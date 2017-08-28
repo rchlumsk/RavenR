@@ -1,0 +1,28 @@
+Package: RavenR
+Type: Package
+Title: Raven Hydrological Modelling Framework R Support and Analysis
+Version: 1.0.3
+Date: 2017-05-07
+Authors@R: c(
+    person("Chlumsky", "Robert", email = "rchlumsk@uwaterloo.ca", role = "cre"),
+    person("Craig", "James", email = "jrcraig@uwaterloo.ca", role = "aut"))
+Description: Provides useful functions for pre- and post-processing Raven output.
+Note: Package is in testing; please report errors and suggestions for development to rchlumsk@uwaterloo.ca
+Depends:
+    R (>= 3.3.0),
+    lubridate,
+    xts,
+    zoo
+Suggests:
+    knitr,
+    rmarkdown,
+    roxygen2,
+    testthat,
+    formatR,
+    devtools
+URL: http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html
+License: GPL-3 + file LICENSE
+Encoding: UTF-8
+LazyData: TRUE
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr
