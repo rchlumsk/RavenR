@@ -71,8 +71,10 @@ apply.wyearly <- function(x,FUN,...) {
     }
   }
   ep <- cbind(ep,ind)[ind==0,1]
-  res <- xts::period.apply(x, ep, FUN, ...)[2:length(ep)]
-  # res <- period.apply(x, ep, sum)[2:length(ep)]
+  # next line causes warning, "no non-missing arguments to max; returning -Inf", unsure why
+  ## suppress as short term solution
+  res <- suppressWarnings(xts::period.apply(x, ep, FUN, ...)[2:length(ep)])
+  # suppressWarnings(res <- period.apply(x, ep, sum)[2:length(ep)])
 
   return(data.frame("date.end"= (lubridate::date(res)),"fun"=coredata(res)))
 }

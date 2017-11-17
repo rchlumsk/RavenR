@@ -1,11 +1,11 @@
 ---
-title: "A Data Visualization Exercise / Workflow with RavenR"
-author: "Dr. James R. Craig, Robert Chlumsky"
+title: "RavenR Tutorial"
+author: "Robert Chlumsky, Dr. James R. Craig"
 date: "`r Sys.Date()`"
 output: pdf_document
 urlcolor: blue
 vignette: >
-  %\VignetteIndexEntry{A Data Visualization Exercise / Workflow with RavenR}
+  %\VignetteIndexEntry{RavenR Tutorial}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,7 +14,19 @@ As you go through this tutorial, don't just follow along blindly. Try to pay att
 
 This exercise will use the Nith River modelled output available from within the RavenR package, thus the functions to read in data from csv files are not required. However, it is recommended that you download the Nith river model files, and try to both run the model and read in the output files. The Nith river model can be downloaded from the  [Raven Tutorial #2](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html).
 
-## Getting Acquainted with RavenR
+## Installing RavenR
+
+The RavenR package can be installed in a number of ways. The RavenR package can be installed either from a source tarball file, or from the GitHub repository directly. To install direct from the repository, load the ('devtools') library and call the following command.
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE, results='hide'}
+library(devtools)
+install_github("rchlumsk/RavenR")
+```
+
+
+
+
+########################
 
 Start a new Rstudio session by opening RStudio. Load the RavenR library from the console and view its contents with the following commands:
 

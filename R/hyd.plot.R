@@ -192,7 +192,7 @@ hyd.plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
   if (!(is.null(precip))) {
     par(new=T)
     precip.col <- col.transparent('blue',100)
-    plot(lubridate::date(precip),precip,col=precip.col,lty=1,lwd=1,
+    plot(lubridate::date(precip[prd]),precip[prd],col=precip.col,lty=1,lwd=1,
          type='h',ylim=rev(c(0,max(precip,na.rm=T)*range.mult)),xaxt='n',yaxt='n',
          xlab="",ylab="")
     axis(4)
