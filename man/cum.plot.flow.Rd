@@ -18,7 +18,7 @@ cum.plot.flow(sim = NULL, obs = NULL, inflow = NULL)
 }
 \description{
 cum.plot.flow creates a cumulative flow plot of the simulated flows;
-optionally includes an osberved and/or inflow series as well. Useful in
+optionally includes an observed and/or inflow series as well. Useful in
 diagnotic analysis of model outputs.
 }
 \details{
@@ -30,6 +30,13 @@ assumed to be daily flows with units of m3/s.
 
 Note that a plot title is purposely omitted in order to allow the automatic
 generation of plot titles.
+
+Note that the cumsum function does not have an na.rm=T argument, thus if
+there are any NA values in the water year of data for any provided series,
+the values beyond an NA value will be calculated as NA. It is up to the user
+to handle NA values appropriately fill in or replace NA values based on the
+type of data supplied. For flow series, linear interpolation for small periods
+of missing values may be appropriate.
 }
 \examples{
 

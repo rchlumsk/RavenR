@@ -1,7 +1,7 @@
 #' Cumulative Plot of model flows
 #'
 #' cum.plot.flow creates a cumulative flow plot of the simulated flows;
-#' optionally includes an osberved and/or inflow series as well. Useful in
+#' optionally includes an observed and/or inflow series as well. Useful in
 #' diagnotic analysis of model outputs.
 #'
 #' This function will plot the simulated series in all cases, and will include
@@ -13,11 +13,19 @@
 #' Note that a plot title is purposely omitted in order to allow the automatic
 #' generation of plot titles.
 #'
+#' Note that the cumsum function does not have an na.rm=T argument, thus if
+#' there are any NA values in the water year of data for any provided series,
+#' the values beyond an NA value will be calculated as NA. It is up to the user
+#' to handle NA values appropriately fill in or replace NA values based on the
+#' type of data supplied. For flow series, linear interpolation for small periods
+#' of missing values may be appropriate.
+#'
 #' @param sim time series object of simulated flows
 #' @param obs optionally supply an inflow series to plot as well
 #' @param inflow optionally supply an inflow series to plot as well
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{flow.scatterplot}} for creating flow scatterplots
+#@seealso \code{\link{cum.plot}} for creating generic cumulative function plotting
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
@@ -72,10 +80,10 @@ cum.plot.flow <- function(sim=NULL,obs=NULL,inflow=NULL) {
        ylab='Cumulative Flow [m3]',xlab='Date',lty=1)
 
   if (!(is.null(obs))) {
-    lines(lubridate::date(sim),cum.obs,col='black',lty=3)
+    lines(lubridate::date(obs),cum.obs,col='black',lty=3)
   }
   if (!(is.null(inflow))) {
-    lines(lubridate::date(sim),cum.inflow,col='blue',lty=5)
+    lines(lubridate::date(inflow),cum.inflow,col='blue',lty=5)
   }
 
 # add a legend

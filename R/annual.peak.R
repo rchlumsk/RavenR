@@ -50,10 +50,11 @@
 annual.peak <- function(sim,obs,rplot=T,add.line=T,add.r2=F,axis.zero=F) {
 
   # calculate the maximums
-  max.sim <- apply.wyearly(sim, max,na.rm=T)
+  max.sim <- apply.wyearly(sim, RavenR::which.max.xts)
+  max.obs <- apply.wyearly(obs, RavenR::which.max.xts)
   dates <- max.sim[,1]
   max.sim <- max.sim[,2]
-  max.obs <- apply.wyearly(obs, max,na.rm=T)[,2]
+  max.obs <- max.obs[,2]
 
   # calculate the r2 fit
   if (add.r2) {

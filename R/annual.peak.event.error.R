@@ -58,7 +58,7 @@ annual.peak.event.error <- function(sim,obs,rplot=T,add.line=T,add.labels=T) {
 
   # calculate the errors
   errs <- (df.peak.event$sim.peak.event - df.peak.event$obs.peak.event)/df.peak.event$obs.peak.event*100
-  text.labels <- year(df.peak.event$date.end)
+  text.labels <- year(df.peak.event$obs.dates)
 
   if (rplot) {
     x.lab <- "Date (Water Year Ending)"
@@ -83,6 +83,6 @@ annual.peak.event.error <- function(sim,obs,rplot=T,add.line=T,add.labels=T) {
       }
     }
   }
-  df <- data.frame("date.end"=df.peak.event$date.end,"errors"=errs)
+  df <- data.frame("obs.dates"=df.peak.event$obs.dates,"errors"=errs)
   return("df.peak.event.error"=df)
 }

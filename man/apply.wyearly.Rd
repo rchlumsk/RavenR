@@ -30,6 +30,9 @@ Note that currently the water year calculation is done from Oct 2 to Oct 1st
 (or September 30th) inclusive. For example in the Oct 1 2007 to Oct 1 2008
 water year, the end date is shown as "2008-10-01", and the function will be
 evaluated for the period 2007-10-02 - 2008-10-01, inclusive.
+
+The apply.wyearly function applies to only one column at a time, otherwise
+only the first column will be used, with a warning.
 }
 \examples{
 

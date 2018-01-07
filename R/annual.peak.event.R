@@ -52,13 +52,8 @@
 annual.peak.event <- function(sim,obs,rplot=T,add.line=T,add.r2=F,axis.zero=F) {
 
   # calculate the maximum observed in each year
-  max.obs <- apply.wyearly(obs, max,na.rm=T)
-  dates <- max.obs[,1]
-  max.obs <- max.obs[,2]
-
-  # get the date of peak obs event
-  max.obs.dates <- apply.wyearly(obs, function(x) sprintf("%i-%i-%i",lubridate::year(x[which.max(x),]),lubridate::month(x[which.max(x),]),lubridate::day(x[which.max(x),])))
-  max.dates <- as.character(max.obs.dates[,2])
+  max.obs <- apply.wyearly(obs, max, na.rm=T)[,2]
+  max.dates <- as.Date(apply.wyearly(obs, function(x) toString(lubridate::date(which.max.xts(x))))[,2])
 
   ind <- matrix(NA,nrow=length(max.obs),ncol=1)
   for (k in 1:length(max.obs)) {
@@ -94,6 +89,6 @@ annual.peak.event <- function(sim,obs,rplot=T,add.line=T,add.r2=F,axis.zero=F) {
     if (add.line) { abline(0,1,lty=2) }
     if (add.r2) {  mtext(sprintf('R2 = %.2f',r2), side=3,adj=1) }
   }
-  df <- data.frame("date.end"=dates,"sim.peak.event"=max.sim,"obs.peak.event"=max.obs)
+  df <- data.frame("obs.dates"=max.dates,"sim.peak.event"=max.sim,"obs.peak.event"=max.obs)
   return("df.peak.event"=df)
 }

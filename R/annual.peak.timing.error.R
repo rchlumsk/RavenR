@@ -55,35 +55,29 @@
 #' @export annual.peak.timing.error
 annual.peak.timing.error <- function(sim,obs,rplot=T,add.line=T,add.labels=T) {
 
-  # calculate the maximum observed in each year
-  max.obs <- apply.wyearly(obs, max,na.rm=T)
-  dates <- max.obs[,1]
-  max.obs <- max.obs[,2]
+  # # calculate the maximum observed in each year
+  # max.obs <- apply.wyearly(obs, max,na.rm=T)
+  # dates <- max.obs[,1]
+  # max.obs <- max.obs[,2]
+  #
+  # # get the date of peak obs event
+  # max.obs.dates <- apply.wyearly(obs,function(x) x[which.max(x)])
+  # max.dates <- max.obs.dates[,1]
 
-  # get the date of peak obs event
-  max.obs.dates <- apply.wyearly(obs, function(x) sprintf("%i-%i-%i",lubridate::year(x[which.max(x),]),lubridate::month(x[which.max(x),]),lubridate::day(x[which.max(x),])))
-  max.obs.dates <- as.character(max.obs.dates[,2])
+  # get the date of maximum obs event
+  max.obs <- apply.wyearly(obs, max, na.rm=T)[,2]
+  max.obs.dates <- as.Date(apply.wyearly(obs, function(x) toString(lubridate::date(which.max.xts(x))))[,2])
 
-  ind.obs <- matrix(NA,nrow=length(max.obs),ncol=1)
-  for (k in 1:length(max.obs)) {
-    ind.obs[k] <- which(year(obs)==year(max.obs.dates[k]) & month(obs)==month(max.obs.dates[k]) & day(obs)==day(max.obs.dates[k]))
-  }
+  # get the date of maximum sim event
+  max.sim <- apply.wyearly(sim, max, na.rm=T)[,2]
+  max.sim.dates <- as.Date(apply.wyearly(sim, function(x) toString(lubridate::date(which.max.xts(x))))[,2])
 
-  # calculate the maximum simulated in each year
-  max.sim <- apply.wyearly(sim, max,na.rm=T)
-  max.sim <- max.sim[,2]
+  # get water year end dates
+  date.end <- apply.wyearly(sim,mean)[,1]
 
-  # get the date of peak sim event
-  max.sim.dates <- apply.wyearly(sim, function(x) sprintf("%i-%i-%i",lubridate::year(x[which.max(x),]),lubridate::month(x[which.max(x),]),lubridate::day(x[which.max(x),])))
-  max.sim.dates <- as.character(max.sim.dates[,2])
-
-  ind.sim <- matrix(NA,nrow=length(max.sim),ncol=1)
-  for (k in 1:length(max.sim)) {
-    ind.sim[k] <- which(year(sim)==year(max.sim.dates[k]) & month(sim)==month(max.sim.dates[k]) & day(sim)==day(max.sim.dates[k]))
-  }
-
-  errs <- ind.sim-ind.obs
-  text.labels <- year(dates)
+  # calcualte errors in timing
+  errs <- as.numeric(max.sim.dates - max.obs.dates)
+  text.labels <- year(date.end)
 
   if (rplot) {
     x.lab <- "Date (Water year ending)"
@@ -110,7 +104,7 @@ annual.peak.timing.error <- function(sim,obs,rplot=T,add.line=T,add.labels=T) {
     }
 
   }
-  df <- data.frame("date.end"=dates,"peak.timing.errors"=errs)
+  df <- data.frame("date.end"=date.end,"peak.timing.errors"=errs)
   return("df.peak.timing.error"=df)
 }
 

@@ -16,6 +16,9 @@
 #' water year, the end date is shown as "2008-10-01", and the function will be
 #' evaluated for the period 2007-10-02 - 2008-10-01, inclusive.
 #'
+#' The apply.wyearly function applies to only one column at a time, otherwise
+#' only the first column will be used, with a warning.
+#'
 #' @param x xts vector to calculate FUN for
 #' @param FUN the function to be applied
 #' @param ... optional arguments to FUN
@@ -60,6 +63,11 @@
 #'
 #' @export apply.wyearly
 apply.wyearly <- function(x,FUN,...) {
+
+  if (ncol(x) > 1) {
+    warning("More than one column in x, only the first will be used.")
+  }
+
   temp <- x[((month(x[,1]) == 10) & (day(x[,1]) == 1)) | ((month(x[,1]) == 9) & (day(x[,1]) == 30))]
   ep <- match(lubridate::date(temp),lubridate::date(x))
 
@@ -71,10 +79,13 @@ apply.wyearly <- function(x,FUN,...) {
     }
   }
   ep <- cbind(ep,ind)[ind==0,1]
-  # next line causes warning, "no non-missing arguments to max; returning -Inf", unsure why
-  ## suppress as short term solution
-  res <- suppressWarnings(xts::period.apply(x, ep, FUN, ...)[2:length(ep)])
-  # suppressWarnings(res <- period.apply(x, ep, sum)[2:length(ep)])
-
-  return(data.frame("date.end"= (lubridate::date(res)),"fun"=coredata(res)))
+  # create data frame to store results, including end dates of water years
+  df <- data.frame("date.end"=lubridate::date(x[ep[2:length(ep)]]),"FUN"=rep(NA,length(ep)-1))
+  # get results and apply functions
+  for (i in 1:nrow(df)) {
+    temp <- x[ep[i]:(ep[i+1]-1)]
+    df[i,2] <- FUN(temp,...)
+    # df[i,2] <- lubridate::date(which.max.xts(temp))
+  }
+  return(df)
 }
