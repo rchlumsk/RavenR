@@ -12,6 +12,7 @@ You can install RavenR from github with:
 
 ``` r
 # install.packages("devtools")
+library(devtools)
 devtools::install_github("rchlumsk/RavenR")
 ```
 
