@@ -79,7 +79,8 @@ flowdurcurve.plot <-function(hydrograph,prd=NULL,seasonal='F'){
   # require(grid)
   xmax=10^(ceiling(log10(max(Qsim))));
   xmin=10^(floor(log10(min(Qsim))));
-  plot(ecdf(as.numeric(Qsim)), log='x',xlim=c(xmin,xmax),ylim=c(0,1),col='Blue',xlab='Q (m3/s)', ylab='% of flows less than Q',main='Flow Exceedance')
+  plot(ecdf(as.numeric(Qsim)), log='x',xlim=c(xmin,xmax),
+       ylim=c(0,1),col='Blue',xlab='Q (m3/s)', ylab='% of flows less than Q',main='Flow Exceedance')
 
   # define legend items (see code from hyd.plot)
   leg.items <- c('Qsim')
