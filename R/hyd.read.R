@@ -61,7 +61,7 @@ hyd.read <- function(ff=NA) {
 
 
   # need to fix the hourly model
-  date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S")
+  date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S",tz='UTC')
   # head(date.time)
   cols <- colnames(hydrographs)
 
@@ -94,7 +94,7 @@ hyd.read <- function(ff=NA) {
         units[i] = mysplit[3]
         obs_flag[i] = T
         newcols[i] = sprintf("%s_obs",mysplit[1])
-      } else if (mysplit[2] == "res.inflow") {
+      } else if (mysplit[2] == "res. inflow") {
         units[i] = mysplit[3]
         obs_flag[i] = F
         newcols[i] = sprintf("%s_inflow",mysplit[1])
