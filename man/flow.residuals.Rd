@@ -43,6 +43,11 @@ generation of plot titles.
 }
 \examples{
 
+# load sample hydrograph data, two years worth of sim/obs
+data(hydrograph.data)
+sim <- hydrograph.data$hyd$Sub36
+obs <- hydrograph.data$hyd$Sub36_ob
+
 # default with moving average smoothing shading of winter months
 flow.residuals(sim,obs)
 

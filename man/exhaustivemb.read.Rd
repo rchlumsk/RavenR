@@ -9,7 +9,7 @@ exhaustivemb.read(ff = NA, join.categories = T)
 \arguments{
 \item{ff}{full file path to the ExhaustiveMassBalance.csv file}
 
-\item{join.categories}{boolean whether add to the category tag as a column 
+\item{join.categories}{boolean whether add to the category tag as a column
 name prefix in exhaustivemb output (default TRUE)}
 }
 \value{
@@ -32,12 +32,14 @@ located in the current working directory, then simply the name of the file
 is sufficient.
 }
 \examples{
-read in file
-myemb <- exhaustivemb.read('output/ExhaustiveMassBalance.csv')
+read in file from package (RavenR/inst/extdata)
+ff <- system.file("extdata","ExhaustiveMassBalance_1.csv", package="RavenR")
 
-# check data
-################### head(myemb$)
-
+# read in exhaustive MB file, create plot
+exhaustiveMB.data <- RavenR::exhaustivemb.read(ff)
+head(exhaustiveMB.data$exhaustivemb)
+plot(exhaustiveMB.data$exhaustivemb$SURFACE_WATER.Infiltration,
+ylab="Cumulative Surface Water Infiltration"
 }
 \seealso{
 \code{\link{hyd.read}} for reading in the Hydrographs.csv file

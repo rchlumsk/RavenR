@@ -34,6 +34,11 @@
 #' @keywords Raven flow residual diagnostics
 #' @examples
 #'
+#' # load sample hydrograph data, two years worth of sim/obs
+#' data(hydrograph.data)
+#' sim <- hydrograph.data$hyd$Sub36
+#' obs <- hydrograph.data$hyd$Sub36_ob
+#'
 #' # default with moving average smoothing shading of winter months
 #' flow.residuals(sim,obs)
 #'
@@ -81,7 +86,7 @@ flow.residuals <- function(sim,obs,ma.smooth=3,add.line=T,winter.shading=T) {
          type='l',col='black',ylim=c(min(resids,na.rm=T),max(c(resids),na.rm=T)))
   }
   if (add.line) {abline(h=0,col='blue',lty=5) }
-  
+
   return(resids)
 }
 

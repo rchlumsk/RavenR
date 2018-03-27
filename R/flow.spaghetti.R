@@ -44,17 +44,16 @@
 #' @keywords Raven flow spaghetti diagnostics
 #' @examples
 #'
-#' # read in first hydrogaph file
-#' myhyd <- hyd.read('model_output/Hydrographs.csv')
+#'# load sample hydrograph data, two years worth of sim/obs
+#'data(hydrograph.data)
+#'sim <- hydrograph.data$hyd$Sub36
+#'sim2 <- hydrograph.data$hyd$Sub43
 #'
-#' # extract specific subbasin data
-#' sub71.flow <- hyd.extract('sub71',myhyd)
+#'# create spaghetti plot of simulated flows
+#'flow.spaghetti(sim)
 #'
-#' # create spaghetti plot of simulated flows
-#' flow.spaghetti(sub71.flow$sim)
-#'
-#' # create spaghetti plot without legend or different colours
-#' flow.spaghetti(sub71.flow$sim,include.legend=F,colour.wheel=F)
+#'# create spaghetti plot without legend or different colours
+#'flow.spaghetti(sim2,include.legend=F,colour.wheel=F)
 #'
 #' @export flow.spaghetti
 flow.spaghetti <- function(flow,include.legend=T,colour.wheel=T) {

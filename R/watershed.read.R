@@ -29,12 +29,10 @@
 #' @keywords Raven read.csv watershed storage
 #' @examples
 #'
-#' # set working directory to file location
-#' dir <- "C:/Users/rchlumsk/Documents/Raven/Madawaska model/output"
-#' setwd(dir)
+#' # locate in RavenR Watershed storage file
+#' ff <- system.file("extdata","run1_WatershedStorage.csv", package="RavenR")
 #'
 #' # create full file path and read in file
-#' ff <- paste0(dir,"/","run4_WatershedStorage.csv")
 #' mywshd <- watershed.read(ff)
 #'
 #' # check data

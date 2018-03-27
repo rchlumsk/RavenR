@@ -30,8 +30,11 @@ Function contributed by Dr. James Craig
 }
 \examples{
 
-# read in rvh file from Alouette tutorial
-rvh <- rvh.read('Alouette.rvh')
+# locate in RavenR rvh sample file
+ff <- system.file("extdata","Nith.rvh", package="RavenR")
+
+# read in rvh file
+myrvh <- rvh.read(ff)
 
 }
 \seealso{

@@ -59,7 +59,7 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven streamgauge flow rvt conversion
 #' @examples
-#' # warning: example not run, sample example for assocaited files only
+#' # warning: example not run, sample example for associated files only
 #' \dontrun{
 #' ff <- 'Daily__May-12-2017_02_00_53PM.csv'
 #' ECflow.rvt(ff,subIDs=c(3,11))

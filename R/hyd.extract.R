@@ -39,68 +39,64 @@
 #' @keywords Raven plot extract hydrograph
 #' @examples
 #'
-#' # set working directory to file location
-#' dir <- "C:/temp/model/output"
-#' setwd(dir)
-#'
-#' # create full file path
-#' ff <- paste0(dir,"/","run4_Hydrographs.csv")
+#' # read in hydrograph sample csv data from RavenR package
+#' ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 #'
 #' # read in Raven Hydrographs file, store into myhyd
 #' myhyd <- hyd.read(ff)
 #'
 #' # no plot or observed data, specified period
-#' flow.24 <- hyd.extract(subs="sub24",hyd=myhyd,prd="2006-10-01/2010-10-01")
+#' flow.36 <- hyd.extract(subs="Sub36",myhyd
 #'
 #' # plot the simulated flow values
-#' plot(flow.24$sim,col='red')
+#' plot(flow.36$sim,col='red')
 #' # plot observed values on same plot
-#' lines(flow.24$obs,lty=5)
+#' lines(flow.36$obs,lty=5)
 #'
 #' # example for precipitation
 #' myprecip <- hyd.extract(subs="precip",hyd=myhyd)
 #'
 #' @export hyd.extract
 hyd.extract <- function(subs=NA, hyd=NA, prd=NULL) {
-  
+
   if (missing(subs)) {
     stop("subs is required for this function.")
   }
   if (missing(hyd)) {
     stop("hyd is required for this function; please supply the full output file from hyd.read.")
   }
-  
+
   # extract random pair
   hydrographs <- hyd$hyd
   units <- hyd$units
   mycols <- colnames(hydrographs)
   subID <- gsub("[^0-9]", "", subs)
-  mysub.sim <- sprintf("\\b%s\\b",subs) # sim does not have a sim 
+  mysub.sim <- sprintf("\\b%s\\b",subs) # sim does not have a sim
   mysub.obs <- sprintf("\\b%s_obs\\b",subs)
   mysub.inflow <- sprintf("\\b%s_inflow\\b",subs)
   # ind.base <- grep(mysub,mycols)
   # ind.sim <- ind.base[1]  # assume sim is always there and first
   # ind.inflow <- ind.base[grep(mysub.inflow,mycols[ind.base])]
   # ind.obs <- ind.base[grep(mysub.obs,mycols[ind.base])]
-  
+
   ind.sim <- grep(mysub.sim,mycols)
   ind.obs <- grep(mysub.obs,mycols)
   ind.inflow <- grep(mysub.inflow,mycols)
-  
+
   ind <- c(ind.sim,ind.inflow,ind.obs)
-  
+
   if (length(ind)==0) {
     stop(sprintf("%s not found in the columns, check the supplied subs argument.",mysub))
   } else if (length(ind) > 3) {
     stop(sprintf("There are %i matches for %s, expect a maximum of 3.",length(ind),mysub))
   }
-  
+
   # assume first column is always simulated one; observed or inflows follow afterwards
   # assume if all 3 columns exist, observed is the second one (obs before inflows)
   mysim <- NULL
   myobs <- NULL
   myinflow <- NULL
-  
+
   if (length(ind.sim) == 1) {
     mysim <- hydrographs[,ind.sim]
   }
@@ -110,10 +106,10 @@ hyd.extract <- function(subs=NA, hyd=NA, prd=NULL) {
   if (length(ind.inflow) == 1) {
     myinflow <- hydrographs[,ind.inflow]
   }
-  
+
   # determine the period to use
   if (!(is.null(prd))) {
-    
+
     # prd is supplied; check that it makes sense
     firstsplit <- unlist(strsplit(prd,"/"))
     if (length(firstsplit) != 2) {
@@ -124,16 +120,16 @@ hyd.extract <- function(subs=NA, hyd=NA, prd=NULL) {
       stop("Check the format of supplied period argument prd; two dates should be in YYYY-MM-DD format.")
     }
     # add conversion to date with xts format check ?
-    
+
   } else {
     # period is not supplied
-    
+
     # not using smart.period function and no period supplied; use whole range
     N <- nrow(hydrographs)
     prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(hydrographs[1,1]),month(hydrographs[1,1]),day(hydrographs[1,1]),
                       year(hydrographs[N,1]),month(hydrographs[N,1]),day(hydrographs[N,1]) )
   }
-  
+
   # return values
   return(list("sim" = mysim[prd,1], "obs" = myobs[prd,1],"inflow"=myinflow[prd,1]))
 }

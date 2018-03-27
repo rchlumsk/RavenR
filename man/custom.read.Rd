@@ -30,17 +30,12 @@ included in the rav.obj attributes.
 }
 \examples{
 
-custom1 <- custom.read('model_output/PRECIP_Daily_Average_BySubbasin.csv')
-head(custom1)
-plot(custom1[,21]) # precip in subbasin 21
+# find sample rvh file for Nith subwatershed
+ff <- system.file("extdata","run1_SNOW_Daily_Average_ByHRU.csv", package="RavenR")
 
-custom2 <- custom.read('model_output/SOIL[1]_Daily_Average_ByHRU.csv')
-head(custom2)
-plot(custom2[,21])  # SOIL[1] storage in subbasin 21
-
-custom3 <- custom.read('model_output/SOIL[1]_Daily_Average_ByWatershed.csv')
-head(custom3)
-plot(custom3[,1])  # average SOIL[1] storage in watershed
+# extract and plot custom data
+mycustomdata <- custom.read(ff)
+plot(mycustomdata[,5],main='Daily Average SNOW - HRU 5')
 
 }
 \seealso{

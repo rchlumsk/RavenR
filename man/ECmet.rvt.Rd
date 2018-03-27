@@ -98,7 +98,7 @@ does not check for common errors in data, does not infill missing values
 required) - only handles daily data (subdaily or monthly not yet handled)
 }
 \examples{
-# warning: example not run, sample example for assocaited files only
+# warning: example not run, sample example for associated files only
 \dontrun{
 ff <- c("eng-daily-01012008-12312008.csv","eng-daily-01012007-12312007.csv")
 

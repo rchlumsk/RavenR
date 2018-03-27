@@ -25,7 +25,7 @@ plots}
 }
 \value{
 \item{Ost.dd}{Ostrich data used in plotting; returned only if
-return.data is TRUE. Else function returns TRUE if the function executed 
+return.data is TRUE. Else function returns TRUE if the function executed
 properly}
 }
 \description{
@@ -58,21 +58,23 @@ param.index = 1 will create a plot of the first parameter in the
 OstModel0.txt file.
 }
 \examples{
-
+# warning: example not run, sample example for associated files only
 \dontrun{
-# directory with the OstModel0.txt file from an Ostrich run
-dir <- "C:/Users/rchlumsk/temp"
-setwd(dir)
-library(RavenR)
+
+# locate sample OstModel0.txt file in RavenR package
+ff <- system.file("extdata","OstModel0.txt", package="RavenR")
+
+# read in file
+mydata <- Ost.read(ff)
 
 # simple plotting of the oft plot type
-Ost.plot()
+Ost.plot(Ost.data=mydata)
 
 # plot of the best objective function vs trials
-Ost.plot(plot.type='boft')
+Ost.plot(mydata,plot.type='boft')
 
 # sensitivty analysis of the 5th parameter
-Ost.plot(plot.type='psa',num.metrics=4,param.index=5)
+Ost.plot(mydata,plot.type='psa',num.metrics=4,param.index=5)
 }
 
 }

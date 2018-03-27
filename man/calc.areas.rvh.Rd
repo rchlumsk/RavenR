@@ -45,11 +45,11 @@ block.
 }
 \examples{
 
-# filepath
-ff <- 'model/York.rvh'
+# locate in RavenR rvh sample file
+ff <- system.file("extdata","Nith.rvh", package="RavenR")
 
 # basic, with defaults (calculates drainage area also)
-myareas <- calc.areas(ff)
+myareas <- calc.areas.rvh(ff)
 
 # avoid calculating drainage areas
 myareas <- calc.areas.rvh(ff,calc.da=F)

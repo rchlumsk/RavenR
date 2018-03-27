@@ -36,12 +36,14 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven reservoir stage relationship initial conditions
 #' @examples
-#'
+#' # warning: example not run, sample example for associated files only
+#' \dontrun{
 #' # set working directory to file location
 #' dir = "C:/temp/test"
 #' ff <- paste0(dir,"/","reservoir data.csv")
 #'
 #' res.init(ff,initial.stage=0.4)
+#' }
 #'
 #' @export res.init
 res.init <- function(ff=NA,initial.stage=0.0) {
@@ -69,6 +71,6 @@ res.init <- function(ff=NA,initial.stage=0.0) {
     writeLines(sprintf(':InitialReservoirStage  %i  %.2f',subbasins[i],min(stage)+initial.stage*(max(stage)-min(stage))),fc2)
   }
   close(fc2)
-  
+
   return(TRUE)
 }

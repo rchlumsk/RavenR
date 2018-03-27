@@ -43,12 +43,14 @@ Also note that the initial stage must be between 0 and 1, so that the
 initial stage is not less than the dry stage or greater than the maximum.
 }
 \examples{
-
+# warning: example not run, sample example for associated files only
+\dontrun{
 # set working directory to file location
 dir = "C:/temp/test"
 ff <- paste0(dir,"/","reservoir data.csv")
 
 res.init(ff,initial.stage=0.4)
+}
 
 }
 \seealso{

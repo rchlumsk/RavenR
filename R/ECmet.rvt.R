@@ -92,7 +92,7 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven meteorological station rvt conversion
 #' @examples
-#' # warning: example not run, sample example for assocaited files only
+#' # warning: example not run, sample example for associated files only
 #' \dontrun{
 #' ff <- c("eng-daily-01012008-12312008.csv","eng-daily-01012007-12312007.csv")
 #'
@@ -336,7 +336,7 @@ ECmet.rvt <- function(ff,prd=NULL,stnName=NULL,forcing.set=1,met.prefix=T,write.
   writeLines(':EndMultiData',fc)
   close(fc)
   print(sprintf("Done writing to %s",rvt.name))
-  
+
   return(TRUE)
 }
 

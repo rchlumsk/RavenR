@@ -52,6 +52,11 @@ index of observed peak).
 }
 \examples{
 
+# load sample hydrograph data, two years worth of sim/obs
+data(hydrograph.data)
+sim <- hydrograph.data$hyd$Sub36
+obs <- hydrograph.data$hyd$Sub36_o
+
 # create a plot of peak timing errors with defaults
 annual.peak.timing.error(sim,obs)
 

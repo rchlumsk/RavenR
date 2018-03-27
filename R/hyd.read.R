@@ -27,14 +27,10 @@
 #' @keywords Raven read.csv hydrograph
 #' @examples
 #'
-#' # set working directory to file location
-#' dir <- "C:/temp/model/output"
-#' setwd(dir)
+#' # read in hydrograph sample csv data from RavenR package
+#' ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 #'
-#' # create full file path
-#' ff <- paste0(dir,"/","run4_Hydrographs.csv")
-#'
-#' # read in the Hydrographs file
+#' # read in Raven Hydrographs file, store into myhyd
 #' myhyd <- hyd.read(ff)
 #'
 #' # view contents

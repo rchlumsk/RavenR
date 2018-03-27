@@ -33,15 +33,17 @@
 #' @keywords Raven flow cumulative diagnostics
 #' @examples
 #'
+#' # load sample hydrograph data, two years worth of sim/obs
+#' data(hydrograph.data)
+#' sim <- hydrograph.data$hyd$Sub36
+#' obs <- hydrograph.data$hyd$Sub36_obs
+#'
 #' # plot cumulative flow for sim and obs
 #' cum.plot.flow(sim,obs)
 #'
 #' # plot cumulative flows for specific period
-#' prd <- "2003-10-01/2005-10-01"
+#' prd <- "2003-10-01/2004-10-01"
 #' cum.plot.flow(sim[prd],obs[prd])
-#'
-#' # plot cumulative flow for sim, obs and inflow
-#' cum.plot.flow(sim,obs,inflow)
 #'
 #' @export cum.plot.flow
 cum.plot.flow <- function(sim=NULL,obs=NULL,inflow=NULL) {

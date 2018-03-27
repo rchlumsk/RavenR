@@ -13,7 +13,7 @@
 #' is sufficient.
 #'
 #' @param ff full file path to the ExhaustiveMassBalance.csv file
-#' @param join.categories boolean whether add to the category tag as a column 
+#' @param join.categories boolean whether add to the category tag as a column
 #' name prefix in exhaustivemb output (default TRUE)
 #' @return \item{exhaustivemb}{data frame from the file with standardized
 #' names} \item{units}{vector corresponding to units of each column}
@@ -27,13 +27,15 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven read.csv exhaustive mass balance
 #' @examples
-#' read in file
-#' myemb <- exhaustivemb.read('output/ExhaustiveMassBalance.csv')
+#' read in file from package (RavenR/inst/extdata)
+#' ff <- system.file("extdata","ExhaustiveMassBalance_1.csv", package="RavenR")
 #'
-#' # check data
-#' ################### head(myemb$)
-#'
-#' @export watershed.read
+#' # read in exhaustive MB file, create plot
+#' exhaustiveMB.data <- RavenR::exhaustivemb.read(ff)
+#' head(exhaustiveMB.data$exhaustivemb)
+#'plot(exhaustiveMB.data$exhaustivemb$SURFACE_WATER.Infiltration,
+#' ylab="Cumulative Surface Water Infiltration"
+#' @export exhaustivemb.read
 exhaustivemb.read <- function(ff=NA,join.categories=T) {
 
   if (missing(ff)) {
@@ -60,7 +62,7 @@ exhaustivemb.read <- function(ff=NA,join.categories=T) {
   # un untouched Raven output file
   # date.time <- as.POSIXct(paste(emb$date,emb$hour), format="%Y-%m-%d %H:%M:%S")
   date.time <- as.POSIXct(paste(emb[,2],emb[,3]), format="%Y-%m-%d %H:%M:%S") # assuming order of dt columns
-  
+
   # head(date.time)
   cols <- colnames(emb)
 
@@ -84,16 +86,16 @@ exhaustivemb.read <- function(ff=NA,join.categories=T) {
   # change all "..." to ".." in cols
   newcols <- gsub("\\.\\.\\.","\\.\\.",cols)
 
-  
+
   ##### UNITS CURRENTLY DISABLED AS THE FILE HAS NO UNITS
-  
+
   # setup units
   units <- matrix(data=NA,nrow=length(cols))
 
   # # split the col names into units
   # for (i in 4:length(cols)) {
   #   mysplit <- unlist(strsplit(newcols[i],"\\.\\."))
-  # 
+  #
   #   if (length(mysplit) == 2) {
   #     units[i] = mysplit[2]
   #     newcols[i] = mysplit[1]
@@ -106,7 +108,7 @@ exhaustivemb.read <- function(ff=NA,join.categories=T) {
   units <- units[4:nrow(units)]
   # categories <- categories[4:length(categories)] # already done above
   emb <- xts(order.by=date.time,x=emb)
-  
+
   # join the categories as a prefix to column names
   if (join.categories) {
     newcols <- paste0(categories,rep(".",length(categories)),newcols)
@@ -122,7 +124,7 @@ exhaustivemb.read <- function(ff=NA,join.categories=T) {
   #       units[i] = substr(units[i],1,nchar(units[i])-1)
   #     }
   #   }
-  
+
   # temporary correction
   # units <- replace(units,which(units == "m3.s."),"m3/s")
   # units <- replace(units,which(units == "mm.day."),"mm/day")

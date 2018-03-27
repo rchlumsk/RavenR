@@ -70,7 +70,8 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven stage reservoir
 #' @examples
-#'
+#' # warning: example not run, sample example for associated files only
+#' \dontrun{
 #' # create a nice reservoir stage plot
 #' res.plot(sim,obs,zero.axis=F)
 #'
@@ -80,6 +81,7 @@
 #' # create a reservoir stage plot with precip as well for a specific subperiod
 #' prd <- "2003-10-01/2005-10-01"
 #' res.plot(sim,obs,range.mult=1.5,precip=precip,prd=prd)
+#' }
 #'
 #' @export res.plot
 res.plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
@@ -226,7 +228,7 @@ res.plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
 
   # restore plotting parameters
   par(.pardefault)
-  
+
   return(TRUE)
 }
 

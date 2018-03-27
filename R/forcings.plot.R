@@ -17,10 +17,16 @@
 #' @keywords Raven forcing plot diagnostics
 #' @examples
 #'
-#' # plots the summary forcings over the 2004 water year
-#' data(forcing.data)
-#' myforcings<-forcing.data
-#' forcings.plot(myforcings$forcings,prd="2003-10-01/2004-09-30")
+#' # read in sample forcings data
+#' data("forcing.data")
+#' fdata <- forcing.data$forcings
+#'
+#' # plot forcings data
+#' forcings.plot(fdata)
+#'
+#' plot subset of forcing data for 2002-2003 water year
+#' prd = "2002-10-01/2003-09-30"
+#' forcings.plot(fdata,prd)
 #'
 #' @export forcings.plot
 forcings.plot <-function(forcings,prd=NULL){

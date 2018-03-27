@@ -29,12 +29,8 @@ is sufficient.
 }
 \examples{
 
-# set working directory to file location
-dir <- "C:/Users/rchlumsk/Documents/Raven/Madawaska model/output"
-setwd(dir)
-
-# create full file path and read in file
-ff <- paste0(dir,"/","run4_ForcingsFunctions.csv")
+# read in sample forcings data
+ff <- system.file("extdata","run1_ForcingFunctions.csv", package="RavenR")
 myforcings <- forcings.read(ff)
 
 # check data

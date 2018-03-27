@@ -4,10 +4,12 @@
 \alias{flowdurcurve.plot}
 \title{Plots summary of watershed forcing functions}
 \usage{
-flowdurcurve.plot(hydrograph, prd = NULL, seasonal = "F")
+flowdurcurve.plot(sim = NULL, obs = NULL, prd = NULL, seasonal = "F")
 }
 \arguments{
-\item{hydrograph}{hydrograph object from hyd.extract function}
+\item{sim}{simulated hydrograph xts time series}
+
+\item{obs}{(optional) observed hydrograph xts time series}
 
 \item{prd}{(optional) time period over which the plot is generated}
 
@@ -27,15 +29,16 @@ be included on the plot as well.
 }
 \examples{
 
-# read in Raven Hydrographs file
-ff <- "C:/temp/model/output/run4_Hydrographs"
-myhyd <- hyd.read(ff)
+# load sample hydrograph data, two years worth of sim/obs
+data(hydrograph.data)
+sim <- hydrograph.data$hyd$Sub36
+obs <- hydrograph.data$hyd$Sub36_obs
 
-# extract flow for subbasin 24
-flow.24 <- hyd.extract(subs="sub24",hyd=myhyd,period="2006-10-01/2010-10-01")
+# create FDC plot, sim only
+flowdurcurve.plot(sim)
 
-# create FDC plot
-flowdurcurve.plot(flow.24,seasonal=T)
+ # create seasonal FDC plot with sim and obs data
+flowdurcurve.plot(sim,obs,seasonal=T)
 
 }
 \seealso{

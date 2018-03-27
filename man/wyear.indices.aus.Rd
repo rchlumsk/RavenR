@@ -29,13 +29,12 @@ The sim and obs should be of time series (xts) format.
 }
 \examples{
 
-# read in a ForcingFunctions file
-myforcings <- forcings.read.read('model_output/ForcingFunctions.csv')
+# read in sample forcings data
+data("forcing.data")
+fdata <- forcing.data$forcings
 
 # get the indices of the start of the water year
-wyear.indices.aus(myforcings$forcings[,1])
-
-# [1]    1  367  732 1097 1462 1828 2193 2558 2923
+wyear.indices.aus(fdata[,1])
 
 }
 \seealso{

@@ -46,7 +46,8 @@ the format "YYYY-MM-DD/YYYY-MM-DD", for example, "2006-10-01/2010-10-01". If
 no period is supplied, the entire time series will be used.
 }
 \examples{
-
+# warning: example not run, sample example for associated files only
+\dontrun{
 # create full file path
 ff <- "C:/temp/model/output/run4_Reservoirs.csv")
 
@@ -63,6 +64,7 @@ lines(stage.24$obs,lty=5)
 
 # example for precipitation
 myplot <- res.extract(subs="precip",res=myres)
+}
 
 }
 \seealso{

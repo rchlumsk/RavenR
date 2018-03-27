@@ -40,7 +40,8 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven plot extract reservoir
 #' @examples
-#'
+#' # warning: example not run, sample example for associated files only
+#' \dontrun{
 #' # create full file path
 #' ff <- "C:/temp/model/output/run4_Reservoirs.csv")
 #'
@@ -57,6 +58,7 @@
 #'
 #' # example for precipitation
 #' myplot <- res.extract(subs="precip",res=myres)
+#' }
 #'
 #' @export res.extract
 res.extract <- function(subs=NA, res=NA, prd=NULL) {
@@ -73,21 +75,21 @@ res.extract <- function(subs=NA, res=NA, prd=NULL) {
   units <- res$units
   mycols <- colnames(reservoirs)
   subID <- gsub("[^0-9]", "", subs)
-  
-  mysub.sim <- sprintf("\\b%s\\b",subs) # sim does not have a sim 
+
+  mysub.sim <- sprintf("\\b%s\\b",subs) # sim does not have a sim
   mysub.obs <- sprintf("\\b%s_obs\\b",subs)
   mysub.inflow <- sprintf("\\b%s_inflow\\b",subs)
   # ind.base <- grep(mysub,mycols)
   # ind.sim <- ind.base[1]  # assume sim is always there and first
   # ind.inflow <- ind.base[grep(mysub.inflow,mycols[ind.base])]
   # ind.obs <- ind.base[grep(mysub.obs,mycols[ind.base])]
-  
+
   ind.sim <- grep(mysub.sim,mycols)
   ind.obs <- grep(mysub.obs,mycols)
   ind.inflow <- grep(mysub.inflow,mycols)
-  
+
   ind <- c(ind.sim,ind.inflow,ind.obs)
-  
+
   # mysub <- subs # sprintf("\\b%s\\b",subs)
   # mysub.obs <- "obs"
   # mysub.inflow <- "inflow"

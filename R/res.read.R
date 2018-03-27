@@ -26,7 +26,8 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven read.csv reservoir
 #' @examples
-#'
+#' # warning: example not run, sample example for associated files only
+#' \dontrun{
 #' # create full file path
 #' dir <- "C:/temp/model/output.csv")
 #' ff <- paste0(dir,"/","run4_ReservoirStages.csv")
@@ -37,6 +38,7 @@
 #' # view contents
 #' head(myres$res)
 #' res$units
+#' }
 #'
 #' @export res.read
 res.read <- function(ff=NA) {

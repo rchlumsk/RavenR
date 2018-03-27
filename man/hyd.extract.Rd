@@ -46,23 +46,19 @@ no period is supplied, the entire time series will be used.
 }
 \examples{
 
-# set working directory to file location
-dir <- "C:/temp/model/output"
-setwd(dir)
-
-# create full file path
-ff <- paste0(dir,"/","run4_Hydrographs.csv")
+# read in hydrograph sample csv data from RavenR package
+ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 
 # read in Raven Hydrographs file, store into myhyd
 myhyd <- hyd.read(ff)
 
 # no plot or observed data, specified period
-flow.24 <- hyd.extract(subs="sub24",hyd=myhyd,prd="2006-10-01/2010-10-01")
+flow.36 <- hyd.extract(subs="Sub36",myhyd
 
 # plot the simulated flow values
-plot(flow.24$sim,col='red')
+plot(flow.36$sim,col='red')
 # plot observed values on same plot
-lines(flow.24$obs,lty=5)
+lines(flow.36$obs,lty=5)
 
 # example for precipitation
 myprecip <- hyd.extract(subs="precip",hyd=myhyd)

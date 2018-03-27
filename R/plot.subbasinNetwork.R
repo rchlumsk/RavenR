@@ -20,12 +20,14 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven rvh subbasin watershed HRU network plot igraph
 #' @examples
-#'
+#' # warning: example not run, sample example for associated files only
+#' \dontrun{
 #' # Using a valid Raven model .rvh file in the working directory,
 #' # read the file into the rvh object
 #' rvh<-rvh.read("WatershedX.rvh")
 #' plot
-#' plot.subbasinNetwork(rvh$SBtable)e)
+#' plot.subbasinNetwork(rvh$SBtable)
+#' }
 #'
 #' @export plot.subbasinNetwork
 plot.subbasinNetwork<-function(SBtable)

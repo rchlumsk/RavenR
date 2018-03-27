@@ -47,15 +47,22 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Ostrich calibration parameter best
 #' @examples
-#'
+#' # warning: example not run, sample example for associated files only
 #' \dontrun{
-#' mydata <- Ost.read()
+#'
+#' # locate sample OstModel0.txt file in RavenR package
+#' ff <- system.file("extdata","OstModel0.txt", package="RavenR")
+#'
+#' # read in file
+#' mydata <- Ost.read(ff)
 #'
 #' # top 30 percent of runs, no removal of metrics
 #' mybest <- Ost.bestparams(mydata,best.num=0.3)
+#' head(mybest)
 #'
 #' # minimalist function run (requires OstModel0.txt in current directory)
-#' mybest <- Ost.bestparams()
+#' mybest <- Ost.bestparams(mydata)
+#' head(mybest)
 #' }
 #'
 #' @export Ost.bestparams

@@ -59,7 +59,7 @@ a 'large' variation between parameter values. To assume a normal
 distribution and 95 percent interval, one can use 1.96 here.
 }
 \examples{
-
+# warning: example not run, sample example for associated files only
 \dontrun{
 ff1 <- "1_OstModel0.txt"
 ff2 <- "2_OstModel0.txt"

@@ -23,8 +23,11 @@
 #' @keywords Raven rvh subbasin watershed HRU
 #' @examples
 #'
-#' # read in rvh file from Alouette tutorial
-#' rvh <- rvh.read('Alouette.rvh')
+#' # locate in RavenR rvh sample file
+#' ff <- system.file("extdata","Nith.rvh", package="RavenR")
+#'
+#' # read in rvh file
+#' myrvh <- rvh.read(ff)
 #'
 #' @export rvh.read
 rvh.read<-function(filename)

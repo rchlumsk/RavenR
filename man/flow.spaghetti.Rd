@@ -51,17 +51,16 @@ generation of plot titles.
 }
 \examples{
 
-# read in first hydrogaph file
-myhyd <- hyd.read('model_output/Hydrographs.csv')
-
-# extract specific subbasin data
-sub71.flow <- hyd.extract('sub71',myhyd)
+# load sample hydrograph data, two years worth of sim/obs
+data(hydrograph.data)
+sim <- hydrograph.data$hyd$Sub36
+sim2 <- hydrograph.data$hyd$Sub43
 
 # create spaghetti plot of simulated flows
-flow.spaghetti(sub71.flow$sim)
+flow.spaghetti(sim)
 
 # create spaghetti plot without legend or different colours
-flow.spaghetti(sub71.flow$sim,include.legend=F,colour.wheel=F)
+flow.spaghetti(sim2,include.legend=F,colour.wheel=F)
 
 }
 \seealso{

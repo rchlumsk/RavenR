@@ -36,7 +36,7 @@
 #' @param param.index index of parameter to plot for parameter sensitivity
 #' plots
 #' @return \item{Ost.dd}{Ostrich data used in plotting; returned only if
-#' return.data is TRUE. Else function returns TRUE if the function executed 
+#' return.data is TRUE. Else function returns TRUE if the function executed
 #' properly}
 #' @seealso \code{\link{hyd.read}} for handling Raven hydrograph files
 #'
@@ -49,21 +49,23 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Ostrich calibration
 #' @examples
-#'
+#' # warning: example not run, sample example for associated files only
 #' \dontrun{
-#' # directory with the OstModel0.txt file from an Ostrich run
-#' dir <- "C:/Users/rchlumsk/temp"
-#' setwd(dir)
-#' library(RavenR)
+#'
+#' # locate sample OstModel0.txt file in RavenR package
+#' ff <- system.file("extdata","OstModel0.txt", package="RavenR")
+#'
+#' # read in file
+#' mydata <- Ost.read(ff)
 #'
 #' # simple plotting of the oft plot type
-#' Ost.plot()
+#' Ost.plot(Ost.data=mydata)
 #'
 #' # plot of the best objective function vs trials
-#' Ost.plot(plot.type='boft')
+#' Ost.plot(mydata,plot.type='boft')
 #'
 #' # sensitivty analysis of the 5th parameter
-#' Ost.plot(plot.type='psa',num.metrics=4,param.index=5)
+#' Ost.plot(mydata,plot.type='psa',num.metrics=4,param.index=5)
 #' }
 #'
 #' @export Ost.plot
@@ -148,8 +150,8 @@ Ost.plot <- function(Ost.data=NA,plot.type='oft',return.data=F,logy=F,rangey=NA,
   }
 
   # supplement data with the best obj vector
-  if (return.data) {     
-    Ost.data <- data.frame(Ost.data,best.obj) 
+  if (return.data) {
+    Ost.data <- data.frame(Ost.data,best.obj)
   } else {
     return(TRUE)
   }

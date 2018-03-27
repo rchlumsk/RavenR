@@ -20,6 +20,8 @@ mos.names is used to return a string vector of months in the year
 months_of_the_year <- mos.names
 months_of_the_year
 
+mos.names(F)
+
 }
 \seealso{
 \code{\link{num.days.month}} for calculating the number of days in a

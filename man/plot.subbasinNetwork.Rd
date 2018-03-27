@@ -25,12 +25,14 @@ Depends: igraph library.
 Function contributed by Dr. James Craig
 }
 \examples{
-
+# warning: example not run, sample example for associated files only
+\dontrun{
 # Using a valid Raven model .rvh file in the working directory,
 # read the file into the rvh object
 rvh<-rvh.read("WatershedX.rvh")
 plot
-plot.subbasinNetwork(rvh$SBtable)e)
+plot.subbasinNetwork(rvh$SBtable)
+}
 
 }
 \seealso{

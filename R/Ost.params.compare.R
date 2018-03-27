@@ -58,7 +58,7 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Ostrich calibration parameter
 #' @examples
-#'
+#' # warning: example not run, sample example for associated files only
 #' \dontrun{
 #' ff1 <- "1_OstModel0.txt"
 #' ff2 <- "2_OstModel0.txt"

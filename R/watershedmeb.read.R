@@ -27,13 +27,10 @@
 #' @keywords Raven read.csv watershed mass energy balance
 #' @examples
 #'
-#' # set working directory to file location
-#' dir <- "C:/Users/rchlumsk/Documents/Raven/Madawaska model/output"
-#' setwd(dir)
+#' # locate RavenR Watershed Mass Energy Balance storage file
+#' ff <- system.file("extdata","run1_WatershedMassEnergyBalance.csv", package="RavenR")
 #'
-#' # create full file path
-#' ff <- paste0(dir,"/","run4_WatershedMassEnergyBalance.csv")
-#'
+#' # read in file
 #' mywshdmeb <- watershedmeb.read(ff)
 #'
 #' @export watershedmeb.read

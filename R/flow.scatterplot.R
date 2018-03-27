@@ -32,6 +32,11 @@
 #' @keywords Raven flow scatterplot diagnostics
 #' @examples
 #'
+#' # load sample hydrograph data, two years worth of sim/obs
+#' data(hydrograph.data)
+#' sim <- hydrograph.data$hyd$Sub36
+#' obs <- hydrograph.data$hyd$Sub36_ob
+#'
 #' # plot the flow scatterplot, produce an R2 metric
 #' flow.scatterplot(sim,obs,add.r2=T)
 #'
@@ -55,6 +60,6 @@ flow.scatterplot <- function(sim,obs,add.line=T,add.r2=F,axis.zero=T) {
     r2 <- 1 - (sum((obs-sim)^2,na.rm=T)/sum((obs-mean(obs,na.rm=T))^2,na.rm=T))
     mtext(sprintf('R2 = %.2f',r2), side=3,adj=1)
   }
-  
+
   return(TRUE)
 }

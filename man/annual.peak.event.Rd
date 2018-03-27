@@ -50,14 +50,21 @@ generation of plot titles.
 }
 \examples{
 
+# load sample hydrograph data, two years worth of sim/obs
+data(hydrograph.data)
+sim <- hydrograph.data$hyd$Sub36
+obs <- hydrograph.data$hyd$Sub36_obs
+
 # create a plot of annual peak events with default options
 annual.peak.event(sim,obs,rplot=T,add.line=T,add.r2=F,axis.zero=F)
 
 # plot with r2 and axes to zero; store results
 peak.df <- annual.peak.event(sim,obs,rplot=T,add.line=T,add.r2=T,axis.zero=T)
+peak.df
 
 # store results without plotting
 peak.df <- annual.peak.event(sim,obs,rplot=F)
+peak.df
 
 }
 \seealso{

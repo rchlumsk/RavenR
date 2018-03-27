@@ -53,6 +53,11 @@ generation of plot titles.
 }
 \examples{
 
+# load sample hydrograph data, two years worth of sim/obs
+data(hydrograph.data)
+sim <- hydrograph.data$hyd$Sub36
+obs <- hydrograph.data$hyd$Sub36_obs
+
 # create a plot of peak annual errors with default options
 annual.peak.event.error(sim,obs,rplot=T,add.line=T)
 

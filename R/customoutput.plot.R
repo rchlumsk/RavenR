@@ -18,12 +18,12 @@
 #' @keywords Raven plot custom output
 #' @examples
 #'
-#'   # read in custom output
-#' custom1 <- customoutput.plot('model_output/PRECIP_Daily_Average_BySubbasin.csv')
+#'# read in custom output from sample data
+#'data("custom.data")
 #'
-#'   # plot custom output
-#' customoutput.plot(custom1)
-#' customoutput.plot(custom1,IDs=seq(23,27),prd="2015-10-01/2017-10-01")
+#'# plot custom data
+#'mycustomdata <- custom.data
+#'customoutput.plot(mycustomdata,IDs=seq(1,32),prd="2002-10-01/2003-09-01")
 #'
 #' @export customoutput.plot
 customoutput.plot <-function(cust,IDs=NULL,prd=NULL){
@@ -104,6 +104,6 @@ customoutput.plot <-function(cust,IDs=NULL,prd=NULL){
   # if variable is state variable (not forcing), should use type='l'
 
   par(old.par)
-  
+
   return(TRUE)
 }

@@ -12,6 +12,8 @@
 #' months_of_the_year <- mos.names
 #' months_of_the_year
 #'
+#' mos.names(F)
+#'
 #' @export mos.names
 mos.names <- function(short=T) {
   if (short) {

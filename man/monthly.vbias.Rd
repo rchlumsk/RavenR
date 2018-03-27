@@ -52,6 +52,11 @@ positive values mean the volume is overestimated.
 }
 \examples{
 
+# load sample hydrograph data, two years worth of sim/obs
+data(hydrograph.data)
+sim <- hydrograph.data$hyd$Sub36
+obs <- hydrograph.data$hyd$Sub36_obs
+
 # check the monthly volume bias; normalizes by default
 monthly.vbias(sim,obs)
 
