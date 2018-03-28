@@ -25,3 +25,8 @@ RavenR Wishlist
 ---------------
 
 Any issues or feature requests can be submitted on Github via the Issues tab. You may also submit feature requests directly to Robert Chlumsky (<rchlumsk@uwaterloo.ca>) via email.
+
+Dependency Installs
+-------------------
+
+Note that some of the package dependencies may require the installation of programs outside of R, particularly for Linux users. Refer to specific function helps on how to install various package materials, such as [ImageMagick](https://www.imagemagick.org/script/download.php).
