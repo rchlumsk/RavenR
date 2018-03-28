@@ -90,7 +90,7 @@ hyd.read <- function(ff=NA) {
         units[i] = mysplit[3]
         obs_flag[i] = T
         newcols[i] = sprintf("%s_obs",mysplit[1])
-      } else if (mysplit[2] == "res. inflow") {
+      } else if (mysplit[2] == "res.inflow") {
         units[i] = mysplit[3]
         obs_flag[i] = F
         newcols[i] = sprintf("%s_inflow",mysplit[1])

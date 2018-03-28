@@ -2,50 +2,75 @@
 % Please edit documentation in R/rvh.read.R
 \name{rvh.read}
 \alias{rvh.read}
-\title{Read Raven RVH File}
+\title{Read Raven .rvh (watershed discretization) file}
 \usage{
 rvh.read(filename)
 }
 \arguments{
-\item{filename}{file name of the rvh file}
+\item{filename}{the name of the .rvh file (with .rvh extension included ), either relative to the working directory or absolute.}
 }
 \value{
-\item{SBtable}{data table of subbasin properties and statistics}
+Returns a list including:
+\item{SBtable}{a data table of Subbasin characteristics indexed by Subbasin ID (SBID). Includes
+the following data columns from the .rvh file : SBID, Name, Downstream_ID, Profile, ReachLength,
+Gauged. The rvh.read() functions supplements this with additional columns: Area, Elevation, AvgLatit,
+AvgLongit, AvgSlope, AvgAspect, DomLU, DomLUArea, DomLUFrac, DomVeg, DomVegArea, DomVegFrac.
+Elevation, AvgLatit, AvgLongit, AvgSlope, and AvgAspect are the area-weighted averages from all
+constituent HRUs. DomLU is the dominant land use name, DomLUArea is the area (in km2) of the
+dominant land use and DomLUArea is the percentage of the basin covered with DomLU; same applies to DomVeg.}
 
-\item{HRUtable}{data table of HRU properties and statistics}
+\item{HRUtable}{a data table of HRU characteristics, with land use and vegetation classes as factors.
+Contains identical information as found in the :HRUs-:EndHRUs block of the .rvh file: ID, Area,
+Elevation, Latitude, Longitude, SBID, LandUse,Vegetation, SoilProfile, Terrain, Aquifer, Slope,
+and Aspect.}
 
-\item{SBnetwork}{igraph object for creating a network plot with
-the plot.subbasinnetwork function}
+\item{SBnetwork}{an igraph network graph network describing subbasin stream network connectivity,
+with nodes indexed by SBID.}
 }
 \description{
-rvh.read reads in a given rvh file and generates a data frame of useful
-summary statistics
+This routine reads in a valid Raven watershed discretization (.rvh) file and returns the
+information about HRUs and Subbasins as data tables. It also returns a subbasin igraph
+network object which describes stream network connectivity and adds additional HRU-derived
+subbasin characteristics such as total upstream area and dominant land/vegetation classes.
 }
-\details{
-This function reads in a given Raven rvh file, and calculates a number
-of useful statistics, including: total upstream area, dominant land cover/
-vegetation info, and area-weighted aspect/slope/lat/long.
-
-Function contributed by Dr. James Craig
+\note{
+depends upon igraph library; does not like tabs in the .rvh file - it should be untabified first.
+The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :SubBasins-:EndSubBasins
+command blocks.
 }
 \examples{
 
-# locate in RavenR rvh sample file
-ff <- system.file("extdata","Nith.rvh", package="RavenR")
+  # locate in RavenR rvh sample file
+  ff <- system.file("extdata","Nith.rvh", package="RavenR")
 
-# read in rvh file
-myrvh <- rvh.read(ff)
+  # read in rvh file
+  rvh <- rvh.read(ff)
 
+  # get number of HRUs
+  numHRUs<-nrow(rvh$HRUtable)
+
+  # total watershed area
+  watershed.area<-sum(rvh$HRUtable$Area)
+
+  # sub-table of headwater subbasins
+  headwaterBasins<-subset(rvh$SBtable,TotalUpstreamArea==0)
+
+  # sub-table of Forested HRUs
+  forestHRUs<-subset(rvh$HRUtable,LandUse=="FOREST1")
+
+  # get total area upstream of subbasin "Raven_River" outlet
+  upstr<-(rvh$SBtable$TotalUpstreamArea+rvh$SBtable$Area)
+  gauge_area<-upstr[rvh$SBtable$Name=="Raven_River"]
 }
 \seealso{
-\code{\link{plot.subbasinNetwork}} for creating a network plot of the watershed
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+\code{\link{rvh.write}} to write contents of the generated (and usually modified HRU and SubBasin tables)
+\code{\link{subbasinNetwork.plot}} to plot the subbasin network
+See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 }
-\keyword{HRU}
+\author{
+James R. Craig, University of Waterloo
+}
+\keyword{HRUs}
 \keyword{Raven}
+\keyword{SubBasins}
 \keyword{rvh}
-\keyword{subbasin}
-\keyword{watershed}

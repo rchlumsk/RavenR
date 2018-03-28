@@ -1,48 +1,106 @@
-#' Read Raven RVH File
+#' Read Raven .rvh (watershed discretization) file
 #'
-#' rvh.read reads in a given rvh file and generates a data frame of useful
-#' summary statistics
+#' This routine reads in a valid Raven watershed discretization (.rvh) file and returns the
+#' information about HRUs and Subbasins as data tables. It also returns a subbasin igraph
+#' network object which describes stream network connectivity and adds additional HRU-derived
+#' subbasin characteristics such as total upstream area and dominant land/vegetation classes.
 #'
-#' This function reads in a given Raven rvh file, and calculates a number
-#' of useful statistics, including: total upstream area, dominant land cover/
-#' vegetation info, and area-weighted aspect/slope/lat/long.
+#' @param filename the name of the .rvh file (with .rvh extension included ), either relative to the working directory or absolute.
 #'
-#' Function contributed by Dr. James Craig
+#' @return
+#' Returns a list including:
+#' \item{SBtable}{a data table of Subbasin characteristics indexed by Subbasin ID (SBID). Includes
+#' the following data columns from the .rvh file : SBID, Name, Downstream_ID, Profile, ReachLength,
+#' Gauged. The rvh.read() functions supplements this with additional columns: Area, Elevation, AvgLatit,
+#' AvgLongit, AvgSlope, AvgAspect, DomLU, DomLUArea, DomLUFrac, DomVeg, DomVegArea, DomVegFrac.
+#' Elevation, AvgLatit, AvgLongit, AvgSlope, and AvgAspect are the area-weighted averages from all
+#' constituent HRUs. DomLU is the dominant land use name, DomLUArea is the area (in km2) of the
+#' dominant land use and DomLUArea is the percentage of the basin covered with DomLU; same applies to DomVeg.}
 #'
-#' @param filename file name of the rvh file
-#' @return \item{SBtable}{data table of subbasin properties and statistics}
-#' @return \item{HRUtable}{data table of HRU properties and statistics}
-#' @return \item{SBnetwork}{igraph object for creating a network plot with
-#' the plot.subbasinnetwork function}
+#' \item{HRUtable}{a data table of HRU characteristics, with land use and vegetation classes as factors.
+#' Contains identical information as found in the :HRUs-:EndHRUs block of the .rvh file: ID, Area,
+#' Elevation, Latitude, Longitude, SBID, LandUse,Vegetation, SoilProfile, Terrain, Aquifer, Slope,
+#' and Aspect.}
 #'
-#' @seealso \code{\link{plot.subbasinNetwork}} for creating a network plot of the watershed
+#' \item{SBnetwork}{an igraph network graph network describing subbasin stream network connectivity,
+#' with nodes indexed by SBID.}
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven rvh subbasin watershed HRU
+#' @author James R. Craig, University of Waterloo
+#'
+#' @note depends upon igraph library; does not like tabs in the .rvh file - it should be untabified first.
+#' The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :SubBasins-:EndSubBasins
+#' command blocks.
+#'
+#' @seealso
+#' \code{\link{rvh.write}} to write contents of the generated (and usually modified HRU and SubBasin tables)
+#' \code{\link{subbasinNetwork.plot}} to plot the subbasin network
+#' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
+#'
 #' @examples
 #'
-#' # locate in RavenR rvh sample file
-#' ff <- system.file("extdata","Nith.rvh", package="RavenR")
+#'   # locate in RavenR rvh sample file
+#'   ff <- system.file("extdata","Nith.rvh", package="RavenR")
 #'
-#' # read in rvh file
-#' myrvh <- rvh.read(ff)
+#'   # read in rvh file
+#'   rvh <- rvh.read(ff)
 #'
+#'   # get number of HRUs
+#'   numHRUs<-nrow(rvh$HRUtable)
+#'
+#'   # total watershed area
+#'   watershed.area<-sum(rvh$HRUtable$Area)
+#'
+#'   # sub-table of headwater subbasins
+#'   headwaterBasins<-subset(rvh$SBtable,TotalUpstreamArea==0)
+#'
+#'   # sub-table of Forested HRUs
+#'   forestHRUs<-subset(rvh$HRUtable,LandUse=="FOREST1")
+#'
+#'   # get total area upstream of subbasin "Raven_River" outlet
+#'   upstr<-(rvh$SBtable$TotalUpstreamArea+rvh$SBtable$Area)
+#'   gauge_area<-upstr[rvh$SBtable$Name=="Raven_River"]
+#' @keywords Raven  rvh  HRUs  SubBasins
 #' @export rvh.read
 rvh.read<-function(filename)
 {
+  stopifnot(file.exists(filename))
+
   # read subbasins table--------------------------------
   lineno<-grep(":SubBasins", readLines(filename), value = FALSE)
   lineend<-grep(":EndSubBasins", readLines(filename), value = FALSE)
+
+  if ((length(lineno)==0) || (length(lineend)==0)){
+    print('warning: filename not a valid .rvh file (no :SubBasins block)')
+  }
+  delim=""
+  if (length(grep(",", readLines(filename)[(lineno+3):(lineend-1)], value = FALSE))>0){
+    delim=","
+  }
   cnames<-c("SBID","Name","Downstream_ID","Profile","ReachLength","Gauged")
-  SubBasinTab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, col.names=cnames,header=FALSE,blank.lines.skip=TRUE, comment.char = "#")
+
+  SubBasinTab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,header=FALSE,blank.lines.skip=TRUE, stringsAsFactors=FALSE,comment.char = "#")
+  SubBasinTab$Name<-trimws(SubBasinTab$Name)
+
+  #untabify
+  #SubBasinTab <- as.data.frame(sapply(SubBasinTab, function(x) gsub("\t", "", x)))
+
 
   # read HRUs table ------------------------------------
   lineno<-grep(":HRUs", readLines(filename), value = FALSE)
   lineend<-grep(":EndHRUs", readLines(filename), value = FALSE)
+  if ((length(lineno)==0) || (length(lineend)==0)){
+    print('warning: filename not a valid .rvh file (no :HRUs block)')
+  }
+  delim=""
+  if (length(grep(",", readLines(filename)[(lineno+3):(lineend-1)], value = FALSE))>0){
+    delim=","
+  }
   cnames<-c("ID","Area","Elevation","Latitude","Longitude","SBID","LandUse","Vegetation","SoilProfile","Terrain","Aquifer","Slope","Aspect")
-  HRUtab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, col.names=cnames,header=FALSE,blank.lines.skip=TRUE, comment.char = "#")
+  HRUtab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,header=FALSE,blank.lines.skip=TRUE,stringsAsFactors=FALSE,comment.char = "#")
+
+  #untabify
+  #HRUtab <- as.data.frame(sapply(HRUtab, function(x) gsub("\t", "", x)))
+
 
   # sum area-------------------------------------------
   A<-aggregate(Area ~ SBID, FUN = sum, data=HRUtab)
@@ -73,7 +131,7 @@ rvh.read<-function(filename)
   out$AvgAspect<-temp$tmpA/temp$Area
 
   # delete tmpA
-  #HRUtab <- select(HRUtab, -tmpA)
+  HRUtab<-HRUtab[ , !(names(HRUtab) %in% c("tmpA"))]
 
   #dominant land use, vegetation,
   LU<-aggregate(HRUtab$Area,list(HRUtab$LandUse,HRUtab$SBID),FUN=sum)
@@ -83,7 +141,8 @@ rvh.read<-function(filename)
   colnames(maxlist)<-c("SBID","Area")
   newdata<-LU[which(LU$Area %in% maxlist$Area),]
   colnames(newdata)<-c("DomLU","SBID","DomLUArea")
-  out<-merge(out,newdata,by="SBID")
+  newdata <- newdata[ !duplicated(newdata$SBID), ]
+  out<-merge(out,newdata,by="SBID") # something wrong with this merge
   out$DomLUFrac<-round(out$DomLUArea/out$Area*100,2)
 
   Veg<-aggregate(HRUtab$Area,list(HRUtab$Vegetation,HRUtab$SBID),FUN=sum)
@@ -93,20 +152,23 @@ rvh.read<-function(filename)
   colnames(maxlist)<-c("SBID","Area")
   newdata<-Veg[which(Veg$Area %in% maxlist$Area),]
   colnames(newdata)<-c("DomVeg","SBID","DomVegArea")
+  newdata <- newdata[ !duplicated(newdata$SBID), ]
   out<-merge(out,newdata,by="SBID")
   out$DomVegFrac<-round(out$DomVegArea/out$Area*100,2)
 
   out<-merge(SubBasinTab,out,by="SBID")
 
+  row.names(out)<-out$SBID
+
   #calculate total upstream area
-  library('igraph')
+  #library('igraph')
   links<-data.frame(SBID=out$SBID,downID=out$Downstream_ID)
   links<-subset.data.frame(links,downID>=0) # get rid of -1
 
   #create network graph structure
-  net <- graph_from_data_frame(d=links, vertices=out, directed=T)
-  egon<-ego(net,order=100,nodes=V(net),mode="in")
-  size<-ego_size(net,order=100,nodes=V(net),mode="in")
+  net <-igraph::graph_from_data_frame(d=links, vertices=out, directed=T)
+  egon<-igraph::ego(net,order=100,nodes=igraph::V(net),mode="in")
+  size<-igraph::ego_size(net,order=100,nodes=igraph::V(net),mode="in")
   count=1
   for (i in 1:nrow(out)){
     SBID=out$SBID[i]
@@ -114,7 +176,12 @@ rvh.read<-function(filename)
     out$TotalUpstreamArea[i]<-sum(up$Area)
     count=count+1
   }
-  #igraph::is_dag mayu be useful here
 
   return (list(SBtable=out,HRUtable=HRUtab,SBnetwork=net))
 }
+
+
+
+
+
+

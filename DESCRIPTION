@@ -13,14 +13,17 @@ Depends:
     lubridate,
     xts,
     zoo,
-    igraph
+    igraph,
+    maptools,
+    rgdal
 Suggests:
     knitr,
     rmarkdown,
     roxygen2,
     testthat,
     formatR,
-    devtools
+    devtools,
+    magick
 URL: http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
