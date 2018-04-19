@@ -1,7 +1,7 @@
 ---
 title: "RavenR Tutorial"
 author: "Robert Chlumsky, Dr. James R. Craig"
-date: "`r Sys.Date()`"
+date: "June 2017"
 output: pdf_document
 urlcolor: blue
 vignette: >
@@ -18,7 +18,7 @@ This exercise will use the Nith River modelled output available from within the 
 
 The RavenR package can be installed in a number of ways. The RavenR package can be installed either from a source tarball file, or from the GitHub repository directly. To install direct from the repository, load the ('devtools') library and call the following command.
 
-```{r, echo=TRUE, message=FALSE, warning=FALSE, results='hide'}
+```{r, echo=TRUE, message=FALSE, warning=FALSE, results='hide',eval=FALSE}
 library(devtools)
 install_github("rchlumsk/RavenR")
 ```

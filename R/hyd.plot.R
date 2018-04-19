@@ -17,11 +17,12 @@
 #' The winter.shading argument will add a transparent cyan shading for the
 #' December 1st to March 31st period in each year that is plotted.
 #'
-#' The range.mult argument will increase the maximum value that is plotted in
+#' The range.mult arguments (range.mult.hyd, range.mult.precip) will increase the maximum value that is plotted in
 #' the flows and the precip values. This is useful in preventing overlap if
 #' precip is also plotted (i.e. with precip as well, range.mult=1.5 works
 #' well). This value should not be less than 1.0, otherwise the values will be
-#' cutoff in the plot.
+#' cutoff in the plot. A value of 2 in each argument will ensure there is no overlap
+#' in the hydrographs and precipitation plots.
 #'
 #' ylabel is the label on the y axis, defined using y.lab in the plot function.
 #' This defaults to 'Flow [m3/s]' intended for plotting hydrographs.
@@ -54,8 +55,8 @@
 #' @param prd period to use in plotting
 #' @param winter.shading optionally adds shading for winter months (default
 #' TRUE)
-#' @param range.mult range multiplier for max value in flows and precip
-#' (default 1)
+#' @param range.mult.hyd range multiplier for max value in hydrograph (default 1.5)
+#' @param range.mult.precip range multiplier for max value in precipitation plot (default 1.5)
 #' @param ylabel text label for y-axis of the plot (default 'Flow [m3/s]')
 #' @param leg.pos string specifying legend placement on plot
 #' @param leg.box boolean on whether to put legend in an opaque box
@@ -72,19 +73,47 @@
 #' @keywords Raven flow hydrograph
 #' @examples
 #'
+#' # load sample hydrograph data, two years worth of sim/obs
+#' data(hydrograph.data)
+#' sim <- hydrograph.data$hyd$Sub36
+#' obs <- hydrograph.data$hyd$Sub36_obs
+#' precip <- hydrograph.data$hyd$precip
+#'
 #' # create a nice hydrograph
 #' hyd.plot(sim,obs,zero.axis=F)
 #'
-#' # create a hydrograph with precip as well
-#' hyd.plot(sim,obs,range.mult=1.5,precip=precip)
+#' # create a hydrograph with precip as well;
+#' ## range.mult=1.5 by default, leaves some overlap in plot axes
+#' hyd.plot(sim,obs,precip=precip)
+#'
+#' # hydrograph with no overlap, range.mult = 2
+#' hyd.plot(sim,obs,range.mult.hyd=2,range.mult.precip=2,precip=precip)
 #'
 #' # create a hydrograph with precip as well for a specific subperiod
-#' prd <- "2003-10-01/2005-10-01"
-#' hyd.plot(sim,obs,range.mult=1.5,precip=precip,prd=prd)
+#' prd <- "2003-10-01/2004-10-01"
+#' hyd.plot(sim,obs,precip=precip,prd=prd)
 #'
 #' @export hyd.plot
 hyd.plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
-              winter.shading=T,range.mult=1,ylabel="Flow [m3/s]",leg.pos=NULL,leg.box=NULL,zero.axis=T) {
+              winter.shading=T,range.mult.hyd=1.5,range.mult.precip=1.5,ylabel="Flow [m3/s]",leg.pos=NULL,leg.box=NULL,zero.axis=T) {
+
+  # check range.mult input
+  if (!(is.na(range.mult.hyd))) {
+    if (range.mult.hyd <= 0) {
+      stop("range.mult.hyd must be a positive value.")
+    }
+    if (range.mult.hyd < 1) {
+      warning("range.mult.hyd is less than one, plot may be cut off.")
+    }
+  }
+  if (!(is.na(range.mult.precip))) {
+    if (range.mult.precip <= 0) {
+      stop("range.mult.precip must be a positive value.")
+    }
+    if (range.mult.precip < 1) {
+      warning("range.mult.precip is less than one, plot may be cut off.")
+    }
+  }
 
   # select series to use as base in time determination
   if (!(is.null(sim))) {
@@ -135,7 +164,8 @@ hyd.plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     # otherwise extends by 4% by default
     par(yaxs='i')
   }
-  y.max <- max(c(sim[prd],obs[prd],inflow[prd]),na.rm=T)*range.mult
+
+  y.max <- max(c(sim[prd],obs[prd],inflow[prd]),na.rm=T)*range.mult.hyd
   if (zero.axis) {
     y.min<-0
   } else {
@@ -193,7 +223,7 @@ hyd.plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     par(new=T)
     precip.col <- col.transparent('blue',100)
     plot(lubridate::date(precip[prd]),precip[prd],col=precip.col,lty=1,lwd=1,
-         type='h',ylim=rev(c(0,max(precip,na.rm=T)*range.mult)),xaxt='n',yaxt='n',
+         type='h',ylim=rev(c(0,max(precip,na.rm=T)*range.mult.precip)),xaxt='n',yaxt='n',
          xlab="",ylab="")
     axis(4)
     mtext("Precipitation [mm]",side=4,line=2.5)

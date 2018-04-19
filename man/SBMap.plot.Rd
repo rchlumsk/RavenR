@@ -2,33 +2,39 @@
 % Please edit documentation in R/SBMap.plot.R
 \name{SBMap.plot}
 \alias{SBMap.plot}
-\title{Create Subbasin Map}
+\title{Plot Continuous Data Using Subbasin Shapefile}
 \usage{
 SBMap.plot(shpfilename, subIDcol, plot.date, cust.data, leg.title = "Legend",
-  leg.pos = "bottomleft", normalize.data = TRUE,
-  colour.scheme = "White-Blue", num.classes = 5, invalid.stop = TRUE,
+  leg.pos = "bottomleft", normalize.data = TRUE, colour1 = "azure",
+  colour2 = "white", num.classes = 5, invalid.stop = TRUE,
   basins.label = "subID", plot.title = "")
-}
-\arguments{
-\item{TBD}{params to be added}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
-# description to be added
+Plots Raven custom output into a subbasin map
 }
 \details{
-Creates single static subbasin plot from custom data
+@param shpfilename filename of shapefile containing HRU polygons, with one column inidicating Raven HRU ID
+ @param subIDcol string of subbasin ID column in shapefile
+ @param plot.date string of date to plot in custom.data
+ @param cust.data custom data set as read in by custom.read, for daily by_subbasin data
+ @param leg.title text for legend title
+ @param leg.pos position of legend
+ @param normalize.data whether to normalize data by all cust.data (TRUE) or just the data for the given date (FALSE)
+ @param colour1 string indicating which colour (text or code) to use on lower bound of range
+ @param colour2 string indicating which colour (text or code) to use on upper bound of range
+ @param num.classes number of classes to use in legend. Does not change the actual display colours
+ @param invalid.stop whether to stop if invalid basins are found (TRUE) or just continue with a warning (FALSE)
+ @param basins.label label to put on basins, one of c('None,'subID','value') to show nothing, subbasinIDs, or actual plotted values
+ @param plot.title title across top of plot
 
-see informal parameter description here
-
-shpfilename - file path to shapefile.shp file
+does not currently support discrete data such as land use
 }
 \examples{
 
 # Warning: example not run
-# Example to be cleaned up
 
 \dontrun{
 shpfilename <- 'shp/subbasins.shp'
@@ -38,13 +44,13 @@ cust.data <- custom.read('PRECIP_Daily_Average_BySubbasin.csv')
 leg.title <- 'Legend - Precip (mm)'
 leg.pos <- 'topright'
 normalize.data <- TRUE
-colour.scheme <- 'White-Blue'
+colour1 <- "green"
+colour2 <- "blue"
 num.classes <- 5
 invalid.stop <- TRUE
 basins.label <- 'subID'
-# 'None', 'subID', 'value'
+# should be on of: 'None', 'subID', 'value'
 plot.title <- 'Precipitation (mm/d)'
-
 
 # create singe plot
 SBMap.plot(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title)
@@ -55,14 +61,19 @@ plot.title <- 'Snow (mm)'
 # create singe plot
 SBMap.plot(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title)
 }
-
 }
 \seealso{
 \code{\link{subbasinNetwork.plot}} to create network plots
 
+See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 Craig's research page} for software downloads, including the
 \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+}
+\author{
+James R. Craig, University of Waterloo
+
+Robert Chlumsky
 }
 \keyword{map}
 \keyword{plot}

@@ -21,9 +21,11 @@ where nodes are located at SubBasin lat-long centroids, and edge widths of the n
 \examples{
  # warning: example not run in compiling package
 \dontrun{
-#' rvh<-rvh.read("example.rvh")
+ # read in rvh file
+ rvh<-rvh.read("example.rvh")
 
-subbasinNetwork.plot(rvh$SBtable)
+ # create network plot of watershed structure from rvh file
+ subbasinNetwork.plot(rvh$SBtable)
 }
 
 }

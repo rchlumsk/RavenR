@@ -25,13 +25,14 @@
 #' @keywords Raven water year indices
 #' @examples
 #'
-#' # read in a ForcingFunctions file
-#' myforcings <- forcings.read.read('model_output/ForcingFunctions.csv')
+#' # read in sample forcings data
+#' data("forcing.data")
+#' fdata <- forcing.data$forcings
 #'
 #' # get the indices of the start of the water year
-#' wyear.indices(myforcings$forcings[,1])
+#' wyear.indices(fdata[,1])
 #'
-#' # [1]    1  367  732 1097 1462 1828 2193 2558 2923
+#' # [1]    1 366 731
 #'
 #' @export wyear.indices
 wyear.indices <- function(sim) {

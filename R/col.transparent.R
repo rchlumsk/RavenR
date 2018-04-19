@@ -11,6 +11,7 @@
 #' @seealso See original code on post in Stack Overflow
 #' \href{http://stackoverflow.com/questions/12995683/any-way-to-make-plot-points-in-scatterplot-more-transparent-in-rmaking}{
 #' plot points transparent in R}
+#' @seealso \code{\link{iscolour}} for checking validity of colour codes
 #' @keywords colour transparency
 #' @examples
 #'

@@ -4,10 +4,12 @@
 \alias{hyd.read}
 \title{Read in Raven Hydrograph file}
 \usage{
-hyd.read(ff = NA)
+hyd.read(ff = NA, tzone = "")
 }
 \arguments{
 \item{ff}{full file path to the Hydrographs.csv file}
+
+\item{tzone}{string indicating the timezone of the data in ff}
 }
 \value{
 \item{hyd}{data frame from the file with standardized names}
@@ -29,6 +31,11 @@ here, for example sub24.
 ff is the full file path of the Hydrographs.csv file. If the file is located
 in the current working directory, then simply the name of the file is
 sufficient.
+
+tzone is a string indicating the timezone of the supplied Hydrographs file. The
+timezone provided is coded into the resulting hyd data frame using the as.POSIXct
+function. If no timezone is provided, this is left as an empty string, and is
+determined by the function as the current time zone.
 }
 \examples{
 

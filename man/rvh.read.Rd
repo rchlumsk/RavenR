@@ -33,18 +33,19 @@ information about HRUs and Subbasins as data tables. It also returns a subbasin 
 network object which describes stream network connectivity and adds additional HRU-derived
 subbasin characteristics such as total upstream area and dominant land/vegetation classes.
 }
+\details{
+does not like comma-delimited tables with a trailing comma
+}
 \note{
 depends upon igraph library; does not like tabs in the .rvh file - it should be untabified first.
 The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :SubBasins-:EndSubBasins
 command blocks.
 }
 \examples{
+ \dontrun{
+  # sample workflow of rvh.read
 
-  # locate in RavenR rvh sample file
-  ff <- system.file("extdata","Nith.rvh", package="RavenR")
-
-  # read in rvh file
-  rvh <- rvh.read(ff)
+  rvh<-rvh.read("example.rvh")
 
   # get number of HRUs
   numHRUs<-nrow(rvh$HRUtable)
@@ -56,11 +57,12 @@ command blocks.
   headwaterBasins<-subset(rvh$SBtable,TotalUpstreamArea==0)
 
   # sub-table of Forested HRUs
-  forestHRUs<-subset(rvh$HRUtable,LandUse=="FOREST1")
+  forestHRUs<-subset(rvh$HRUtable,LandUse=="FOREST")
 
   # get total area upstream of subbasin "Raven_River" outlet
   upstr<-(rvh$SBtable$TotalUpstreamArea+rvh$SBtable$Area)
   gauge_area<-upstr[rvh$SBtable$Name=="Raven_River"]
+ }
 }
 \seealso{
 \code{\link{rvh.write}} to write contents of the generated (and usually modified HRU and SubBasin tables)

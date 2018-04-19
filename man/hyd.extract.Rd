@@ -53,12 +53,12 @@ ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 myhyd <- hyd.read(ff)
 
 # no plot or observed data, specified period
-flow.36 <- hyd.extract(subs="Sub36",myhyd
+flow.36 <- hyd.extract(subs="Sub36",myhyd)
 
 # plot the simulated flow values
 plot(flow.36$sim,col='red')
 # plot observed values on same plot
-lines(flow.36$obs,lty=5)
+lines(flow.36$obs,lty=5,col='black')
 
 # example for precipitation
 myprecip <- hyd.extract(subs="precip",hyd=myhyd)

@@ -31,18 +31,18 @@
 #' The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :SubBasins-:EndSubBasins
 #' command blocks.
 #'
+#' @details does not like comma-delimited tables with a trailing comma
+#'
 #' @seealso
 #' \code{\link{rvh.write}} to write contents of the generated (and usually modified HRU and SubBasin tables)
 #' \code{\link{subbasinNetwork.plot}} to plot the subbasin network
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
+#'  \dontrun{
+#'   # sample workflow of rvh.read
 #'
-#'   # locate in RavenR rvh sample file
-#'   ff <- system.file("extdata","Nith.rvh", package="RavenR")
-#'
-#'   # read in rvh file
-#'   rvh <- rvh.read(ff)
+#'   rvh<-rvh.read("example.rvh")
 #'
 #'   # get number of HRUs
 #'   numHRUs<-nrow(rvh$HRUtable)
@@ -54,16 +54,18 @@
 #'   headwaterBasins<-subset(rvh$SBtable,TotalUpstreamArea==0)
 #'
 #'   # sub-table of Forested HRUs
-#'   forestHRUs<-subset(rvh$HRUtable,LandUse=="FOREST1")
+#'   forestHRUs<-subset(rvh$HRUtable,LandUse=="FOREST")
 #'
 #'   # get total area upstream of subbasin "Raven_River" outlet
 #'   upstr<-(rvh$SBtable$TotalUpstreamArea+rvh$SBtable$Area)
 #'   gauge_area<-upstr[rvh$SBtable$Name=="Raven_River"]
+#'  }
 #' @keywords Raven  rvh  HRUs  SubBasins
 #' @export rvh.read
 rvh.read<-function(filename)
 {
   stopifnot(file.exists(filename))
+
 
   # read subbasins table--------------------------------
   lineno<-grep(":SubBasins", readLines(filename), value = FALSE)
@@ -77,10 +79,10 @@ rvh.read<-function(filename)
     delim=","
   }
   cnames<-c("SBID","Name","Downstream_ID","Profile","ReachLength","Gauged")
-
-  SubBasinTab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,header=FALSE,blank.lines.skip=TRUE, stringsAsFactors=FALSE,comment.char = "#")
+  #print(paste0("read sbs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
+  SubBasinTab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,header=FALSE,blank.lines.skip=TRUE, strip.white=TRUE,stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
   SubBasinTab$Name<-trimws(SubBasinTab$Name)
-
+  #print('done reading sbs')
   #untabify
   #SubBasinTab <- as.data.frame(sapply(SubBasinTab, function(x) gsub("\t", "", x)))
 
@@ -96,8 +98,10 @@ rvh.read<-function(filename)
     delim=","
   }
   cnames<-c("ID","Area","Elevation","Latitude","Longitude","SBID","LandUse","Vegetation","SoilProfile","Terrain","Aquifer","Slope","Aspect")
-  HRUtab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,header=FALSE,blank.lines.skip=TRUE,stringsAsFactors=FALSE,comment.char = "#")
 
+  #print(paste0("read HRUs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
+  HRUtab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,header=FALSE,blank.lines.skip=TRUE,strip.white=TRUE,stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
+  #print('done reading HRUs')
   #untabify
   #HRUtab <- as.data.frame(sapply(HRUtab, function(x) gsub("\t", "", x)))
 
@@ -179,9 +183,3 @@ rvh.read<-function(filename)
 
   return (list(SBtable=out,HRUtable=HRUtab,SBnetwork=net))
 }
-
-
-
-
-
-

@@ -46,12 +46,12 @@
 #' myhyd <- hyd.read(ff)
 #'
 #' # no plot or observed data, specified period
-#' flow.36 <- hyd.extract(subs="Sub36",myhyd
+#' flow.36 <- hyd.extract(subs="Sub36",myhyd)
 #'
 #' # plot the simulated flow values
 #' plot(flow.36$sim,col='red')
 #' # plot observed values on same plot
-#' lines(flow.36$obs,lty=5)
+#' lines(flow.36$obs,lty=5,col='black')
 #'
 #' # example for precipitation
 #' myprecip <- hyd.extract(subs="precip",hyd=myhyd)
@@ -71,13 +71,9 @@ hyd.extract <- function(subs=NA, hyd=NA, prd=NULL) {
   units <- hyd$units
   mycols <- colnames(hydrographs)
   subID <- gsub("[^0-9]", "", subs)
-  mysub.sim <- sprintf("\\b%s\\b",subs) # sim does not have a sim
+  mysub.sim <- sprintf("\\b%s\\b",subs)
   mysub.obs <- sprintf("\\b%s_obs\\b",subs)
-  mysub.inflow <- sprintf("\\b%s_inflow\\b",subs)
-  # ind.base <- grep(mysub,mycols)
-  # ind.sim <- ind.base[1]  # assume sim is always there and first
-  # ind.inflow <- ind.base[grep(mysub.inflow,mycols[ind.base])]
-  # ind.obs <- ind.base[grep(mysub.obs,mycols[ind.base])]
+  mysub.inflow <- sprintf("\\b%s_resinflow\\b",subs)
 
   ind.sim <- grep(mysub.sim,mycols)
   ind.obs <- grep(mysub.obs,mycols)
@@ -131,6 +127,6 @@ hyd.extract <- function(subs=NA, hyd=NA, prd=NULL) {
   }
 
   # return values
-  return(list("sim" = mysim[prd,1], "obs" = myobs[prd,1],"inflow"=myinflow[prd,1]))
+  return(list("sim" = mysim[prd,1], "obs" = myobs[prd,1],"resinflow"=myinflow[prd,1]))
 }
 

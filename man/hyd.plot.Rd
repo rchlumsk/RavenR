@@ -5,8 +5,9 @@
 \title{Plot Hydrograph}
 \usage{
 hyd.plot(sim = NULL, obs = NULL, inflow = NULL, precip = NULL,
-  prd = NULL, winter.shading = T, range.mult = 1,
-  ylabel = "Flow [m3/s]", leg.pos = NULL, leg.box = NULL, zero.axis = T)
+  prd = NULL, winter.shading = T, range.mult.hyd = 1.5,
+  range.mult.precip = 1.5, ylabel = "Flow [m3/s]", leg.pos = NULL,
+  leg.box = NULL, zero.axis = T)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
@@ -22,8 +23,9 @@ hyd.plot(sim = NULL, obs = NULL, inflow = NULL, precip = NULL,
 \item{winter.shading}{optionally adds shading for winter months (default
 TRUE)}
 
-\item{range.mult}{range multiplier for max value in flows and precip
-(default 1)}
+\item{range.mult.hyd}{range multiplier for max value in hydrograph (default 1.5)}
+
+\item{range.mult.precip}{range multiplier for max value in precipitation plot (default 1.5)}
 
 \item{ylabel}{text label for y-axis of the plot (default 'Flow [m3/s]')}
 
@@ -55,11 +57,12 @@ which again can be obtained directly by using the hyd.extract function.
 The winter.shading argument will add a transparent cyan shading for the
 December 1st to March 31st period in each year that is plotted.
 
-The range.mult argument will increase the maximum value that is plotted in
+The range.mult arguments (range.mult.hyd, range.mult.precip) will increase the maximum value that is plotted in
 the flows and the precip values. This is useful in preventing overlap if
 precip is also plotted (i.e. with precip as well, range.mult=1.5 works
 well). This value should not be less than 1.0, otherwise the values will be
-cutoff in the plot.
+cutoff in the plot. A value of 2 in each argument will ensure there is no overlap
+in the hydrographs and precipitation plots.
 
 ylabel is the label on the y axis, defined using y.lab in the plot function.
 This defaults to 'Flow [m3/s]' intended for plotting hydrographs.
@@ -87,15 +90,25 @@ generation of plot titles.
 }
 \examples{
 
+# load sample hydrograph data, two years worth of sim/obs
+data(hydrograph.data)
+sim <- hydrograph.data$hyd$Sub36
+obs <- hydrograph.data$hyd$Sub36_obs
+precip <- hydrograph.data$hyd$precip
+
 # create a nice hydrograph
 hyd.plot(sim,obs,zero.axis=F)
 
-# create a hydrograph with precip as well
-hyd.plot(sim,obs,range.mult=1.5,precip=precip)
+# create a hydrograph with precip as well;
+## range.mult=1.5 by default, leaves some overlap in plot axes
+hyd.plot(sim,obs,precip=precip)
+
+# hydrograph with no overlap, range.mult = 2
+hyd.plot(sim,obs,range.mult.hyd=2,range.mult.precip=2,precip=precip)
 
 # create a hydrograph with precip as well for a specific subperiod
-prd <- "2003-10-01/2005-10-01"
-hyd.plot(sim,obs,range.mult=1.5,precip=precip,prd=prd)
+prd <- "2003-10-01/2004-10-01"
+hyd.plot(sim,obs,precip=precip,prd=prd)
 
 }
 \seealso{

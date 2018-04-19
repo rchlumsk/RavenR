@@ -1,7 +1,7 @@
 ---
 title: "A Data Visualization Exercise / Workflow with RavenR"
 author: "Dr. James R. Craig, Robert Chlumsky"
-date: "`r Sys.Date()`"
+date: "June 2017"
 output: pdf_document
 urlcolor: blue
 vignette: >

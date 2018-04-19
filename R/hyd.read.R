@@ -16,7 +16,13 @@
 #' in the current working directory, then simply the name of the file is
 #' sufficient.
 #'
+#' tzone is a string indicating the timezone of the supplied Hydrographs file. The
+#' timezone provided is coded into the resulting hyd data frame using the as.POSIXct
+#' function. If no timezone is provided, this is left as an empty string, and is
+#' determined by the function as the current time zone.
+#'
 #' @param ff full file path to the Hydrographs.csv file
+#' @param tzone string indicating the timezone of the data in ff
 #' @return \item{hyd}{data frame from the file with standardized names}
 #' @seealso \code{\link{hyd.extract}} for extraction tools related to the
 #' hyd.read output file
@@ -38,7 +44,7 @@
 #' myhyd$units
 #'
 #' @export hyd.read
-hyd.read <- function(ff=NA) {
+hyd.read <- function(ff=NA,tzone="") {
 
   if (missing(ff)) {
     stop("Requires the full file path to the Hydrographs.csv file.")
@@ -55,9 +61,8 @@ hyd.read <- function(ff=NA) {
   # re-read with specified colClasses
   hydrographs <- read.csv(ff,header=T,colClasses = classes,na.strings=c("---",'NA'))
 
-
   # need to fix the hourly model
-  date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S",tz='UTC')
+  date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S",tz=tzone)
   # head(date.time)
   cols <- colnames(hydrographs)
 
@@ -85,15 +90,19 @@ hyd.read <- function(ff=NA) {
       units[i] = mysplit[2]
       obs_flag[i] = F
       newcols[i] = mysplit[1]
-    } else if (length(mysplit) == 3) {
+    } else if (length(mysplit) >= 3) {
       if (mysplit[2] == "observed") {
         units[i] = mysplit[3]
         obs_flag[i] = T
         newcols[i] = sprintf("%s_obs",mysplit[1])
-      } else if (mysplit[2] == "res.inflow") {
+      } else if (mysplit[2] == "inflow") {
         units[i] = mysplit[3]
         obs_flag[i] = F
-        newcols[i] = sprintf("%s_inflow",mysplit[1])
+        newcols[i] = sprintf("%s_resinflow",mysplit[1])
+      } else if (mysplit[3] == "inflow") {
+        units[i] = mysplit[4]
+        obs_flag[i] = F
+        newcols[i] = sprintf("%s_resinflow",mysplit[1])
       }
     }
   }

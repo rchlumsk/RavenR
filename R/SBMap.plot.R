@@ -1,30 +1,31 @@
-#' Create Subbasin Map
+#' Plot Continuous Data Using Subbasin Shapefile
 #'
-#' # description to be added
+#' Plots Raven custom output into a subbasin map
 #'
-#' Creates single static subbasin plot from custom data
+#'  @param shpfilename filename of shapefile containing HRU polygons, with one column inidicating Raven HRU ID
+#'  @param subIDcol string of subbasin ID column in shapefile
+#'  @param plot.date string of date to plot in custom.data
+#'  @param cust.data custom data set as read in by custom.read, for daily by_subbasin data
+#'  @param leg.title text for legend title
+#'  @param leg.pos position of legend
+#'  @param normalize.data whether to normalize data by all cust.data (TRUE) or just the data for the given date (FALSE)
+#'  @param colour1 string indicating which colour (text or code) to use on lower bound of range
+#'  @param colour2 string indicating which colour (text or code) to use on upper bound of range
+#'  @param num.classes number of classes to use in legend. Does not change the actual display colours
+#'  @param invalid.stop whether to stop if invalid basins are found (TRUE) or just continue with a warning (FALSE)
+#'  @param basins.label label to put on basins, one of c('None,'subID','value') to show nothing, subbasinIDs, or actual plotted values
+#'  @param plot.title title across top of plot
 #'
-#' see informal parameter description here
+#' @details does not currently support discrete data such as land use
 #'
-#'shpfilename - file path to shapefile.shp file
-# subIDcol - string of subbasin ID column in shapefile
-# plot.date - string of date to plot in custom.data
-# cust.data - custom data set as read in by custom.read, for daily by_subbasin data
-# let.title - text for legend title
-# leg.pos - position of legend
-# normalize.data - whether to normalize data by all cust.data (TRUE) or just the data for the given date (FALSE)
-# colour.scheme - colour scheme to use. Currently just 'White-Blue' or 'Blue-White'. Will be easy to add more later
-# num.classes - number of classes to use in legend. Does not change the actual display colours
-# invalid.stop - whether to stop if invalid basins are found (TRUE) or just continue with a warning (FALSE)
-# basins.label - label to put on basins, one of c('None,'subID','value') to show nothing, subbasinIDs, or actual plotted values
-# plot.title - title across top of plot
-#'
-#' @param TBD params to be added
+#' @author James R. Craig, University of Waterloo
+#' @author Robert Chlumsky
 #'
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #'
 #' @seealso \code{\link{subbasinNetwork.plot}} to create network plots
 #'
+#' See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
@@ -32,7 +33,6 @@
 #' @examples
 #'
 #' # Warning: example not run
-#' # Example to be cleaned up
 #'
 #' \dontrun{
 #' shpfilename <- 'shp/subbasins.shp'
@@ -42,13 +42,13 @@
 #' leg.title <- 'Legend - Precip (mm)'
 #' leg.pos <- 'topright'
 #' normalize.data <- TRUE
-#' colour.scheme <- 'White-Blue'
+#' colour1 <- "green"
+#' colour2 <- "blue"
 #' num.classes <- 5
 #' invalid.stop <- TRUE
 #' basins.label <- 'subID'
-#' # 'None', 'subID', 'value'
+#' # should be on of: 'None', 'subID', 'value'
 #' plot.title <- 'Precipitation (mm/d)'
-#'
 #'
 #' # create singe plot
 #' SBMap.plot(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title)
@@ -59,10 +59,9 @@
 #' # create singe plot
 #' SBMap.plot(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title)
 #' }
-#'
 #' @export SBMap.plot
 SBMap.plot <- function(shpfilename,subIDcol,plot.date,cust.data,leg.title='Legend',leg.pos='bottomleft',
-                       normalize.data=TRUE,colour.scheme='White-Blue',
+                       normalize.data=TRUE,colour1="azure",colour2="white",
                        num.classes=5,invalid.stop=TRUE,basins.label='subID',plot.title='')
 {
   basinshp<-readShapeSpatial(shpfilename)
@@ -115,15 +114,19 @@ SBMap.plot <- function(shpfilename,subIDcol,plot.date,cust.data,leg.title='Legen
   # JRC todo: if data is string-based (e.g., landcover), should plot differently
 
   cc <- seq(0.0,num.classes,1)/num.classes
-  if (colour.scheme == "White-Blue") {
-    hc <- rgb(colorRamp(c("azure", "blue"))(drange)/255)
-    legcolor<-rgb(colorRamp(c("azure", "blue"))(cc)/255)
-  } else if (colour.scheme == "Blue-White") {
-    hc <- rgb(colorRamp(c("blue","azure"))(drange)/255)
-    legcolor<-rgb(colorRamp(c("blue", "azure"))(cc)/255)
-  } else {
-    stop("Other colour schemes coming soon")
+
+  # check validity of colour inputs
+  if (!(iscolour(colour1))) {
+    warning(sprintf("Specified colour1 %s is not a valid colour, defaulting to azure.",colour1))
+    colour1 <- "azure"
   }
+  if (!(iscolour(colour2))) {
+    warning(sprintf("Specified colour2 %s is not a valid colour, defaulting to white.",colour2))
+    colour2 <- "white"
+  }
+  # create colour scheme
+  hc <- rgb(colorRamp(c(colour1,colour2))(drange)/255)
+  legcolor<-rgb(colorRamp(c("azure", "blue"))(cc)/255)
 
   # create plot
   plot(validbasins,col=hc)

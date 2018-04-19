@@ -2,34 +2,48 @@
 % Please edit documentation in R/SBMap.animate.R
 \name{SBMap.animate}
 \alias{SBMap.animate}
-\title{Create Subbasin Map Animation}
+\title{Create Animated Subbasin Map}
 \usage{
 SBMap.animate(shpfilename, subIDcol, plot.daterange, cust.data,
   leg.title = "Legend", leg.pos = "bottomleft", normalize.data = TRUE,
-  colour.scheme = "White-Blue", num.classes = 5, invalid.stop = TRUE,
-  basins.label = "subID", plot.title = "",
+  colour1 = "azure", colour2 = "white", num.classes = 5,
+  invalid.stop = TRUE, basins.label = "subID", plot.title = "",
   gif.filename = "subbasin_animated_plot.gif", transition.speed = 50)
-}
-\arguments{
-\item{TBD}{params to be added}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
-# description to be added
+Plots Raven custom output into an animated subbasin map for the specified date range.
 }
 \details{
-Creates animated subbasin plot from custom data and specified time period
+@param shpfilename filename of shapefile containing HRU polygons, with one column inidicating Raven HRU ID
+ @param subIDcol string of subbasin ID column in shapefile
+ @param plot.daterange string of date range to create in GIF
+ @param cust.data custom data set as read in by custom.read, for daily by_subbasin data
+ @param leg.title text for legend title
+ @param leg.pos position of legend
+ @param normalize.data whether to normalize data by all cust.data (TRUE) or just the data for the given date (FALSE)
+ @param colour1 string indicating which colour (text or code) to use on lower bound of range
+ @param colour2 string indicating which colour (text or code) to use on upper bound of range
+ @param num.classes number of classes to use in legend. Does not change the actual display colours
+ @param invalid.stop whether to stop if invalid basins are found (TRUE) or just continue with a warning (FALSE)
+ @param basins.label label to put on basins, one of c('None,'subID','value') to show nothing, subbasinIDs, or actual plotted values
+ @param plot.title title across top of plot
+ @param gif.filename fielname of outputted gif file
+ @param transition.speed transition speed between plots in gif, in ms
 
-Requires ImageMagick to be installed on your system
-
-see informal parameter description here
+Requires \href{https://www.imagemagick.org/script/download.php}{ImageMagick} to be installed on your system
 }
-\examples{
+\seealso{
+\code{\link{SBMap.plot}} to create a static subbasin map
+
+See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 
 # Warning: example not run
-# Example to be cleaned up
 
 \dontrun{
 plot.daterange <- '2000-01-01/2000-01-31'
@@ -45,22 +59,15 @@ plot.daterange <- '2000-02-01/2000-02-28'
 cust.data <- custom.read('SNOW_Daily_Average_BySubbasin.csv')
 plot.title <- 'Snow Cover (mm)'
 leg.title <- 'Legend: Snow (mm)'
-colour.scheme <- "Blue-White"
+colour1<-"green"
+colour2<-"white
 num.classes=7
 
 # create GIF of custom data plots
 SBmap.plot.animate(shpfilename,subIDcol,plot.daterange,cust.data,plot.title=plot.title,colour.scheme=colour.scheme,
                    num.classes=num.classes,leg.title=leg.title,transition.speed = transition.speed,gif.filename = 'Snow_mm_Jan2000.gif')
 }
-
 }
-\seealso{
-\code{\link{subbasinNetwork.plot}} to create network plots
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+\author{
+Robert Chlumsky
 }
-\keyword{map}
-\keyword{plot}
-\keyword{subbasin}
