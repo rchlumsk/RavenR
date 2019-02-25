@@ -35,7 +35,7 @@ rvh.write<-function(filename,SBtable,HRUtable)#add HRUgroups later
   write("# -------------------------------------------------",append=TRUE,file=filename)
 
   write(":SubBasins",append=TRUE,file=filename)
-  write(":Properties,SBID,Name,Downstream_ID,Profile,ReachLength,Gauged",append=TRUE,file=filename)
+  write(":Attributes  NAME,DOWNSTREAM_ID,PROFILE,REACH_LENGTH,GAUGED",append=TRUE,file=filename)
   write(":Units			     ,none,none         ,none		,km				  ,none",append=TRUE,file=filename)
   write.table(SBtable[c('SBID','Name','Downstream_ID','Profile','ReachLength','Gauged')],quote=FALSE,row.names=FALSE,col.names=FALSE,sep=", ",append=TRUE,file=filename)
   write(":EndSubBasins",append=TRUE,file=filename)
