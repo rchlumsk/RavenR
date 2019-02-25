@@ -16,7 +16,10 @@ You can install RavenR from github with:
 # install.packages("devtools")
 # library(devtools)
 #for this forked version:
-devtools::install_github("jwtrubi/RavenR")
+devtools::install_github("jwtrubil/RavenR")
+
+#for real version:
+devtools::install_github("rchlumsk/RavenR")
 ```
 
 Tutorials and Quick Start Guide
