@@ -49,7 +49,7 @@ rvh.cleanHRUs<-function(HRUtab,SBtab,area_tol=0.001,merge=FALSE,elev_tol=50,slop
   #-----------------------------------------------------------
 
   # get fraction of SB area in each HRU
-  areavec<-merge(HRUtab["SBID"],SBtab[c("SBID","Area")],by="SBID")$Area
+  areavec<-base::merge(HRUtab["SBID"],SBtab[c("SBID","Area")],by="SBID")$Area
 
   #areavec=SBtab$Area[HRUtab$SBID] #using index, not ID!!
   HRUtab$areafrac<-HRUtab$Area/areavec
