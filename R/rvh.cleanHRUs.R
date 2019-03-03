@@ -49,10 +49,11 @@ rvh.cleanHRUs<-function(HRUtab,SBtab,area_tol=0.001,merge=FALSE,elev_tol=50,slop
   #-----------------------------------------------------------
 
   # get fraction of SB area in each HRU
-  areavec<-merge(HRUtab["SBID"],SBtab[c("SBID","Area")],by="SBID")$Area
+  #areavec<-base::merge(HRUtab["SBID"],SBtab[c("SBID","Area")],by="SBID")$Area
+  SBtab$AreaSB <- SBtab$Area
 
-  #areavec=SBtab$Area[HRUtab$SBID] #using index, not ID!!
-  HRUtab$areafrac<-HRUtab$Area/areavec
+  HRUtab <- base::merge(HRUtab,SBtab[c("SBID","AreaSB")],by="SBID")
+  HRUtab$areafrac<-HRUtab$Area/HRUtab$AreaSB
 
   # re-sort HRU dataframe by SBID then by area frac
   HRUtab<-HRUtab[with(HRUtab, order(SBID, areafrac)),]
@@ -61,9 +62,9 @@ rvh.cleanHRUs<-function(HRUtab,SBtab,area_tol=0.001,merge=FALSE,elev_tol=50,slop
   HRUtab$remove<-(HRUtab$areafrac<area_tol) & !(HRUtab$ID %in% ProtectedHRUList) # (&& HRUtab$cumareafrac<0.25)
 
   # calculate area correction factors for all HRUs
-  A<-aggregate(areafrac ~ SBID, FUN = sum, data=HRUtab[HRUtab$remove==FALSE, ])
+  A<-stats::aggregate(areafrac ~ SBID, FUN = sum, data=HRUtab[HRUtab$remove==FALSE, ])
   rownames(A)<-A$SBID
-  B<-merge(HRUtab["SBID"],A[c("SBID","areafrac")],by="SBID")$areafrac
+  B<-base::merge(HRUtab["SBID"],A[c("SBID","areafrac")],by="SBID")$areafrac
 
   # unremove HRUs which were eradicating an entire SB
   B=ifelse(B==0,1.0,B)

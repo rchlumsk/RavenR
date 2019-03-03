@@ -5,6 +5,8 @@ RavenR
 
 RavenR is an R package for handling Raven hydrologic modelling framework inputs, outputs, and diagnostics. Please contact Robert Chlumsky (<rchlumsk@uwaterloo.ca>) for any troubleshooting, bug fixes, or recommendations on future releases.
 
+This is a forked version by Joel Trubilowicz, contacted at (<jwtrubil@gmail.com>)
+
 Installation
 ------------
 
@@ -12,7 +14,11 @@ You can install RavenR from github with:
 
 ``` r
 # install.packages("devtools")
-library(devtools)
+# library(devtools)
+#for this forked version:
+devtools::install_github("jwtrubil/RavenR")
+
+#for real version:
 devtools::install_github("rchlumsk/RavenR")
 ```
 
