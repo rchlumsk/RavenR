@@ -4,8 +4,8 @@
 \alias{HRUMap.plot}
 \title{Plot continuous data using HRU shapefile}
 \usage{
-HRUMap.plot(shpfilename, HRUID_name = "ID", validHRUIDs, toplot, plottitle,
-  legtitle, dmin = 1e+99, dmax = -1e+99, label = FALSE)
+HRUMap.plot(shpfilename, HRUID_name = "ID", validHRUIDs, toplot,
+  plottitle, legtitle, dmin = 1e+99, dmax = -1e+99, label = FALSE)
 }
 \value{
 TRUE if completed successfully

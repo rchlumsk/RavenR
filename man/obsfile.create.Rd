@@ -4,7 +4,8 @@
 \alias{obsfile.create}
 \title{Create Raven observation data (rvt) file}
 \usage{
-obsfile.create(filename, ts, SBID, typestr = "HYDROGRAPH", units = "m3/s")
+obsfile.create(filename, ts, SBID, typestr = "HYDROGRAPH",
+  units = "m3/s")
 }
 \arguments{
 \item{filename}{observation data file to be created, with .rvt extension}

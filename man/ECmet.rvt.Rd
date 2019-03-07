@@ -5,7 +5,8 @@
 \title{EC Climate Station File Conversion}
 \usage{
 ECmet.rvt(ff, prd = NULL, stnName = NULL, forcing.set = 1,
-  met.prefix = T, write.redirect = F, write.stndata = F, perform.qc = F)
+  met.prefix = T, write.redirect = F, write.stndata = F,
+  perform.qc = F)
 }
 \arguments{
 \item{ff}{EC climate data file paths in a string vector}

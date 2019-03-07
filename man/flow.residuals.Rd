@@ -4,7 +4,8 @@
 \alias{flow.residuals}
 \title{Scatterplot of model flows}
 \usage{
-flow.residuals(sim, obs, ma.smooth = 3, add.line = T, winter.shading = T)
+flow.residuals(sim, obs, ma.smooth = 3, add.line = T,
+  winter.shading = T)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}

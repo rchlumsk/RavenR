@@ -1,22 +1,16 @@
-#' EC Streamgauge File Conversion
+#' EC Streamgauge File Conversion from tidyhydat
 #'
-#' ECflow.rvt converts Environment Canada historical streamgauge data,
-#' downloaded from the Water Survey Canada, into .rvt format files usable in
+#' ECflowTidy.rvt converts Environment Canada historical streamgauge data,
+#' accessed via the tidyhydat package, into .rvt format files usable in
 #' Raven.
 #'
-#' This function takes a single WSC flow file and converts the flow data for
+#' This function takes a single flow tibble generated from tidyhydat and converts the flow data for
 #' each station in the file into .rvt formatted files for a Raven model. If
-#' multiple stations exist in the .csv file,
-#'
-#' The file should be downloaded in a .csv Date-Data format with missing days
-#' included. The download website is linked below. Any level data will be
-#' ignored, although can be included in the file for stations with flow and
-#' level data. If no data is found for a given station, an error will be
-#' reported.
+#' multiple stations exist in the .csv file, multiple observation files are created
 #'
 #' subIDs is required and should correspond to the subID to be used in the .rvt
 #' file for each station in the ff file, in the order in which it will be read
-#' in. If the subbasin is currently unknown, please supply a placeholder value.
+#' in. 
 #'
 #' prd is used by the xts formatted-data to restrict the data reported in .rvt
 #' files, for each station, to this period. The prd should be defined in
@@ -25,7 +19,7 @@
 #' thrown.
 #'
 #' stnNames is an optional character vector to replace the EC station codes
-#' found in the .csv file. If supplied, the vector must be of the same length
+#' found in the HYDAT database. If supplied, the vector must be of the same length
 #' as the number of stations supplied and the subIDs vector. If not supplied,
 #' the EC station codes will be used. Note that this does not impact model
 #' function, only filename readability and station recognition.
@@ -39,7 +33,8 @@
 #' alphabeticized order is not dependent on the station name, and the observed
 #' files will be in one set.
 #'
-#' @param ff WSC flow file in csv format
+#' @param indata tibble of WSC flow data from tidyhydat's hy_daily_flows() 
+#' function
 #' @param subIDs vector of subbasin IDs to correspond to the stations in ff
 #' @param prd (optional) data period to use in .rvt file
 #' @param stnNames (optional) character vector of alternative station names to
@@ -48,45 +43,29 @@
 #' separate .rvt file
 #' @param flip.number (optional) put the subID first in the .rvt filename
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
-#' @seealso \code{\link{annual.peak.event}} to consider the timing of peak
-#' events
 #'
-#' Download EC streamgauge data from
-#' \href{https://wateroffice.ec.gc.ca/search/historical_e.html}{WSC Historical
-#' Data}
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven streamgauge flow rvt conversion
+#' See also the \href{http://www.raven.uwaterloo.ca/}{Raven page}
+#' @keywords Raven streamgauge flow rvt conversion tidyhydat
 #' @examples
 #' # warning: example not run, sample example for associated files only
 #' \dontrun{
-#' ff <- 'Daily__May-12-2017_02_00_53PM.csv'
-#' ECflow.rvt(ff,subIDs=c(3,11))
+#' data<-hy_daily_flows(station_number = c("05CB004","05CA002"),start_date = "1996-01-01", end_date = "2000-01-01")
+#' 
+#' stationnames<-c('Raven River','Lower James River')
 #'
-#' # add custom station names, put subID number first in file
-#' ECflow.rvt(ff,subIDs=c(3,11),stnNames<-c('Rob_Hill','Bob_River'),flip.number=T)
+#' ECflowTidy.rvt(data,subIDs=c(3,11),stnNames=stationnames,flip.number=T)
 #' }
 #'
-#' @export ECflow.rvt
-ECflow.rvt <- function(ff,subIDs,prd=NULL,stnNames=NULL,write.redirect=F,flip.number=F) {
+#' @export ECflowTidy.rvt
+ECflowTidy.rvt <- function(indata,subIDs,prd=NULL,stnNames=NULL,write.redirect=F,flip.number=F) {
 
   # data checks
   if (!(is.null(stnNames)) & (length(subIDs) != length(stnNames))) {
     stop("Length of subIDs must be the same as stnNames.")
   }
 
-  # PARAMETERS
-  # param (flow) == 1
-  # param (level) == 2
-
-  # SYMBOLS - not currently reported
-  #
-
-  # determine period ----
   # determine the period to use
   if (!(is.null(prd))) {
-
     # period is supplied; check that it makes sense
     firstsplit <- unlist(strsplit(prd,"/"))
     if (length(firstsplit) != 2) {
@@ -98,17 +77,7 @@ ECflow.rvt <- function(ff,subIDs,prd=NULL,stnNames=NULL,write.redirect=F,flip.nu
     }
   }
 
-  # check the stations in the supplied file
-  dd <- utils::read.table(ff,sep=",",skip=1,header=T)
-
-  # fix to handle multi-byte marker/byte order marker,
-  #   appears if there is more than one station per file
-  stns <- as.character(unique(iconv(dd$ID,to="ASCII")))
-  stns <- stns[!(is.na(stns))]
-  if (length(stns) != length(subIDs)) {
-    stop(sprintf("Number of stations found in file not equal to the length of subIDs or stnNames, please check the
-                 supplied file and function inputs. Found %i stations, %s",length(stns),toString(paste(stns))))
-  }
+  stns<-pull(distinct(select(indata,STATION_NUMBER)),STATION_NUMBER)
 
   # begin writing the support file
   if (write.redirect) {
@@ -117,14 +86,18 @@ ECflow.rvt <- function(ff,subIDs,prd=NULL,stnNames=NULL,write.redirect=F,flip.nu
 
   # iterate through for all stations in the file
   for (i in 1:length(stns)) {
-    dd.temp <- dd[(dd$ID == stns[i] & dd$PARAM == 1),]
-    # date.temp <- as.Date(dd.temp$Date,format="%Y/%m/%d")
+    
+    dd.temp <- dd.temp <- filter(indata,STATION_NUMBER == stns[i])
+    dd.temp <- select(dd.temp,Date,Value)
     ts.temp <- xts(order.by=as.Date(dd.temp$Date,format="%Y/%m/%d"),x=dd.temp$Value)
+    
     if (!(is.null(prd))) {
       ts.temp <- ts.temp[prd]
     }
-    # change all NA values to Raven NA (-1.2345)
+    
+    # change all NA values to Raven blank (-1.2345)
     ts.temp[is.na(ts.temp)] = -1.2345
+    
     # check for empty time series
     if (nrow(ts.temp)==0) {
       close(fc.redirect)
@@ -165,5 +138,5 @@ ECflow.rvt <- function(ff,subIDs,prd=NULL,stnNames=NULL,write.redirect=F,flip.nu
     close(fc.redirect)
   }
   return(TRUE)
-  }
+}
 

@@ -5,7 +5,8 @@
 \title{Clean HRU data table.}
 \usage{
 rvh.cleanHRUs(HRUtab, SBtab, area_tol = 0.001, merge = FALSE,
-  elev_tol = 50, slope_tol = 4, aspect_tol = 20, ProtectedHRUList = c())
+  elev_tol = 50, slope_tol = 4, aspect_tol = 20,
+  ProtectedHRUList = c())
 }
 \arguments{
 \item{HRUtab}{table of HRUs generated (typically) by \code{\link{rvh.read}}}

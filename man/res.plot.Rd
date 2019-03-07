@@ -5,8 +5,9 @@
 \title{Plot Reservoir Stage}
 \usage{
 res.plot(sim = NULL, obs = NULL, inflow = NULL, precip = NULL,
-  prd = NULL, winter.shading = T, range.mult = 1, ylabel = "Stage [m]",
-  leg.pos = NULL, leg.box = NULL, zero.axis = T)
+  prd = NULL, winter.shading = T, range.mult = 1,
+  ylabel = "Stage [m]", leg.pos = NULL, leg.box = NULL,
+  zero.axis = T)
 }
 \arguments{
 \item{sim}{time series object of simulated stage}

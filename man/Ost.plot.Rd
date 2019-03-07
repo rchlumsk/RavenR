@@ -4,8 +4,8 @@
 \alias{Ost.plot}
 \title{Plot data from Ostrich output}
 \usage{
-Ost.plot(Ost.data = NA, plot.type = "oft", return.data = F, logy = F,
-  rangey = NA, num.metrics = 1, param.index = 1)
+Ost.plot(Ost.data = NA, plot.type = "oft", return.data = F,
+  logy = F, rangey = NA, num.metrics = 1, param.index = 1)
 }
 \arguments{
 \item{Ost.data}{data object from Ost.read function (optional)}

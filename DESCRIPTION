@@ -15,7 +15,9 @@ Depends:
     zoo,
     igraph,
     maptools,
-    rgdal
+    rgdal,
+    tidyhydat,
+    dplyr
 Suggests:
     knitr,
     rmarkdown,
@@ -28,5 +30,5 @@ URL: http://raven.uwaterloo.ca/RavenR.html
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr

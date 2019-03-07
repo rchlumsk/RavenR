@@ -4,7 +4,8 @@
 \alias{annual.peak.event.error}
 \title{Annual Peak Event Errors}
 \usage{
-annual.peak.event.error(sim, obs, rplot = T, add.line = T, add.labels = T)
+annual.peak.event.error(sim, obs, rplot = T, add.line = T,
+  add.labels = T)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}

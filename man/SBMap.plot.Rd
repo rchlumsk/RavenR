@@ -4,10 +4,11 @@
 \alias{SBMap.plot}
 \title{Plot Continuous Data Using Subbasin Shapefile}
 \usage{
-SBMap.plot(shpfilename, subIDcol, plot.date, cust.data, leg.title = "Legend",
-  leg.pos = "bottomleft", normalize.data = TRUE, colour1 = "azure",
-  colour2 = "white", num.classes = 5, invalid.stop = TRUE,
-  basins.label = "subID", plot.title = "")
+SBMap.plot(shpfilename, subIDcol, plot.date, cust.data,
+  leg.title = "Legend", leg.pos = "bottomleft",
+  normalize.data = TRUE, colour1 = "azure", colour2 = "white",
+  num.classes = 5, invalid.stop = TRUE, basins.label = "subID",
+  plot.title = "")
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}

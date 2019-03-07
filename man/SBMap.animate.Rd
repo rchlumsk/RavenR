@@ -5,10 +5,11 @@
 \title{Create Animated Subbasin Map}
 \usage{
 SBMap.animate(shpfilename, subIDcol, plot.daterange, cust.data,
-  leg.title = "Legend", leg.pos = "bottomleft", normalize.data = TRUE,
-  colour1 = "azure", colour2 = "white", num.classes = 5,
-  invalid.stop = TRUE, basins.label = "subID", plot.title = "",
-  gif.filename = "subbasin_animated_plot.gif", transition.speed = 50)
+  leg.title = "Legend", leg.pos = "bottomleft",
+  normalize.data = TRUE, colour1 = "azure", colour2 = "white",
+  num.classes = 5, invalid.stop = TRUE, basins.label = "subID",
+  plot.title = "", gif.filename = "subbasin_animated_plot.gif",
+  transition.speed = 50)
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}

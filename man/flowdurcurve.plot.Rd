@@ -4,7 +4,8 @@
 \alias{flowdurcurve.plot}
 \title{Plots summary of watershed forcing functions}
 \usage{
-flowdurcurve.plot(sim = NULL, obs = NULL, prd = NULL, seasonal = "F")
+flowdurcurve.plot(sim = NULL, obs = NULL, prd = NULL,
+  seasonal = "F")
 }
 \arguments{
 \item{sim}{simulated hydrograph xts time series}
