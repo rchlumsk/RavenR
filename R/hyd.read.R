@@ -63,8 +63,13 @@ hyd.read <- function(ff=NA,tzone="") {
 
   # need to fix the hourly model
   date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S",tz=tzone)
-  # head(date.time)
+
+  if (length(which(is.na(date.time)))>0){
+    print("hyd.read: Error in mapping day/time to POSIXct. Must be timezone without daylight savings")
+    return()
+  }
   cols <- colnames(hydrographs)
+
 
   # temporary fix while precip column leaves no space between precip and units
   if ("precip.mm.day." %in% cols) {

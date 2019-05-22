@@ -5,8 +5,6 @@ RavenR
 
 RavenR is an R package for handling Raven hydrologic modelling framework inputs, outputs, and diagnostics. Please contact Robert Chlumsky (<rchlumsk@uwaterloo.ca>) for any troubleshooting, bug fixes, or recommendations on future releases.
 
-This is a forked version by Joel Trubilowicz, contacted at (<jwtrubil@gmail.com>)
-
 Installation
 ------------
 
@@ -14,11 +12,7 @@ You can install RavenR from github with:
 
 ``` r
 # install.packages("devtools")
-# library(devtools)
-#for this forked version:
-devtools::install_github("jwtrubil/RavenR")
-
-#for real version:
+library(devtools)
 devtools::install_github("rchlumsk/RavenR")
 ```
 
@@ -42,9 +36,15 @@ Note that some of the package dependencies may require the installation of progr
 Version Update Notes
 --------------------
 
-### 1.2
+### 1.3
 
-*Currently in Beta mode for v1.2, please test and submit comments to <rchlumsk@uwaterloo.ca>*
+*Currently updates are in progress towards v1.3 release, please test and submit comments to <rchlumsk@uwaterloo.ca>*
+
+Updated functionality and test shapefile data sets for use, with a focus on updated documentation. New functions include: \* dygraph plotting of subbasin results \* RVI read in function \* minor fixes to flagging in hyd.read
+
+Sample data sets added include: \* Nith.rvi (from Raven Walkthrough Tutorial files) \* Nith subwatershed shapefile (for testing GIS-based functions) \* additional custom outputs for run1
+
+### 1.2
 
 Updated functionality and test data sets for use. New functions include: \* subbasin and HRU plotting from shapefile from custom data or tabular input \* animation of subbasin plots for custom data \* watershed network plotting from HRU file \* RVH file handling \* time series infilling \* creation of observation rvt files
 

@@ -13,7 +13,7 @@ This package provides a number of types of useful functions, including:
 \item{reading in \strong{Raven output files} (including ForcingFunctions, Hydrographs, etc.)}
 \item{processing some file types into \strong{Raven format} (e.g. ECflow.rvt, ECmet.rvt)}
 \item{flow-based \strong{diagnostics} and plot functions}
-\item{other useful plotting functions (e.g. forcings.plot, flow duration curve)}
+\item{other useful plotting functions (e.g. forcings.plot, flow duration curve, dyGraphs)}
 \item{useful utilities for time series and hydrologic functions (e.g. apply.wyearly)}
 }
 }

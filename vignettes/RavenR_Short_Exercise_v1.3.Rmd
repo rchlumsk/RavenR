@@ -1,22 +1,32 @@
 ---
-title: "A Data Visualization Exercise / Workflow with RavenR"
+title: "A Short Workflow Exercise with RavenR v1.3"
 author: "Dr. James R. Craig, Robert Chlumsky"
-date: "June 2017"
+date: "May 2019"
 output: pdf_document
 urlcolor: blue
 vignette: >
-  %\VignetteIndexEntry{A Data Visualization Exercise / Workflow with RavenR}
+  %\VignetteIndexEntry{Short Workflow Exercise with RavenR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+This short document is intended to get you started with using RavenR to aid your analysis with the Raven model. This will get you up and running with the RavenR package and comfortable running a few commands. Some knowledge or R is presumed in this document. If you are not comfortable with R, take a look at any number of R training and Introductory resources, such as the [tRaining repository](https://github.com/rchlumsk/tRaining)) on Github.
 
-As you go through this tutorial, don't just follow along blindly. Try to pay attention to what you are doing and how you are doing it.
 
 This exercise will use the Nith River modelled output available from within the RavenR package, thus the functions to read in data from csv files are not required. However, it is recommended that you download the Nith river model files, and try to both run the model and read in the output files. The Nith river model can be downloaded from the  [Raven Tutorial #2](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html).
 
+As you go through this tutorial, don't just follow along blindly. Try to pay attention to what you are doing and how you are doing it.
+
 ## Getting Acquainted with RavenR
 
-Start a new Rstudio session by opening RStudio. Load the RavenR library from the console and view its contents with the following commands:
+Start a new Rstudio session by opening RStudio. If you don't have RavenR yet installed in your R library, run the following commands to install the latest version of RavenR from Github (you will need the **devtools** library to be installed and loaded as well, so install this library first if you haven't yet).
+
+```{r, eval=FALSE}
+# install.packages("devtools")
+library(devtools)
+devtools::install_github("rchlumsk/RavenR")
+```
+
+Load the RavenR library from the console and view its contents with the following commands:
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE, results='hide'}
 library(RavenR)
@@ -44,13 +54,13 @@ head(ff[,1:6])
 
 Now we can plot the forcing data using the forcings.plot function. This creates an output of the five main forcings from the data set.
 
-```{r, fig.height=6, fig.width=7}
+```{r, fig.height=10, fig.width=7}
 forcings.plot(ff)
 ```
 
 This is typically a reasonable reality check on the model forcings. We can similarly access the hydrograph fit. Here the hydrograph sample data is set to the 'hy' object (normally read in from the Hydrographs.csv file using the hyd.read function). The flows from a specific subbasin can be extracted using the hyd.extract function, which is done here for subbasin 36. The precipitation can be extracted similarly.
 
-```{r}
+```{r, fig.height=5, fig.width=6}
 data(hydrograph.data)
 hy <- hydrograph.data
 head(hy$hyd)
@@ -60,15 +70,29 @@ precip <- hyd.extract("precip",hy)$sim
 
 The hydrograph object flow3 now stores the simulated hydrograph (`flow36$sim`) and the observed hydrograph (`flow36$obs`), and the null subobject (`flow36$inflow`). The precip object stores the entire time series of watershed-averaged precip (`precip$sim`). We can plot the simulated and observed hydrograph with the simple commands:
 
-```{r, fig.height=3, fig.width=6, message=FALSE, warning=FALSE}
+```{r, fig.height=5, fig.width=6, message=FALSE, warning=FALSE}
 plot(lubridate::date(flow36$sim),flow36$sim,col='red',type='l')
 lines(lubridate::date(flow36$obs),flow36$obs,col='black')
 ```
 
 Or using the special hydrograph plot function, which is part of the RavenR library.
 
-```{r, fig.height=3, fig.width=6}
-hyd.plot(sim=flow36$sim, obs=flow36$obs, precip=precip, range.mult=1.5)
+```{r, fig.height=5, fig.width=6}
+hyd.plot(sim=flow36$sim, obs=flow36$obs, precip=precip)
+```
+
+There are some other helpful functions in RavenR for understanding our hydrographs.
+
+```{r, fig.height=5, fig.width=6}
+flow.spaghetti(flow36$sim)
+flowdurcurve.plot(flow36$sim)
+```
+
+We can also use some of the Raven plots to get some diagnostics and comparisons on the simulated and observed hydrographs.
+
+```{r, fig.height=5, fig.width=6}
+cum.plot.flow(flow36$sim, obs=flow36$obs)
+annual.volume(flow36$sim, flow36$obs)
 ```
 
 The RavenR library can be explored to see what other functions are available in the package.
@@ -135,4 +159,4 @@ Modify the above script to generate png image plots of monthly subbasin-averaged
 
 ## More exercises
 
-This short exercise is meant to serve as a brief introduction to the RavenR package. The complete RavenR Tutorial can be found on the [Raven downloads page](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html). If you have any comments, suggestions or bug reports, please email the authors of the package or feel free to let us know on the [Raven forum](http://www.civil.uwaterloo.ca/raven_forum/).
+This short exercise is meant to serve as a brief introduction to the RavenR package. The complete RavenR Tutorial can be found on the [Raven downloads page](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html) or on the [RavenR Github page](https://github.com/rchlumsk/RavenR). If you have any comments, suggestions or bug reports, please email the authors of the package or feel free to let us know on the [Raven forum](http://www.civil.uwaterloo.ca/raven_forum/).
