@@ -31,10 +31,13 @@ file (not yet implemented!)}
 \item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
-ECmet.rvt converts Environment Canada historical meteorological data for a
-given station into the .rvt format usable in Raven.
+Note - this function is designated to be rewritten using the weathercan package
+available on Github to pull Environment Canada data directly
 }
 \details{
+ECmet.rvt converts Environment Canada historical meteorological data for a
+given station into the .rvt format usable in Raven.
+
 This function accepts a set of files and parses them into a single time
 series in the .rvt format for Raven. The function prints in the :MultiData
 format; the particular set of forcings to print can be set with the

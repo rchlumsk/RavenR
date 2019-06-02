@@ -18,13 +18,17 @@
 #'
 #' @author James R. Craig, University of Waterloo
 #'
+#' @importFrom rgdal readOGR
+#' @importFrom grDevices rgb colorRamp
+#'
 #' @seealso \code{\link{HRUMap.plot}}; See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 #'
 #' @examples
 #'
-#'   HRUdata<-HRUMap.prep.custom("SNOW_Monthly_Average_ByHRU.csv","2007-02-01")
-#'   HRUMap.plot("HRUs.shp",HRUdata$validHRUIDs,toplot=HRUdata$toplot,plottitle=HRUdata$plotttitle,legtitle=HRUdata$legtitle)
-#'
+#'\dontrun{
+#' HRUdata<-HRUMap.prep.custom("SNOW_Monthly_Average_ByHRU.csv","2007-02-01")
+#' HRUMap.plot("HRUs.shp",HRUdata$validHRUIDs,toplot=HRUdata$toplot,plottitle=HRUdata$plotttitle,legtitle=HRUdata$legtitle)
+#'}
 #' @keywords Raven  Map Plot HRUs
 #' @export HRUMap.prep.custom
 #'

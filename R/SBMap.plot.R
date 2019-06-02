@@ -2,26 +2,29 @@
 #'
 #' Plots Raven custom output into a subbasin map
 #'
-#'  @param shpfilename filename of shapefile containing HRU polygons, with one column inidicating Raven HRU ID
-#'  @param subIDcol string of subbasin ID column in shapefile
-#'  @param plot.date string of date to plot in custom.data
-#'  @param cust.data custom data set as read in by custom.read, for daily by_subbasin data
-#'  @param leg.title text for legend title
-#'  @param leg.pos position of legend
-#'  @param normalize.data whether to normalize data by all cust.data (TRUE) or just the data for the given date (FALSE)
-#'  @param colour1 string indicating which colour (text or code) to use on lower bound of range
-#'  @param colour2 string indicating which colour (text or code) to use on upper bound of range
-#'  @param num.classes number of classes to use in legend. Does not change the actual display colours
-#'  @param invalid.stop whether to stop if invalid basins are found (TRUE) or just continue with a warning (FALSE)
-#'  @param basins.label label to put on basins, one of c('None,'subID','value') to show nothing, subbasinIDs, or actual plotted values
-#'  @param plot.title title across top of plot
+#' @param shpfilename filename of shapefile containing HRU polygons, with one column inidicating Raven HRU ID
+#' @param subIDcol string of subbasin ID column in shapefile
+#' @param plot.date string of date to plot in custom.data
+#' @param cust.data custom data set as read in by custom.read, for daily by_subbasin data
+#' @param leg.title text for legend title
+#' @param leg.pos position of legend
+#' @param normalize.data whether to normalize data by all cust.data (TRUE) or just the data for the given date (FALSE)
+#' @param colour1 string indicating which colour (text or code) to use on lower bound of range
+#' @param colour2 string indicating which colour (text or code) to use on upper bound of range
+#' @param num.classes number of classes to use in legend. Does not change the actual display colours
+#' @param invalid.stop whether to stop if invalid basins are found (TRUE) or just continue with a warning (FALSE)
+#' @param basins.label label to put on basins, one of c('None,'subID','value') to show nothing, subbasinIDs, or actual plotted values
+#' @param plot.title title across top of plot
+#' @param plot.invalid boolean indicating whether to plot invalid basins in grey (currently disabled)
 #'
-#' @details does not currently support discrete data such as land use
+#' @details Does not currently support discrete data such as land use. Ability to include invalid basins in grey is currently disabled.
 #'
 #' @author James R. Craig, University of Waterloo
 #' @author Robert Chlumsky
 #'
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
+#'
+#' @importFrom sf read_sf st_centroid st_coordinates
 #'
 #' @seealso \code{\link{subbasinNetwork.plot}} to create network plots
 #'
@@ -32,40 +35,33 @@
 #' @keywords subbasin map plot
 #' @examples
 #'
-#' # Warning: example not run
+#' # Raw sample data
+#' shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR")
 #'
-#' \dontrun{
-#' shpfilename <- 'shp/subbasins.shp'
-#' subIDcol <- 'subID'
-#' plot.date <- "2010-01-02"
-#' cust.data <- custom.read('PRECIP_Daily_Average_BySubbasin.csv')
-#' leg.title <- 'Legend - Precip (mm)'
-#' leg.pos <- 'topright'
-#' normalize.data <- TRUE
-#' colour1 <- "green"
-#' colour2 <- "blue"
-#' num.classes <- 5
-#' invalid.stop <- TRUE
-#' basins.label <- 'subID'
-#' # should be on of: 'None', 'subID', 'value'
-#' plot.title <- 'Precipitation (mm/d)'
+#' # Custom Output data from Raven for Nith basin
+#' cust.data <- custom.read(system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv",
+#'                                   package="RavenR"))
 #'
-#' # create singe plot
-#' SBMap.plot(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title)
+#' subIDcol <- 'subID' # attriute in shapefile with subbasin IDs
+#' plot.date <- "2003-03-30" # date for which to plot custom data
 #'
-#' cust.data <- custom.read('SNOW_Daily_Average_BySubbasin.csv')
-#' plot.title <- 'Snow (mm)'
+#' # function call
+#' SBMap.plot(shpfilename,subIDcol,plot.date,cust.data)
 #'
-#' # create singe plot
-#' SBMap.plot(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title)
-#' }
 #' @export SBMap.plot
 SBMap.plot <- function(shpfilename,subIDcol,plot.date,cust.data,leg.title='Legend',leg.pos='bottomleft',
-                       normalize.data=TRUE,colour1="azure",colour2="white",
-                       num.classes=5,invalid.stop=TRUE,basins.label='subID',plot.title='')
+                       normalize.data=FALSE,colour1="green",colour2="blue",
+                       num.classes=5,invalid.stop=TRUE,basins.label='subID',plot.title='', plot.invalid=F)
 {
-  basinshp<-readShapeSpatial(shpfilename)
-  shp.subs<-basinshp@data[[subIDcol]] # all SBIDs in the GIS File
+
+  basinshp <- sf::read_sf(shpfilename)
+
+  if ( !(subIDcol %in% colnames(basinshp)) ) {
+    stop(sprintf("Provided argument subIDcol value '%s' must be a column attribute in shapefile.",subIDcol))
+  }
+
+  shp.subs <- basinshp[[subIDcol]] # all SBIDs in the GIS File
+
   if (is.null(shp.subs)){
     print("Invalid Subbasin ID column identifier")
   }
@@ -85,7 +81,7 @@ SBMap.plot <- function(shpfilename,subIDcol,plot.date,cust.data,leg.title='Legen
   }
 
   # get IDs of subbasin to plot
-  subs <- sort(shp.subs[(shp.subs %in% data.subs)])
+  subs <- as.character(sort(shp.subs[(shp.subs %in% data.subs)]))
 
   if (length(subs) == 0) {
     stop("No valid subbasins found. Check shapefile and custom data supplied to function.")
@@ -94,10 +90,10 @@ SBMap.plot <- function(shpfilename,subIDcol,plot.date,cust.data,leg.title='Legen
   # proceed with plotting
 
   # shapefile with valid basins
-  validbasins <- basinshp[ (basinshp@data[[subIDcol]] %in% subs),]
+  validbasins <- basinshp[ (basinshp[[subIDcol]] %in% subs),]
 
   # shapefile with invalid basins
-  invalidbasins<-basinshp[!(basinshp@data[[subIDcol]] %in% subs),]
+  invalidbasins<-basinshp[!(basinshp[[subIDcol]] %in% subs),]
 
   # get data to plot
   dd <- cust.data[plot.date,subs]
@@ -117,30 +113,33 @@ SBMap.plot <- function(shpfilename,subIDcol,plot.date,cust.data,leg.title='Legen
 
   # check validity of colour inputs
   if (!(iscolour(colour1))) {
-    warning(sprintf("Specified colour1 %s is not a valid colour, defaulting to azure.",colour1))
-    colour1 <- "azure"
+    warning(sprintf("Specified colour1 %s is not a valid colour, defaulting to green",colour1))
+    colour1 <- "green"
   }
   if (!(iscolour(colour2))) {
-    warning(sprintf("Specified colour2 %s is not a valid colour, defaulting to white.",colour2))
-    colour2 <- "white"
+    warning(sprintf("Specified colour2 %s is not a valid colour, defaulting to blue",colour2))
+    colour2 <- "blue"
   }
   # create colour scheme
   hc <- rgb(colorRamp(c(colour1,colour2))(drange)/255)
-  legcolor<-rgb(colorRamp(c("azure", "blue"))(cc)/255)
+  legcolor<-rgb(colorRamp(c(colour1, colour2))(cc)/255)
 
   # create plot
-  plot(validbasins,col=hc)
+  plot(validbasins$geometry,col=hc)
 
   # add title
   title(plot.title)
+
+  # get the polygon coordinates, suppress the current warning message with this function
+  suppressWarnings(crds <- st_coordinates(st_centroid(validbasins)))
 
   # add subbasin labels
   if (basins.label == 'None') {
     # no labels
   } else if (basins.label == 'subID') {
-    invisible(text(getSpPPolygonsLabptSlots(validbasins),labels=as.character(subs), cex=0.5))
+    invisible(text(crds, labels=as.character(subs), cex=0.5))
   } else if (basins.label == 'value') {
-    invisible(text(getSpPPolygonsLabptSlots(validbasins),labels=as.character(round(dd,1)), cex=0.5))
+    invisible(text(crds,labels=as.character(round(dd,1)), cex=0.5))
   }
 
   # add date to plot
@@ -152,6 +151,7 @@ SBMap.plot <- function(shpfilename,subIDcol,plot.date,cust.data,leg.title='Legen
          border='black',title.col = 'black')
 
   # Plot invalid basins as gray
-  plot(invalidbasins,add=TRUE,col=rep("gray40",length(invalidbasins@data)))
+  # plot(invalidbasins,add=TRUE,col=rep("gray40",nrow(invalidbasins))) # disabled feature, need to get extents of
+  # valid and invalid basins prior to including this feature
   return(TRUE)
 }

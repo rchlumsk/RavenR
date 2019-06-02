@@ -1,5 +1,8 @@
 #' EC Climate Station File Conversion
 #'
+#' Note - this function is designated to be rewritten using the weathercan package
+#' available on Github to pull Environment Canada data directly
+#'
 #' ECmet.rvt converts Environment Canada historical meteorological data for a
 #' given station into the .rvt format usable in Raven.
 #'

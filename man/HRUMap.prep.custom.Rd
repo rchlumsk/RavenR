@@ -25,9 +25,10 @@ from the custom output file name
 }
 \examples{
 
-  HRUdata<-HRUMap.prep.custom("SNOW_Monthly_Average_ByHRU.csv","2007-02-01")
-  HRUMap.plot("HRUs.shp",HRUdata$validHRUIDs,toplot=HRUdata$toplot,plottitle=HRUdata$plotttitle,legtitle=HRUdata$legtitle)
-
+\dontrun{
+HRUdata<-HRUMap.prep.custom("SNOW_Monthly_Average_ByHRU.csv","2007-02-01")
+HRUMap.plot("HRUs.shp",HRUdata$validHRUIDs,toplot=HRUdata$toplot,plottitle=HRUdata$plotttitle,legtitle=HRUdata$legtitle)
+}
 }
 \seealso{
 \code{\link{HRUMap.plot}}; See also the \href{http://raven.uwaterloo.ca/}{Raven web site}

@@ -6,9 +6,38 @@
 \usage{
 SBMap.plot(shpfilename, subIDcol, plot.date, cust.data,
   leg.title = "Legend", leg.pos = "bottomleft",
-  normalize.data = TRUE, colour1 = "azure", colour2 = "white",
+  normalize.data = FALSE, colour1 = "green", colour2 = "blue",
   num.classes = 5, invalid.stop = TRUE, basins.label = "subID",
-  plot.title = "")
+  plot.title = "", plot.invalid = F)
+}
+\arguments{
+\item{shpfilename}{filename of shapefile containing HRU polygons, with one column inidicating Raven HRU ID}
+
+\item{subIDcol}{string of subbasin ID column in shapefile}
+
+\item{plot.date}{string of date to plot in custom.data}
+
+\item{cust.data}{custom data set as read in by custom.read, for daily by_subbasin data}
+
+\item{leg.title}{text for legend title}
+
+\item{leg.pos}{position of legend}
+
+\item{normalize.data}{whether to normalize data by all cust.data (TRUE) or just the data for the given date (FALSE)}
+
+\item{colour1}{string indicating which colour (text or code) to use on lower bound of range}
+
+\item{colour2}{string indicating which colour (text or code) to use on upper bound of range}
+
+\item{num.classes}{number of classes to use in legend. Does not change the actual display colours}
+
+\item{invalid.stop}{whether to stop if invalid basins are found (TRUE) or just continue with a warning (FALSE)}
+
+\item{basins.label}{label to put on basins, one of c('None,'subID','value') to show nothing, subbasinIDs, or actual plotted values}
+
+\item{plot.title}{title across top of plot}
+
+\item{plot.invalid}{boolean indicating whether to plot invalid basins in grey (currently disabled)}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
@@ -17,51 +46,23 @@ SBMap.plot(shpfilename, subIDcol, plot.date, cust.data,
 Plots Raven custom output into a subbasin map
 }
 \details{
-@param shpfilename filename of shapefile containing HRU polygons, with one column inidicating Raven HRU ID
- @param subIDcol string of subbasin ID column in shapefile
- @param plot.date string of date to plot in custom.data
- @param cust.data custom data set as read in by custom.read, for daily by_subbasin data
- @param leg.title text for legend title
- @param leg.pos position of legend
- @param normalize.data whether to normalize data by all cust.data (TRUE) or just the data for the given date (FALSE)
- @param colour1 string indicating which colour (text or code) to use on lower bound of range
- @param colour2 string indicating which colour (text or code) to use on upper bound of range
- @param num.classes number of classes to use in legend. Does not change the actual display colours
- @param invalid.stop whether to stop if invalid basins are found (TRUE) or just continue with a warning (FALSE)
- @param basins.label label to put on basins, one of c('None,'subID','value') to show nothing, subbasinIDs, or actual plotted values
- @param plot.title title across top of plot
-
-does not currently support discrete data such as land use
+Does not currently support discrete data such as land use. Ability to include invalid basins in grey is currently disabled.
 }
 \examples{
 
-# Warning: example not run
+# Raw sample data
+shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR")
 
-\dontrun{
-shpfilename <- 'shp/subbasins.shp'
-subIDcol <- 'subID'
-plot.date <- "2010-01-02"
-cust.data <- custom.read('PRECIP_Daily_Average_BySubbasin.csv')
-leg.title <- 'Legend - Precip (mm)'
-leg.pos <- 'topright'
-normalize.data <- TRUE
-colour1 <- "green"
-colour2 <- "blue"
-num.classes <- 5
-invalid.stop <- TRUE
-basins.label <- 'subID'
-# should be on of: 'None', 'subID', 'value'
-plot.title <- 'Precipitation (mm/d)'
+# Custom Output data from Raven for Nith basin
+cust.data <- custom.read(system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv",
+                                  package="RavenR"))
 
-# create singe plot
-SBMap.plot(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title)
+subIDcol <- 'subID' # attriute in shapefile with subbasin IDs
+plot.date <- "2003-03-30" # date for which to plot custom data
 
-cust.data <- custom.read('SNOW_Daily_Average_BySubbasin.csv')
-plot.title <- 'Snow (mm)'
+# function call
+SBMap.plot(shpfilename,subIDcol,plot.date,cust.data)
 
-# create singe plot
-SBMap.plot(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title)
-}
 }
 \seealso{
 \code{\link{subbasinNetwork.plot}} to create network plots

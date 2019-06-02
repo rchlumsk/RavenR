@@ -1,34 +1,38 @@
 ---
-title: "RavenR Tutorial"
+title: "RavenR Tutorial (under construction)"
 author: "Robert Chlumsky, Dr. James R. Craig"
-date: "June 2017"
+date: "June 2019"
 output: pdf_document
 urlcolor: blue
 vignette: >
   %\VignetteIndexEntry{RavenR Tutorial}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
-As you go through this tutorial, don't just follow along blindly. Try to pay attention to what you are doing and how you are doing it.
+**This tutorial is currently under construction, and will be made fully available with a future version release**
 
-This exercise will use the Nith River modelled output available from within the RavenR package, thus the functions to read in data from csv files are not required. However, it is recommended that you download the Nith river model files, and try to both run the model and read in the output files. The Nith river model can be downloaded from the  [Raven Tutorial #2](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html).
+# Introduction
 
-## Installing RavenR
+This document is intended to get you started with using RavenR to aid your analysis with the Raven model. This will familiarize you with the RavenR package and running most of the commands within the package, and serves as a longer form help exercise and reference manual. If you are looking for a shorter exercise, you may find the RavenR Short Exercise files maintained with the RavenR package.
 
-The RavenR package can be installed in a number of ways. The RavenR package can be installed either from a source tarball file, or from the GitHub repository directly. To install direct from the repository, load the ('devtools') library and call the following command.
+Some knowledge of R is presumed in this document. If you are not comfortable with R, take a look at any number of R training and Introductory resources, such as the [tRaining repository](https://github.com/rchlumsk/tRaining)) or the R training materials maintained by Dr. Kevin Shook under the [Centre for Hydrology](https://github.com/CentreForHydrology), both available on Github. 
 
-```{r, echo=TRUE, message=FALSE, warning=FALSE, results='hide',eval=FALSE}
+Sections of this tutorial will use sample files from the Nith River basin, which is referenced in the Raven Tutorial files. The Nith river model can be downloaded from the  [Raven Tutorial #2](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html).
+
+## Getting Acquainted with RavenR
+
+Start a new RStudio session by opening RStudio. If you don't have RavenR yet installed in your R library, run the following commands to install the latest version of RavenR from Github (you will need the **devtools** library to be installed and loaded as well, so install this library first if you haven't yet).
+
+```{r, eval=FALSE}
+# install.packages("devtools")
 library(devtools)
-install_github("rchlumsk/RavenR")
+devtools::install_github("rchlumsk/RavenR")
 ```
 
-
-
-
-########################
-
-Start a new Rstudio session by opening RStudio. Load the RavenR library from the console and view its contents with the following commands:
+Load the RavenR library from the console and view its contents with the following commands:
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE, results='hide'}
 library(RavenR)
@@ -41,110 +45,45 @@ You can look at what any one of these functions does by typing out the name of t
 ?flow.scatterplot
 ```
 
-Now you are ready to start using RavenR to directly visualize and manipulate model output. The sample data set from the RavenR package can be loaded in using the data function, e.g.,
+## Sample Data in RavenR
+
+The RavenR package contains a number of sample data files, which are useful for training purposes and testing of functions. The package contains sample data both in R format (under RavenR/data) and as raw data files in their native formats (RavenR/inst/extdata). The sample data set from the RavenR package (in R format) can be loaded in using the data function, e.g.,
 
 ```{r, message=FALSE, warning=FALSE, results='hide'}
 data(forcing.data)
+?forcing.data
 ```
+Notice as well that the sample data set in R format also has a built in help file to describe the data.
 
-We will store the packaged forcing.data into an object called ff (and obtain just the subobject using the '$' operator), and then view the first few rows using the head function. We will show only the first few columns of the data for brevity.
+To pull out the raw data from the RavenR package, we will use a syntax to find the data by file name in the RavenR package directory, which ends up looking more similar to a raw file call. This raw data file comes from the **extdata** folder in the RavenR package, **not the data folder**. Note that this is done so that the sample data in raw format can be used and tested with functions, and the syntax to locate the data file is more portable across various computer operating systems.
 
 ```{r}
-ff <- forcing.data$forcings
-head(ff[,1:6])
+# read in hydrograph sample csv data from RavenR package
+ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
+
+# read in sample rvi file from the RavenR package
+rvi <- system.file("extdata", "Nith.rvi", package="RavenR")
 ```
 
-Now we can plot the forcing data using the forcings.plot function. This creates an output of the five main forcings from the data set.
+The **system.file** command will simply build a file path for where this data file is located on your machine with the RavenR package installation, which can then be passed to any function as required to provide a file location. This command will be used throughout this tutorial in place of local files for portability, however, your own data files may be swapped in place of the system.file locations.
 
-```{r, fig.height=6, fig.width=7}
-forcings.plot(ff)
-```
+# Package Functions
 
-This is typically a reasonable reality check on the model forcings. We can similarly access the hydrograph fit. Here the hydrograph sample data is set to the 'hy' object (normally read in from the Hydrographs.csv file using the hyd.read function). The flows from a specific subbasin can be extracted using the hyd.extract function, which is done here for subbasin 36. The precipitation can be extracted similarly.
+The package contains a few broad categories of functions. The broad categories include:
 
-```{r}
-data(hydrograph.data)
-hy <- hydrograph.data
-head(hy$hyd)
-flow36 <- hyd.extract("Sub36",hy)
-precip <- hyd.extract("precip",hy)$sim
-```
+* Diagnostics and Plotting Functions
+* Raven File Functions (reading and outputting Raven files)
+* Time Series Functions (helpful functions for time series analysis and preparation)
+* RavenR Utility functions (utility functions you likely won't need but are helpful for other RavenR functions)
 
-The hydrograph object flow3 now stores the simulated hydrograph (`flow36$sim`) and the observed hydrograph (`flow36$obs`), and the null subobject (`flow36$inflow`). The precip object stores the entire time series of watershed-averaged precip (`precip$sim`). We can plot the simulated and observed hydrograph with the simple commands:
+## Diagnostics and Plotting
 
-```{r, fig.height=3, fig.width=6, message=FALSE, warning=FALSE}
-plot(lubridate::date(flow36$sim),flow36$sim,col='red',type='l')
-lines(lubridate::date(flow36$obs),flow36$obs,col='black')
-```
+This section contains a number of helpful functions related to model diagnostics, model performance evaluation, and plotting functions.
 
-Or using the special hydrograph plot function, which is part of the RavenR library.
+### Forcing Functions (forcings.plot)
 
-```{r, fig.height=3, fig.width=6}
-hyd.plot(sim=flow36$sim, obs=flow36$obs, precip=precip, range.mult=1.5)
-```
 
-The RavenR library can be explored to see what other functions are available in the package.
 
-```{r, results='hide'}
-ls("package:RavenR")
-```
+# More exercises and Resources
 
-Using the ?help option (where help is the name of a RavenR command), figure out how to plot:
-
-1. a comparison of annual peak flows, and
-2. the mean and median annual observed flow using the barplot() function (hint: use the apply.wyearly function to calculate annual mean and median)
-  
-## Building a model workflow script
-
-Now we will build a simple script which will provide a bunch of visualizations that we can use to look at the Nith river model each time we run it. This can be made as complex as you want.
-
-Start with a new script. From RStudio, go to the main menu. `Choose File -> New File -> R Script`. Populate the script with the following. You can find the Nith model files in the Raven Tutorials.
-
-```{r, eval=FALSE}
-# Load the RavenR sample data
-# =====================================================
-indir <- "C:/temp/Nith/"
-outdir <- "C:/temp/Nith/output/"
-fileprefix <- "Nith"
-
-if (dir.exists(outdir)==FALSE) {
-  dir.create(outdir)
-}
-
-setwd(outdir)
-
-# RUN RAVEN
-# =====================================================
-# writes complete command prompt command
-# > Raven.exe [filename] -o [outputdir]
-RavenCMD <-paste(indir,"Raven.exe ",indir,fileprefix," -o ",outdir,sep="")
-system(RavenCMD) # this runs raven from the command prompt
-```
-
-Once the model is run, we can read in the output (or use the package data) and save some of the plots to file.
-
-```{r, eval=FALSE}
-# GENERATE OUTPUT PLOTS
-# =====================================================
-# use the package data, or read in the model output files
-
-# ff<-forcings.read("ForcingFunctions.csv")
-pdf("forcings.pdf") # create a pdf file to direct plot to
-forcings.plot(ff$forcings)
-dev.off() #finishes writing plot to .pdf file
-
-data(watershed.data)
-mywshd <- watershed.data$watershed.storage
-#mywshd <- RavenR::watershed.read("WatershedStorage.csv")$watershed.storage
-png("snowpack.png") # create a png file to direct plot to
-plot(mywshd$snow)
-dev.off() #finishes writing plot to .png file
-```
-
-## Modify the script
-
-Modify the above script to generate png image plots of monthly subbasin-averaged PET in Subbasin 43 using the :CustomOutput option (you will have to add a :CustomOutput command to the Raven input rvi file). You will also want to use the RavenR `custom.read()` and `customoutput.plot()` commands.
-
-## More exercises
-
-This short exercise is meant to serve as a brief introduction to the RavenR package. The complete RavenR Tutorial can be found on the [Raven downloads page](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html). If you have any comments, suggestions or bug reports, please email the authors of the package or feel free to let us know on the [Raven forum](http://www.civil.uwaterloo.ca/raven_forum/).
+This short exercise is meant to serve as a brief introduction to the RavenR package. The complete RavenR Tutorial can be found on the [Raven downloads page](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html) or on the [RavenR Github page](https://github.com/rchlumsk/RavenR). If you have any comments, suggestions or bug reports, please email the authors of the package or feel free to let us know on the [Raven forum](http://www.civil.uwaterloo.ca/raven_forum/).

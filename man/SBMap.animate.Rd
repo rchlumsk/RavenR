@@ -8,8 +8,44 @@ SBMap.animate(shpfilename, subIDcol, plot.daterange, cust.data,
   leg.title = "Legend", leg.pos = "bottomleft",
   normalize.data = TRUE, colour1 = "azure", colour2 = "white",
   num.classes = 5, invalid.stop = TRUE, basins.label = "subID",
-  plot.title = "", gif.filename = "subbasin_animated_plot.gif",
-  transition.speed = 50)
+  plot.title = "", plot.invalid = F,
+  gif.filename = "subbasin_animated_plot.gif", gif.speed = 1,
+  cleanup = T)
+}
+\arguments{
+\item{shpfilename}{filename of shapefile containing HRU polygons, with one column inidicating Raven HRU ID}
+
+\item{subIDcol}{string of subbasin ID column in shapefile}
+
+\item{plot.daterange}{string of date range to create in GIF}
+
+\item{cust.data}{custom data set as read in by custom.read, for daily by_subbasin data}
+
+\item{leg.title}{text for legend title}
+
+\item{leg.pos}{position of legend}
+
+\item{normalize.data}{whether to normalize data by all cust.data (TRUE) or just the data for the given date (FALSE)}
+
+\item{colour1}{string indicating which colour (text or code) to use on lower bound of range}
+
+\item{colour2}{string indicating which colour (text or code) to use on upper bound of range}
+
+\item{num.classes}{number of classes to use in legend. Does not change the actual display colours}
+
+\item{invalid.stop}{whether to stop if invalid basins are found (TRUE) or just continue with a warning (FALSE)}
+
+\item{basins.label}{label to put on basins, one of c('None,'subID','value') to show nothing, subbasinIDs, or actual plotted values}
+
+\item{plot.title}{title across top of plot}
+
+\item{plot.invalid}{boolean indicating whether to plot invalid basins in grey (currently disabled)}
+
+\item{gif.filename}{filename of outputted gif file}
+
+\item{gif.speed}{time in seconds between images}
+
+\item{cleanup}{boolean indicates whether to remove the scratch directory with image files stored.}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
@@ -18,23 +54,15 @@ SBMap.animate(shpfilename, subIDcol, plot.daterange, cust.data,
 Plots Raven custom output into an animated subbasin map for the specified date range.
 }
 \details{
-@param shpfilename filename of shapefile containing HRU polygons, with one column inidicating Raven HRU ID
- @param subIDcol string of subbasin ID column in shapefile
- @param plot.daterange string of date range to create in GIF
- @param cust.data custom data set as read in by custom.read, for daily by_subbasin data
- @param leg.title text for legend title
- @param leg.pos position of legend
- @param normalize.data whether to normalize data by all cust.data (TRUE) or just the data for the given date (FALSE)
- @param colour1 string indicating which colour (text or code) to use on lower bound of range
- @param colour2 string indicating which colour (text or code) to use on upper bound of range
- @param num.classes number of classes to use in legend. Does not change the actual display colours
- @param invalid.stop whether to stop if invalid basins are found (TRUE) or just continue with a warning (FALSE)
- @param basins.label label to put on basins, one of c('None,'subID','value') to show nothing, subbasinIDs, or actual plotted values
- @param plot.title title across top of plot
- @param gif.filename fielname of outputted gif file
- @param transition.speed transition speed between plots in gif, in ms
-
 Requires \href{https://www.imagemagick.org/script/download.php}{ImageMagick} to be installed on your system
+This function has been updated to make use of the magick R package, which makes a cleaner command stack for generating gifs.
+
+The cleanup parameter can be used to disable removal of the scratch directory where individual plot images are stored, which
+may be desired if the user wishes to keep individual plots in addition to the .gif file created by this function.
+
+Note that the normalize.data parameter is default as TRUE for this function. In generating a series of plots the data should
+ideally be normalized across the entire dataset for consistency between frames, however, this is not the default for the
+static plot call.
 }
 \seealso{
 \code{\link{SBMap.plot}} to create a static subbasin map
@@ -43,31 +71,31 @@ See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 Craig's research page} for software downloads, including the
 \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' # shapefile of Nith basin
+shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR")
 
-# Warning: example not run
+# Custom Output data from Raven for Nith basin
+cust.data <- custom.read(system.file("extdata","run1_PRECIP_Daily_Maximum_BySubbasin.csv",
+                                     package="RavenR"))
 
-\dontrun{
-plot.daterange <- '2000-01-01/2000-01-31'
-cust.data <- custom.read('PRECIP_Daily_Average_BySubbasin.csv')
-leg.title <- 'Legend: Precip (mm/d)'
-plot.title <- 'Precipitation (mm/d)'
+subIDcol <- 'subID' # attribute in shapefile with subbasin IDs
+leg.title <- 'Legend - Precip (mm)'
+colour1 <- "white"
+colour2 <- "blue"
+num.classes <- 5
+plot.title <- 'Daily Max Precip. (mm)'
+plot.daterange <- '2003-05-01/2003-06-30'
 
-# create GIF of custom data plots
-SBmap.plot.animate(shpfilename,subIDcol,plot.daterange,cust.data,plot.title=plot.title,leg.title=leg.title,gif.filename = 'Precip_mmd_Jan2000.gif')
+gif.filename='Nith_precip_May2003_June2003.gif'
+gif.speed <- 0.5
+cleanup <- FALSE
 
-transition.speed <- 30
-plot.daterange <- '2000-02-01/2000-02-28'
-cust.data <- custom.read('SNOW_Daily_Average_BySubbasin.csv')
-plot.title <- 'Snow Cover (mm)'
-leg.title <- 'Legend: Snow (mm)'
-colour1<-"green"
-colour2<-"white
-num.classes=7
-
-# create GIF of custom data plots
-SBmap.plot.animate(shpfilename,subIDcol,plot.daterange,cust.data,plot.title=plot.title,colour.scheme=colour.scheme,
-                   num.classes=num.classes,leg.title=leg.title,transition.speed = transition.speed,gif.filename = 'Snow_mm_Jan2000.gif')
-}
+SBMap.animate(shpfilename,subIDcol,plot.daterange,cust.data,plot.title=plot.title,
+              colour1 = colour1, colour2=colour2,
+              leg.title = leg.title, normalize=T, num.classes=num.classes,
+              gif.filename=gif.filename,
+              gif.speed=gif.speed, cleanup=cleanup
+)
 }
 \author{
 Robert Chlumsky
