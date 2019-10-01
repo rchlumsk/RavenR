@@ -18,6 +18,7 @@ This package provides a number of types of useful functions, including:
 }
 }
 \seealso{
+The package \href{https://github.com/rchlumsk/RavenR}{GitHub page},
 \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 Craig's research page} for software downloads, including the
 \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
