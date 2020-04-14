@@ -17,8 +17,8 @@
 #' # read in RavenR sample hydrographs data
 #' hy <- rvn_hydrograph_data
 #'
-#' # view contents for subbasin 11 as dyGraph
-#' res<-rvn_hyd_dygraph(hy,basins="sub11")
+#' # view contents for subbasin 36 as dyGraph
+#' res<-rvn_hyd_dygraph(hy,basins="sub36")
 #'
 #' @export rvn_hyd_dygraph
 rvn_hyd_dygraph <- function(hy, timezone="UTC",basins="", figheight=400)

@@ -56,46 +56,62 @@
 #' peak_df
 #'
 #' @export rvn_annual_peak_event
-rvn_annual_peak_event <- function(sim,obs,rplot=T,add_line=T,add_r2=F,axis_zero=F) {
-
-  # calculate the maximum observed in each year
-  max.obs <- apply_wyearly(obs, max, na.rm=T)[,2]
-  max.dates <- as.Date(apply_wyearly(obs, function(x) toString(lubridate::date(which_max_xts(x))))[,2])
-
-  ind <- matrix(NA,nrow=length(max.obs),ncol=1)
+#'
+rvn_annual_peak_event <- function (sim, obs, rplot = T, add_line = T, add_r2 = F) {
+  max.obs <- apply.wyearly(obs, max, na.rm = T)[, 2]
+  max.dates <- as.Date(apply.wyearly(obs, function(x) toString(lubridate::date(which.max.xts(x))))[,
+                                                                                                   2])
+  ind <- matrix(NA, nrow = length(max.obs), ncol = 1)
   for (k in 1:length(max.obs)) {
-    ind[k] <- which(year(obs)==year(max.dates[k]) & month(obs)==month(max.dates[k]) & day(obs)==day(max.dates[k]))
+    ind[k] <- which(year(obs) == year(max.dates[k]) & month(obs) ==
+                      month(max.dates[k]) & day(obs) == day(max.dates[k]))
   }
-  # get the simulated values at those indices
   max.sim <- as.numeric(sim[ind])
 
-  # calculate the r2 fit
+  df <- data.frame(obs.dates = max.dates, sim.peak.event = max.sim,
+                   obs.peak.event = max.obs)
+
   if (add_r2) {
-    # need to check the r2 calculation, ensure it is for an intercept of zero
     max.obs.mean <- mean(max.obs)
     ss.err <- sum((max.sim - max.obs)^2)
     ss.tot <- sum((max.obs - max.obs.mean)^2)
-    r2 <- 1- ss.err/ss.tot
+    r2 <- 1 - ss.err/ss.tot
   }
-
   if (rplot) {
+    x.lab <- expression("Observed Peak ["*m^3*"/s]")
+    y.lab <- expression("Simulated Peak ["*m^3*"/s]")
+    title.lab <- ""
 
-    x.lab <- "Observed Peak Event [m3/s]"
-    y.lab <- "Simulated Peak Event [m3/s]"
-    title.lab <- '' #"Annual Peak Event Flow Comparison"
-    if (axis_zero) {
-      x.lim=c(0,max(max.obs,max.sim,na.rm=T)*1.1)
-      y.lim=c(0,max(max.obs,max.sim,na.rm=T)*1.1)
-    } else {
-      x.lim=c(min(max.obs,max.sim,na.rm=T)*0.9,max(max.obs,max.sim,na.rm=T)*1.1)
-      y.lim=c(min(max.obs,max.sim,na.rm=T)*0.9,max(max.obs,max.sim,na.rm=T)*1.1)
+    x.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,
+              max(max.obs, max.sim, na.rm = T) * 1.1)
+    y.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,
+              max(max.obs, max.sim, na.rm = T) * 1.1)
+
+    text.labels <- year(max.dates)
+
+    #Base Plot
+    p1 <- ggplot(data=df,aes(x=obs.peak.event,y=sim.peak.event,label=text.labels))+
+      geom_point()+
+      geom_text(hjust=0.5,vjust=-0.5)+
+      scale_x_continuous(limits=x.lim, name=x.lab)+
+      scale_y_continuous(limits=y.lim, name=y.lab)+
+      theme_bw()
+
+
+    if (add_line){
+      p1 <- p1 +
+        geom_abline(linetype=2)
     }
-    text.labels <- sprintf("'%02d",as.numeric(format(index(max.sim), format = "%Y")) )
-    plot(coredata(max.obs), coredata(max.sim), xlim=x.lim, ylim=y.lim, xlab=x.lab, ylab=y.lab, main=title.lab)
-    text(coredata(max.obs), coredata(max.sim), text.labels, cex=0.75, pos=3)
-    if (add_line) { abline(0,1,lty=2) }
-    if (add_r2) {  mtext(sprintf('R2 = %.2f',r2), side=3,adj=1) }
+
+    if (add_r2){
+      r2.label <- paste("R^2 == ", round(r2,2))
+      p1 <- p1 +
+        annotate(geom="text",x=(x.lim[2]-x.lim[1])*0.5+x.lim[1],y=y.lim[2],label=r2.label, parse=T)
+    }
+
+    return(list(df.peak.event = df,plot=p1))
+
+  } else{
+    return(df.peak.event = df)
   }
-  df <- data.frame("obs_dates"=max.dates,"sim_peak_event"=max.sim,"obs_peak_event"=max.obs)
-  return("df_peak_event"=df)
 }

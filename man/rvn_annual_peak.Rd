@@ -4,7 +4,7 @@
 \alias{rvn_annual_peak}
 \title{Annual Peak Comparison}
 \usage{
-rvn_annual_peak(sim, obs, rplot = T, add_line = T, add_r2 = F, axis_zero = F)
+rvn_annual_peak(sim, obs, rplot = T, add_line = T, add_r2 = F)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
@@ -62,7 +62,7 @@ peak_df <- rvn_annual_peak(sim,obs,rplot=F)
 
 }
 \seealso{
-\code{\link{annual_volume}} to create a scatterplot of annual flow
+\code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 volumes \code{\link{rvn_annual_peak_event}} to consider the timing of peak
 events
 

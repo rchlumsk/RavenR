@@ -32,7 +32,7 @@
 #' @param add_labels optionally adds labels for early peak/late peaks on right
 #' side axis (default TRUE)
 #' @return \item{mvbias}{monthly volume biases}
-#' @seealso \code{\link{annual.volume}} to create a scatterplot of annual flow
+#' @seealso \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 #' volumes
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
@@ -53,43 +53,52 @@
 #' rvn_monthly_vbias(sim,obs,normalize = F)
 #'
 #' @export rvn_monthly_vbias
-rvn_monthly_vbias <- function(sim,obs,rplot=T,add_line=T,normalize=T,add_labels=T) {
-
-  obs.monthly <- apply.monthly(obs,sum,na.rm=T)
-  sim.monthly <- apply.monthly(sim,sum,na.rm=T)
-  mvbias <- matrix(NA,nrow=12,ncol=1)
-  colnames(mvbias) <-c ("mvbias")
-  rownames(mvbias) <- RavenR::mos.names(T)
-
-  # important part - calculate monthly differences, relative or not
+rvn_monthly_vbias <- function (sim, obs, rplot = T, add_line = T, normalize = T, add_labels = T) {
+  obs.monthly <- apply.monthly(obs, sum, na.rm = T)
+  sim.monthly <- apply.monthly(sim, sum, na.rm = T)
+  mvbias <- matrix(NA, nrow = 12, ncol = 1)
+  colnames(mvbias) <- c("mvbias")
+  rownames(mvbias) <- RavenR::rvn_mos_names(T)
   if (normalize) {
-    diff <- (sim.monthly - obs.monthly)/obs.monthly*100
-    ylabel <- '% Flow Volume Bias'
-  } else {
+    diff <- (sim.monthly - obs.monthly)/obs.monthly * 100
+    y.lab <- "% Flow Volume Bias"
+  }
+  else {
     diff <- (sim.monthly - obs.monthly)
-    ylabel <- 'Flow Volume Bias [m3/s]'
+    y.lab <- "Flow Volume Bias [m3/s]"
   }
-
-  # calculate mvbias (normalized or unnormalized handled the same)
-  for ( k in 1:12) {
-    mvbias[k] <- mean(diff[month(diff) == k,],na.rm=T)
+  for (k in 1:12) {
+    mvbias[k] <- mean(diff[month(diff) == k, ], na.rm = T)
   }
-
-  # create plot
   if (rplot) {
-    # thick line plot, maybe upgrade to bar plot eventually
-    plot(mvbias,type='h',main='',xlab='Month',xaxt='n',ylab=ylabel,
-         lwd=5,panel.first=grid())
-    axis(1, at=1:12,labels=RavenR::mos.names(T),cex.axis=0.6)
-    if (add_line) { abline(h=0,lty=5) }
+
+    df.plot <- data.frame(cbind(seq(1,12),rownames(mvbias),mvbias))
+    colnames(df.plot) <-c("nmon","x.label","mvbias")
+    df.plot$mvbias <- as.numeric(as.character(df.plot$mvbias))
+    df.plot$nmon <- as.numeric(as.character(df.plot$nmon))
+
+    p1 <- ggplot(df.plot)+
+      geom_bar(aes(x=nmon,y=mvbias),stat="identity",width=0.5)+
+      scale_y_continuous(name=y.lab)+
+      scale_x_continuous(breaks=df.plot$nmon,labels=df.plot$x.label,name="")+
+      theme_bw()
+
+    if (add_line) {
+      p1 <- p1+
+        geom_hline(yintercept=0,linetype=2)
+    }
     if (add_labels) {
-      if (max(mvbias,na.rm=T)/2 > 0 ) {
-        mtext('overestimated',side=4,at=c(max(mvbias,na.rm=T)/2),cex=0.8)
+      if (max(mvbias, na.rm = T)/2 > 0) {
+        p1 <- p1+
+          annotate("text",x=max(as.numeric(df.plot$nmon)+0.5),y=max(mvbias,na.rm=T)/2,label="Overestimated",angle=90)
       }
-      if (min(mvbias,na.rm=T)/2 < 0 ) {
-        mtext('underestimated',side=4,at=c(min(mvbias,na.rm=T)/2),cex=0.8)
+      if (min(mvbias, na.rm = T)/2 < 0) {
+        p1 <- p1+
+          annotate("text",x=max(as.numeric(df.plot$nmon)+0.5),y=min(mvbias,na.rm=T)/2,label="Underestimated",angle=90)
       }
     }
+    return(list(df.mvbias = mvbias,plot=p1))
+  } else{
+    return(df.mvbias = mvbias)
   }
-  return(mvbias)
 }

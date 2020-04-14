@@ -57,38 +57,51 @@
 #' peak_errors
 #'
 #' @export rvn_annual_peak_error
-rvn_annual_peak_error <- function(sim,obs,rplot=T,add_line=T,add_labels=T) {
-
-  # obtain peak from annual_peak function
-  df_peak <- annual_peak(sim,obs,rplot=F)
-
-  # calculate the errors
-  errs <- (df_peak$sim_peak - df_peak$obs_peak)/df_peak$obs_peak*100
-  text.labels <- year(df_peak$date_end)
-
+rvn_annual_peak_error <- function (sim, obs, rplot = T, add_line = T, add_labels = T){
+  df.peak <- annual.peak(sim, obs, rplot = F)
+  errs <- (df.peak$sim.peak - df.peak$obs.peak)/df.peak$obs.peak *
+    100
+  text.labels <- year(df.peak$date.end)
   if (rplot) {
     x.lab <- "Date (Water Year Ending)"
     y.lab <- "% Error in Peaks"
-    title.lab <- ''
+    title.lab <- ""
     if (add_line) {
-      y.max <- max(0.5,max(errs))
-      y.min <- min(-0.5,min(errs))
-    } else {
+      y.max <- max(0.5, max(errs))
+      y.min <- min(-0.5, min(errs))
+    }
+    else {
       y.max <- max(errs)
       y.min <- min(errs)
     }
-    plot(errs, xlab=x.lab, ylab=y.lab, main=title.lab,xaxt='n',ylim=c(y.min,y.max))
-    axis(1, at=index(errs),labels=text.labels)
-    if (add_line) { abline(h=0,lty=2) }
+
+    df.plot <- data.frame(cbind(text.labels,errs))
+    df.plot$text.labels <- as.factor(df.plot$text.labels)
+
+    p1 <- ggplot(data=df.plot)+
+      geom_point(aes(x=text.labels,y=errs))+
+      scale_y_continuous(limits=c(y.min,y.max),name=y.lab)+
+      scale_x_discrete(name=x.lab)+
+      theme_bw()
+    if (add_line) {
+      p1 <- p1+
+        geom_hline(yintercept=0,linetype=2)
+    }
+
     if (add_labels) {
-      if (max(errs,na.rm=T)/2 > 0 ) {
-        mtext('overpredict',side=4,at=c(max(errs,na.rm=T)/2),cex=0.8)
+      if (max(errs, na.rm = T)/2 > 0) {
+        p1 <- p1+
+          annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=max(errs,na.rm=T)/2,label="Overpredict",angle=90)
       }
-      if (min(errs,na.rm=T)/2 < 0 ) {
-        mtext('underpredict',side=4,at=c(min(errs,na.rm=T)/2),cex=0.8)
+      if (min(errs, na.rm = T)/2 < 0) {
+        p1 <- p1+
+          annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=min(errs,na.rm=T)/2,label="Underpredict",angle=90)
       }
     }
+    df <- data.frame(date.end = df.peak$date.end, errors = errs)
+    return(list(df.peak.error = df,plot=p1))
+  } else {
+    df <- data.frame(date.end = df.peak$date.end, errors = errs)
+    return(df.peak.error=df)
   }
-  df <- data.frame("date_end"=df_peak$date_end,"errors"=errs)
-  return("df_peak_error"=df)
 }

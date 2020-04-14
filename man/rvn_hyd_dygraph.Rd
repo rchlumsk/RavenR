@@ -29,8 +29,8 @@ structure read using rvn_hyd_read()
 # read in RavenR sample hydrographs data
 hy <- rvn_hydrograph_data
 
-# view contents for subbasin 11 as dyGraph
-res<-rvn_hyd_dygraph(hy,basins="sub11")
+# view contents for subbasin 36 as dyGraph
+res<-rvn_hyd_dygraph(hy,basins="sub36")
 
 }
 \keyword{Raven}

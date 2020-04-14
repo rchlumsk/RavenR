@@ -17,7 +17,7 @@
 #' flows with units of m3/s. Note that a plot title is purposely omitted in
 #' order to allow the automatic generation of plot titles.
 #'
-#' The add.labels will add the labels of 'early peak' and 'late peak' to the
+#' The add_labels will add the labels of 'early peak' and 'late peak' to the
 #' right hand side axis if set to TRUE. This is useful in interpreting the
 #' plots. Note that values in this metric of less than zero indicate an early
 #' prediction of the peak, and positive values mean a late prediction of the
@@ -58,50 +58,58 @@
 #' timing_errs <- rvn_annual_peak_timing_error(sim,obs,rplot=F)
 #'
 #' @export rvn_annual_peak_timing_error
-rvn_annual_peak_timing_error <- function(sim,obs,rplot=T,add_line=T,add_labels=T) {
-
-
-  # get the date of maximum obs event
-  max.obs <- apply_wyearly(obs, max, na.rm=T)[,2]
-  max.obs.dates <- as.Date(apply_wyearly(obs, function(x) toString(lubridate::date(which_max_xts(x))))[,2])
-
-  # get the date of maximum sim event
-  max.sim <- apply_wyearly(sim, max, na.rm=T)[,2]
-  max.sim.dates <- as.Date(apply_wyearly(sim, function(x) toString(lubridate::date(which_max_xts(x))))[,2])
-
-  # get water year end dates
-  date.end <- apply_wyearly(sim,mean)[,1]
-
-  # calcualte errors in timing
+rvn_annual_peak_timing_error <- function (sim, obs, rplot = T, add_line = T, add_labels = T)
+{
+  max.obs <- apply.wyearly(obs, max, na.rm = T)[, 2]
+  max.obs.dates <- as.Date(apply.wyearly(obs, function(x) toString(lubridate::date(which.max.xts(x))))[,
+                                                                                                       2])
+  max.sim <- apply.wyearly(sim, max, na.rm = T)[, 2]
+  max.sim.dates <- as.Date(apply.wyearly(sim, function(x) toString(lubridate::date(which.max.xts(x))))[,
+                                                                                                       2])
+  date.end <- apply.wyearly(sim, mean)[, 1]
   errs <- as.numeric(max.sim.dates - max.obs.dates)
   text.labels <- year(date.end)
-
   if (rplot) {
     x.lab <- "Date (Water year ending)"
     y.lab <- "Day Difference in Peaks"
-    title.lab <- ''
+    title.lab <- ""
     if (add_line) {
-      y.max <- max(0.5,max(errs))
-      y.min <- min(-0.5,min(errs))
-    } else {
+      y.max <- max(0.5, max(errs))
+      y.min <- min(-0.5, min(errs))
+    }
+    else {
       y.max <- max(errs)
       y.min <- min(errs)
     }
-    plot(errs, xlab=x.lab, ylab=y.lab, main=title.lab,xaxt='n',ylim=c(y.min,y.max))
-    if (add_line) { abline(h=0,lty=2) }
-    axis(1, at=index(errs),labels=text.labels)
 
-    if (add_labels) {
-      if (max(errs,na.rm=T)/2 > 0 ) {
-        mtext('late peak',side=4,at=c(max(errs,na.rm=T)/2),cex=0.8)
-      }
-      if (min(errs,na.rm=T)/2 < 0 ) {
-        mtext('early peak',side=4,at=c(min(errs,na.rm=T)/2),cex=0.8)
-      }
+    df.plot <- data.frame(cbind(text.labels,errs))
+    df.plot$text.labels <- as.factor(df.plot$text.labels)
+
+    p1 <- ggplot(data=df.plot)+
+      geom_point(aes(x=text.labels,y=errs))+
+      scale_y_continuous(limits=c(y.min,y.max),name=y.lab)+
+      scale_x_discrete(name=x.lab)+
+      theme_bw()
+
+    if (add_line) {
+      p1 <- p1+
+        geom_hline(yintercept=0,linetype=2)
     }
 
+    if (add_labels) {
+      if (max(errs, na.rm = T)/2 > 0) {
+        p1 <- p1+
+          annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=max(errs,na.rm=T)/2,label="Late Peak",angle=90)
+      }
+      if (min(errs, na.rm = T)/2 < 0) {
+        p1 <- p1+
+          annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=min(errs,na.rm=T)/2,label="Early Peak",angle=90)
+      }
+    }
+    df <- data.frame(date.end = date.end, peak.timing.errors = errs)
+    return(list(df.peak.timing.error = df,plot=p1))
+  } else{
+    df <- data.frame(date.end = date.end, peak.timing.errors = errs)
+    return(df.peak.timing.error = df)
   }
-  df <- data.frame("date_end"=date.end,"peak_timing_errors"=errs)
-  return("df_peak_timing_error"=df)
 }
-

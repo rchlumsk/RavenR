@@ -4,14 +4,7 @@
 \alias{rvn_annual_peak_event}
 \title{Annual Peak Event Comparison}
 \usage{
-rvn_annual_peak_event(
-  sim,
-  obs,
-  rplot = T,
-  add_line = T,
-  add_r2 = F,
-  axis_zero = F
-)
+rvn_annual_peak_event(sim, obs, rplot = T, add_line = T, add_r2 = F)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}

@@ -71,7 +71,7 @@ rvn_monthly_vbias(sim,obs,normalize = F)
 
 }
 \seealso{
-\code{\link{annual.volume}} to create a scatterplot of annual flow
+\code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 volumes
 
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

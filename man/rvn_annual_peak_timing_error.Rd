@@ -42,7 +42,7 @@ of the same length and time period. The flow series are assumed to be daily
 flows with units of m3/s. Note that a plot title is purposely omitted in
 order to allow the automatic generation of plot titles.
 
-The add.labels will add the labels of 'early peak' and 'late peak' to the
+The add_labels will add the labels of 'early peak' and 'late peak' to the
 right hand side axis if set to TRUE. This is useful in interpreting the
 plots. Note that values in this metric of less than zero indicate an early
 prediction of the peak, and positive values mean a late prediction of the

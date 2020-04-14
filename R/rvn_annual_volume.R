@@ -49,47 +49,54 @@
 #' volumes <- rvn_annual_volume(sim,obs,rplot=F)
 #'
 #' @export rvn_annual_volume
-rvn_annual_volume <- function(sim,obs,rplot=T,add_line=T,add_r2=F,axis_zero=F) {
-
+rvn_annual_volume <- function (sim, obs, rplot = T, add_line = T, add_r2 = F) {
   sec.per.day <- 86400
-
-  #calculate the sums
-  sum.sim <- apply_wyearly(sim, sum,na.rm=T)
-  dates <- sum.sim[,1]
-  sum.sim <- sum.sim[,2]
-  sum.obs <- apply_wyearly(obs, sum,na.rm=T)[,2]
-
-  # unit conversion
-  sum.sim <- sum.sim*sec.per.day
-  sum.obs <- sum.obs*sec.per.day
-
-  # calculate the r2 fit
+  sum.sim <- apply.wyearly(sim, sum, na.rm = T)
+  dates <- sum.sim[, 1]
+  sum.sim <- sum.sim[, 2]
+  sum.obs <- apply.wyearly(obs, sum, na.rm = T)[, 2]
+  sum.sim <- sum.sim * sec.per.day
+  sum.obs <- sum.obs * sec.per.day
+  df <- data.frame(date.end = dates, sim.vol = sum.sim, obs.vol = sum.obs)
   if (add_r2) {
-    # need to check the r2 calculation, ensure it is for an intercept of zero
     sum.obs.mean <- mean(sum.obs)
     ss.err <- sum((sum.sim - sum.obs)^2)
     ss.tot <- sum((sum.obs - sum.obs.mean)^2)
-    r2 <- 1- ss.err/ss.tot
+    r2 <- 1 - ss.err/ss.tot
   }
-
   if (rplot) {
-    x.lab <- "Observed Volume [m3]"
-    y.lab <- "Simulated Volume [m3]"
-    title.lab <- '' # "Annual Volume Comparison"
-    if (axis_zero) {
-      x.lim=c(0,max(sum.obs,sum.sim,na.rm=T)*1.1)
-      y.lim=c(0,max(sum.obs,sum.sim,na.rm=T)*1.1)
-    } else {
-      x.lim=c(min(sum.obs,sum.sim,na.rm=T)*0.9,max(sum.obs,sum.sim,na.rm=T)*1.1)
-      y.lim=c(min(sum.obs,sum.sim,na.rm=T)*0.9,max(sum.obs,sum.sim,na.rm=T)*1.1)
-    }
+    x.lab <- expression("Observed Volume ["*m^3*"]")
+    y.lab <- expression("Simulated Volume ["*m^3*"]")
+    title.lab <- ""
+    x.lim = c(min(sum.obs, sum.sim, na.rm = T) * 0.9,
+              max(sum.obs, sum.sim, na.rm = T) * 1.1)
+    y.lim = c(min(sum.obs, sum.sim, na.rm = T) * 0.9,
+              max(sum.obs, sum.sim, na.rm = T) * 1.1)
 
     text.labels <- year(dates)
-    plot(coredata(sum.obs), coredata(sum.sim), xlim=x.lim, ylim=y.lim, xlab=x.lab, ylab=y.lab, main=title.lab)
-    text(coredata(sum.obs), coredata(sum.sim), text.labels, cex=0.75, pos=3)
-    if (add_line) { abline(0,1,lty=2) }
-    if (add_r2) {  mtext(sprintf('R2 = %.2f',r2), side=3,adj=1) }
+
+    #Base Plot
+    p1 <- ggplot(data=df,aes(x=obs.vol,y=sim.vol,label=text.labels))+
+      geom_point()+
+      geom_text(hjust=0.5,vjust=-0.5)+
+      scale_x_continuous(limits=x.lim, name=x.lab)+
+      scale_y_continuous(limits=y.lim, name=y.lab)+
+      theme_bw()
+
+    if (add_line){
+      p1 <- p1 +
+        geom_abline(linetype=2)
+    }
+
+    if (add_r2){
+      r2.label <- paste("R^2 == ", round(r2,2))
+      p1 <- p1 +
+        annotate(geom="text",x=(x.lim[2]-x.lim[1])*0.5+x.lim[1],y=y.lim[2],label=r2.label, parse=T)
+
+    }
+    return(list(df.volume=df,plot=p1))
+  } else{
+
+    return(df.volume=df)
   }
-  df <- data.frame("date_end"=dates,"sim_vol"=sum.sim,"obs_vol"=sum.obs)
-  return("df_volume"=df)
 }

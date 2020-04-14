@@ -4,7 +4,7 @@
 \alias{rvn_annual_volume}
 \title{Annual Volume Comparison}
 \usage{
-rvn_annual_volume(sim, obs, rplot = T, add_line = T, add_r2 = F, axis_zero = F)
+rvn_annual_volume(sim, obs, rplot = T, add_line = T, add_r2 = F)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
