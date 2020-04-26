@@ -13,6 +13,7 @@
 #' }
 #'
 #' @importFrom lubridate year month day date yday
+#' @importFrom scales date_format
 #' @importFrom xts xts apply.monthly apply.yearly apply.daily period.apply xtsAttributes
 #' @importFrom zoo index coredata rollapply
 #'
