@@ -9,7 +9,8 @@ yearly_quantile(
   minyear = NULL,
   maxyear = NULL,
   Qlower = 0.1,
-  Qupper = 0.9
+  Qupper = 0.9,
+  water_year = T
 )
 }
 \arguments{

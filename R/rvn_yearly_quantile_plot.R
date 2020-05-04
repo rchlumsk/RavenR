@@ -20,7 +20,7 @@
 #' qdat <- yearly_quantile(hgdata)
 #'
 yearly_quantile <- function(hgdata, minyear=NULL, maxyear=NULL,
-                           Qlower=0.1, Qupper=0.9) {
+                           Qlower=0.1, Qupper=0.9, water_year=T) {
 
   #-- Assuming hgdata is a daily xts object
   # TODO: Add support for other frequencies
@@ -35,6 +35,10 @@ yearly_quantile <- function(hgdata, minyear=NULL, maxyear=NULL,
   #-- Aggregate to Quantiles by Day
   # (Uses maxyear as placeholder for year)
   monthday <- as.Date(paste0(toString(maxyear), "-", month(hgdata), "-", day(hgdata)))
+  if (water_year) {
+    # Year is arbitrary, so subtract a year post-Oct to create water years
+    monthday[month(monthday) > 9] = monthday[month(monthday) > 9] - years(1)
+  }
   qdat <- xts(aggregate(hgdata, by=monthday, quantile,
                         probs=c(Qlower, .5, Qupper), na.rm=T))
 
