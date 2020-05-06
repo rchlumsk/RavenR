@@ -2,21 +2,25 @@
 % Please edit documentation in R/rvn_file_write_utils.R
 \name{write.RavenLabel}
 \alias{write.RavenLabel}
-\title{Writes common Raven labeled line to file (appends)}
+\title{Writes common Raven labeled line to file, with optional value (appends)}
 \usage{
-write.RavenLabel(label, filename)
+write.RavenLabel(filename, label, value = NULL, digits = NULL)
 }
 \arguments{
+\item{filename}{character, file name/path to write to, with extension}
+
 \item{label}{character, (e.g. "SoilClasses")}
 
-\item{filename}{character, file name/path to write label to, with extension}
+\item{value}{numeric or character, corresponding value written after label (optional)}
+
+\item{digits}{Number of digits to round value to (optional)}
 }
 \description{
-Writes common Raven labeled line to file (appends)
+Writes common Raven labeled line to file, with optional value (appends)
 }
 \examples{
 \dontrun{}
-write.RavenLabel('SoilClasses', 'Hogwarts.rvp')
+write.RavenLabel('Duration', 365, 'Hogwarts.rvi')
 }
 \author{
 Leland Scantlebury, \email{leland@scantle.com}

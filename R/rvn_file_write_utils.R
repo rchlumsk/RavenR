@@ -19,7 +19,7 @@
 writeRavenRFileInfo <- function(filename, filetype, author=NULL,
                                 creationDate=TRUE, textlen=40) {
   # File Type
-  write(paste0(":filetype ", stringPad(filetype, textlen-10)),
+  write(paste0(":FileType ", stringPad(filetype, textlen-10)),
         append=TRUE, file=filename)
 
   # Author
@@ -69,7 +69,7 @@ startRavenRFile <- function(filename, description, filetype, author=NULL,
 
   # Write a little custom description
   write('#', append=TRUE, file=filename)
-  write(paste("#",headerString), append=TRUE, file=filename)
+  write(paste("#",description), append=TRUE, file=filename)
   write(paste("#",strrep('-',linelen-2)), append=TRUE, file=filename)
   write('#', append=TRUE, file=filename)
 }
