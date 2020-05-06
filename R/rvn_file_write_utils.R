@@ -227,40 +227,23 @@ write.RavenTable <- function(filename, attributes, units, df,
 #-----------------------------------------------------------------------------#
 
 #-----------------------------------------------------------------------------#
-#' Writes common Raven labeled line to file (appends)
+#' Writes common Raven labeled line to file, with optional value (appends)
 #'
+#' @param filename character, file name/path to write to, with extension
 #' @param label character, (e.g. "SoilClasses")
-#' @param filename character, file name/path to write label to, with extension
+#' @param value numeric or character, corresponding value written after label (optional)
+#' @param digits Number of digits to round value to (optional)
 #'
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
 #' @export write.RavenLabel
 #'
 #' @examples
 #' \dontrun{}
-#' write.RavenLabel('SoilClasses', 'Hogwarts.rvp')
-write.RavenLabel <- function(label, filename) {
-  write(paste0(':',label), filename, append = TRUE)
-}
-#-----------------------------------------------------------------------------#
-
-#-----------------------------------------------------------------------------#
-#' Writes common Raven command/parameter line to file (appends)
-#'
-#' @param command character, Raven command
-#' @param value numeric or character, corresponding value
-#' @param filename character, file name/path to write command/parameter line to, with extension
-#' @param digits Number of digits to round value to (optional)
-#'
-#' @author Leland Scantlebury, \email{leland@@scantle.com}
-#' @export write.RavenCommand
-#'
-#' @examples
-#' \dontrun{}
-#' write.RavenCommand('Duration', 365, 'Hogwarts.rvi')
-write.RavenCommand <- function(command, value, filename, digits=NULL) {
+#' write.RavenLabel('Duration', 365, 'Hogwarts.rvi')
+write.RavenLabel <- function(filename, label, value=NULL, digits=NULL) {
   if (!is.null(digits)) {
     value <- round(value, digits)
   }
-  write(paste0('  :', command, ' ', value), filename, append = TRUE)
+  write(paste0(':',label, ' ', value), filename, append = TRUE)
 }
 #-----------------------------------------------------------------------------#
