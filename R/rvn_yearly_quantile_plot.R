@@ -1,8 +1,8 @@
 #' Calculates Yearly Median, Upper and Lower Quantiles of Flow
 #'
 #' @param hgdata Time series object of observed or simulated flows
-#' @param minyear Integer of minimum year
-#' @param maxyear Integer of maximum year
+#' @param minyear Integer of minimum year (optional)
+#' @param maxyear Integer of maximum year (optional)
 #' @param Qlower Decimal percentage of lower quantile value (default 0.1)
 #' @param Qupper Decimal percentage of upper quantile value (default 0.9)
 #'
@@ -11,7 +11,7 @@
 #' @export yearly_quantile
 #'
 #' @examples
-#' data(hydrograph.data)
+#' data("rvn_hydrograph_data")
 #'
 #' # Pull out a specific hydrograph
 #' hgdata <- hydrograph.data$hyd$Sub36
