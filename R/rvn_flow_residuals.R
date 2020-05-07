@@ -61,31 +61,39 @@ rvn_flow_residuals <- function(sim,obs,ma_smooth=3,add.line=T,winter_shading=T) 
     resids <- rollapply(sim-obs,ma_smooth,mean,fill=NA)
   }
 
-  if (winter_shading) {
-    plot(lubridate::date(resids),resids,xlab='Date',ylab='Smoothed Residuals',
-         type='l',col='white',ylim=c(min(resids,na.rm=T),max(c(resids),na.rm=T)))
-    # shaded winter months
-    x <- resids
-    temp <- x[((month(x[,1]) == 12) & (day(x[,1]) == 1)) | ((month(x[,1]) == 3) & (day(x[,1]) == 31))]
-    ep <- match(lubridate::date(temp),lubridate::date(x))
-    if (month(sim[ep[1]])==3) {
-      ep <- ep[-1]
-    }
-    if (month(sim[ep[length(ep)]])==12) {
-      ep <- ep[-length(ep)]
-    }
-    bc <- rvn_col_transparent('cyan',50)
-    for (k in seq(1,length(ep),2)) {
-      cord.x <- c(lubridate::date(x[ep[k]]),lubridate::date(x[ep[k]]),lubridate::date(x[ep[k+1]]),lubridate::date(x[ep[k+1]]))
-      cord.y <- c(min(resids,na.rm=T),max(resids,na.rm=T),max(resids,na.rm=T),min(resids,na.rm=T))
-      polygon(cord.x,cord.y,col=bc,border=NA)
-    }
-    lines(lubridate::date(resids),resids,col='black')
-  } else {
-    plot(lubridate::date(resids),resids,xlab='Date',ylab='Smoothed Residuals',
-         type='l',col='black',ylim=c(min(resids,na.rm=T),max(c(resids),na.rm=T)))
+  df.plot <- fortify(resids)
+  colnames(df.plot) <- c("Date","Resid")
+  df.plot$Date <- as.Date(df.plot$Date)
+  
+  p1 <- ggplot(df.plot)+
+    geom_line(aes(x=Date,y=Resid))+
+    ylab("Smoothed Residual")+
+    theme_bw()
+  
+  if (add.line){
+    p1 <- p1 +
+      geom_hline(yintercept=0,linetype="dashed")
   }
-  if (add.line) {abline(h=0,col='blue',lty=5) }
-
+  
+  if (winter.shading){
+    
+    
+    winter.start <- as.Date(df.plot$Date[month(df.plot$Date) == 12 & day(df.plot$Date) == 1])
+    winter.end <- as.Date(df.plot$Date[month(df.plot$Date) == 3 & day(df.plot$Date) == 31])
+    
+    shade <- data.frame(cbind(winter.start,winter.end))
+    shade$winter.start <- as.Date(shade$winter.start)
+    shade$winter.end <- as.Date(shade$winter.end)
+    shade$y.start <- -Inf
+    shade$y.end <- Inf
+    
+    p1 <- p1 + 
+      geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey",alpha=0.3)
+    
+    
+  }
+  
+  resids <- list(resids = resids, plot = p1)
+  
   return(resids)
 }
