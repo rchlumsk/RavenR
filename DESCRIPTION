@@ -41,7 +41,9 @@ Depends:
     dygraphs,
     dplyr,
     sf,
-    ggplot2
+    ggplot2,
+    scales,
+    gdata
 Suggests:
     knitr,
     rmarkdown,
