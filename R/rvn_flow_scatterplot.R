@@ -20,8 +20,11 @@
 #' @param add_line optionally adds a 1:1 line to the plot for reference
 #' (default TRUE)
 #' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
+<<<<<<< HEAD:R/rvn_flow_scatterplot.R
+=======
 #' @param axis_zero optionally sets the minimum flow on axes to zero (default
 #' TRUE)
+>>>>>>> 596e2515dc7a5c1913a64a9c775646acfbaeb156:R/flow.scatterplot.R
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{forcings.read}} for reading in the ForcingFunctions
 #' file
@@ -41,6 +44,33 @@
 #' rvn_flow_scatterplot(sim,obs,add_r2=T)
 #'
 #' @export rvn_flow_scatterplot
+<<<<<<< HEAD:R/rvn_flow_scatterplot.R
+rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F) {
+  x.lab <- expression("Observed Flow ["*m^3*"/s]")
+  y.lab <- expression("Simulated Flow ["*m^3*"/s]")
+  
+  plot.df <- fortify(cbind(sim,obs))
+  colnames(plot.df) <- c("date","sim","obs")
+  max.flow <- max(obs, sim, na.rm = T)
+  
+  p1 <- ggplot(plot.df)+
+    geom_point(aes(x=obs,y=sim))+
+    scale_x_continuous(name=x.lab,limits=c(0,max.flow))+
+    scale_y_continuous(name=y.lab,limits=c(0,max.flow))+
+    theme_bw()
+  
+  if (add.line){
+    p1 <- p1+
+      geom_abline(linetype="dashed")
+  }
+  
+  if (add.r2) {
+    r2 <- 1 - (sum((obs - sim)^2, na.rm = T)/sum((obs - mean(obs, 
+                                                             na.rm = T))^2, na.rm = T))
+    r2.label <- paste("R^2 == ", round(r2,2))
+    p1 <- p1 +
+      annotate(geom="text",x=max.flow*0.9,y=max.flow*0.9,label=r2.label, parse=T)
+=======
 rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F,axis_zero=T) {
   x.lab <- "Observed flow [m3/s]"
   y.lab <- "Simulated flow [m3/s]"
@@ -59,7 +89,8 @@ rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F,axis_zero=T) {
     # check the calculation to ensure it is R2 with no intercept
     r2 <- 1 - (sum((obs-sim)^2,na.rm=T)/sum((obs-mean(obs,na.rm=T))^2,na.rm=T))
     mtext(sprintf('R2 = %.2f',r2), side=3,adj=1)
+>>>>>>> 596e2515dc7a5c1913a64a9c775646acfbaeb156:R/flow.scatterplot.R
   }
-
-  return(TRUE)
+  
+  return(p1)
 }
