@@ -1,7 +1,7 @@
 #' Generate grid overlay from netCDF file
 #'
 #' Takes the latitude-longitude cell coordinates from a netCDF file (assumed to be named 'lat' and 'long')
-#' generates an estimate of the grid polygons associated with each netCDF cell and exports this to a shapefile (outshp)\
+#' generates an estimate of the grid polygons associated with each netCDF cell and exports this to a shapefile (outshp)
 #'
 #' @param ncfile netCDF file with latitude and longitude variables
 #' @param UTMzone UTM zone for exported shapefile (integer)
@@ -17,6 +17,7 @@
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#'
 #' @author James R. Craig, University of Waterloo, 2019
 #' @keywords netcdf grid shapefile conversion
 #' @examples

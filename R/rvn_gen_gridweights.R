@@ -17,6 +17,7 @@
 #'  @param gridIDcol the name of the Gridshpfile polugon which contains the cell IDs
 #'  @param outfile optional name of output Raven gaugeweights file
 #'
+#'
 #'  @return \item{TRUE}{returns TRUE if executed properly. Also output GaugeWeights.rvi file}
 #'
 #'  @details not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UTM zone;
@@ -27,13 +28,12 @@
 #'
 #'  @seealso \code{\link{rvn_netcdf_to_gridshp}} for converting netcdf files to grid shapefile format
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @author James R. Craig, University of Waterloo, 2019
+#'  @seealso \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R. Craig's research page} for software downloads,
+#'  including the \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#'
 #' @keywords netcdf grid shapefile conversion
 #'
-#'  @examples
+#' @examples
 #'
 #'  \dontrun{
 #'   # netcdf.to.gridshp(2017052200.nc,11,GridCells)

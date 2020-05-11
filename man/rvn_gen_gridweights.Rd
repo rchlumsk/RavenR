@@ -32,6 +32,7 @@ wt[k][g] for any k, over all g, is 1.0
  @param gridIDcol the name of the Gridshpfile polugon which contains the cell IDs
  @param outfile optional name of output Raven gaugeweights file
 
+
  @return \item{TRUE}{returns TRUE if executed properly. Also output GaugeWeights.rvi file}
 
  @details not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UTM zone;
@@ -42,50 +43,36 @@ wt[k][g] for any k, over all g, is 1.0
 
  @seealso \code{\link{rvn_netcdf_to_gridshp}} for converting netcdf files to grid shapefile format
 
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+ @seealso \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R. Craig's research page} for software downloads,
+ including the \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\author{
-James R. Craig, University of Waterloo, 2019
+\examples{
+
+ \dontrun{
+  # netcdf.to.gridshp(2017052200.nc,11,GridCells)
+  rvn_gen_gridweights(ModelHRUs.shp,GridCells.shp,ValidHRUIDs,HRUIDcol="ID")
+
+  # example workflow
+  #--------------------------------------------
+  setwd("C:/temp/RedDeer/")
+
+  HRUshpfile<-"./maps/RedDeerHRUs.shp" # needs to have single column referring to HRU ID (here presumed 'HRU_ID')
+  GRDshpfile<-"./maps/RDPS_GridRedDeer2.shp"
+  rvh<-rvh.read("reddeer.rvh")
+
+  validHRUIDs<-rvh$HRUtable$ID
+
+  tmp<-gridweights.gen(HRUshpfile,GRDshpfile, validHRUIDs, gridIDcol="GridIDs",HRUIDcol="HRU_ID",outfile="RDPSGridWeights.rvt")
+
+  #dsn=normalizePath(dirname(HRUshpfile))
+  #lay=substr(basename(HRUshpfile),1,nchar(basename(HRUshpfile))-4)
+  #HRUshp<-readOGR(dsn = dsn,layer = lay) # returns SpatialPolygonsDataFrame
+
+ }
+
+
 }
-\keyword{#}
-\keyword{#--------------------------------------------}
-\keyword{#HRUshp<-readOGR(dsn}
-\keyword{#dsn=normalizePath(dirname(HRUshpfile))}
-\keyword{#lay=substr(basename(HRUshpfile),1,nchar(basename(HRUshpfile))-4)}
-\keyword{'HRU_ID')}
-\keyword{(here}
-\keyword{=}
-\keyword{@examples}
-\keyword{GRDshpfile<-"./maps/RDPS_GridRedDeer2.shp"}
-\keyword{HRU}
-\keyword{HRUshpfile<-"./maps/RedDeerHRUs.shp"}
-\keyword{ID}
-\keyword{SpatialPolygonsDataFrame}
-\keyword{\dontrun{}
-\keyword{column}
 \keyword{conversion}
-\keyword{dsn,layer}
-\keyword{example}
 \keyword{grid}
-\keyword{gridIDcol="GridIDs",HRUIDcol="HRU_ID",outfile="RDPSGridWeights.rvt")}
-\keyword{have}
-\keyword{lay)}
-\keyword{needs}
 \keyword{netcdf}
-\keyword{netcdf.to.gridshp(2017052200.nc,11,GridCells)}
-\keyword{presumed}
-\keyword{referring}
-\keyword{returns}
-\keyword{rvh<-rvh.read("reddeer.rvh")}
-\keyword{rvn_gen_gridweights(ModelHRUs.shp,GridCells.shp,ValidHRUIDs,HRUIDcol="ID")}
-\keyword{setwd("C:/temp/RedDeer/")}
 \keyword{shapefile}
-\keyword{single}
-\keyword{tmp<-gridweights.gen(HRUshpfile,GRDshpfile,}
-\keyword{to}
-\keyword{validHRUIDs,}
-\keyword{validHRUIDs<-rvh$HRUtable$ID}
-\keyword{workflow}
-\keyword{}}

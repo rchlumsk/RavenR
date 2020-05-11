@@ -4,15 +4,10 @@
 \alias{rvn_flow_spaghetti}
 \title{Flow Spaghetti Plot}
 \usage{
-rvn_flow_spaghetti(flow, include_legend = T, colour_wheel = T)
+rvn_flow_spaghetti(flow)
 }
 \arguments{
 \item{flow}{time series object of simulated flows}
-
-\item{include_legend}{option to include a legend (default TRUE)}
-
-\item{colour_wheel}{option to use a different colour for each year plotted
-(default TRUE)}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
@@ -31,19 +26,6 @@ plotted including day 366 and starting on day 274, regardless of whether it
 is a leap year or not. This is likely without consequence in seeing the
 trends between water years, however the user is warned of this deficiency.
 
-The include_legend argument will add a legend to the right-hand side of the
-plot, if true. The legend will be labelled as the year for each flow series,
-where the year is the date-ending year (i.e. for the 2003-10-01 to
-2004-09-30 water year, the flow series will be labelled as 2004). This
-argument will also cause the plot margins to be adjusted so that the legend
-can be included. Note that the current setup to accomodate approximately 15
-years of flow series in the legend, beyond that the legend may not be
-aesthetically pleasing.
-
-The colour_wheel argument, if TRUE, will plot each water year in a different
-randomly sampled colour. If FALSE, all years will be plotted in black. If
-colour_wheel is FALSE, the legend is recommended to be set to FALSE as well.
-
 The flow series provided should be of time series (xts) format.
 
 Note that a plot title is purposely omitted in order to allow the automatic
@@ -59,8 +41,6 @@ sim2 <- rvn_hydrograph_data$hyd$Sub43
 # create spaghetti plot of simulated flows
 rvn_flow_spaghetti(sim)
 
-# create spaghetti plot without legend or different colours
-rvn_flow_spaghetti(sim2,include_legend=F,colour_wheel=F)
 
 }
 \seealso{

@@ -1,13 +1,9 @@
-# ECmet.rvt modification
-# RavenR package update contribution by Simon Lin
-# Last modified: 2020-05-08
-
 #' EC Climate Station File Conversion
 #'
 #' Note - this function is designated to be rewritten using the weathercan package
 #' available on Github to pull Environment Canada data directly
 #'
-#' ECmet.rvt converts Environment Canada historical meteorological data for a
+#' rvn_ECmet_rvt converts Environment Canada historical meteorological data for a
 #' given station into the .rvt format usable in Raven.
 #'
 #' This function accepts a set of files and parses them into a single time
@@ -84,7 +80,7 @@
 #' @param perform.qc (optional) quality controls the data before writing to
 #' file (not yet implemented!)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
-#' @seealso \code{\link{ECflow.rvt}} to convert WSC flow gauge data to Raven
+#' @seealso \code{\link{rvn_ECflow_rvt}} to convert WSC flow gauge data to Raven
 #' format
 #'
 #' Download EC climate data from
@@ -105,12 +101,15 @@
 #'
 #' # basic use, includes "met_" prefix
 #' # default forcing.set (PRECIP, MAX TEMP, MIN TEMP)
-#' ECmet.rvt(ff,forcing.set=1)
+#' rvn_ECmet_rvt(ff,forcing.set=1)
 #'
 #' # set without prefix, different file created
 #'   # forcing.set includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
-#' ECmet.rvt(ff,forcing.set=2,met.prefix=F,write.stndata=T,write.redirect = T)
-#' }
+#' rvn_ECmet_rvt(ff,forcing.set=2,met.prefix=F,write.stndata=T,write.redirect = T)
+#'
+#'
+#' # sample data set from weatherCAN
+#' ff = weather_dl(station_ids=c(4180,4181), interval = "day")
 #'
 #' library dependencies:
 #' library(weathercan)
@@ -118,19 +117,17 @@
 #' library(dplyr)
 #' library(tidyr)
 #' library(ggplot2)
-
-#' @export ECmet.rvt
-# sample data set from weatherCAN
-ff = weather_dl(station_ids=c(4180,4181), interval = "day")
-
-ECmetMWR.rvt = function (ff, prd = NULL, stnName = NULL, forcing.set = 1, met.prefix = T, 
-                         write.redirect = F, write.stndata = F) 
-{
+#'
+#' }
+#'
+#' @export rvn_ECmet_rvt
+rvn_ECmet_rvt = function (ff, prd = NULL, stnName = NULL, forcing.set = 1, met.prefix = T,
+                         write.redirect = F, write.stndata = F) {
   ## Define output file names
   rd.file <- "met_redirects.rvt"
   stndata.file <- "met_stndata.rvt"
   params = c("max_temp","min_temp","mean_temp","total_rain","total_snow","total_precip")
-  
+
   ## verify inputs
   if (nrow(ff) == 0) {
     stop("Requires at least one set of station data to read in.")
@@ -147,40 +144,40 @@ ECmetMWR.rvt = function (ff, prd = NULL, stnName = NULL, forcing.set = 1, met.pr
     if (length(firstsplit) != 2) {
       stop("Check the format of supplied period; should be two dates separated by '/'.")
     }
-    if (length(unlist(strsplit(firstsplit[1], "-"))) != 3 || 
-        length(unlist(strsplit(firstsplit[2], "-"))) != 3 || 
+    if (length(unlist(strsplit(firstsplit[1], "-"))) != 3 ||
+        length(unlist(strsplit(firstsplit[2], "-"))) != 3 ||
         nchar(firstsplit[1]) != 10 || nchar(firstsplit[2]) != 10) {
       stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
     }
   }
-  
+
   # write status of each rvt file. Geographic data is written for every successful station into the main rvt metadata.
   ws = data.frame("station" = unique(ff$station_id), "rvt.name" = NA ,"status" = NA)
-  
+
   ## Begin writing rvt file for each station listed in entry
   for (i in 1:length(unique(ff$station_id))){
     rr = ff[ff$station_id == unique(ff$station_id)[i],]
     sn = unique(rr$station_name)
     sid = unique(rr$station_id)
     rr = rr[as.Date(rr$date) >= as.Date(firstsplit[1]) | as.Date(rr$date) <= as.Date(firstsplit[2]),]
-    
+
     # Verify existing record overlaps with desired period
     if(nrow(rr) == 0 & !is.null(prd)){
       message(paste0("No data available for desired period at ",sn," (station ID: ",sid,")"))
     }
-    
+
     if ("time" %in% colnames(rr)){
       stop(paste0("Function not available yet for non-daily time steps. Please re-download data at daily intervals.
                    (Station ID:", sid,")"))
     }
-    
+
     dd = as.Date(format(as.POSIXct(rr$date, format = "%Y-%m-%d %H:%M:%S"), format = "%Y-%m-%d"))
     timestep = as.numeric(as.difftime(as.Date(dd[2:length(dd)])-as.Date(dd[1:(length(dd)-1)]), units = "days"))
-    
+
     if(sum(timestep != 1)>0) {
       stop(paste0("Function not available yet for non-daily time steps. Please check time intervals. (Station ID: ",sid,")"))
     }
-    
+
     # create time series for extracted parameters
     if(forcing.set == 1){
       rr.ts = xts(x=rr[,c("total_precip","max_temp","min_temp")], order.by = dd)
@@ -193,11 +190,11 @@ ECmetMWR.rvt = function (ff, prd = NULL, stnName = NULL, forcing.set = 1, met.pr
         stop(paste0("Station does not have snowfall observations on record.\nLook for 'total_snow' as a parameter in the inputs. (Station id: ", sid,")"))
       }
     }else{
-      stop("'forcing.set' value can only be set as 1 or 2. Type '?ECmet.rvt' for more details.")
+      stop("'forcing.set' value can only be set as 1 or 2. Type '?rvn_ECmet_rvt' for more details.")
     }
-    
+
     rr.ts[is.na(rr.ts)] = - 1.2345
-    
+
     # write rvt file
     if(!is.null(stnName)){
       if(length(stnName != length(unique(ff$station_id)))){
@@ -206,17 +203,17 @@ ECmetMWR.rvt = function (ff, prd = NULL, stnName = NULL, forcing.set = 1, met.pr
       sn <- stnName[i]
       }
     }
-    
+
     rvt.name = sprintf("%s.rvt",sn)
     if(met.prefix){
       rvt.name = sprintf("met_%s",rvt.name)
     }
     ws$rvt.name[ws$station==sid] = rvt.name
-    
+
     fc <- file(rvt.name, open="w+")
     writeLines(":MultiData",fc)
     writeLines(sprintf("%s 00:00:00 %g %i", as.character(lubridate::date(rr.ts[1])), timestep[!duplicated(timestep)], nrow(rr.ts)),fc)
-  
+
       if(forcing.set==1){
         writeLines(":Parameters\tPRECIP\tTEMP_DAILY_MAX\tTEMP_DAILY_MIN",fc)
         writeLines(":Units\tmm/d\tC\tC",fc)
@@ -235,18 +232,18 @@ ECmetMWR.rvt = function (ff, prd = NULL, stnName = NULL, forcing.set = 1, met.pr
     close(fc)
     message(sprintf("Done writing to %s", rvt.name))
     ws$status[ws$station == sid] = TRUE
-    
+
     # Provide a visual of generated time series
     print("Overview of generated timeseries")
     print(autoplot(rr.ts, geom="line", main = sn)+theme_bw()+theme(axis.title.x = element_blank()))
   }
-  
+
   ## Write geographic values of stations to main rvt file
   md = do.call("rbind",lapply(ws$station[ws$status == T],function(s){
     md = ff[ff$station_id==s, c("station_name","lat","lon","elev")]
     md = data.frame(md[!duplicated(md),], "rvt.name" = ws$rvt.name[ws$station==s])
   }))
-  
+
   # Write station data
   if(write.stndata){
   fc = file(stndata.file,open = "a+")
@@ -260,7 +257,7 @@ ECmetMWR.rvt = function (ff, prd = NULL, stnName = NULL, forcing.set = 1, met.pr
   close(fc)
   message(sprintf("Done writing station data to %s", stndata.file))
   }
-  
+
   ## Write Redirect commands
   if(write.redirect){
   fc.redirect = file(rd.file, open = "a+")
@@ -270,6 +267,6 @@ ECmetMWR.rvt = function (ff, prd = NULL, stnName = NULL, forcing.set = 1, met.pr
   close(fc.redirect)
   message(sprintf("Done writing redirect commands to %s",rd.file))
   }
-  
+
   return(TRUE)
 }
