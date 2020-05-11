@@ -69,7 +69,6 @@ rvn_fdc_plot <-function(sim=NULL,obs=NULL,prd=NULL,seasonal='F'){
   winter=NULL
   if (seasonal!='F'){
     sim.month<-month(sim,label=F,abbr=F)
-    #print(sim.month)
     summer<-sim[sim.month >=5 & sim.month<9] # May to September
     winter<-sim[sim.month <5 | sim.month>=9]
   }
@@ -78,44 +77,41 @@ rvn_fdc_plot <-function(sim=NULL,obs=NULL,prd=NULL,seasonal='F'){
     obs=sim+rep(10,length(sim)); # temp debug
   }
 
-  # require(png)
-  # require(grid)
   xmax=10^(ceiling(log10(max(sim))));
   xmin=10^(floor(log10(min(sim))));
-  plot(ecdf(as.numeric(sim)), log='x',xlim=c(xmin,xmax),
-       ylim=c(0,1),col='Blue',xlab='Q (m3/s)', ylab='% of flows less than Q',main='Flow Exceedance')
 
-  # define legend items (see code from hyd.plot)
-  leg.items <- c('sim')
-  leg.cols <- c('blue')
-  leg.lty <- c(1)
-
+  plot.df <- fortify(sim)
+  plot.df$Type <- "Sim"
+  colnames(plot.df)[2] <- "Value"
+  
   if (!is.null(obs)){
-    lines(ecdf(as.numeric(obs)),col='black')
-    #legend(x='bottomright',legend=c('sim','obs'),lty=c(1,1),col=c('blue','black'))
-    leg.items <- c(leg.items,'obs')
-    leg.cols <- c(leg.cols,'black')
-    leg.lty <- c(leg.lty,1)
+    plot.df2 <- fortify(obs)
+    plot.df2$Type <- "Obs"
+    colnames(plot.df2)[2] <- "Value" 
+    plot.df <- rbind(plot.df, plot.df2)
   }
-  if (seasonal!='F'){
-    lines(ecdf(as.numeric(summer)),col='red',do.p=FALSE)
-    lines(ecdf(as.numeric(winter)),col='cadetblue2')
-    # legend(x='bottomright',legend=c('sim','obs','Qsummer','Qwinter'),lty=c(1,1,1,1),col=c('blue','black','red','cadetblue2'))
-    leg.items <- c(leg.items,'Qsummer','Qwinter')
-    leg.cols <- c(leg.cols,'red','cadetblue2')
-    leg.lty <- c(leg.lty,1,1)
+  
+  if (seasonal != "F"){
+    plot.df3 <- fortify(summer)
+    plot.df3$Type <- "Summer"
+    colnames(plot.df3)[2] <- "Value" 
+    
+    plot.df4 <- fortify(winter)
+    plot.df4$Type <- "Winter"
+    colnames(plot.df4)[2] <- "Value" 
+    
+    plot.df <- rbind(plot.df, plot.df3,plot.df4)
   }
-
-  legend(x='bottomright',legend=leg.items,lty=leg.lty,col=leg.cols,inset=0.01,cex=0.9)
-
-  #icon.draw <- function(image, x, y, size) {
-  #  logo <- rasterGrob(image = image,
-  #                     x = unit(x, "npc"), y = unit(y, "npc"), height = unit(size, "cm"))
-  #  grid.draw(logo)
-  #}
-  # plot(0:1,0:1,type="n",ann=FALSE,axes=FALSE)
-  #img<-png::readPNG("RavenIcon.png")
-  # plot(1:10,1:10)
-  #icon.draw(img,0.9,0.7,1)
+  
+  
+  p1 <-  ggplot(plot.df)+
+    stat_ecdf(aes(x=Value, color=Type))+
+    scale_x_continuous(trans = 'log10', name = expression("Q ["*m^3*"/s]"),limits = c(xmin,xmax))+
+    scale_y_continuous(name = "% of flow less than Q",limits = c(0,1))+
+    theme_bw()+
+    ggtitle("Flow Exceedance")+
+    theme(plot.title = element_text(hjust=0.5))
+  
+  return(p1)
 }
 

@@ -78,53 +78,31 @@ rvn_cum_plot_flow <- function(sim=NULL,obs=NULL,inflow=NULL) {
 
   max.vol <- max(cum.sim,cum.obs,cum.inflow,na.rm=T)*1.1
 
-  plot(lubridate::date(sim),cum.sim,type='l',col='red',ylim=c(0,max.vol),
-       ylab='Cumulative Flow [m3]',xlab='Date',lty=1)
-
+  df.plot <- data.frame(cbind(fortify(sim),cum.sim,"sim"))
+  colnames(df.plot) <- c("date","value","cum","variable")
+  
   if (!(is.null(obs))) {
-    lines(lubridate::date(obs),cum.obs,col='black',lty=3)
+    df <- cbind(fortify(obs),cum.obs,"obs")
+    colnames(df) <- c("date","value","cum","variable")
+    df.plot <- rbind(df.plot,df)
   }
   if (!(is.null(inflow))) {
-    lines(lubridate::date(inflow),cum.inflow,col='blue',lty=5)
+    df <- cbind(fortify(inflow),cum.obs,"inflow")
+    colnames(df) <- c("date","value","cum","variable")
+    df.plot <- rbind(df.plot,df)
   }
+  
+  df.plot$cum <- as.numeric(df.plot$cum)
+  df.plot$variable <- factor(df.plot$variable)
+  
+  cum_flow_plot <- ggplot(df.plot)+
+    geom_line(aes(x=date,y=cum,color=variable))+
+    scale_y_continuous(name="Cumulative Flow [m3]",limits=c(0,max.vol))+
+    xlab("Date")+
+    theme_bw()
+  
+  
+  return(cum_flow_plot)
 
-# add a legend
-  if (is.null(inflow) & is.null(obs) ) {
-    # legend for only sim
-    legend(
-      x='topleft',
-      c('sim'),
-      col=c('red'),
-      cex=0.7,inset=0.01,
-      lty=c(1)
-    )
-  } else if ( is.null(inflow) & !(is.null(obs))) {
-    # legend for sim and obs
-    legend(
-      x='topleft',
-      c('sim','obs'),
-      col=c('red','black'),
-      cex=0.7,inset=0.01,
-      lty=c(1,3)
-    )
-  } else if ( !(is.null(inflow)) & is.null(obs)) {
-    # legend for sim and inflow
-    legend(
-      x='topleft',
-      c('sim','inflow'),
-      col=c('red','blue'),
-      cex=0.7,inset=0.01,
-      lty=c(1,5)
-    )
-  } else {
-    # legend for all 3
-    legend(
-      x='topleft',
-      c('sim','obs','inflow'),
-      col=c('red','black','blue'),
-      cex=0.7,inset=0.01,
-      lty=c(1,3,5)
-    )
-  }
-  return(TRUE)
+
 }
