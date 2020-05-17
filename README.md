@@ -9,8 +9,6 @@ status](https://travis-ci.org/rchlumsk/RavenR.svg?branch=master)](https://travis
 
 # RavenR <img src="man/figures/RavenR_logo.png" align="right" />
 
-# RavenR
-
 RavenR is an R package for handling Raven hydrologic modelling framework
 inputs, outputs, and diagnostics. Please contact Robert Chlumsky
 (<rchlumsk@uwaterloo.ca>) or Dr. James Craig (<jrcraig@uwaterloo.ca>)
