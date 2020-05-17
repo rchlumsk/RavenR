@@ -1,3 +1,5 @@
+README
+================
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Travis build
@@ -5,11 +7,13 @@ status](https://travis-ci.org/rchlumsk/RavenR.svg?branch=master)](https://travis
 [![license](https://img.shields.io/badge/license-GPL3-lightgrey.svg)](https://choosealicense.com/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3468442.svg)](https://doi.org/10.5281/zenodo.3468442)
 
+# RavenR <img src="man/figures/RavenR_logo.png" align="right" />
+
 # RavenR
 
 RavenR is an R package for handling Raven hydrologic modelling framework
 inputs, outputs, and diagnostics. Please contact Robert Chlumsky
-(<rchlumsk@uwaterloo.ca>) or Dr. James Craig (<jrcraig@uwaterloo.ca>)
+(<rchlumsk@uwaterloo.ca>) or Dr. James Craig (<jrcraig@uwaterloo.ca>)
 for any troubleshooting, bug fixes, or recommendations on future
 releases.
 

@@ -1,5 +1,6 @@
 
 ---
+title: README
 output: github_document
 ---
 
@@ -15,6 +16,8 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 ```
+
+# RavenR <img src="man/figures/RavenR_logo.png" align="right" />
 
 # RavenR
 
