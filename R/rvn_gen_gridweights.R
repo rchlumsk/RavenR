@@ -56,8 +56,7 @@
 #'   #HRUshp<-readOGR(dsn = dsn,layer = lay) # returns SpatialPolygonsDataFrame
 #'
 #'  }
-#'
-#'
+#' @export rvn_gen_gridweights
 rvn_gen_gridweights <- function(HRUshpfile,Gridshpfile,ValidHRUIDs,HRUIDcol="HRU_ID",gridIDcol="cellID",outfile="GridWeights.rvt")
 {
 

@@ -19,13 +19,16 @@ Depends:
     lubridate,
     xts,
     zoo,
-    igraph,
-    dygraphs,
     dplyr,
     sf,
+    rgdal,
     ggplot2,
     scales,
-    gdata
+    gdata,
+Imports:
+    data.table,
+    igraph,
+    dygraphs
 Suggests:
     knitr,
     rmarkdown,
@@ -38,8 +41,7 @@ Suggests:
     gifski,
     magick,
     gifski,
-    maptools,
-    rgdal,
+    maptools
 URL: https://github.com/rchlumsk/RavenR
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
