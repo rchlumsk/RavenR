@@ -13,10 +13,10 @@
 #' is sufficient.
 #'
 #' @param ff full file path to the ForcingFunctions.csv file
-#' @return \list{
+#' @return
 #'  \item{forcings}{data frame from the file with standardized names}
 #'  \item{units}{vector corresponding to units of each column}
-#' }
+#'
 #'
 #' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
 #'

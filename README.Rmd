@@ -1,5 +1,6 @@
 
 ---
+title: README
 output: github_document
 ---
 
@@ -16,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# RavenR
+# RavenR <img src="man/figures/RavenR_logo_small.png" align="right" />
 
 RavenR is an R package for handling Raven hydrologic modelling framework inputs, outputs, and diagnostics. Please contact Robert Chlumsky (rchlumsk@uwaterloo.ca) or Dr. James Craig (jrcraig@uwaterloo.ca) for any troubleshooting, bug fixes, or recommendations on future releases.
 
@@ -46,30 +47,40 @@ Note that some of the package dependencies may require the installation of progr
 
 ## Version Update Notes
 
+### 2.0
+
+Major updates to the package, including core package styling such as function case, naming conventions, and use of ggplot2 libraries for plotting. Some of these include:
+* all core RavenR functions have an 'rvn_' prefix to specify the package origin;
+* functions and input/output variables now use an underscore naming convention, rather than periods or camelCase;
+* ggplot2 is now the default plotting library for plotting functions, and some plotting arguments have been reduced, as ggplot objects may be modified in post-production by the user;
+* new functions including XXX;
+* new sample data sets and examples, including tidying of all function examples and addition of netcdf files to test netcdf-related functions;
+* new tutorials and vignettes for RavenR.
+
 ### 1.3
 
 Updated functionality and test shapefile data sets for use, with a focus on updated documentation. New functions include:
-* dygraph plotting of subbasin results  
-* RVI read in function  
-* minor fixes to flagging in hyd.read  
-* major updates to SBMap.plot and SBMap.animate to use sf and magick packages  
+* dygraph plotting of subbasin results;  
+* RVI read in function;  
+* minor fixes to flagging in hyd.read; and  
+* major updates to SBMap.plot and SBMap.animate to use sf and magick packages.  
 
 Sample data sets added include:
-* Nith.rvi (from Raven Walkthrough Tutorial files)  
-* Nith subwatershed shapefile (for testing GIS-based functions)  
-* additional custom outputs for run1  
+* Nith.rvi (from Raven Walkthrough Tutorial files);  
+* Nith subwatershed shapefile (for testing GIS-based functions); and  
+* additional custom outputs for run1.  
 
 Updated RavenR Short Exercise with new functions, and started RavenR Tutorial document (planned for future release, currently under construction).
 
 ### 1.2
 
 Updated functionality and test data sets for use. New functions include:
-* subbasin and HRU plotting from shapefile from custom data or tabular input  
-* animation of subbasin plots for custom data  
-* watershed network plotting from HRU file  
-* RVH file handling  
-* time series infilling  
-* creation of observation rvt files  
+* subbasin and HRU plotting from shapefile from custom data or tabular input;  
+* animation of subbasin plots for custom data;  
+* watershed network plotting from HRU file;  
+* RVH file handling;  
+* time series infilling; and  
+* creation of observation rvt files.  
 
 New sample data sets, including raw data for testing read-type functions.
 

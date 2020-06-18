@@ -4,7 +4,7 @@
 #' modelling Framework Raven.
 #'
 #' This function expects a full file path to the Hydrographs.csv file, then
-#' reads in the file using read.csv. The main advantage of this function is
+#' reads in the file using fread. The main advantage of this function is
 #' renaming the columns to nicer names and extracting the units into something
 #' much easier to read.
 #'
@@ -31,6 +31,7 @@
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven read.csv hydrograph
+#' @importFrom data.table fread
 #' @examples
 #'
 #' # read in hydrograph sample csv data from RavenR package
@@ -59,7 +60,7 @@ rvn_hyd_read <- function(ff=NA,tzone="") {
   classes <- c(c('numeric','character','character'),rep('numeric',ncol(hydrographs)-3))
 
   # re-read with specified colClasses
-  hydrographs <- read.csv(ff,header=T,colClasses = classes,na.strings=c("---",'NA'))
+  hydrographs <- fread(ff,header=T,colClasses = classes,na.strings=c("---",'NA'))
 
   # need to fix the hourly model
   date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S",tz=tzone)

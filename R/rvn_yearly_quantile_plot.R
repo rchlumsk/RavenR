@@ -8,7 +8,7 @@
 #'
 #' @return Time series object of monthly median and quantile values
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
-#' @export yearly_quantile
+#' @export rvn_yearly_quantile
 #'
 #' @examples
 #' data("rvn_hydrograph_data")
@@ -17,9 +17,9 @@
 #' hgdata <- hydrograph.data$hyd$Sub36
 #'
 #' # Calculate quantiles
-#' qdat <- yearly_quantile(hgdata)
+#' qdat <- rvn_yearly_quantile(hgdata)
 #'
-yearly_quantile <- function(hgdata, minyear=NULL, maxyear=NULL,
+rvn_yearly_quantile <- function(hgdata, minyear=NULL, maxyear=NULL,
                            Qlower=0.1, Qupper=0.9, water_year=T) {
 
   #-- Assuming hgdata is a daily xts object
