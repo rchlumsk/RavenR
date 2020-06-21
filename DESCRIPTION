@@ -10,6 +10,7 @@ Description: Provides useful functions for pre- and post-processing Raven output
 Note: Package is active development; please report errors and suggestions for development to rchlumsk@uwaterloo.ca.
 Depends:
     R (>= 3.3.0),
+    gdata,
     methods,
     lubridate,
     xts,

@@ -229,8 +229,8 @@ write.RavenTable <- function(filename, attributes, units, df,
 #-----------------------------------------------------------------------------#
 #' Writes common Raven labeled line to file, with optional value (appends)
 #'
-#' @param filename character, file name/path to write to, with extension
 #' @param label character, (e.g. "SoilClasses")
+#' @param filename character, file name/path to write to, with extension
 #' @param value numeric or character, corresponding value written after label (optional)
 #' @param digits Number of digits to round value to (optional)
 #'
@@ -239,8 +239,8 @@ write.RavenTable <- function(filename, attributes, units, df,
 #'
 #' @examples
 #' \dontrun{}
-#' write.RavenLabel('Duration', 365, 'Hogwarts.rvi')
-write.RavenLabel <- function(filename, label, value=NULL, digits=NULL) {
+#' write.RavenLabel('Duration', 'Hogwarts.rvi', value=365)
+write.RavenLabel <- function(label, filename, value=NULL, digits=NULL) {
   if (!is.null(digits)) {
     value <- round(value, digits)
   }
