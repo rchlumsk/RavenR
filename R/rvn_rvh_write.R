@@ -51,6 +51,8 @@ rvn_rvh_write<-function(filename,SBtable,HRUtable)#add HRUgroups later
   write(" ",append=TRUE,file=filename)
 }
 
+#-----------------------------------------------------------------------------#
+
 #' @describeIn rvn_rvh_write Overwrite contents of original .rvh file
 #' @export rvn_rvh_write
 rvh.overwrite<-function(orig_file,filename,SBtable,HRUtable)
@@ -94,4 +96,64 @@ rvh.overwrite<-function(orig_file,filename,SBtable,HRUtable)
   write(noHRUs[HRUend:length(noHRUs)],append=TRUE,file=filename)
 
   return(TRUE)
+}
+
+#-----------------------------------------------------------------------------#
+
+#' Generate Blank Raven SubBasin DataFrame
+#'
+#' @param nsubbasins Number of SubBasins in model, used to determine number of rows in table (default = 1)
+#'
+#' @return data.frame of blank SubBasin properties to be filled in by user
+#' @export rvn_blankSubBasindf
+#'
+#' @examples
+#' SBtable <- rvn_blankSubBasindf(nsubbasins = 1)
+rvn_blankSubBasindf <- function(nsubbasins = 1) {
+  df <- data.frame('SBID'          = 1:nsubbasins,
+                   'Name'          = NA,
+                   'Downstream_ID' = -1,
+                   'Profile'       = NA,
+                   'ReachLength'   = 0.0,
+                   'Gauged'        = 0)
+  return(df)
+}
+
+#-----------------------------------------------------------------------------#
+
+#' Generate Blank Raven HRU DataFrame
+#'
+#' Used to generate a blank HRU table that can be filled in by the user. Compatible with
+#' rvn_rvh_write().
+#'
+#' @param nhrus Number of HRUs, used to determine number of rows in table (default = 1)
+#' @param subbasinIDs Subbasins that HRUs belong to (default = all equal 1)
+#'
+#' @return data.frame of blank HRU properties to be filled in by user
+#' @author Leland Scantlebury
+#' @export rvn_blankHRUdf
+#'
+#' @examples
+#' HRUtable <- rvh_blankHRUdf(nhrus = 3, subbasinIDs=c(1,1,2))
+rvn_blankHRUdf <- function(nhrus = 1, subbasinIDs=NULL) {
+  if (is.null(subbasinIDs)) {
+    subbasinIDs <- rep(1, nhrus)
+  }
+
+  #-- default is zero for numbers, NA for text
+  df <- data.frame('ID'         = 1:nhrus,
+                   'Area'       = 0.0,
+                   'Elevation'  = 0.0,
+                   'Latitude'   = 0.0,
+                   'Longitude'  = 0.0,
+                   'SBID'       = subbasinIDs,
+                   'LandUse'    = NA,
+                   'Vegetation' = NA,
+                   'SoilProfile'= NA,
+                   'Terrain'    = "[NONE]",
+                   'Aquifer'    = NA,
+                   'Slope'      = 0.0,
+                   'Aspect'     = 0.0)
+  #-- Nothing fancy
+  return(df)
 }
