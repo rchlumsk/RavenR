@@ -61,7 +61,7 @@
 #'
 #' @export rvn_tidyhydat_rvt
 rvn_tidyhydat_rvt <- function(indata, subIDs, prd=NULL, stnNames=NULL, write_redirect=F, flip_number=F,
-                              rd.file = 'flow_stn_redirect_text.rvt', ) {
+                              rd.file = 'flow_stn_redirect_text.rvt') {
 
   # data checks
   if (!(is.null(stnNames)) & (length(subIDs) != length(stnNames))) {
