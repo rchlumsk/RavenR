@@ -4,7 +4,8 @@
 \name{rvn_watershed_data}
 \alias{rvn_watershed_data}
 \title{Watershed Storage Data from Raven}
-\format{rvn_watershed_data is a data frame with two object
+\format{
+rvn_watershed_data is a data frame with two object
 \describe{
   \item{watershed.storage}{various storage variable states outputted from the
   Raven model}
@@ -37,7 +38,8 @@ each watershed storage state can be found in the Raven Manual
 }
 
 The Nith River model can be downloaded from the Raven Tutorials (tutorial #2)
-\url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}}
+\url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}
+}
 \usage{
 rvn_watershed_data
 }

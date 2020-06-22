@@ -69,8 +69,6 @@ wt[k][g] for any k, over all g, is 1.0
   #HRUshp<-readOGR(dsn = dsn,layer = lay) # returns SpatialPolygonsDataFrame
 
  }
-
-
 }
 \keyword{conversion}
 \keyword{grid}

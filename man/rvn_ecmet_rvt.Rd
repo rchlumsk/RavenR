@@ -5,17 +5,19 @@
 \title{EC Climate Station File Conversion}
 \usage{
 rvn_ECmet_rvt(
-  ff,
+  metdata,
   prd = NULL,
   stnName = NULL,
   forcing.set = 1,
-  met.prefix = T,
+  prefix = "met_",
   write.redirect = F,
-  write.stndata = F
+  write.stndata = F,
+  rd.file = "met_redirects.rvt",
+  stndata.file = "met_stndata.rvt"
 )
 }
 \arguments{
-\item{ff}{EC climate data file paths in a string vector}
+\item{metdata}{EC meteorological data from one or more stations (e.g., from weathercan::weather_dl())}
 
 \item{prd}{(optional) data period to use in .rvt file}
 
@@ -23,41 +25,31 @@ rvn_ECmet_rvt(
 
 \item{forcing.set}{(optional) specifies the set of forcings to print to file}
 
-\item{met.prefix}{(optional) prefixes the file name with "met_"}
+\item{prefix}{(optional) prefixes the file name (default: "met_")}
 
 \item{write.redirect}{(optional) write the :RedirectToFile commands in a
 separate .rvt file}
 
 \item{write.stndata}{(optional) write the gauge data to a separate .rvt file}
 
-\item{perform.qc}{(optional) quality controls the data before writing to
-file (not yet implemented!)}
+\item{rd.file}{(optional) name of the redirect file created (if write.redirect = TRUE)}
+
+\item{stndata.file}{(optional) name of the station data file created (if write.stndata = TRUE)}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
-Note - this function is designated to be rewritten using the weathercan package
-available on Github to pull Environment Canada data directly
+Note - this function is designated to use data from the weathercan package
+available on Github to pull Environment Canada data
 }
 \details{
 rvn_ECmet_rvt converts Environment Canada historical meteorological data for a
 given station into the .rvt format usable in Raven.
 
-This function accepts a set of files and parses them into a single time
-series in the .rvt format for Raven. The function prints in the :MultiData
-format; the particular set of forcings to print can be set with the
-forcing.set command. The files should be downloaded in a .csv Date-Data
-format with missing days included. The download website is linked below.
-Note that the first file passed is used to extract the gauge data, and the
-remaining files are compared to the ClimateID of the first file to ensure
-consistency.
-
-ff should be a string vector (or single string) of climate file paths. The
-first file is used to obtain the station metadata, and the subsequent files
-are checked for consistency against the first file to ensure there is not a
-mix of climate stations supplied. The files do not have to be supplied in
-chronological order as long as they belong to the same climate station.
+The function prints in the :MultiData format; the particular set of forcings to
+print can be set with the forcing.set command. The data should be downloaded
+with missing days included. The download website is linked below.
 
 prd is used by the xts formatted-data to restrict the data reported in .rvt
 files, for each station, to this period. The prd should be defined in
@@ -66,10 +58,11 @@ empty time series (i.e. non-overlapping time periods), an error will be
 thrown.
 
 stnName can be supplied to overwrite the station name that is otherwise
-obtained from the Station Name field in the climate file.
+obtained from the Station Name field in the climate file. Spaces in raw Station
+Names will be replaced with underscores.
 
-met.prefix supplies the "met_" prefix to the .rvt file name, which may be
-useful in organizing multiple climate data files.
+prefix can be used to add a prefix to the .rvt file name, ("met_" by default)
+which may be useful in organizing multiple climate data files.
 
 forcing.set specifies the set of forcings to print to .rvt file. Currently
 there are only two available sets. A value of 1 prints total precipitation,
@@ -104,39 +97,26 @@ warning that post-processing will be required
 
 Current limitations of the function: - quality control is not implemented;
 does not check for common errors in data, does not infill missing values
-(required for running in Raven, thus post-processing of files is likely
+(required for running in Raven, thus pre-processing of files is likely
 required) - only handles daily data (subdaily or monthly not yet handled)
 }
 \examples{
-# warning: example not run, sample example for associated files only
 \dontrun{
-ff <- c("eng-daily-01012008-12312008.csv","eng-daily-01012007-12312007.csv")
+#-- Download data using weathercan weather_dl
 
 # basic use, includes "met_" prefix
 # default forcing.set (PRECIP, MAX TEMP, MIN TEMP)
-rvn_ECmet_rvt(ff,forcing.set=1)
+rvn_ECmet_rvt(metdata = kam, forcing.set = 1)
 
-# set without prefix, different file created
-  # forcing.set includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
-rvn_ECmet_rvt(ff,forcing.set=2,met.prefix=F,write.stndata=T,write.redirect = T)
-
-
-# sample data set from weatherCAN
-ff = weather_dl(station_ids=c(4180,4181), interval = "day")
-
-library dependencies:
-library(weathercan)
-library(xts)
-library(dplyr)
-library(tidyr)
-library(ggplot2)
+# set without prefix, station data and redirect files created
+# forcing.set 2 includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
+rvn_ECmet_rvt(metdata = kam, forcing.set = 2, prefix = NULL, write.stndata = T, write.redirect = T)
 
 }
 
 }
 \seealso{
-\code{\link{rvn_ECflow_rvt}} to convert WSC flow gauge data to Raven
-format
+\code{\link{rvn_ECflow_rvt}} to convert WSC flow gauge data to Raven format
 
 Download EC climate data from
 \href{http://climate.weather.gc.ca/historical_data/search_historic_data_e.html}{EC
