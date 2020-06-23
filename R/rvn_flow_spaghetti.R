@@ -12,28 +12,12 @@
 #' is a leap year or not. This is likely without consequence in seeing the
 #' trends between water years, however the user is warned of this deficiency.
 #'
-#' The include_legend argument will add a legend to the right-hand side of the
-#' plot, if true. The legend will be labelled as the year for each flow series,
-#' where the year is the date-ending year (i.e. for the 2003-10-01 to
-#' 2004-09-30 water year, the flow series will be labelled as 2004). This
-#' argument will also cause the plot margins to be adjusted so that the legend
-#' can be included. Note that the current setup to accomodate approximately 15
-#' years of flow series in the legend, beyond that the legend may not be
-#' aesthetically pleasing.
-#'
-#' The colour_wheel argument, if TRUE, will plot each water year in a different
-#' randomly sampled colour. If FALSE, all years will be plotted in black. If
-#' colour_wheel is FALSE, the legend is recommended to be set to FALSE as well.
-#'
 #' The flow series provided should be of time series (xts) format.
 #'
 #' Note that a plot title is purposely omitted in order to allow the automatic
 #' generation of plot titles.
 #'
 #' @param flow time series object of simulated flows
-#' @param include_legend option to include a legend (default TRUE)
-#' @param colour_wheel option to use a different colour for each year plotted
-#' (default TRUE)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow
 #' values
@@ -52,56 +36,30 @@
 #'# create spaghetti plot of simulated flows
 #'rvn_flow_spaghetti(sim)
 #'
-#'# create spaghetti plot without legend or different colours
-#'rvn_flow_spaghetti(sim2,include_legend=F,colour_wheel=F)
 #'
 #' @export rvn_flow_spaghetti
-rvn_flow_spaghetti <- function(flow,include_legend=T,colour_wheel=T) {
+rvn_flow_spaghetti <- function(flow) {
 
-  # initial plot setup
-  ticks.at <- seq(1,366,1)
-  ticks.seq <- c(seq(274,366,1),seq(1,273,1))
-  ind.start <- seq(1,366,31)
-  nyears <- round(nrow(flow)/365)
-  ep <- wyear.indices(flow)
-  y.min <- min(flow)
-  y.max<-max(flow)
-
-  # define colours to use
-  # eventually want to update this to get it to pick 'nice' colours consistently
-  if (colour_wheel) {
-    cw <- sample(colours(), nyears,replace=F)
-  } else {
-    cw <- rep('black',nyears)
-  }
-
-  ## start plot
-  if (include_legend) {
-    .pardefault <- par(no.readonly=T)
-    par(mar=c(5,4,4,4)+0.1)
-    par(xpd=T)
-  }
-  plot(ticks.at,rnorm(366),xaxt='n',ylim=c(y.min,y.max),col='white',
-       ylab='Flow [m3/s]',xlab='Day of Year')
-  axis(1, at=ticks.at[ind.start],labels=ticks.seq[ind.start],cex.axis=0.7)
-
-  j = 1
-  for (i in 1:(length(ep)-1)) {
-    temp <- coredata(flow[ep[i]:ep[i+1],])
-    temp <- temp[1:(length(temp)-1)]
-    lines(seq(1,length(temp),1),temp,lty=5,col=cw[j])
-    j = j+1
-  }
-
-  # add legend
-  if (include_legend) {
-    labs <- matrix(ncol=1,nrow=j-1)
-
-    # re-obtain periods and year labels; don't need for starting point
-    labs <- lubridate::year(flow[ep])[-1]
-    legend(x=380,y=y.max,legend=labs,bty='n',col=cw,lty=rep(5,length(labs)),cex=0.8)
-    par(.pardefault)
-  }
-  return(TRUE)
+  ticks.at <- seq(1, 366, 1)
+  ticks.seq <- c(seq(274, 366, 1), seq(1, 273, 1))
+  
+  plot.df <- fortify(flow)
+  plot.df$doy <- lubridate::yday(plot.df$Index)
+  plot.df$Year <- as.factor(year(plot.df$Index))
+  colnames(plot.df)[2] <- "flow"
+  plot.df$x_form <- plot.df$doy-273
+  plot.df$x_form[month(plot.df$Index)<10] <- plot.df$x_form[month(plot.df$Index)<10]+365
+  
+  labels <- c(seq(274,365,30),seq(1,270,30))
+  
+  
+  p1 <- ggplot(plot.df)+
+    geom_line(aes(x=x_form,y=flow,group=Year, color=Year))+
+    scale_y_continuous(name=expression("Flow ["*m^3*"/s]"))+
+    scale_x_continuous(name="Day of Year", breaks=seq(1,365,30), labels = labels)+
+    theme_bw()
+  
+  
+  return(p1)
 }
 

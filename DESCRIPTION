@@ -2,7 +2,7 @@ Package: RavenR
 Type: Package
 Title: Raven Hydrological Modelling Framework R Support and Analysis
 Version: 1.3.3
-Date: 2020-03-12
+Date: 2020-05-11
 Authors@R: c(
     person("Chlumsky", "Robert", email = "rchlumsk@uwaterloo.ca", role = c("cre","aut")),
     person("Craig", "James", email = "jrcraig@uwaterloo.ca", role = "aut"),
@@ -19,11 +19,16 @@ Depends:
     lubridate,
     xts,
     zoo,
-    igraph,
-    dygraphs,
     dplyr,
     sf,
-    ggplot2
+    rgdal,
+    ggplot2,
+    scales,
+    gdata,
+Imports:
+    data.table,
+    igraph,
+    dygraphs
 Suggests:
     knitr,
     rmarkdown,
@@ -36,8 +41,7 @@ Suggests:
     gifski,
     magick,
     gifski,
-    maptools,
-    rgdal,
+    maptools
 URL: https://github.com/rchlumsk/RavenR
 License: GPL-3 + file LICENSE
 Encoding: UTF-8

@@ -4,7 +4,7 @@
 \alias{rvn_flow_scatterplot}
 \title{Scatterplot of model flows}
 \usage{
-rvn_flow_scatterplot(sim, obs, add_line = T, add_r2 = F, axis_zero = T)
+rvn_flow_scatterplot(sim, obs, add_line = T, add_r2 = F)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
@@ -15,9 +15,6 @@ rvn_flow_scatterplot(sim, obs, add_line = T, add_r2 = F, axis_zero = T)
 (default TRUE)}
 
 \item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
-
-\item{axis_zero}{optionally sets the minimum flow on axes to zero (default
-TRUE)}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}

@@ -10,10 +10,8 @@ rvn_forcings_read(ff = NA)
 \item{ff}{full file path to the ForcingFunctions.csv file}
 }
 \value{
-\list{
- \item{forcings}{data frame from the file with standardized names}
+\item{forcings}{data frame from the file with standardized names}
  \item{units}{vector corresponding to units of each column}
-}
 }
 \description{
 rvn_forcings_read is used to read in the ForcingFunctions.csv file produced by

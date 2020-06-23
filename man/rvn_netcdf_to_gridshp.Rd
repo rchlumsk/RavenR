@@ -17,7 +17,8 @@ rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
 \item{TRUE}{returns TRUE if executed properly. Also generates shapefile in folder}
 }
 \description{
-
+Takes the latitude-longitude cell coordinates from a netCDF file (assumed to be named 'lat' and 'long')
+generates an estimate of the grid polygons associated with each netCDF cell and exports this to a shapefile (outshp)
 }
 \details{
 not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UTM zone;
