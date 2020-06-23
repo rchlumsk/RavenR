@@ -41,7 +41,6 @@ separate .rvt file}
 }
 \description{
 Note - this function is designated to use data from the weathercan package
-available on Github to pull Environment Canada data
 }
 \details{
 rvn_rvt_ECmet converts Environment Canada historical meteorological data for a
