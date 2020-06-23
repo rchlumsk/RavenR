@@ -3,11 +3,11 @@
 #' Note - this function is designated to use data from the weathercan package
 #' available on Github to pull Environment Canada data
 #'
-#' rvn_ECmet_rvt converts Environment Canada historical meteorological data for a
+#' rvn_rvt_ECmet converts Environment Canada historical meteorological data for a
 #' given station into the .rvt format usable in Raven.
 #'
 #' The function prints in the :MultiData format; the particular set of forcings to
-#' print can be set with the forcing.set command. The data should be downloaded
+#' print can be set with the forcing_set command. The data should be downloaded
 #' with missing days included. The download website is linked below.
 #'
 #' prd is used by the xts formatted-data to restrict the data reported in .rvt
@@ -23,7 +23,7 @@
 #' prefix can be used to add a prefix to the .rvt file name, ("met_" by default)
 #' which may be useful in organizing multiple climate data files.
 #'
-#' forcing.set specifies the set of forcings to print to .rvt file. Currently
+#' forcing_set specifies the set of forcings to print to .rvt file. Currently
 #' there are only two available sets. A value of 1 prints total precipitation,
 #' and 2 splits the precipitation into rainfall and snowfall. In some cases the
 #' EC data provides only total precipitation, which is a good check to make for
@@ -31,13 +31,13 @@
 #' currently print max and min daily temperature. Future extensions to this
 #' function may provide more options for forcing sets.
 #'
-#' write.redirect will print out the :RedirectToFile commands in a separate
+#' write_redirect will print out the :RedirectToFile commands in a separate
 #' file, met_redirects.rvt. These commands can be copied into the main model's
 #' .rvt file to redirect to the produced time series files. The function will
 #' append to the file if it already exists, meaning that this works for
 #' iterations of this function.
 #'
-#' write.stndata wil print out the gauge metadata to file (met_stndata.rvt) in
+#' write_stndata wil print out the gauge metadata to file (met_stndata.rvt) in
 #' the .rvt format, which is required to include a meterological station in
 #' Raven. The function will append to the file if it already exists, meaning
 #' that this works for iterations of this function.
@@ -62,13 +62,13 @@
 #' @param metdata EC meteorological data from one or more stations (e.g., from weathercan::weather_dl())
 #' @param prd (optional) data period to use in .rvt file
 #' @param stnName (optional) station name to use (instead of name in file)
-#' @param forcing.set (optional) specifies the set of forcings to print to file
+#' @param forcing_set (optional) specifies the set of forcings to print to file
 #' @param prefix (optional) prefixes the file name (default: "met_")
-#' @param write.redirect (optional) write the :RedirectToFile commands in a
+#' @param write_redirect (optional) write the :RedirectToFile commands in a
 #' separate .rvt file
-#' @param write.stndata (optional) write the gauge data to a separate .rvt file
-#' @param rd.file (optional) name of the redirect file created (if write.redirect = TRUE)
-#' @param stndata.file (optional) name of the station data file created (if write.stndata = TRUE)
+#' @param write_stndata (optional) write the gauge data to a separate .rvt file
+#' @param rd_file (optional) name of the redirect file created (if write_redirect = TRUE)
+#' @param stndata_file (optional) name of the station data file created (if write_stndata = TRUE)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{rvn_ECflow_rvt}} to convert WSC flow gauge data to Raven format
 #'
@@ -90,20 +90,20 @@
 #`                   start = "2016-10-01", end = "2019-09-30", interval="day")
 #'
 #' # basic use, includes "met_" prefix
-#' # default forcing.set (PRECIP, MAX TEMP, MIN TEMP)
-#' rvn_ECmet_rvt(metdata = kam, forcing.set = 1)
+#' # default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
+#' rvn_rvt_ECmet(metdata = kam, forcing_set = 1)
 #'
 #' # set without prefix, station data and redirect files created
-#' # forcing.set 2 includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
-#' rvn_ECmet_rvt(metdata = kam, forcing.set = 2, prefix = NULL, write.stndata = T, write.redirect = T)
+#' # forcing_set 2 includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
+#' rvn_rvt_ECmet(metdata = kam, forcing_set = 2, prefix = NULL, write_stndata = T, write_redirect = T)
 #'
 #' }
 #'
-#' @export rvn_ECmet_rvt
+#' @export rvn_rvt_ECmet
 #'
-rvn_ECmet_rvt <-  function (metdata, prd = NULL, stnName = NULL, forcing.set = 1, prefix = 'met_',
-                         write.redirect = F, write.stndata = F, rd.file = "met_redirects.rvt",
-                         stndata.file = "met_stndata.rvt") {
+rvn_rvt_ECmet <-  function(metdata, prd = NULL, stnName = NULL, forcing_set = 1, prefix = 'met_',
+                           write_redirect = F, write_stndata = F, rd_file = "met_redirects.rvt",
+                           stndata_file = "met_stndata.rvt") {
 
   ## params
   params <- c("max_temp","min_temp","mean_temp","total_rain","total_snow","total_precip")
@@ -174,9 +174,9 @@ rvn_ECmet_rvt <-  function (metdata, prd = NULL, stnName = NULL, forcing.set = 1
     }
 
     # create time series for extracted parameters
-    if(forcing.set == 1){
+    if(forcing_set == 1){
       rr.ts <-  xts(x=rr[,c("total_precip","max_temp","min_temp")], order.by = dd)
-    } else if(forcing.set == 2) {
+    } else if(forcing_set == 2) {
       # verify snow measurements exist
       if("total_snow" %in% colnames(metdata)){
       rr.ts <-  xts(x=rr[,c("total_rain","total_snow","max_temp","min_temp")], order.by = dd)
@@ -185,7 +185,7 @@ rvn_ECmet_rvt <-  function (metdata, prd = NULL, stnName = NULL, forcing.set = 1
         stop(paste0("Station does not have snowfall observations on record.\nLook for 'total_snow' as a parameter in the inputs. (Station id: ", sid,")"))
       }
     } else {
-      stop("'forcing.set' value can only be set as 1 or 2. Type '?rvn_ECmet_rvt' for more details.")
+      stop("'forcing_set' value can only be set as 1 or 2. Type '?rvn_rvt_ECmet' for more details.")
     }
 
     #rr.ts[is.na(rr.ts)] = - 1.2345
@@ -209,7 +209,7 @@ rvn_ECmet_rvt <-  function (metdata, prd = NULL, stnName = NULL, forcing.set = 1
     #-- Data sets are subset & converted to dataframe prior to writing (rvn_rvt_write currently doens't handle tibbles)
     #   Dates are seperated out since we are not passing an XTS object
 
-    if(forcing.set == 1){
+    if(forcing_set == 1){
       rvn_rvt_write(ts = rr.ts,
                     ff = rvt.name,
                     params = ":Parameters\tPRECIP\tTEMP_DAILY_MAX\tTEMP_DAILY_MIN",
@@ -237,8 +237,8 @@ rvn_ECmet_rvt <-  function (metdata, prd = NULL, stnName = NULL, forcing.set = 1
   }))
 
   # Write station data
-  if(write.stndata){
-    fc = file(stndata.file,open = "a+")
+  if(write_stndata){
+    fc = file(stndata_file,open = "a+")
     for (k in 1:nrow(md)){
       writeLines(sprintf(":Gauge %s", md$station_name[k]),fc)
       writeLines(sprintf("  :Latitude %.6f", md$lat[k]),fc)
@@ -247,17 +247,17 @@ rvn_ECmet_rvt <-  function (metdata, prd = NULL, stnName = NULL, forcing.set = 1
       writeLines(":EndGauge\n",fc)
     }
     close(fc)
-    message(sprintf("Done writing station data to %s", stndata.file))
+    message(sprintf("Done writing station data to %s", stndata_file))
   }
 
   ## Write Redirect commands
-  if(write.redirect){
-  fc.redirect = file(rd.file, open = "a+")
+  if(write_redirect){
+  fc.redirect = file(rd_file, open = "a+")
    for(k in 1:nrow(md)){
      writeLines(sprintf(":RedirectToFile %s", md$rvt.name[k]),fc.redirect)
    }
   close(fc.redirect)
-  message(sprintf("Done writing redirect commands to %s",rd.file))
+  message(sprintf("Done writing redirect commands to %s",rd_file))
   }
 
   return(TRUE)

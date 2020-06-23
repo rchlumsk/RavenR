@@ -1,6 +1,6 @@
 #' EC Streamgauge File Conversion from tidyhydat
 #'
-#' rvn_tidyhydat_rvt converts Environment Canada historical streamgauge data,
+#' rvn_rvt_tidyhydat converts Environment Canada historical streamgauge data,
 #' accessed via the tidyhydat package, into .rvt format files usable in
 #' Raven.
 #'
@@ -41,7 +41,7 @@
 #' use
 #' @param write_redirect (optional) write the :RedirectToFile commands in a
 #' separate .rvt file
-#' @param rd.file (optional) name of the redirect file created (if write_redirect = TRUE)
+#' @param rd_file (optional) name of the redirect file created (if write_redirect = TRUE)
 #' @param flip_number (optional) put the subID first in the .rvt filename
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #'
@@ -57,11 +57,11 @@
 #' station_info <- hy_stations(stations)
 #'
 #' # Create RVT files
-#' rvn_tidyhydat_rvt(data, subIDs=c(3,11), stnNames=station_info$STATION_NAME, flip_number=T)
+#' rvn_rvt_tidyhydat(data, subIDs=c(3,11), stnNames=station_info$STATION_NAME, flip_number=T)
 #'
-#' @export rvn_tidyhydat_rvt
-rvn_tidyhydat_rvt <- function(indata, subIDs, prd=NULL, stnNames=NULL, write_redirect=F, flip_number=F,
-                              rd.file = 'flow_stn_redirect_text.rvt') {
+#' @export rvn_rvt_tidyhydat
+rvn_rvt_tidyhydat <- function(indata, subIDs, prd=NULL, stnNames=NULL, write_redirect=F, flip_number=F,
+                              rd_file = 'flow_stn_redirect_text.rvt') {
 
   # data checks
   if (!(is.null(stnNames)) & (length(subIDs) != length(stnNames))) {
@@ -85,7 +85,7 @@ rvn_tidyhydat_rvt <- function(indata, subIDs, prd=NULL, stnNames=NULL, write_red
 
   # begin writing the support file
   if (write_redirect) {
-    fc.redirect <- file(rd.file, open='a+')
+    fc.redirect <- file(rd_file, open='a+')
   }
 
   # iterate through for all stations in the file
