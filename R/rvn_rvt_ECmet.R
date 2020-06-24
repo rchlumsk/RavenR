@@ -241,7 +241,7 @@ rvn_rvt_ECmet <-  function(metdata, prd = NULL, stnName = NULL, forcing_set = 1,
     for (k in 1:nrow(md)){
       writeLines(sprintf(":Gauge %s", md$station_name[k]),fc)
       writeLines(sprintf("  :Latitude %.6f", md$lat[k]),fc)
-      writeLines(sprintf("  :Longtiude: %.6f", md$lon[k]),fc)
+      writeLines(sprintf("  :Longitude %.6f", md$lon[k]),fc)
       writeLines(sprintf("  :Elevation %.2f", md$elev[k]),fc)
       writeLines(":EndGauge\n",fc)
     }
