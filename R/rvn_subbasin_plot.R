@@ -6,15 +6,9 @@
 #' @param subIDcol string of subbasin ID column in shapefile
 #' @param plot_date string of date to plot in custom.data
 #' @param cust_data custom data set as read in by custom.read, for daily by_subbasin data
-#' @param leg_title text for legend title
-#' @param leg_pos position of legend
 #' @param normalize_data whether to normalize data by all cust_data (TRUE) or just the data for the given date (FALSE)
-#' @param colour1 string indicating which colour (text or code) to use on lower bound of range
-#' @param colour2 string indicating which colour (text or code) to use on upper bound of range
-#' @param num_classes number of classes to use in legend. Does not change the actual display colours
 #' @param invalid_stop whether to stop if invalid basins are found (TRUE) or just continue with a warning (FALSE)
 #' @param basins_label label to put on basins, one of c('None,'subID','value') to show nothing, subbasinIDs, or actual plotted values
-#' @param plot_title title across top of plot
 #' @param plot_invalid boolean indicating whether to plot invalid basins in grey (currently disabled)
 #'
 #' @details Does not currently support discrete data such as land use. Ability to include invalid basins in grey is currently disabled.
@@ -49,9 +43,8 @@
 #' rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data)
 #'
 #' @export rvn_subbasin_map
-rvn_subbasin_map <- function(shpfilename,subIDcol,plot_date,cust_data,leg_title='Legend',leg_pos='bottomleft',
-                       normalize_data=FALSE,colour1="green",colour2="blue",
-                       num_classes=5,invalid_stop=TRUE,basins_label='subID',plot_title='', plot_invalid=F)
+rvn_subbasin_map <- function(shpfilename,subIDcol,plot_date,cust_data, normalize_data=FALSE,
+                       invalid_stop=TRUE,basins_label='subID',plot_invalid=F)
 {
 
   basinshp <- sf::read_sf(shpfilename)
@@ -101,57 +94,56 @@ rvn_subbasin_map <- function(shpfilename,subIDcol,plot_date,cust_data,leg_title=
   if (normalize_data) {
     dmin <- min(cust_data[,subs])
     dmax <- max(cust_data[,subs])
+    drange <- ((dd-dmin)/(dmax-dmin))
+    drange <- t(as.data.frame(drange))
+    validbasins$Value <- drange
   } else {
-    dmin <- min(dd)
-    dmax <- max(dd)
+    dd <- t(as.data.frame(dd))
+    validbasins$Value <- dd
   }
-  drange <- ((dd-dmin)/(dmax-dmin))
 
-  # JRC todo: if data is string-based (e.g., landcover), should plot differently
-
-  cc <- seq(0.0,num_classes,1)/num_classes
-
-  # check validity of colour inputs
-  if (!(iscolour(colour1))) {
-    warning(sprintf("Specified colour1 %s is not a valid colour, defaulting to green",colour1))
-    colour1 <- "green"
-  }
-  if (!(iscolour(colour2))) {
-    warning(sprintf("Specified colour2 %s is not a valid colour, defaulting to blue",colour2))
-    colour2 <- "blue"
-  }
-  # create colour scheme
-  hc <- rgb(colorRamp(c(colour1,colour2))(drange)/255)
-  legcolor<-rgb(colorRamp(c(colour1, colour2))(cc)/255)
-
-  # create plot
-  plot(validbasins$geometry,col=hc)
-
-  # add title
-  title(plot_title)
-
+  #create plot
+  p1 <- ggplot()+
+    geom_sf(data=validbasins, aes(fill=Value))+
+    theme_bw()+
+    theme(panel.grid = element_blank(),
+          axis.ticks = element_blank(),
+          axis.text = element_blank())
+  
   # get the polygon coordinates, suppress the current warning message with this function
   suppressWarnings(crds <- st_coordinates(st_centroid(validbasins)))
-
+  
   # add subbasin labels
   if (basins_label == 'None') {
     # no labels
   } else if (basins_label == 'subID') {
-    invisible(text(crds, labels=as.character(subs), cex=0.5))
+    sub_labels <- as.data.frame(crds)
+    sub_labels$text <- as.character(subs)
+    
+    p1 <- p1 + 
+      geom_text(data = sub_labels, aes(X,Y,label=text), size=0.5)
+    
   } else if (basins_label == 'value') {
-    invisible(text(crds,labels=as.character(round(dd,1)), cex=0.5))
+    sub_labels <- as.data.frame(crds)
+    sub_labels$text <- as.character(round(dd,1))
+    
+    p1 <- p1 + 
+      geom_text(data = sub_labels, aes(X,Y,label=text), size=0.5)
   }
-
+  
   # add date to plot
-  mtext(as.character(plot_date),side=1)
-
-  # Create Legend
-  nos<-as.character(round(cc*(dmax-dmin)+dmin,1))
-  legend(x=leg_pos,y=leg_pos, legend=nos, legcolor, cex=0.8, bty="n",title=leg_title,
-         border='black',title.col = 'black')
-
-  # Plot invalid basins as gray
-  # plot(invalidbasins,add=TRUE,col=rep("gray40",nrow(invalidbasins))) # disabled feature, need to get extents of
-  # valid and invalid basins prior to including this feature
-  return(TRUE)
+  p1 <- p1 +
+    xlab(plot_date)+
+    ylab("")
+  
+  p1 + 
+    geom_sf(data = invalidbasins, fill = "grey")
+  
+  #plot invalid basins as gray
+  invalidbasins$Value <- NA
+  
+  p1 +
+    geom_sf(data = invalidbasins, fill = "grey")
+  
+  return(p1)
 }
