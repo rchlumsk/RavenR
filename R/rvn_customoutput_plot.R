@@ -32,11 +32,60 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
   if (is.null(IDs)){
     IDs=colnames(cust)
   }
-
-  # determine period ----
+  
+  # Put into approrpiate format
+  df.plot <- fortify(cust[,IDs])
+  df.plot <- reshape2::melt(df.plot, id.vars = "Index")
+  
+  # Break down xts attributes to get title
+  rav.dt   <-xtsAttributes(cust)$ datatype;# odd space involved
+  stat.agg <-xtsAttributes(cust)$ stat.agg;
+  time.agg <-xtsAttributes(cust)$ time.agg
+  space.agg<-unlist(strsplit(xtsAttributes(cust)$ space.agg, split = "By"))[2]
+  runname  <-xtsAttributes(cust)$ runname
+  
+  plot.title=toupper(paste(time.agg,' ',stat.agg,' ',rav.dt,' by ', space.agg))
+  
+  # Yaxis
+  yaxis.title=rav.dt
+  
+  flist=c('PRECIP',        'PRECIP_DAILY_AVE', 'PRECIP_5DAY',    'SNOW_FRAC',
+          'RAINFALL',      'SNOWFALL',
+          'TEMP_AVE',      'TEMP_DAILY_MIN',   'TEMP_DAILY_MAX', 'TEMP_DAILY_AVE',
+          'TEMP_MONTH_MAX','TEMP_MONTH_MIN',   'TEMP_MONTH_AVE',
+          'TEMP_AVE_UNC',  'TEMP_MIN_UNC',     'TEMP_MAX_UNC',
+          'AIR_PRES',      'AIR_DENS',        'REL_HUMIDITY',
+          'CLOUD_COVER',   'SW_RADIA',         'LW_RADIA','ET_RADIA','SW_RADIA_NET','SW_RADIA_UNC',
+          'DAY_LENGTH',    'DAY_ANGLE',        'WIND_VEL',
+          'PET,OW_PET',  'PET_MONTH_AVE',
+          'SUBDAILY_CORR', 'POTENTIAL_MELT')
+  
+  if (rav.dt  %in% flist){
+    #Use step plot instead of lineplot
+    p1 <- ggplot()+
+      geom_step(data = df.plot, aes(x=Index,y=value,color=variable))+
+      theme_bw()+
+      ylab(yaxis.title)+
+      xlab("")+
+      ggtitle(plot.title)+
+      theme(plot.title = element_text(hjust=0.5),
+            legend.title = element_blank())
+    
+  } else { #line plot is default for state variables 
+    
+    p1 <- ggplot()+
+      geom_line(data = df.plot, aes(x=Index,y=value,color=variable))+
+      theme_bw()+
+      ylab(yaxis.title)+
+      xlab("")+
+      ggtitle(plot.title)+
+      theme(plot.title = element_text(hjust=0.5),
+            legend.title = element_blank())
+  }
+  
+  # Change plot limits to period 
   # determine the period to use
   if (!(is.null(prd))) {
-
     # period is supplied; check that it makes sense
     firstsplit <- unlist(strsplit(prd,"/"))
     if (length(firstsplit) != 2) {
@@ -47,63 +96,15 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
       stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
     }
     # add conversion to date with xts format check ?
-  }
-  else
-  {
-    # period is not supplied, define entire range as period
-    ts=cust[,1]
-    N <- nrow(ts)
-    prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(ts[1,1]),month(ts[1,1]),day(ts[1,1]),
-                   year(ts[N,1]),month(ts[N,1]),day(ts[N,1]) )
-  }
+    
+    #Limit plot to period
+    p1 <- p1 + 
+      scale_x_datetime(limits=c(as.POSIXct(firstsplit[1]),as.POSIXct(firstsplit[2])))
+  } 
+  
+  )
 
-  old.par <-par(mfrow=c(1,1));
+ plot(p1)
 
-  rav.dt   <-xtsAttributes(cust)$ datatype;# odd space involved
-  stat.agg <-xtsAttributes(cust)$ stat.agg;
-  time.agg <-xtsAttributes(cust)$ time.agg
-  space.agg<-xtsAttributes(cust)$ space.agg
-  runname  <-xtsAttributes(cust)$ runname
-
-  plot.title=paste(time.agg,' ',stat.agg,' ',rav.dt,' by ', space.agg)
-  vaxis.title=rav.dt
-
-  flist=c('PRECIP',        'PRECIP_DAILY_AVE', 'PRECIP_5DAY',    'SNOW_FRAC',
-            'RAINFALL',      'SNOWFALL',
-            'TEMP_AVE',      'TEMP_DAILY_MIN',   'TEMP_DAILY_MAX', 'TEMP_DAILY_AVE',
-            'TEMP_MONTH_MAX','TEMP_MONTH_MIN',   'TEMP_MONTH_AVE',
-            'TEMP_AVE_UNC',  'TEMP_MIN_UNC',     'TEMP_MAX_UNC',
-            'AIR_PRES',      'AIR_DENS',        'REL_HUMIDITY',
-            'CLOUD_COVER',   'SW_RADIA',         'LW_RADIA','ET_RADIA','SW_RADIA_NET','SW_RADIA_UNC',
-            'DAY_LENGTH',    'DAY_ANGLE',        'WIND_VEL',
-            'PET,OW_PET',  'PET_MONTH_AVE',
-            'SUBDAILY_CORR', 'POTENTIAL_MELT')
-  plottype='l'; # default for state variable
-  if (rav.dt  %in% flist){
-    plottype='s';
-  }
-
-  # Create a basic plot with a custom title
-  # plot.title <- sprintf('Precipitation in subbasin %s',colnames(custom1)[21])
-  allmin<-1e99
-  allmax<--1e99
-  for (ID in IDs){
-   allmax=max(allmax,max(cust[prd,ID]))
-   allmin=min(allmin,min(cust[prd,ID]))
-  }
-  ylimits=c(allmin,allmax)
-  plot(lubridate::date(cust[prd,IDs[1]]),0*cust[prd,IDs[1]],xlab='Date/Time',ylab=vaxis.title,ylim=ylimits,type='s',main=plot.title)
-  # plot.new() # precip in subbasin 21
-  #type='h',main=plot.title
-
-  for (ID in IDs){
-    lines(lubridate::date(cust[prd,ID]),cust[prd,ID],type=plottype)
-  }
-  legend(x='topright',legend=IDs,lty=rep(1,length(IDs)),col=rep('black',length(IDs)))
-
-  # if variable is state variable (not forcing), should use type='l'
-
-  par(old.par)
-
-  return(TRUE)
+ return(p1)
 }
