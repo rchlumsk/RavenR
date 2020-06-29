@@ -49,7 +49,7 @@ writeRavenRFileInfo <- function(filename, filetype, author=NULL,
 #' @param textlen Length of textlines (default: 40, used to right-align text)
 #'
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
-#' @export startRavenRFile
+#' @export rvn_newfile
 #'
 #' @examples
 #' \dontrun{}
@@ -58,7 +58,7 @@ writeRavenRFileInfo <- function(filename, filetype, author=NULL,
 #'                 filetype = 'rvp ASCII Raven 2.9.1',
 #'                 author = 'Harry Potter')
 #'
-startRavenRFile <- function(filename, description, filetype, author=NULL,
+rvn_newfile <- function(filename, description, filetype, author=NULL,
                             creationDate=TRUE, linelen=74, textlen=40) {
   # Some top filler
   write(strrep('#', linelen), append=FALSE, file=filename)
@@ -185,10 +185,10 @@ df2RavenRTable <- function(attributes, units, df, parameters=FALSE) {
 #-----------------------------------------------------------------------------#
 #' Writes a nicely formatted tables of Raven attributes/parameters
 #'
-#' @param filename Name of the file, with extension, to append the table to
 #' @param attributes array of strings containing attribute/parameter names
 #' @param units array of strings with the corresponding units
 #' @param df Dataframe of values corresponding to attributes/parameters
+#' @param filename Name of the file, with extension, to append the table to
 #' @param justify alignment of character columns (default 'right'). See \code{\link{format}}
 #' @param sep character(s) used to seperate columns (default ', ')
 #' @param ... Extra arguments for \code{\link{write.fwf}}
@@ -207,7 +207,7 @@ df2RavenRTable <- function(attributes, units, df, parameters=FALSE) {
 #' units <-  rep('none',4)
 #' write.RavenTable('Hogwarts.rvp', attributes = attributes, units = units, df = soil_classes)
 #'
-write.RavenTable <- function(filename, attributes, units, df,
+write.RavenTable <- function(attributes, units, df, filename,
                              justify = 'right', sep = ', ', ...) {
 
   # Setup
@@ -229,8 +229,8 @@ write.RavenTable <- function(filename, attributes, units, df,
 #-----------------------------------------------------------------------------#
 #' Writes common Raven labeled line to file, with optional value (appends)
 #'
-#' @param filename character, file name/path to write to, with extension
 #' @param label character, (e.g. "SoilClasses")
+#' @param filename character, file name/path to write to, with extension
 #' @param value numeric or character, corresponding value written after label (optional)
 #' @param digits Number of digits to round value to (optional)
 #'
@@ -239,8 +239,8 @@ write.RavenTable <- function(filename, attributes, units, df,
 #'
 #' @examples
 #' \dontrun{}
-#' write.RavenLabel('Duration', 365, 'Hogwarts.rvi')
-write.RavenLabel <- function(filename, label, value=NULL, digits=NULL) {
+#' write.RavenLabel('Duration', 'Hogwarts.rvi', value=365)
+write.RavenLabel <- function(label, filename, value=NULL, digits=NULL) {
   if (!is.null(digits)) {
     value <- round(value, digits)
   }

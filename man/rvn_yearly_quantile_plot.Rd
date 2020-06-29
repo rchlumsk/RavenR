@@ -44,7 +44,7 @@ p  # To view
 
 # Add a second hydrograph to compare
 simdata <- rvn_hydrograph_data$hyd$Sub36
-qdat_sim <- yearly_quantile(hgdata)
+qdat_sim <- rvn_yearly_quantile(hgdata)
 
 p <- rvn_yearly_quantile_plot(qdat_sim, mediancolor = 'red', ribboncolor = 'red', addtoplot = p)
 p # To view
