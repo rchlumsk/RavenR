@@ -1,34 +1,11 @@
 Package: RavenR
 Type: Package
 Title: Raven Hydrological Modelling Framework R Support and Analysis
-<<<<<<< HEAD
-<<<<<<< HEAD
 Version: 1.3.2
 Date: 2019-10-01
 Authors@R: c(
     person("Chlumsky", "Robert", email = "rchlumsk@uwaterloo.ca", role = c("cre","aut")),
     person("Craig", "James", email = "jrcraig@uwaterloo.ca", role = "aut"))
-=======
-Version: 1.3.3
-Date: 2020-03-12
-Authors@R: c(
-    person("Chlumsky", "Robert", email = "rchlumsk@uwaterloo.ca", role = c("cre","aut")),
-=======
-Version: 1.3.3
-Date: 2020-03-12
-Authors@R: c(
-    person("Chlumsky", "Robert", email = "rchlumsk@uwaterloo.ca", role = c("cre","aut")),
->>>>>>> 596e2515dc7a5c1913a64a9c775646acfbaeb156
-    person("Craig", "James", email = "jrcraig@uwaterloo.ca", role = "aut"),
-    person("Brown", "Genevieve", email = "genevieve.wbrown@gmail.com", role = "ctb"),
-    person("Scantlebury", "Leland", email = "lscantlebury@uwaterloo.ca", role = "ctb"),
-    person("Grass", "Sarah", email = "sgrass@nhcweb.com", role = "ctb"),
-    person("Lin", "Simon", email = "simon.lin@edu.uwaterloo.ca", role = "ctb") )
-Maintainer: Robert Chlumsky <rchlumsk@uwaterloo.ca>    
-<<<<<<< HEAD
->>>>>>> 596e2515dc7a5c1913a64a9c775646acfbaeb156
-=======
->>>>>>> 596e2515dc7a5c1913a64a9c775646acfbaeb156
 Description: Provides useful functions for pre- and post-processing Raven output.
 Note: Package is active development; please report errors and suggestions for development to rchlumsk@uwaterloo.ca.
 Depends:
@@ -38,10 +15,15 @@ Depends:
     xts,
     zoo,
     igraph,
+    maptools,
+    rgdal,
+    tidyhydat,
+    tidyverse,
     dygraphs,
     dplyr,
     sf,
-    ggplot2
+    magick,
+    gifski
 Suggests:
     knitr,
     rmarkdown,
@@ -49,26 +31,10 @@ Suggests:
     testthat,
     formatR,
     devtools,
-<<<<<<< HEAD
-<<<<<<< HEAD
     htmlwidgets
-=======
-=======
->>>>>>> 596e2515dc7a5c1913a64a9c775646acfbaeb156
-    htmlwidgets,
-    magick,
-    gifski,
-    magick,
-    gifski,
-    maptools,
-    rgdal,
-<<<<<<< HEAD
->>>>>>> 596e2515dc7a5c1913a64a9c775646acfbaeb156
-=======
->>>>>>> 596e2515dc7a5c1913a64a9c775646acfbaeb156
 URL: https://github.com/rchlumsk/RavenR
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: TRUE
-RoxygenNote: 7.0.2
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr
