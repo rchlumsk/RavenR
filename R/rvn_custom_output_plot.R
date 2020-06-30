@@ -32,23 +32,23 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
   if (is.null(IDs)){
     IDs=colnames(cust)
   }
-  
+
   # Put into approrpiate format
   df.plot <- fortify(cust[,IDs])
   df.plot <- reshape2::melt(df.plot, id.vars = "Index")
-  
+
   # Break down xts attributes to get title
   rav.dt   <-xtsAttributes(cust)$ datatype;# odd space involved
   stat.agg <-xtsAttributes(cust)$ stat.agg;
   time.agg <-xtsAttributes(cust)$ time.agg
   space.agg<-unlist(strsplit(xtsAttributes(cust)$ space.agg, split = "By"))[2]
   runname  <-xtsAttributes(cust)$ runname
-  
+
   plot.title=toupper(paste(time.agg,' ',stat.agg,' ',rav.dt,' by ', space.agg))
-  
+
   # Yaxis
   yaxis.title=rav.dt
-  
+
   flist=c('PRECIP',        'PRECIP_DAILY_AVE', 'PRECIP_5DAY',    'SNOW_FRAC',
           'RAINFALL',      'SNOWFALL',
           'TEMP_AVE',      'TEMP_DAILY_MIN',   'TEMP_DAILY_MAX', 'TEMP_DAILY_AVE',
@@ -59,7 +59,7 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
           'DAY_LENGTH',    'DAY_ANGLE',        'WIND_VEL',
           'PET,OW_PET',  'PET_MONTH_AVE',
           'SUBDAILY_CORR', 'POTENTIAL_MELT')
-  
+
   if (rav.dt  %in% flist){
     #Use step plot instead of lineplot
     p1 <- ggplot()+
@@ -70,9 +70,9 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
       ggtitle(plot.title)+
       theme(plot.title = element_text(hjust=0.5),
             legend.title = element_blank())
-    
-  } else { #line plot is default for state variables 
-    
+
+  } else { #line plot is default for state variables
+
     p1 <- ggplot()+
       geom_line(data = df.plot, aes(x=Index,y=value,color=variable))+
       theme_bw()+
@@ -82,8 +82,8 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
       theme(plot.title = element_text(hjust=0.5),
             legend.title = element_blank())
   }
-  
-  # Change plot limits to period 
+
+  # Change plot limits to period
   # determine the period to use
   if (!(is.null(prd))) {
     # period is supplied; check that it makes sense
@@ -96,13 +96,11 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
       stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
     }
     # add conversion to date with xts format check ?
-    
+
     #Limit plot to period
-    p1 <- p1 + 
+    p1 <- p1 +
       scale_x_datetime(limits=c(as.POSIXct(firstsplit[1]),as.POSIXct(firstsplit[2])))
-  } 
-  
-  )
+  }
 
  plot(p1)
 

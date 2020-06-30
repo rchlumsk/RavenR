@@ -13,6 +13,22 @@ rvn_gen_gridweights(
   outfile = "GridWeights.rvt"
 )
 }
+\arguments{
+\item{HRUshpfile}{polygon shapefile of HRUs with data column containing HRU IDs (.shp extension expected)}
+
+\item{Gridshpfile}{polygon shapefile of grid cells with data column containing cell IDs (.shp extension expected)}
+
+\item{ValidHRUIDs}{a vector of valid HRU IDs in the model}
+
+\item{HRUIDcol}{the name of the HRUshpfile polugon which contains the HRU IDs}
+
+\item{gridIDcol}{the name of the Gridshpfile polugon which contains the cell IDs}
+
+\item{outfile}{optional name of output Raven gaugeweights file}
+}
+\value{
+\item{TRUE}{returns TRUE if executed properly. Also output GaugeWeights.rvi file}
+}
 \description{
 Generate grid weights file GaugeWeights.rvi given an HRU shapefile with HRU ID column
 HRUIDcol (default 'HRU_ID') and a grid shapefile with ID column gridIDcol (default: 'cellID')
@@ -25,26 +41,9 @@ and area[k][g] is the area of HRU k that is within cell g.
 By definition, the grid domain has to completely cover the HRU domain such that the sum of
 wt[k][g] for any k, over all g, is 1.0
 
- @param HRUshpfile polygon shapefile of HRUs with data column containing HRU IDs (.shp extension expected)
- @param Gridshpfile polygon shapefile of grid cells with data column containing cell IDs (.shp extension expected)
- @param ValidHRUIDs a vector of valid HRU IDs in the model
- @param HRUIDcol the name of the HRUshpfile polugon which contains the HRU IDs
- @param gridIDcol the name of the Gridshpfile polugon which contains the cell IDs
- @param outfile optional name of output Raven gaugeweights file
-
-
- @return \item{TRUE}{returns TRUE if executed properly. Also output GaugeWeights.rvi file}
-
- @details not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UTM zone;
+not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UTM zone;
  uses rgdal and rgeos libraries. *Both shapefiles should be in same projection!* Unfortunately, the
  accuracy of the gIntersection() routine leaves a bit to be desired...
-
- @author James R. Craig, University of Waterloo, 2019
-
- @seealso \code{\link{rvn_netcdf_to_gridshp}} for converting netcdf files to grid shapefile format
-
- @seealso \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R. Craig's research page} for software downloads,
- including the \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
 \examples{
 
@@ -69,6 +68,15 @@ wt[k][g] for any k, over all g, is 1.0
   #HRUshp<-readOGR(dsn = dsn,layer = lay) # returns SpatialPolygonsDataFrame
 
  }
+}
+\seealso{
+\code{\link{rvn_netcdf_to_gridshp}} for converting netcdf files to grid shapefile format
+
+\href{http://www.civil.uwaterloo.ca/jrcraig/}{James R. Craig's research page} for software downloads,
+including the \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+}
+\author{
+James R. Craig, University of Waterloo, 2019
 }
 \keyword{conversion}
 \keyword{grid}

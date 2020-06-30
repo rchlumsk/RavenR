@@ -15,6 +15,7 @@
 #'
 #' @author James R. Craig, University of Waterloo
 #' @author Robert Chlumsky
+#' @author Genevieve Brown
 #'
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #'
@@ -36,16 +37,21 @@
 #' cust_data <- custom.read(system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv",
 #'                                   package="RavenR"))
 #'
-#' subIDcol <- 'subID' # attriute in shapefile with subbasin IDs
+#' subIDcol <- 'subID' # attribute in shapefile with subbasin IDs
 #' plot_date <- "2003-03-30" # date for which to plot custom data
 #'
 #' # function call
-#' rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data)
+#'
+#' rvn_subbasin_map(shpfilename,subIDcol)
+#'
+#' rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data, normalize=T)
+#'
+#' p1 <- rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data)
+#' p1 + scale_fill_continuous(name="Daily Precip (mm/d)")
 #'
 #' @export rvn_subbasin_map
-rvn_subbasin_map <- function(shpfilename,subIDcol,plot_date,cust_data, normalize_data=FALSE,
-                       invalid_stop=TRUE,basins_label='subID',plot_invalid=F)
-{
+rvn_subbasin_map <- function(shpfilename, subIDcol, plot_date, cust_data=NA, normalize_data=FALSE,
+                       invalid_stop=TRUE, basins_label='subID', plot_invalid=F) {
 
   basinshp <- sf::read_sf(shpfilename)
 
@@ -109,41 +115,42 @@ rvn_subbasin_map <- function(shpfilename,subIDcol,plot_date,cust_data, normalize
     theme(panel.grid = element_blank(),
           axis.ticks = element_blank(),
           axis.text = element_blank())
-  
+
   # get the polygon coordinates, suppress the current warning message with this function
   suppressWarnings(crds <- st_coordinates(st_centroid(validbasins)))
-  
+
   # add subbasin labels
   if (basins_label == 'None') {
     # no labels
   } else if (basins_label == 'subID') {
     sub_labels <- as.data.frame(crds)
     sub_labels$text <- as.character(subs)
-    
-    p1 <- p1 + 
+
+    p1 <- p1 +
       geom_text(data = sub_labels, aes(X,Y,label=text), size=0.5)
-    
+
   } else if (basins_label == 'value') {
     sub_labels <- as.data.frame(crds)
     sub_labels$text <- as.character(round(dd,1))
-    
-    p1 <- p1 + 
+
+    p1 <- p1 +
       geom_text(data = sub_labels, aes(X,Y,label=text), size=0.5)
   }
-  
+
   # add date to plot
   p1 <- p1 +
     xlab(plot_date)+
     ylab("")
-  
-  p1 + 
-    geom_sf(data = invalidbasins, fill = "grey")
-  
-  #plot invalid basins as gray
-  invalidbasins$Value <- NA
-  
+
   p1 +
     geom_sf(data = invalidbasins, fill = "grey")
-  
+
+  #plot invalid basins as gray
+  invalidbasins$Value <- NA
+
+  p1 +
+    geom_sf(data = invalidbasins, fill = "grey")
+  ## check why the invalidbasins are added a second time wiht line 145, should be able to get effects in 1 line?
+
   return(p1)
 }

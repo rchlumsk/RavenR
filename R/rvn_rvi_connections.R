@@ -1,11 +1,12 @@
 #' Generate Hydrological process connections list
 #'
-#' This routine reads in a hydrologic process list from rvi.read() and generates
+#' This routine reads in a hydrologic process list from rvn_rvi_read() and generates
 #' the list of hydrologic process connections. It relies on a valid and up-to-date
-#' RavenProcessConnections.dat file
+#' RavenProcessConnections.dat file. This file is provided with the RavenR package, but
+#' may be overrided by a more recent file if provided manually.
 #'
-#' @param HPTable a data frame of hydrologic processes generated from the rvi.read() routine
-#' @param ProcConDataFile (optional) filename/location of RavenProcesConnections.dat file
+#' @param rvi data object generated from the rvn_rvi_read() routine
+#' @param ProcConDataFile (optional) path to RavenProcesConnections.dat file
 #'
 #' @return
 #' Returns a dataframe of all of the process connections Includes the following data columns:
@@ -13,18 +14,22 @@
 #'
 #' @author James R. Craig, University of Waterloo
 #'
-#' @seealso rvn_rvi_read
+#' @seealso \code{\link{rvn_rvi_read}} to read a .rvi file and generate an rvi object
+#'
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
-#'  \dontrun{
-#'   rvi<-rvi.read("example.rvi")
-#'   conn<-rvn_rvi_connections(rvi$HydProcTable,ProcConDataFile="RavenProcessConnections.dat")
-#'   rvi.HPNetworkPlot(conn,pdfout="network.pdf")
-#'   }
+#'   rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
+#'   conn <- rvn_rvi_connections(rvi)
+#'   rvn_rvi_hpnet_plot(conn)
+#'
 #' @keywords Raven  rvi  Hydrologic Processes connections
 #' @export rvn_rvi_connections
-rvn_rvi_connections<-function(HPTable, ProcConDataFile="RavenProcessConnections.dat") {
+rvn_rvi_connections<-function(rvi,
+                              ProcConDataFile=system.file("extdata","RavenProcessConnections.dat", package="RavenR") ) {
+
+  HPTable <- rvi$HydProcTable
+
   if (nrow(HPTable)==0){
     print("WARNING (rvn_rvi_connections): no rows in hydrologicprocess table")
     return (NA)
