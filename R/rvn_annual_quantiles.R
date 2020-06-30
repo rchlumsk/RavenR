@@ -4,20 +4,25 @@
 #' @param minyear Integer of minimum year (optional)
 #' @param maxyear Integer of maximum year (optional)
 #' @param Qlower Decimal percentage of lower quantile value (default 0.1)
-#' @param Qupper Decimal percentage of upper quantile value (default 0.9)
+#' @param Qupper Decimal percentage of upper quantile value (default 0.9)#'
+#' @return \item{qdat}{Time series object of monthly median and quantile values}
 #'
-#' @return Time series object of monthly median and quantile values
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
 #'
 #' @examples
-#' data("rvn_hydrograph_data")
+#' system.file("extdata","run1_Hydrographs.csv", package="RavenR") %>%
+#' rvn_hyd_read(.) %>%
+#' rvn_hyd_extract(subs="Sub36",.) ->
+#' hyd_data
 #'
 #' # Pull out a specific hydrograph
-#' hgdata <- hydrograph.data$hyd$Sub36
+#' hgdata <- rvn_hydrograph_data$hyd$Sub36
 #'
 #' # Calculate quantiles
 #' qdat <- rvn_annual_quantiles(hgdata)
+#' head(qdat)
 #'
+#' @keywords quantile hydrograph flow statistics diagnostic
 #' @export rvn_annual_quantiles
 rvn_annual_quantiles <- function(hgdata, minyear=NULL, maxyear=NULL,
                            Qlower=0.1, Qupper=0.9, water_year=T) {

@@ -22,24 +22,33 @@ rvn_annual_quantiles(
 
 \item{Qlower}{Decimal percentage of lower quantile value (default 0.1)}
 
-\item{Qupper}{Decimal percentage of upper quantile value (default 0.9)}
+\item{Qupper}{Decimal percentage of upper quantile value (default 0.9)#'}
 }
 \value{
-Time series object of monthly median and quantile values
+\item{qdat}{Time series object of monthly median and quantile values}
 }
 \description{
 Calculates Yearly Median, Upper and Lower Quantiles of Flow
 }
 \examples{
-data("rvn_hydrograph_data")
+system.file("extdata","run1_Hydrographs.csv", package="RavenR") \%>\%
+rvn_hyd_read(.) \%>\%
+rvn_hyd_extract(subs="Sub36",.) ->
+hyd_data
 
 # Pull out a specific hydrograph
-hgdata <- hydrograph.data$hyd$Sub36
+hgdata <- rvn_hydrograph_data$hyd$Sub36
 
 # Calculate quantiles
 qdat <- rvn_annual_quantiles(hgdata)
+head(qdat)
 
 }
 \author{
 Leland Scantlebury, \email{leland@scantle.com}
 }
+\keyword{diagnostic}
+\keyword{flow}
+\keyword{hydrograph}
+\keyword{quantile}
+\keyword{statistics}

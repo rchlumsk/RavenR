@@ -40,13 +40,13 @@ rvn_annual_quantiles_plot <- function(qdat, mediancolor='black', ribboncolor='gr
   names(qdat) <- c('Lower','Median','Upper','date')
 
   if(is.null(addtoplot)) {
-    p <- ggplot(qdat, aes(x = date)) +
+    p1 <- ggplot(qdat, aes(x = date)) +
       geom_ribbon(aes(ymin=Lower, ymax=Upper), fill=ribboncolor, alpha=ribbonalpha) +
       geom_line(aes(y=Median), color=mediancolor) +
       scale_x_date(labels = date_format("%b")) +
       labs(x = 'Day of Year', y = expression(Daily~Streamflow~(m^3/s)))
   } else {
-    p <- p + geom_ribbon(data=qdat, aes(ymin=Lower, ymax=Upper), fill=ribboncolor, alpha=ribbonalpha) +
+    p1 <- p1 + geom_ribbon(data=qdat, aes(ymin=Lower, ymax=Upper), fill=ribboncolor, alpha=ribbonalpha) +
       geom_line(data=qdat, aes(y=Median), color=mediancolor)
   }
 

@@ -27,26 +27,29 @@
 #' @param subs column name for plotting/extracting
 #' @param hyd full hydrograph data frame (including units) produced by hyd.read
 #' @param prd time period for plotting, as string. See details
-#' @return \item{sim}{model simulation for specified column and period}
-#' \item{obs}{observed data for specified column and period}
-#' \item{inflow}{inflow simulation for specified column and period}
+#' @return returns a list with sim, obs, and inflow time series
+#'  \item{sim}{model simulation for specified column and period}
+#'  \item{obs}{observed data for specified column and period}
+#'  \item{inflow}{inflow simulation for specified column and period}
+#'
 #' @seealso \code{\link{hyd.read}} for reading in the Hydrographs.csv file and
 #' creating the object required in this function.
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven plot extract hydrograph
-#' @examples
 #'
+#' @examples
 #' # read in hydrograph sample csv data from RavenR package
 #' ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 #'
 #' # read in Raven Hydrographs file, store into myhyd
-#' myhyd <- hyd.read(ff)
+#' myhyd <- rvn_hyd_read(ff)
 #'
 #' # no plot or observed data, specified period
 #' flow_36 <- rvn_hyd_extract(subs="Sub36",myhyd)
+#'
+#' attributes(flow_36)
 #'
 #' # plot the simulated flow values
 #' plot(flow_36$sim,col='red')
@@ -56,6 +59,8 @@
 #' # example for precipitation
 #' myprecip <- rvn_hyd_extract(subs="precip",hyd=myhyd)
 #'
+#'
+#' @keywords Raven plot extract hydrograph
 #' @export rvn_hyd_extract
 rvn_hyd_extract <- function(subs=NA, hyd=NA, prd=NULL) {
 

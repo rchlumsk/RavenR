@@ -4,29 +4,26 @@
 \alias{rvn_annual_peak}
 \title{Annual Peak Comparison}
 \usage{
-rvn_annual_peak(sim, obs, rplot = F, add_line = T, add_r2 = F)
+rvn_annual_peak(sim, obs, add_line = T, add_r2 = F, rplot = F)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
 
 \item{obs}{time series object of observed flows}
 
-\item{rplot}{boolean whether to generate plot (default TRUE)}
-
-\item{add_line}{optionally adds a 1:1 line to the plot for reference
-(default TRUE)}
+\item{add_line}{optionally adds a 1:1 line to the plot for reference (default TRUE)}
 
 \item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
+
+\item{rplot}{boolean whether to print the plot (default FALSE)}
 }
 \value{
 returns a list with peak data in a data frame, and a ggplot object
-\itemize{
-  \item{df_peak data frame of the calculated peaks}
-  \item{p1 ggplot object with plotted annual peaks}
-}
+ \item{df_peak}{data frame of the calculated peaks}
+ \item{p1}{ggplot object with plotted annual peaks}
 }
 \description{
-rvn_annual_peak creates a plot of the annual observed and simulated peaks.
+rvn_annual_peak creates a plot of the annual observed and simulated peaks, based on the water year.
 }
 \details{
 This function creates a scatterplot of the annual observed and simulated
@@ -64,7 +61,7 @@ add_r2=T, rplot=T)
 \seealso{
 \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 volumes \code{\link{rvn_annual_peak_event}} to consider the timing of peak
-events
+events.
 
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 Craig's research page} for software downloads, including the
