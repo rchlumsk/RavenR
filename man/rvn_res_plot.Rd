@@ -10,12 +10,7 @@ rvn_res_plot(
   inflow = NULL,
   precip = NULL,
   prd = NULL,
-  winter_shading = T,
-  range_mult = 1,
-  ylabel = "Stage [m]",
-  leg_pos = NULL,
-  leg_box = NULL,
-  zero_axis = T
+  winter_shading = T
 )
 }
 \arguments{
@@ -31,17 +26,6 @@ rvn_res_plot(
 
 \item{winter_shading}{optionally adds shading for winter months (default
 TRUE)}
-
-\item{range_mult}{range multiplier for max value in stage and precip
-(default 1)}
-
-\item{ylabel}{label on the y axis (default "Stage [m]")}
-
-\item{leg_pos}{string specifying legend placement on plot}
-
-\item{leg_box}{boolean on whether to put legend in an opaque box}
-
-\item{zero_axis}{fixes the y axis to start exactly at zero (default TRUE)}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
@@ -65,33 +49,6 @@ which again can be obtained directly by using the rvn_res_extract function.
 The winter_shading argument will add a transparent cyan shading for the
 December 1st to March 31st period in each year that is plotted.
 
-The range_mult argument will increase the maximum value that is plotted in
-the stage and the precip values. This is useful in preventing overlap if
-precip is also plotted (i.e. with precip as well, range_mult=1.5 works
-well). This value should not be less than 1.0, otherwise the values will be
-cutoff in the plot.
-
-ylabel is the label on the y axis, defined using y.lab in the plot function.
-This defaults to 'Stage [m]' intended for plotting stage.
-
-leg_pos is the position for the legend to be placed, e.g. 'topleft',
-'right', etc., and is consistent with the legend function options. If this
-is left null, the function will place it either topleft or left, depending
-on whether precip is also plotted (i.e. left if precip added, topleft
-otherwise).
-
-leg_box is a boolean for whether to put the legend in an opaque. white box
-or not. If left as NULL, the function will automatically not use a white box
-and leave the background of the legend transparent.
-
-zero_axis can be used to set the min value of the y axis (or axes if precip
-also plotted) to zero. Note that by default, R will plot the values with a
-slight buffer for presentation. A warning that if this option is set to
-TRUE, the minimum value is set to zero without checking if any flow values
-are less than zero. This option should not be used for stage plotting, since
-most reservoirs are not in the range of 'zero' stage for normal operations,
-since stage is reported to elevation and not to stage bottom, typically.
-
 Note that a plot title is purposely omitted in order to allow the automatic
 generation of plot titles.
 }
@@ -102,11 +59,11 @@ generation of plot titles.
 rvn_res_plot(sim,obs,zero_axis=F)
 
 # create a reservoir stage plot with precip as well
-rvn_res_plot(sim,obs,range_mult=1.5,precip=precip)
+rvn_res_plot(sim,obs,precip=precip)
 
 # create a reservoir stage plot with precip as well for a specific subperiod
 prd <- "2003-10-01/2005-10-01"
-rvn_res_plot(sim,obs,range_mult=1.5,precip=precip,prd=prd)
+rvn_res_plot(sim,obs,precip=precip,prd=prd)
 }
 
 }

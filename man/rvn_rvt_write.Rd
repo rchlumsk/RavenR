@@ -5,27 +5,30 @@
 \title{Write Raven rvt file from Time Series}
 \usage{
 rvn_rvt_write(
-  ts = NULL,
+  ts,
+  params,
+  units,
+  dates = NULL,
   prd = NULL,
   tt = "00:00:00",
   dt = 1,
-  params = ":Parameters XX",
-  units = ":Units XX",
   ff = "raven_rvt_write.rvt"
 )
 }
 \arguments{
-\item{ts}{time series to write in xts format}
+\item{ts}{time series to write in xts or dataframe format}
+
+\item{params}{the full string expression for the parameters line to write to file}
+
+\item{units}{the full string expression for the units line to write to file}
+
+\item{dates}{vector of date objects passed, necessary only if ts is not xts}
 
 \item{prd}{period to use in writing rvt file, format "YYYY-MM-DD/YYYY-MM-DD"}
 
 \item{tt}{initial start time to file}
 
 \item{dt}{time interval to write to file}
-
-\item{params}{the full string expression for the parameters line to write to file}
-
-\item{units}{the full string expression for the units line to write to file}
 
 \item{ff}{filename to write to without .rvt extension (added automatically)}
 }

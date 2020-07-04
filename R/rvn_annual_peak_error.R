@@ -1,7 +1,7 @@
 #' Annual Peak Errors
 #'
 #' rvn_annual_peak_error creates a plot of the annual observed and simulated peak
-#' percent errors.
+#' percent errors, based on the water year.
 #'
 #' This function creates a plot of the percent errors in simulated peaks for
 #' each water year. The peaks are calculated as the magnitude of the largest
@@ -28,80 +28,87 @@
 #'
 #' @param sim time series object of simulated flows
 #' @param obs time series object of observed flows
-#' @param rplot boolean whether to generate plot (default TRUE)
 #' @param add_line optionally adds a 1:1 line to the plot for reference
 #' (default TRUE)
 #' @param add_labels optionally adds labels for overpredict/underpredict on
 #' right side axis (default TRUE)
-#' @return \item{df_peak_error}{data frame of the calculated peak errors}
-#' @seealso \code{\link{annual_peak_event}} to consider the timing of peak
-#' events \code{\link{annual_peak_event_error}} to calculate errors in peak
-#' events
+#' @param rplot boolean whether to print the plot (default FALSE)
+#' @return returns a list with peak errors in a data frame, and a ggplot object
+#'  \item{df_peak_error}{data frame of the calculated peak errors}
+#'  \item{p1}{ggplot object with plotted annual peak errors}
+#'
+#' @seealso \code{\link{rvn_annual_peak_event}} to consider the timing of peak
+#' events \code{\link{rvn_annual_peak_event_error}} to calculate errors in peak
+#' events.
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven annual peak error diagnostics
+#'
 #' @examples
+#' system.file("extdata","run1_Hydrographs.csv", package="RavenR") %>%
+#' rvn_hyd_read(.) %>%
+#' rvn_hyd_extract(subs="Sub36",.) ->
+#' hyd_data
 #'
-#' # load sample hydrograph data, two years worth of sim/obs
-#' data(hydrograph_data)
-#' sim <- hydrograph_data$hyd$Sub36
-#' obs <- hydrograph_data$hyd$Sub36_obs
+#' sim <- hyd_data$sim
+#' obs <- hyd_data$obs
 #'
-#' # create a plot of peak annual errors with default options
-#' rvn_annual_peak_error(sim,obs,rplot=T,add_line=T)
+#' # create a plot of annual peak errors with default options
+#' peak1 <- rvn_annual_peak_error(sim, obs, add_line=T)
+#' peak1$df_peak_error
+#' peak1$p1
 #'
-#' # do not plot, just store the calculated peak errors
-#' peak_errors <- rvn_annual_peak_error(sim,obs,rplot=F)
-#' peak_errors
+#' # plot directly and without labels
+#' rvn_annual_peak_error(sim, obs, add_line=T, rplot=T, add_labels=F)
 #'
+#'
+#' @keywords Raven annual peak error diagnostics
 #' @export rvn_annual_peak_error
-rvn_annual_peak_error <- function (sim, obs, rplot = T, add_line = T, add_labels = T){
-  df.peak <- annual.peak(sim, obs, rplot = F)
+rvn_annual_peak_error <- function(sim, obs, add_line = T,
+                                   add_labels = T, rplot = F) {
+  df.peak <- rvn_annual_peak(sim, obs, rplot = F)$df_peak
   errs <- (df.peak$sim.peak - df.peak$obs.peak)/df.peak$obs.peak *
     100
   text.labels <- year(df.peak$date.end)
-  if (rplot) {
-    x.lab <- "Date (Water Year Ending)"
-    y.lab <- "% Error in Peaks"
-    title.lab <- ""
-    if (add_line) {
-      y.max <- max(0.5, max(errs))
-      y.min <- min(-0.5, min(errs))
-    }
-    else {
-      y.max <- max(errs)
-      y.min <- min(errs)
-    }
 
-    df.plot <- data.frame(cbind(text.labels,errs))
-    df.plot$text.labels <- as.factor(df.plot$text.labels)
-
-    p1 <- ggplot(data=df.plot)+
-      geom_point(aes(x=text.labels,y=errs))+
-      scale_y_continuous(limits=c(y.min,y.max),name=y.lab)+
-      scale_x_discrete(name=x.lab)+
-      theme_bw()
-    if (add_line) {
-      p1 <- p1+
-        geom_hline(yintercept=0,linetype=2)
-    }
-
-    if (add_labels) {
-      if (max(errs, na.rm = T)/2 > 0) {
-        p1 <- p1+
-          annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=max(errs,na.rm=T)/2,label="Overpredict",angle=90)
-      }
-      if (min(errs, na.rm = T)/2 < 0) {
-        p1 <- p1+
-          annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=min(errs,na.rm=T)/2,label="Underpredict",angle=90)
-      }
-    }
-    df <- data.frame(date.end = df.peak$date.end, errors = errs)
-    return(list(df.peak.error = df,plot=p1))
+  x.lab <- "Date (Water Year Ending)"
+  y.lab <- "% Error in Peaks"
+  title.lab <- ""
+  if (add_line) {
+    y.max <- max(0.5, max(errs))
+    y.min <- min(-0.5, min(errs))
   } else {
-    df <- data.frame(date.end = df.peak$date.end, errors = errs)
-    return(df.peak.error=df)
+    y.max <- max(errs)
+    y.min <- min(errs)
   }
+
+  df.plot <- data.frame(cbind(text.labels,errs))
+  df.plot$text.labels <- as.factor(df.plot$text.labels)
+
+  p1 <- ggplot(data=df.plot)+
+    geom_point(aes(x=text.labels,y=errs))+
+    scale_y_continuous(limits=c(y.min,y.max),name=y.lab)+
+    scale_x_discrete(name=x.lab)+
+    theme_bw()
+  if (add_line) {
+    p1 <- p1+
+      geom_hline(yintercept=0,linetype=2)
+  }
+
+  if (add_labels) {
+    if (max(errs, na.rm = T)/2 > 0) {
+      p1 <- p1+
+        annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=max(errs,na.rm=T)/2,label="Overpredict",angle=90)
+    }
+    if (min(errs, na.rm = T)/2 < 0) {
+      p1 <- p1+
+        annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=min(errs,na.rm=T)/2,label="Underpredict",angle=90)
+    }
+  }
+  df <- data.frame(date.end = df.peak$date.end, errors = errs)
+
+  if (rplot) {plot(p1)}
+
+  return(list(df_peak_error = df,p1=p1))
 }

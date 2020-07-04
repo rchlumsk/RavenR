@@ -6,7 +6,8 @@
 #' the entirety of the columns provided in the given xts object. Please ensure that the
 #' parameters supplied in the params and units objects match the xts object supplied.
 #'
-#' @param ts time series to write in xts format
+#' @param ts time series to write in xts or dataframe format
+#' @param dates vector of date objects passed, necessary only if ts is not xts
 #' @param prd period to use in writing rvt file, format "YYYY-MM-DD/YYYY-MM-DD"
 #' @param tt initial start time to file
 #' @param dt time interval to write to file
@@ -27,11 +28,19 @@
 #' rvn_rvt_write(hydrograph.data$hyd)
 #'
 #' @export rvn_rvt_write
-rvn_rvt_write <- function(ts=NULL, prd=NULL, tt="00:00:00", dt=1.0, params=":Parameters XX",
-                      units=":Units XX", ff="raven_rvt_write.rvt") {
+rvn_rvt_write <- function(ts, params, units, dates=NULL, prd=NULL,
+                          tt="00:00:00", dt=1.0, ff="raven_rvt_write.rvt") {
 
-  if(is.null(ts)) {
-    stop("ts is required for this function.")
+  # Deal with dates
+  if(!is.null(dates)) {
+    min_date <- start(ts)
+  } else {
+    # XTS
+    if (is.xts(ts)) {
+      min_date <- as.character(lubridate::date(ts[1]))
+    } else {
+      stop("Argument 'dates' must be passed for non-XTS time series (ts) arguments")
+    }
   }
 
   # determine the period to use
@@ -61,15 +70,24 @@ rvn_rvt_write <- function(ts=NULL, prd=NULL, tt="00:00:00", dt=1.0, params=":Par
   # change all NA values to Raven NA (-1.2345)
   ts[is.na(ts)] = -1.2345
 
-  fc <- file(ff,open='w+')
+  fc <- file(ff,open='wt')
   writeLines(":MultiData",fc)
-  writeLines(sprintf('%s %s %.2f %i',as.character(lubridate::date(ts[1])),tt,dt,nrow(ts)),fc)
+  writeLines(sprintf('%s %s %.2f %i', min_date, tt, dt, nrow(ts)), fc)
   writeLines(params,fc)
   writeLines(units,fc)
-  for (j in 1:nrow(ts)) {
-    writeLines(sprintf(rep("%g ",ncol(ts)),ts[j,1:ncol(ts)]),fc)
-  }
-  writeLines(':EndMultiData',fc)
+  # write.fwf writes nicely-spaced tables, but perhaps this isn't desired in the
+  # RVT file since it often isn't edited by hand (and the spaces take up more disk space!)
+  gdata::write.fwf(x = ts,
+                   file = fc,
+                   append = TRUE,
+                   justify = 'right',
+                   colnames = F,
+                   sep = ', ',
+                   scientific = T)
+  #for (j in 1:nrow(ts)) {
+  #  writeLines(sprintf(rep("%g ",ncol(ts)),ts[j,1:ncol(ts)]),fc)
+  #}
+  write.RavenLabel('EndMultiData',fc)
   close(fc)
 
   return("flag"=TRUE)

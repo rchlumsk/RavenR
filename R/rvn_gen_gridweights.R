@@ -10,26 +10,25 @@
 #' By definition, the grid domain has to completely cover the HRU domain such that the sum of
 #' wt[k][g] for any k, over all g, is 1.0
 #'
-#'  @param HRUshpfile polygon shapefile of HRUs with data column containing HRU IDs (.shp extension expected)
-#'  @param Gridshpfile polygon shapefile of grid cells with data column containing cell IDs (.shp extension expected)
-#'  @param ValidHRUIDs a vector of valid HRU IDs in the model
-#'  @param HRUIDcol the name of the HRUshpfile polugon which contains the HRU IDs
-#'  @param gridIDcol the name of the Gridshpfile polugon which contains the cell IDs
-#'  @param outfile optional name of output Raven gaugeweights file
-#'
-#'
-#'  @return \item{TRUE}{returns TRUE if executed properly. Also output GaugeWeights.rvi file}
-#'
-#'  @details not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UTM zone;
+#' @details not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UTM zone;
 #'  uses rgdal and rgeos libraries. *Both shapefiles should be in same projection!* Unfortunately, the
 #'  accuracy of the gIntersection() routine leaves a bit to be desired...
 #'
-#'  @author James R. Craig, University of Waterloo, 2019
+#' @param HRUshpfile polygon shapefile of HRUs with data column containing HRU IDs (.shp extension expected)
+#' @param Gridshpfile polygon shapefile of grid cells with data column containing cell IDs (.shp extension expected)
+#' @param ValidHRUIDs a vector of valid HRU IDs in the model
+#' @param HRUIDcol the name of the HRUshpfile polugon which contains the HRU IDs
+#' @param gridIDcol the name of the Gridshpfile polugon which contains the cell IDs
+#' @param outfile optional name of output Raven gaugeweights file
 #'
-#'  @seealso \code{\link{rvn_netcdf_to_gridshp}} for converting netcdf files to grid shapefile format
+#' @return \item{TRUE}{returns TRUE if executed properly. Also output GaugeWeights.rvi file}
 #'
-#'  @seealso \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R. Craig's research page} for software downloads,
-#'  including the \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' @author James R. Craig, University of Waterloo, 2019
+#'
+#' @seealso \code{\link{rvn_netcdf_to_gridshp}} for converting netcdf files to grid shapefile format
+#'
+#' @seealso \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R. Craig's research page} for software downloads,
+#' including the \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #'
 #' @keywords netcdf grid shapefile conversion
 #'
@@ -57,8 +56,8 @@
 #'
 #'  }
 #' @export rvn_gen_gridweights
-rvn_gen_gridweights <- function(HRUshpfile,Gridshpfile,ValidHRUIDs,HRUIDcol="HRU_ID",gridIDcol="cellID",outfile="GridWeights.rvt")
-{
+rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs, HRUIDcol="HRU_ID",
+                                gridIDcol="cellID", outfile="GridWeights.rvt") {
 
   require(rgdal)
   require(rgeos)
@@ -119,7 +118,7 @@ rvn_gen_gridweights <- function(HRUshpfile,Gridshpfile,ValidHRUIDs,HRUIDcol="HRU
   # extract HRU and grid indices from gIntersection-generated 'ID' field
   #----------------------------------------------------------
   isect$id   <-sapply(slot(isect, "polygons"), slot, "ID")
-  for (k in 1:nrow(isect)){
+  for (k in 1:nrow(isect)) {
     isect$hindex[k]<-as.numeric(strsplit(isect$id[k], " ")[[1]][1])+1
     isect$gindex[k]<-as.numeric(strsplit(isect$id[k], " ")[[1]][2])+1
   }
@@ -136,13 +135,11 @@ rvn_gen_gridweights <- function(HRUshpfile,Gridshpfile,ValidHRUIDs,HRUIDcol="HRU
   #asum1=0.0
   #asum2=0.0
   wtsum <-rep(0.0,nrow(HRUshp))
-  for (i in 1:nrow(isect))
-  {
+  for (i in 1:nrow(isect)) {
     wt<-0
     k<-isect$hindex[i] # HRU index
     g<-isect$gindex[i] # grid cell index
-    if ((k>=1) & (k<=nrow(HRUshp)))
-    {
+    if ((k>=1) & (k<=nrow(HRUshp))) {
       # for each HRU, wt[k][g]=area[k][g]/area[k]
 
       if (HRUshp$HRUarea[k]>0){
@@ -162,8 +159,6 @@ rvn_gen_gridweights <- function(HRUshpfile,Gridshpfile,ValidHRUIDs,HRUIDcol="HRU
     }
   }
   write(":EndGridWeights",append=TRUE,file=outfile)
-
-
 
   #for debugging only:
   return (list(area=isect$area,id=isect$id,id1=isect$hindex,id2=isect$gindex,HRU=HRUshp, weightsum=wtsum))

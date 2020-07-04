@@ -4,7 +4,8 @@
 \name{rvn_forcing_data}
 \alias{rvn_forcing_data}
 \title{Forcings Data from Raven}
-\format{rvn_forcing_data is a data frame with two object
+\format{
+rvn_forcing_data is a data frame with two object
 \describe{
   \item{forcings}{various forcing functions and related output from Raven model}
   \item{units}{units associated with each variable in forcings}
@@ -38,7 +39,8 @@ each forcing function can be found in the Raven Manual
 }
 
 The Nith River model can be downloaded from the Raven Tutorials (tutorial #2)
-\url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}}
+\url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}
+}
 \usage{
 rvn_forcing_data
 }

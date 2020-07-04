@@ -4,28 +4,31 @@
 \alias{rvn_annual_peak_event}
 \title{Annual Peak Event Comparison}
 \usage{
-rvn_annual_peak_event(sim, obs, rplot = T, add_line = T, add_r2 = F)
+rvn_annual_peak_event(sim, obs, add_line = T, add_r2 = F, rplot = F)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
 
 \item{obs}{time series object of observed flows}
 
-\item{rplot}{boolean whether to generate plot (default TRUE)}
-
 \item{add_line}{optionally adds a 1:1 line to the plot for reference
 (default TRUE)}
 
 \item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
 
+\item{rplot}{boolean whether to print the plot (default FALSE)}
+
 \item{axis_zero}{optionally sets the minimum volume on axes to zero (default
 FALSE)}
 }
 \value{
-\item{df_peak_event}{data frame of the calculated peak events}
+returns a list with peak data in a data frame, and a ggplot object
+ \item{df_peak_event}{data frame of the calculated peak events}
+ \item{p1}{ggplot object with plotted annual peaks}
 }
 \description{
-rvn_annual_peak_event creates a plot of the annual observed and simulated peaks.
+rvn_annual_peak_event creates a plot of the annual observed and simulated peaks,
+based on the water year.
 }
 \details{
 This function creates a scatterplot of the annual observed and simulated
@@ -48,26 +51,23 @@ Note that a plot title is purposely omitted in order to allow the automatic
 generation of plot titles.
 }
 \examples{
-
 # load sample hydrograph data, two years worth of sim/obs
-data(hydrograph_data)
-sim <- hydrograph_data$hyd$Sub36
-obs <- hydrograph_data$hyd$Sub36_obs
+data(rvn_hydrograph_data)
+sim <- rvn_hydrograph_data$hyd$Sub36
+obs <- rvn_hydrograph_data$hyd$Sub36_obs
 
 # create a plot of annual peak events with default options
-rvn_annual_peak_event(sim,obs,rplot=T,add_line=T,add_r2=F,axis_zero=F)
+peak1 <- rvn_annual_peak_event(sim, obs)
+peak1$df_peak_event
+peak1$p1
 
-# plot with r2 and axes to zero; store results
-peak_df <- rvn_annual_peak_event(sim,obs,rplot=T,add_line=T,add_r2=T,axis_zero=T)
-peak_df
+# add the r2 regression line and plot directly
+rvn_annual_peak_event(sim, obs, add_r2=T, rplot=T)
 
-# store results without plotting
-peak_df <- rvn_annual_peak_event(sim,obs,rplot=F)
-peak_df
 
 }
 \seealso{
-\code{\link{annual_peak}} to create a scatterplot of annual peaks
+\code{\link{rvn_annual_peak}} to create a scatterplot of annual peaks
 (consider the magnitude of peaks only)
 
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

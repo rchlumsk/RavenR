@@ -4,7 +4,9 @@
 \name{rvn_custom_data}
 \alias{rvn_custom_data}
 \title{Custom Output Data from Raven}
-\format{A data frame with 730 rows, containg data for 32 HRUs from 2002-10-01 to 2004-09-29}
+\format{
+A data frame with 730 rows, containg data for 32 HRUs from 2002-10-01 to 2004-09-29
+}
 \usage{
 rvn_custom_data
 }

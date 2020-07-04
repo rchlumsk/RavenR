@@ -4,7 +4,7 @@
 \alias{rvn_hyd_read}
 \title{Read in Raven Hydrograph file}
 \usage{
-rvn_hyd_read(ff = NA, tzone = "")
+rvn_hyd_read(ff = NA, tzone = NULL)
 }
 \arguments{
 \item{ff}{full file path to the Hydrographs.csv file}
@@ -20,7 +20,7 @@ modelling Framework Raven.
 }
 \details{
 This function expects a full file path to the Hydrographs.csv file, then
-reads in the file using read.csv. The main advantage of this function is
+reads in the file using fread. The main advantage of this function is
 renaming the columns to nicer names and extracting the units into something
 much easier to read.
 
@@ -38,7 +38,6 @@ function. If no timezone is provided, this is left as an empty string, and is
 determined by the function as the current time zone.
 }
 \examples{
-
 # read in hydrograph sample csv data from RavenR package
 ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 
@@ -48,6 +47,7 @@ myhyd <- rvn_hyd_read(ff)
 # view contents
 head(myhyd$hyd)
 myhyd$units
+
 
 }
 \seealso{
