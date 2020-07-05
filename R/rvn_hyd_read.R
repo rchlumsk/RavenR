@@ -65,10 +65,10 @@ rvn_hyd_read <- function(ff=NA,tzone=NULL) {
   hydrographs <- read.csv(ff,header=T,colClasses = classes,na.strings=c("---",'NA'))
 
   # need to fix the hourly model
-  if (is.null(tz)) {
+  if (is.null(tzone)) {
     date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S")
   } else {
-    date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S",tz=tzone)
+    date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S",tzone=tzone)
   }
 
   if (length(which(is.na(date.time)))>0){

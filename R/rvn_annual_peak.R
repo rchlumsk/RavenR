@@ -53,7 +53,7 @@
 #' @keywords Raven annual peak diagnostics
 #' @export rvn_annual_peak
 rvn_annual_peak <- function(sim, obs, add_line = T,
-                             add_r2 = F, rplot = F) {
+                             add_r2 = F, add_eqn = F, rplot = F) {
   max.sim <- rvn_apply_wyearly(sim, RavenR::rvn_which_max_xts)
   max.obs <- rvn_apply_wyearly(obs, RavenR::rvn_which_max_xts)
   dates <- max.sim[, 1]
@@ -69,22 +69,20 @@ rvn_annual_peak <- function(sim, obs, add_line = T,
     r2 <- 1 - ss.err/ss.tot
   }
 
-  x.lab <- expression("Observed Peak ["*m^3*"/s]")
-  y.lab <- expression("Simulated Peak ["*m^3*"/s]")
-  title.lab <- ""
+  x.lab <- expression("Observed Peak Discharge ["*m^3*"/s]")
+  y.lab <- expression("Simulated Peak Discharge ["*m^3*"/s]")
   x.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,
             max(max.obs, max.sim, na.rm = T) * 1.1)
   y.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,
             max(max.obs, max.sim, na.rm = T) * 1.1)
 
-  text.labels <- year(dates)
+  #text.labels <- year(dates)
 
-  p1 <- ggplot(data=df,aes(x=max.obs,y=max.sim,label=text.labels))+
+  p1 <- ggplot(data=df,aes(x=max.obs,y=max.sim))+
     geom_point()+
-    geom_text(hjust=0.5,vjust=-0.5)+
     scale_x_continuous(limits=x.lim, name=x.lab)+
     scale_y_continuous(limits=y.lim, name=y.lab)+
-    theme_bw()
+    theme_RavenR()
 
   if (add_line){
     p1 <- p1 +
@@ -94,11 +92,28 @@ rvn_annual_peak <- function(sim, obs, add_line = T,
   if (add_r2){
     r2.label <- paste("R^2 == ", round(r2,2))
     p1 <- p1 +
-      annotate(geom="text",x=(x.lim[2]-x.lim[1])*0.5+x.lim[1],y=y.lim[2],label=r2.label, parse=T)
+      geom_text(x= max(max.obs, max.sim),
+                y= min(max.sim, max.obs),
+                vjust = 1,
+                label=r2.label,
+                parse=T,
+                size = 3.5)
+  }
 
+  if (add_eqn){
+    m <- lm(max.sim ~ 0 + max.obs)
+    coeff <- round(as.numeric(m$coefficients[1]), 3)
+    equation <- paste0( "y = ", coeff, "x")
+    p1 <- p1 +
+      geom_text(x = max(max.obs, max.sim),
+                y = min(max.sim, max.obs)*1.1,
+                vjust = 1,
+                label = equation,
+                size = 3.5)
   }
 
   if (rplot) {plot(p1)}
 
   return(list(df_peak = df,p1=p1))
 }
+
