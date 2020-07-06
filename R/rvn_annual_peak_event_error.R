@@ -74,12 +74,12 @@ rvn_annual_peak_event_error <- function(sim, obs, add_line = T, add_labels = T, 
   y.lab <- "% Error in Event Peaks"
   title.lab <- ""
   if (add_line) {
-    y.max <- max(0.5, max(errs))
-    y.min <- min(-0.5, min(errs))
-  }
-  else {
-    y.max <- max(errs)
-    y.min <- min(errs)
+    limit <- max(max(errs), abs(min(errs)))
+    y.max <- max(0.5, limit)
+    y.min <- min(-0.5, limit *-1)
+  } else {
+    y.max <- limit
+    y.min <- limit*-1
   }
 
   df.plot <- data.frame(cbind(text.labels,errs))
@@ -89,22 +89,29 @@ rvn_annual_peak_event_error <- function(sim, obs, add_line = T, add_labels = T, 
     geom_point(aes(x=text.labels,y=errs))+
     scale_y_continuous(limits=c(y.min,y.max),name=y.lab)+
     scale_x_discrete(name=x.lab)+
-    theme_bw()
+    theme_RavenR()
 
   if (add_line) {
     p1 <- p1+
       geom_hline(yintercept=0,linetype=2)
   }
   if (add_labels) {
-    if (max(errs, na.rm = T)/2 > 0) {
+        p1 <- p1+
+        geom_text(x= max(as.numeric(df.plot$text.labels)+0.5),
+                  y= y.max/2,
+                  label= "Overpredict",
+                  angle=90,
+                  vjust = 0.5,
+                  hjust = 0.5)
       p1 <- p1+
-        annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=max(errs,na.rm=T)/2,label="Overpredict",angle=90)
+        geom_text(x=max(as.numeric(df.plot$text.labels)+0.5),
+                  y= y.min/2,
+                  label="Underpredict",
+                  angle=90,
+                  vjust = 0.5,
+                  hjust = 0.5)
     }
-    if (min(errs, na.rm = T)/2 < 0) {
-      p1 <- p1+
-        annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=min(errs,na.rm=T)/2,label="Underpredict",angle=90)
-    }
-  }
+
   df <- data.frame(obs.dates = df.peak.event$obs.dates, errors = errs)
 
   if (rplot) {plot(p1)}

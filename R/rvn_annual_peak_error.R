@@ -98,24 +98,20 @@ rvn_annual_peak_error <- function(sim, obs, add_line = T,
   }
 
   if (add_labels) {
-    if (max(errs, na.rm = T)/2 > 0) {
-      p1 <- p1+
-        geom_text(x=max(as.numeric(df.plot$text.labels)+0.5),
-                  y=max(errs,na.rm=T)/2,
-                  label="Overpredict",
-                  angle=90,
-                  vjust = 0.5,
-                  hjust = 0.5)
-    }
-    if (min(errs, na.rm = T)/2 < 0) {
-      p1 <- p1+
-        geom_text(x=max(as.numeric(df.plot$text.labels)+0.5),
-                  y= y.min/2,
-                  label="Underpredict",
-                  angle=90,
-                  vjust = 0.5,
-                  hjust = 0.5)
-    }
+    p1 <- p1+
+      geom_text(x= max(as.numeric(df.plot$text.labels)+0.5),
+                y= y.max/2,
+                label= "Overpredict",
+                angle=90,
+                vjust = 0.5,
+                hjust = 0.5)
+    p1 <- p1+
+      geom_text(x=max(as.numeric(df.plot$text.labels)+0.5),
+                y= y.min/2,
+                label="Underpredict",
+                angle=90,
+                vjust = 0.5,
+                hjust = 0.5)
   }
   df <- data.frame(date.end = df.peak$date.end, errors = errs)
 

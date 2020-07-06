@@ -51,10 +51,10 @@
 #' @export rvn_annual_volume
 rvn_annual_volume <- function (sim, obs, rplot = T, add_line = T, add_r2 = F) {
   sec.per.day <- 86400
-  sum.sim <- apply.wyearly(sim, sum, na.rm = T)
+  sum.sim <- rvn_apply_wyearly(sim, sum, na.rm = T)
   dates <- sum.sim[, 1]
   sum.sim <- sum.sim[, 2]
-  sum.obs <- apply.wyearly(obs, sum, na.rm = T)[, 2]
+  sum.obs <- rvn_apply_wyearly(obs, sum, na.rm = T)[, 2]
   sum.sim <- sum.sim * sec.per.day
   sum.obs <- sum.obs * sec.per.day
   df <- data.frame(date.end = dates, sim.vol = sum.sim, obs.vol = sum.obs)
@@ -73,15 +73,14 @@ rvn_annual_volume <- function (sim, obs, rplot = T, add_line = T, add_r2 = F) {
     y.lim = c(min(sum.obs, sum.sim, na.rm = T) * 0.9,
               max(sum.obs, sum.sim, na.rm = T) * 1.1)
 
-    text.labels <- year(dates)
+    #text.labels <- year(dates)
 
     #Base Plot
-    p1 <- ggplot(data=df,aes(x=obs.vol,y=sim.vol,label=text.labels))+
+    p1 <- ggplot(data=df,aes(x=obs.vol,y=sim.vol))+
       geom_point()+
-      geom_text(hjust=0.5,vjust=-0.5)+
       scale_x_continuous(limits=x.lim, name=x.lab)+
       scale_y_continuous(limits=y.lim, name=y.lab)+
-      theme_bw()
+      theme_RavenR()
 
     if (add_line){
       p1 <- p1 +
@@ -91,9 +90,16 @@ rvn_annual_volume <- function (sim, obs, rplot = T, add_line = T, add_r2 = F) {
     if (add_r2){
       r2.label <- paste("R^2 == ", round(r2,2))
       p1 <- p1 +
-        annotate(geom="text",x=(x.lim[2]-x.lim[1])*0.5+x.lim[1],y=y.lim[2],label=r2.label, parse=T)
+        geom_text(x= x.lim[2],
+                  y= y.lim[1]*1.1,
+                  vjust = 1,
+                  hjust = 1,
+                  label=r2.label,
+                  parse=T,
+                  size = 3.5)
 
     }
+    if (rplot) {plot(p1)}
     return(list(df.volume=df,plot=p1))
   } else{
 
