@@ -5,23 +5,23 @@
 \title{Writes a nicely formatted tables of Raven attributes/parameters}
 \usage{
 write.RavenTable(
-  filename,
   attributes,
   units,
   df,
+  filename,
   justify = "right",
   sep = ", ",
   ...
 )
 }
 \arguments{
-\item{filename}{Name of the file, with extension, to append the table to}
-
 \item{attributes}{array of strings containing attribute/parameter names}
 
 \item{units}{array of strings with the corresponding units}
 
 \item{df}{Dataframe of values corresponding to attributes/parameters}
+
+\item{filename}{Name of the file, with extension, to append the table to}
 
 \item{justify}{alignment of character columns (default 'right'). See \code{\link{format}}}
 

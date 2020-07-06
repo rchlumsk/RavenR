@@ -4,24 +4,28 @@
 \alias{rvn_annual_peak_event_error}
 \title{Annual Peak Event Errors}
 \usage{
-rvn_annual_peak_event_error(sim, obs, rplot = T, add_line = T, add_labels = T)
+rvn_annual_peak_event_error(sim, obs, add_line = T, add_labels = T, rplot = F)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
 
 \item{obs}{time series object of observed flows}
 
-\item{rplot}{boolean whether to generate plot (default TRUE)}
-
 \item{add_line}{optionally adds a 1:1 line to the plot for reference
 (default TRUE)}
 
 \item{add_labels}{optionally adds labels for overpredict/underpredict on
 right side axis (default TRUE)}
+
+\item{rplot}{boolean whether to print the plot (default FALSE)}
 }
 \value{
 \item{df_peak_event_error}{data frame of the calculated peak event
 errors}
+
+returns a list with peak event error data in a data frame, and a ggplot object
+ \item{df_peak_event_error}{data frame of the calculated peak event errors}
+ \item{p1}{ggplot object with plotted annual peak event errors}
 }
 \description{
 rvn_annual_peak_event_error creates a plot of the annual observed and simulated
@@ -52,22 +56,24 @@ Note that a plot title is purposely omitted in order to allow the automatic
 generation of plot titles.
 }
 \examples{
-
 # load sample hydrograph data, two years worth of sim/obs
 data(hydrograph_data)
 sim <- hydrograph_data$hyd$Sub36
 obs <- hydrograph_data$hyd$Sub36_obs
 
 # create a plot of peak annual errors with default options
-rvn_annual_peak_event_error(sim,obs,rplot=T,add_line=T)
+peak1 <- rvn_annual_peak_event_error(sim, obs)
+peak1$df_peak_event_error
+peak1$p1
 
-# do not plot, just store the calculated peak errors
-peak_event_errors <- rvn_annual_peak_event_error(sim,obs,rplot=F)
+# plot directly and without labels
+rvn_annual_peak_event_error(sim, obs, add_line=T, rplot=T, add_labels=F)
+
 
 }
 \seealso{
-\code{\link{annual_peak}} to consider just the magnitude of each
-year's peak \code{\link{annual_peak_error}} to calculate errors in peaks
+\code{\link{rvn_annual_peak}} to consider just the magnitude of each
+year's peak \code{\link{rvn_annual_peak_error}} to calculate errors in peaks
 
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 Craig's research page} for software downloads, including the

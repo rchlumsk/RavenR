@@ -27,7 +27,6 @@ writeRavenRFileInfo(
 Write common Raven file header. All lines are Appended.
 }
 \examples{
-\dontrun{}
 writeRavenRFileInfo(filename = 'HogwartsBasin.rvp',
                     filetype = 'rvp ASCII Raven 2.9.1',
                     author   = 'Harry Potter')

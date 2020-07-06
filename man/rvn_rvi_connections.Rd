@@ -4,31 +4,36 @@
 \alias{rvn_rvi_connections}
 \title{Generate Hydrological process connections list}
 \usage{
-rvn_rvi_connections(HPTable, ProcConDataFile = "RavenProcessConnections.dat")
+rvn_rvi_connections(
+  rvi,
+  ProcConDataFile = system.file("extdata", "RavenProcessConnections.dat", package =
+    "RavenR")
+)
 }
 \arguments{
-\item{HPTable}{a data frame of hydrologic processes generated from the rvi.read() routine}
+\item{rvi}{data object generated from the rvn_rvi_read() routine}
 
-\item{ProcConDataFile}{(optional) filename/location of RavenProcesConnections.dat file}
+\item{ProcConDataFile}{(optional) path to RavenProcesConnections.dat file}
 }
 \value{
 Returns a dataframe of all of the process connections Includes the following data columns:
 process type, algorithm, 'from' compartment, 'to' compartment, and conditional.
 }
 \description{
-This routine reads in a hydrologic process list from rvi.read() and generates
+This routine reads in a hydrologic process list from rvn_rvi_read() and generates
 the list of hydrologic process connections. It relies on a valid and up-to-date
-RavenProcessConnections.dat file
+RavenProcessConnections.dat file. This file is provided with the RavenR package, but
+may be overrided by a more recent file if provided manually.
 }
 \examples{
- \dontrun{
-  rvi<-rvi.read("example.rvi")
-  conn<-rvn_rvi_connections(rvi$HydProcTable,ProcConDataFile="RavenProcessConnections.dat")
-  rvi.HPNetworkPlot(conn,pdfout="network.pdf")
-  }
+  rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
+  conn <- rvn_rvi_connections(rvi)
+  rvn_rvi_hpnet_plot(conn)
+
 }
 \seealso{
-rvn_rvi_read
+\code{\link{rvn_rvi_read}} to read a .rvi file and generate an rvi object
+
 See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 }
 \author{

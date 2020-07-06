@@ -4,12 +4,12 @@
 \alias{write.RavenLabel}
 \title{Writes common Raven labeled line to file, with optional value (appends)}
 \usage{
-write.RavenLabel(filename, label, value = NULL, digits = NULL)
+write.RavenLabel(label, filename, value = NULL, digits = NULL)
 }
 \arguments{
-\item{filename}{character, file name/path to write to, with extension}
-
 \item{label}{character, (e.g. "SoilClasses")}
+
+\item{filename}{character, file name/path to write to, with extension}
 
 \item{value}{numeric or character, corresponding value written after label (optional)}
 
@@ -19,8 +19,7 @@ write.RavenLabel(filename, label, value = NULL, digits = NULL)
 Writes common Raven labeled line to file, with optional value (appends)
 }
 \examples{
-\dontrun{}
-write.RavenLabel('Duration', 365, 'Hogwarts.rvi')
+write.RavenLabel('Duration', 'Hogwarts.rvi', value=365)
 }
 \author{
 Leland Scantlebury, \email{leland@scantle.com}

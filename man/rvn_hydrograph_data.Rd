@@ -4,7 +4,8 @@
 \name{rvn_hydrograph_data}
 \alias{rvn_hydrograph_data}
 \title{Hydrograph Data from Raven}
-\format{rvn_hydrograph_data is a data frame with two object
+\format{
+rvn_hydrograph_data is a data frame with two object
 \describe{
   \item{hyd}{simulated and observed flows from Raven model}
   \item{units}{units associated with each variable in hyd}
@@ -23,7 +24,8 @@ the Hydrographs.csv output can be found in the Raven manual.
 }
 
 The Nith River model can be downloaded from the Raven Tutorials (tutorial #2)
-\url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}}
+\url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}
+}
 \usage{
 rvn_hydrograph_data
 }
