@@ -65,8 +65,8 @@ rvn_annual_volume <- function (sim, obs, rplot = T, add_line = T, add_r2 = F) {
     r2 <- 1 - ss.err/ss.tot
   }
   if (rplot) {
-    x.lab <- expression("Observed Volume ["*m^3*"]")
-    y.lab <- expression("Simulated Volume ["*m^3*"]")
+    x.lab <- expression("Observed Volume ("*m^3*")")
+    y.lab <- expression("Simulated Volume ("*m^3*")")
     title.lab <- ""
     x.lim = c(min(sum.obs, sum.sim, na.rm = T) * 0.9,
               max(sum.obs, sum.sim, na.rm = T) * 1.1)

@@ -70,8 +70,8 @@ rvn_annual_peak <- function(sim, obs, add_line = T,
     r2 <- 1 - ss.err/ss.tot
   }
 
-  x.lab <- expression("Observed Peak Discharge ["*m^3*"/s]")
-  y.lab <- expression("Simulated Peak Discharge ["*m^3*"/s]")
+  x.lab <- expression("Observed Peak Discharge ("*m^3*"/s)")
+  y.lab <- expression("Simulated Peak Discharge ("*m^3*"/s)")
   x.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,
             max(max.obs, max.sim, na.rm = T) * 1.1)
   y.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,

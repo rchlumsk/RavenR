@@ -64,23 +64,23 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
     #Use step plot instead of lineplot
     p1 <- ggplot()+
       geom_step(data = df.plot, aes(x=Index,y=value,color=variable))+
-      theme_bw()+
+      theme_RavenR()+
       ylab(yaxis.title)+
       xlab("")+
-      ggtitle(plot.title)+
-      theme(plot.title = element_text(hjust=0.5),
-            legend.title = element_blank())
+      #ggtitle(plot.title) +
+      scale_colour_brewer(type = "qual", palette = 3)
+
 
   } else { #line plot is default for state variables
 
     p1 <- ggplot()+
       geom_line(data = df.plot, aes(x=Index,y=value,color=variable))+
-      theme_bw()+
+      theme_RavenR()+
       ylab(yaxis.title)+
       xlab("")+
-      ggtitle(plot.title)+
-      theme(plot.title = element_text(hjust=0.5),
-            legend.title = element_blank())
+      #ggtitle(plot.title)+
+      scale_colour_brewer(type = "qual", palette = 3)
+
   }
 
   # Change plot limits to period

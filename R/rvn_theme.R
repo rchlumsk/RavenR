@@ -11,6 +11,7 @@ library(ggplot2)
 
 theme_RavenR <- function(){
   theme_bw() +
-    theme(panel.border = element_rect(color = "black"))
+    theme(panel.border = element_rect(color = "black"),
+          legend.title = element_blank())
 }
 
