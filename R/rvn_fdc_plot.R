@@ -83,35 +83,37 @@ rvn_fdc_plot <-function(sim=NULL,obs=NULL,prd=NULL,seasonal='F'){
   plot.df <- fortify(sim)
   plot.df$Type <- "Sim"
   colnames(plot.df)[2] <- "Value"
-  
+
   if (!is.null(obs)){
     plot.df2 <- fortify(obs)
     plot.df2$Type <- "Obs"
-    colnames(plot.df2)[2] <- "Value" 
+    colnames(plot.df2)[2] <- "Value"
     plot.df <- rbind(plot.df, plot.df2)
   }
-  
+
   if (seasonal != "F"){
     plot.df3 <- fortify(summer)
     plot.df3$Type <- "Summer"
-    colnames(plot.df3)[2] <- "Value" 
-    
+    colnames(plot.df3)[2] <- "Value"
+
     plot.df4 <- fortify(winter)
     plot.df4$Type <- "Winter"
-    colnames(plot.df4)[2] <- "Value" 
-    
+    colnames(plot.df4)[2] <- "Value"
+
     plot.df <- rbind(plot.df, plot.df3,plot.df4)
   }
-  
-  
+
+
   p1 <-  ggplot(plot.df)+
     stat_ecdf(aes(x=Value, color=Type))+
-    scale_x_continuous(trans = 'log10', name = expression("Q ["*m^3*"/s]"),limits = c(xmin,xmax))+
-    scale_y_continuous(name = "% of flow less than Q",limits = c(0,1))+
-    theme_bw()+
-    ggtitle("Flow Exceedance")+
-    theme(plot.title = element_text(hjust=0.5))
-  
+    scale_x_continuous(trans = 'log10',
+                       name = expression("Daily Discharge ("*m^3*"/s)"),
+                       limits = c(xmin,xmax))+
+    scale_y_continuous(name = "% of flow less than daily discharge",limits = c(0,1))+
+    theme_RavenR()+
+    #ggtitle("Flow Exceedance")+
+    scale_colour_brewer(type = "qual", palette = 3)
+
   return(p1)
 }
 

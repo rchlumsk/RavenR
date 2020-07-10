@@ -29,7 +29,11 @@
 #' p <- rvn_annual_quantiles_plot(qdat_sim, mediancolor = 'red', ribboncolor = 'red', addtoplot = p)
 #' p # To view
 #' @export rvn_annual_quantiles_plot
-rvn_annual_quantiles_plot <- function(qdat, mediancolor='black', ribboncolor='grey60', ribbonalpha=0.5, addtoplot=NULL) {
+rvn_annual_quantiles_plot <- function(qdat,
+                                      mediancolor='black',
+                                      ribboncolor='grey60',
+                                      ribbonalpha=0.5,
+                                      addtoplot=NULL) {
 
   # Export XTS object into df
   dates <- date(qdat)
@@ -40,13 +44,22 @@ rvn_annual_quantiles_plot <- function(qdat, mediancolor='black', ribboncolor='gr
   names(qdat) <- c('Lower','Median','Upper','date')
 
   if(is.null(addtoplot)) {
+
     p1 <- ggplot(qdat, aes(x = date)) +
-      geom_ribbon(aes(ymin=Lower, ymax=Upper), fill=ribboncolor, alpha=ribbonalpha) +
-      geom_line(aes(y=Median), color=mediancolor) +
+      geom_ribbon(aes(ymin=Lower, ymax=Upper),
+                  fill=ribboncolor,
+                  alpha=ribbonalpha) +
+      geom_line(aes(y=Median),
+                color=mediancolor) +
       scale_x_date(labels = date_format("%b")) +
-      labs(x = 'Day of Year', y = expression(Daily~Streamflow~(m^3/s)))
+      xlab('Day of Water Year') +
+      ylab(expression("Daily Discharge ("*m^3*"/s)")) +
+      theme_RavenR()
+
   } else {
-    p1 <- p1 + geom_ribbon(data=qdat, aes(ymin=Lower, ymax=Upper), fill=ribboncolor, alpha=ribbonalpha) +
+    p1 <- p1 +
+      geom_ribbon(data=qdat, aes(ymin=Lower, ymax=Upper),
+                  fill=ribboncolor, alpha=ribbonalpha) +
       geom_line(data=qdat, aes(y=Median), color=mediancolor)
   }
 

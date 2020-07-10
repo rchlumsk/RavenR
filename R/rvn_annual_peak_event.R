@@ -28,8 +28,6 @@
 #' @param add_line optionally adds a 1:1 line to the plot for reference
 #' (default TRUE)
 #' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
-#' @param axis_zero optionally sets the minimum volume on axes to zero (default
-#' FALSE)
 #' @param rplot boolean whether to print the plot (default FALSE)
 #' @return returns a list with peak data in a data frame, and a ggplot object
 #'  \item{df_peak_event}{data frame of the calculated peak events}
@@ -80,23 +78,22 @@ rvn_annual_peak_event <- function (sim, obs, add_line = T, add_r2 = F, rplot = F
     r2 <- 1 - ss.err/ss.tot
   }
 
-  x.lab <- expression("Observed Peak ["*m^3*"/s]")
-  y.lab <- expression("Simulated Peak ["*m^3*"/s]")
-  title.lab <- ""
+  x.lab <- expression("Observed Peak Discharge ("*m^3*"/s)")
+  y.lab <- expression("Simulated Peak Discharge ("*m^3*"/s)")
+  #title.lab <- ""
 
   x.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,
             max(max.obs, max.sim, na.rm = T) * 1.1)
   y.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,
             max(max.obs, max.sim, na.rm = T) * 1.1)
 
-  text.labels <- year(max.dates)
+  #text.labels <- year(max.dates)
 
-  p1 <- ggplot(data=df,aes(x=obs.peak.event,y=sim.peak.event,label=text.labels))+
+  p1 <- ggplot(data=df,aes(x=obs.peak.event,y=sim.peak.event))+
     geom_point()+
-    geom_text(hjust=0.5,vjust=-0.5)+
     scale_x_continuous(limits=x.lim, name=x.lab)+
     scale_y_continuous(limits=y.lim, name=y.lab)+
-    theme_bw()
+    theme_RavenR()
 
   if (add_line){
     p1 <- p1 +
@@ -106,7 +103,13 @@ rvn_annual_peak_event <- function (sim, obs, add_line = T, add_r2 = F, rplot = F
   if (add_r2){
     r2.label <- paste("R^2 == ", round(r2,2))
     p1 <- p1 +
-      annotate(geom="text",x=(x.lim[2]-x.lim[1])*0.5+x.lim[1],y=y.lim[2],label=r2.label, parse=T)
+      geom_text(x= x.lim[2],
+                y= y.lim[1]*1.9,
+                vjust = 1,
+                hjust = 1,
+                label=r2.label,
+                parse=T,
+                size = 3.5)
   }
 
   if (rplot) {plot(p1)}

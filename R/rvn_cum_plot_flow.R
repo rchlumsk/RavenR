@@ -80,7 +80,7 @@ rvn_cum_plot_flow <- function(sim=NULL,obs=NULL,inflow=NULL) {
 
   df.plot <- data.frame(cbind(fortify(sim),cum.sim,"sim"))
   colnames(df.plot) <- c("date","value","cum","variable")
-  
+
   if (!(is.null(obs))) {
     df <- cbind(fortify(obs),cum.obs,"obs")
     colnames(df) <- c("date","value","cum","variable")
@@ -91,17 +91,19 @@ rvn_cum_plot_flow <- function(sim=NULL,obs=NULL,inflow=NULL) {
     colnames(df) <- c("date","value","cum","variable")
     df.plot <- rbind(df.plot,df)
   }
-  
+
   df.plot$cum <- as.numeric(df.plot$cum)
   df.plot$variable <- factor(df.plot$variable)
-  
+
   cum_flow_plot <- ggplot(df.plot)+
     geom_line(aes(x=date,y=cum,color=variable))+
-    scale_y_continuous(name="Cumulative Flow [m3]",limits=c(0,max.vol))+
+    scale_y_continuous(limits=c(0,max.vol))+
     xlab("Date")+
-    theme_bw()
-  
-  
+    ylab(expression("Cummulative Volume ("*m^3*")"))+
+    scale_colour_brewer(type = "qual", palette = 3) +
+    theme_RavenR()
+
+
   return(cum_flow_plot)
 
 

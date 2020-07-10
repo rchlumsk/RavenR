@@ -42,6 +42,7 @@ rvn_annual_quantiles <- function(hgdata, minyear=NULL, maxyear=NULL,
   monthday <- as.Date(paste0(toString(maxyear), "-", month(hgdata), "-", day(hgdata)))
   if (water_year) {
     # Year is arbitrary, so subtract a year post-Oct to create water years
+    #SAG comment: is this right? shouldn't you be adding a year post October?
     monthday[month(monthday) > 9] = monthday[month(monthday) > 9] - years(1)
   }
   qdat <- xts(aggregate(hgdata, by=monthday, quantile,
