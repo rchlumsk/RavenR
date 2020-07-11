@@ -24,8 +24,15 @@
 #' @keywords Raven rvt flow file
 #' @examples
 #'
-#' data(hydrograph.data)
-#' rvn_rvt_write(hydrograph.data$hyd)
+#' # load sample flow data
+#' system.file('extdata','run1_Hydrographs.csv', package = "RavenR") %>%
+#' read.csv(.) -> mydata
+#'
+#' # generate time-series object from Sub basin 36 observations
+#' flows <- xts(mydata$Sub36..observed...m3.s.,order.by = as.Date(paste0(mydata$date,mydata$time)))
+#'
+#' # write time series to rvt file
+#' rvn_rvt_write(flows,params = "HYDROGRAPH", units = "m3/s", ff = 'raven_rvt_write')
 #'
 #' @export rvn_rvt_write
 rvn_rvt_write <- function(ts, params, units, dates=NULL, prd=NULL,
@@ -70,7 +77,7 @@ rvn_rvt_write <- function(ts, params, units, dates=NULL, prd=NULL,
   # change all NA values to Raven NA (-1.2345)
   ts[is.na(ts)] = -1.2345
 
-  fc <- file(ff,open='wt')
+  fc <- file(paste0(ff,".rvt"),open='wt')
   writeLines(":MultiData",fc)
   writeLines(sprintf('%s %s %.2f %i', min_date, tt, dt, nrow(ts)), fc)
   writeLines(params,fc)

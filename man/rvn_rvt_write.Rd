@@ -45,8 +45,15 @@ parameters supplied in the params and units objects match the xts object supplie
 }
 \examples{
 
-data(hydrograph.data)
-rvn_rvt_write(hydrograph.data$hyd)
+# load sample flow data
+system.file('extdata','run1_Hydrographs.csv', package = "RavenR") \%>\%
+read.csv(.) -> mydata
+
+# generate time-series object from Sub basin 36 observations
+flows <- xts(mydata$Sub36..observed...m3.s.,order.by = as.Date(paste0(mydata$date,mydata$time)))
+
+# write time series to rvt file
+rvn_rvt_write(flows,params = "HYDROGRAPH", units = "m3/s", ff = 'raven_rvt_write')
 
 }
 \seealso{

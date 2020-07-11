@@ -100,8 +100,9 @@ does not check for common errors in data, does not infill missing values
 required) - only handles daily data (subdaily or monthly not yet handled)
 }
 \examples{
-\dontrun{
-#-- Download data using weathercan weather_dl
+# Download data using weathercan weather_dl
+kam <- weather_dl(station_ids = 51423,
+                  start = "2016-10-01", end = "2019-09-30", interval="day")
 
 # basic use, includes "met_" prefix
 # default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
@@ -110,8 +111,6 @@ rvn_rvt_ECmet(metdata = kam, forcing_set = 1)
 # set without prefix, station data and redirect files created
 # forcing_set 2 includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
 rvn_rvt_ECmet(metdata = kam, forcing_set = 2, prefix = NULL, write_stndata = T, write_redirect = T)
-
-}
 
 }
 \seealso{

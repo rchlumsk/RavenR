@@ -103,6 +103,6 @@ rvn_rvi_process_plot <- function(connections, plot=TRUE, pdfout=NULL) {
           legend.position = "none")
 
   if (plot) {p1}
-  if (pdfout) {ggsave(pdfout,p1, units = "in", height = 7, width = 7, dpi =300)}
+  if (!is.null(pdfout)) {ggsave(pdfout,p1, units = "in", height = 7, width = 7, dpi =300)}
   return(p1)
 }

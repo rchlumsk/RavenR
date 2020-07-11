@@ -28,7 +28,7 @@ may be overrided by a more recent file if provided manually.
 \examples{
   rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
   conn <- rvn_rvi_connections(rvi)
-  rvn_rvi_hpnet_plot(conn)
+  rvn_rvi_process_plot(conn)
 
 }
 \seealso{

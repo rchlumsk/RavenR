@@ -21,7 +21,7 @@
 #' @examples
 #'   rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
 #'   conn <- rvn_rvi_connections(rvi)
-#'   rvn_rvi_hpnet_plot(conn)
+#'   rvn_rvi_process_plot(conn)
 #'
 #' @keywords Raven  rvi  Hydrologic Processes connections
 #' @export rvn_rvi_connections

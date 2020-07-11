@@ -14,20 +14,25 @@
 #' @author James R. Craig, University of Waterloo
 #'
 #' @examples
-#' \dontrun{
-#'   mydata<-read.csv("JohnCreek.csv")
-#'   flows<-timeseries.infill(mydata)
-#'   rvn_obsfile_rvt("JohnCreek.rvt", flows, 13,typestr="HYDROGRAPH")
+#'  # locate hydrograph sample csv data from RavenR package
+#'  ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 #'
-#'   # just weight March-October flows :
-#'   wts<-obsweights.gen(flows,criterion="BETWEEN_CYCLIC",startdate="2000-03-01",enddate="2000-11-01")
+#'  # read in Raven Hydrographs file, store into mydata
+#'  mydata <- rvn_hyd_read(ff)
 #'
-#'   # and only after March 2003:
-#'   wts<-obsweights.gen(flows,criterion="AFTER",startdate="2003-03-01")
-#'   wts2=wts2*wts # product merges weights
+#'  # generate rvt file using just observations from Subbasin ID 36
+#'  flows <- rvn_ts_infill(mydata$hyd$Sub36_obs)
+#'  rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36, typestr = "HYDROGRAPH")
 #'
-#'   obsweightsfile.create("JohnCreekWts.rvt",wts2,13,typestr="HYDROGRAPH")
-#'   }
+#'  # weight March-October flows:
+#'  wts <- rvn_gen_obsweights(flows,criterion = "BETWEEN_CYCLIC", startdate="2000-03-01", enddate="2003-11-01")
+#'
+#'  # and only after March 2003:
+#'  wts2 <- rvn_gen_obsweights(flows,criterion = "AFTER", startdate="2003-03-01")
+#'  wts2 <- wts2*wts # product merges weights
+#'
+#'  # write observation weights to rvt file
+#'  rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2, 36, typestr="HYDROGRAPH")
 #'
 #' @keywords Raven observations weights rvt file write
 #'

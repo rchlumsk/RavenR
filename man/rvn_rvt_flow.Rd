@@ -65,13 +65,11 @@ data(rvn_hydrograph_data)
 obs <- rvn_hydrograph_data$hyd$Sub36_obs
 
 # note that the writing examples are not run
-\dontrun{
 # write out observation flow file
 rvn_rvt_flow(obs,subID=36,stnName="Nith_Obs1",flip_number=1)
 
 # also write out the redirect file
-rvn_write_flow_rvt(obs,subID=36,stnName="Nith_Obs1",write_redirect=T,flip_number=1)
-}
+rvn_rvt_flow(obs,subID=36,stnName="Nith_Obs1",write_redirect=T,flip_number=1)
 
 }
 \seealso{
