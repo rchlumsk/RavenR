@@ -17,13 +17,11 @@
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
-#'  \dontrun{
-#'   # sample workflow of rvh.read
+#'  # read in rvt file
+#'  system.file('extdata','GlenAllan.rvt',package="RavenR")%>%
+#'  rvn_rvt_read(.) -> rvt
+#'  plot(rvt$TEMP_DAILY_MIN)
 #'
-#'   rvt<-rvn_rvt_read("MetData.rvt")
-#'
-#'   plot(rvt$TEMP_DAILY_MIN)
-#'}
 #' @keywords Raven  rvt  time series
 #' @export rvn_rvt_read
 #'
@@ -37,12 +35,6 @@ rvn_rvt_read<-function(filename) {
   mult<-grep(":MultiData", readLines(filename))
   is_multidata<-!(length(mult)==0)
 
-  lineend<-grep(":End", readLines(filename), value = FALSE)
-
-  delim=""
-  if (length(grep(",", readLines(filename)[(lineno):(lineend-1)], value = FALSE))>0){
-    delim="," # comma delimited
-  }
 
   #find location of start and end of data (assumes :Data)
   if (!is_multidata){
@@ -59,11 +51,19 @@ rvn_rvt_read<-function(filename) {
 
     # read parameter names
     pline<-grep(":Parameters", readLines(filename), value = FALSE)
-    pline<-unlist(strsplit(read_lines(filename)[pline]," "))
+    pline<-unlist(strsplit(readLines(filename)[pline]," "))
     pline<-pline[pline!=""]
 
     cnames<-pline[2:length(pline)]
   }
+
+  lineend<-grep(":End", readLines(filename), value = FALSE)
+
+  delim=""
+  if (length(grep(",", readLines(filename)[(lineno):(lineend-1)], value = FALSE))>0){
+    delim="," # comma delimited
+  }
+
   if ((length(lineno)==0) || (length(lineend)==0)){
     print('warning: filename not a valid .rvT file (no :End command)')
   }
@@ -84,7 +84,7 @@ rvn_rvt_read<-function(filename) {
   ts[ts==-1.2345]<-NA #raven NA to NA
 
   # read date line
-  line1<-unlist(strsplit(read_lines(filename)[dateline]," "))
+  line1<-unlist(strsplit(readLines(filename)[dateline]," "))
   line1<-line1[line1!=""]
   startdate<-as.Date(paste0(line1[1]," ",line1[2])  )
 

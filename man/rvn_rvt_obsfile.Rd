@@ -19,29 +19,21 @@ or a state variable name (e.g., SOIL[0] or SNOW)}
 \item{units}{units of the data (should be consistent with Raven units; neither Raven nor this routine checks or corrects}
 }
 \value{
-{TRUE}{returns TRUE if function runs properly}
+{TRUE}{ returns TRUE if function runs properly}
 }
 \description{
 Creates an observation data file named filename from a continuous (gap-free) xts time series ts
 }
 \examples{
-\dontrun{
+ # locate hydrograph sample csv data from RavenR package
+ ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 
-  ## this example needs to be totally cleaned up!!!
+ # read in Raven Hydrographs file, store into mydata
+ mydata <- rvn_hyd_read(ff)
 
-  mydata<-read.csv("JohnCreek.csv")
-  flows<-timeseries.infill(mydata)
-  rvn_obsfile_rvt("JohnCreek.rvt", flows, 13,typestr="HYDROGRAPH")
-
-  # just weight March-October flows :
-  wts<-obsweights.gen(flows,criterion="BETWEEN_CYCLIC",startdate="2000-03-01",enddate="2000-11-01")
-
-  # and only after March 2003:
-  wts<-obsweights.gen(flows,criterion="AFTER",startdate="2003-03-01")
-  wts2=wts2*wts # product merges weights
-
-  rvn_rvt_obsfile("JohnCreekWts.rvt",wts2,13,typestr="HYDROGRAPH")
-  }
+ # generate rvt file using just observations from Subbasin ID 36
+ flows <- rvn_ts_infill(mydata$hyd$Sub36_obs)
+ rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36, typestr = "HYDROGRAPH")
 
 }
 \seealso{

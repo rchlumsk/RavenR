@@ -20,13 +20,11 @@ information as an xts time series. It supports :MultiData, :Data, :ObservedData,
 NOT support the master .rvt file with :Gauge or :GriddedForcing commands
 }
 \examples{
- \dontrun{
-  # sample workflow of rvh.read
+ # read in rvt file
+ system.file('extdata','GlenAllan.rvt',package="RavenR")\%>\%
+ rvn_rvt_read(.) -> rvt
+ plot(rvt$TEMP_DAILY_MIN)
 
-  rvt<-rvn_rvt_read("MetData.rvt")
-
-  plot(rvt$TEMP_DAILY_MIN)
-}
 }
 \seealso{
 See also the \href{http://raven.uwaterloo.ca/}{Raven page}
