@@ -17,9 +17,6 @@ rvn_annual_peak_event(sim, obs, add_line = T, add_r2 = F, rplot = F)
 \item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
 
 \item{rplot}{boolean whether to print the plot (default FALSE)}
-
-\item{axis_zero}{optionally sets the minimum volume on axes to zero (default
-FALSE)}
 }
 \value{
 returns a list with peak data in a data frame, and a ggplot object

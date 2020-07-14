@@ -4,7 +4,7 @@
 \alias{rvn_annual_peak}
 \title{Annual Peak Comparison}
 \usage{
-rvn_annual_peak(sim, obs, add_line = T, add_r2 = F, rplot = F)
+rvn_annual_peak(sim, obs, add_line = T, add_r2 = F, add_eqn = F, rplot = F)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
@@ -16,6 +16,8 @@ rvn_annual_peak(sim, obs, add_line = T, add_r2 = F, rplot = F)
 \item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
 
 \item{rplot}{boolean whether to print the plot (default FALSE)}
+
+\item{add_egn}{optionally adds the equation for a linear regression line through the origin (default FALSE)}
 }
 \value{
 returns a list with peak data in a data frame, and a ggplot object
