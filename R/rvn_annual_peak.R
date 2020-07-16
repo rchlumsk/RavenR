@@ -1,6 +1,6 @@
 #' Annual Peak Comparison
 #'
-#' rvn_annual_peak creates a plot of the annual observed and simulated peaks.
+#' rvn_annual_peak creates a plot of the annual observed and simulated peaks, based on the water year.
 #'
 #' This function creates a scatterplot of the annual observed and simulated
 #' peaks, calculated for each available water year of data (Oct 1st hardcoded)
@@ -20,41 +20,43 @@
 #'
 #' @param sim time series object of simulated flows
 #' @param obs time series object of observed flows
-#' @param rplot boolean whether to generate plot (default TRUE)
-#' @param add_line optionally adds a 1:1 line to the plot for reference
-#' (default TRUE)
+#' @param add_line optionally adds a 1:1 line to the plot for reference (default TRUE)
 #' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
-#' @param axis_zero optionally sets the minimum volume on axes to zero (default
-#' FALSE)
-#' @return \item{df_peak}{data frame of the calculated peaks}
+#' @param add_egn optionally adds the equation for a linear regression line through the origin (default FALSE)
+#' @param rplot boolean whether to print the plot (default FALSE)
+#' @return returns a list with peak data in a data frame, and a ggplot object
+#'  \item{df_peak}{data frame of the calculated peaks}
+#'  \item{p1}{ggplot object with plotted annual peaks}
+#'
 #' @seealso \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 #' volumes \code{\link{rvn_annual_peak_event}} to consider the timing of peak
-#' events
+#' events.
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven annual peak diagnostics
-#' @examples
 #'
+#' @examples
 #' # load sample hydrograph data, two years worth of sim/obs
-#' data(hydrograph_data)
-#' sim <- hydrograph_data$hyd$Sub36
-#' obs <- hydrograph_data$hyd$Sub36_obs
+#' data(rvn_hydrograph_data)
+#' sim <- rvn_hydrograph_data$hyd$Sub36
+#' obs <- rvn_hydrograph_data$hyd$Sub36_obs
 #'
 #' # create a plot of annual peaks with default options
-#' rvn_annual_peak(sim,obs,rplot=T,add_line=T,add_r2=F,axis_zero=F)
+#' peak1 <- rvn_annual_peak(sim, obs, add_line=T, add_r2=F)
+#' peak1$df_peak
+#' peak1$p1
 #'
 #' # plot with r2 and axes to zero; store results
-#' peak_df <- rvn_annual_peak(sim,obs,rplot=T,add_line=T,add_r2=T,axis_zero=T)
+#' peak_df <- rvn_annual_peak(sim, obs, add_line=T,
+#' add_r2=T, rplot=T)
 #'
-#' # store results without plotting
-#' peak_df <- rvn_annual_peak(sim,obs,rplot=F)
-#'
+#' @keywords Raven annual peak diagnostics
 #' @export rvn_annual_peak
-rvn_annual_peak <- function (sim, obs, rplot = T, add_line = T, add_r2 = F) {
-  max.sim <- apply.wyearly(sim, RavenR::which.max.xts)
-  max.obs <- apply.wyearly(obs, RavenR::which.max.xts)
+rvn_annual_peak <- function(sim, obs, add_line = T,
+                             add_r2 = F, add_eqn = F, rplot = F) {
+  max.sim <- rvn_apply_wyearly(sim, RavenR::rvn_which_max_xts)
+  max.obs <- rvn_apply_wyearly(obs, RavenR::rvn_which_max_xts)
   dates <- max.sim[, 1]
   max.sim <- max.sim[, 2]
   max.obs <- max.obs[, 2]
@@ -67,42 +69,52 @@ rvn_annual_peak <- function (sim, obs, rplot = T, add_line = T, add_r2 = F) {
     text.labels <- year(dates)
     r2 <- 1 - ss.err/ss.tot
   }
-  if (rplot) {
-    x.lab <- expression("Observed Peak ["*m^3*"/s]")
-    y.lab <- expression("Simulated Peak ["*m^3*"/s]")
-    title.lab <- ""
-    x.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,
-              max(max.obs, max.sim, na.rm = T) * 1.1)
-    y.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,
-              max(max.obs, max.sim, na.rm = T) * 1.1)
 
-    text.labels <- year(dates)
+  x.lab <- expression("Observed Peak Discharge ("*m^3*"/s)")
+  y.lab <- expression("Simulated Peak Discharge ("*m^3*"/s)")
+  x.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,
+            max(max.obs, max.sim, na.rm = T) * 1.1)
+  y.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,
+            max(max.obs, max.sim, na.rm = T) * 1.1)
 
+  #text.labels <- year(dates)
 
-    #Base Plot
-    p1 <- ggplot(data=df,aes(x=max.obs,y=max.sim,label=text.labels))+
-      geom_point()+
-      geom_text(hjust=0.5,vjust=-0.5)+
-      scale_x_continuous(limits=x.lim, name=x.lab)+
-      scale_y_continuous(limits=y.lim, name=y.lab)+
-      theme_bw()
+  p1 <- ggplot(data=df,aes(x=max.obs,y=max.sim))+
+    geom_point()+
+    scale_x_continuous(limits=x.lim, name=x.lab)+
+    scale_y_continuous(limits=y.lim, name=y.lab)+
+    theme_RavenR()
 
-    if (add_line){
-      p1 <- p1 +
-        geom_abline(linetype=2)
-    }
-
-    if (add_r2){
-      r2.label <- paste("R^2 == ", round(r2,2))
-      p1 <- p1 +
-        annotate(geom="text",x=(x.lim[2]-x.lim[1])*0.5+x.lim[1],y=y.lim[2],label=r2.label, parse=T)
-
-    }
-
-    return(list(df_peak = df,plot=p1))
-
-  } else{
-
-    return(df_peak = df)
+  if (add_line){
+    p1 <- p1 +
+      geom_abline(linetype=2)
   }
+
+  if (add_r2){
+    r2.label <- paste("R^2 == ", round(r2,2))
+    p1 <- p1 +
+      geom_text(x= max(max.obs, max.sim),
+                y= min(max.sim, max.obs),
+                vjust = 1,
+                label=r2.label,
+                parse=T,
+                size = 3.5)
+  }
+
+  if (add_eqn){
+    m <- lm(max.sim ~ 0 + max.obs)
+    coeff <- round(as.numeric(m$coefficients[1]), 3)
+    equation <- paste0( "y = ", coeff, "x")
+    p1 <- p1 +
+      geom_text(x = max(max.obs, max.sim),
+                y = min(max.sim, max.obs)*1.1,
+                vjust = 1,
+                label = equation,
+                size = 3.5)
+  }
+
+  if (rplot) {plot(p1)}
+
+  return(list(df_peak = df,p1=p1))
 }
+

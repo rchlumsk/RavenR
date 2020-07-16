@@ -48,11 +48,11 @@
 #' See also the \href{http://www.raven.uwaterloo.ca/}{Raven page}
 #' @keywords Raven streamgauge flow rvt conversion tidyhydat
 #' @examples
-#'
+#' library(tidyhydat)
 #' stations <- c("05CB004","05CA002")
 #'
 #' # Gather station data/info using tidyhydat functions
-#' data <- hy_daily_flows(station_number = stations, start_date = "1996-01-01", end_date = "2000-01-01")
+#' data <- tidyhydat::hy_daily_flows(station_number = stations, start_date = "1996-01-01", end_date = "2000-01-01")
 #'
 #' station_info <- hy_stations(stations)
 #'

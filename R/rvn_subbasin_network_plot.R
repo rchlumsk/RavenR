@@ -19,7 +19,8 @@
 #'  # warning: example not run in compiling package
 #' \dontrun{
 #'  # read in rvh file
-#'  rvh<-rvn_rvh_read("example.rvh")
+#'  # rvh<-rvn_rvh_read("example.rvh")
+#'  rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package="RavenR"))
 #'
 #'  # create network plot of watershed structure from rvh file
 #'  rvn_subbasin_network_plot(rvh$SBtable)
@@ -28,38 +29,47 @@
 #' @keywords Raven Network Stream Plot
 #'
 #' @export rvn_subbasin_network_plot
+rvn_subbasin_network_plot <- function(SBtable,labeled=FALSE) {
 
-rvn_subbasin_network_plot<-function(SBtable,labeled=FALSE)
-{
   links<-data.frame(SBID=SBtable$SBID,downID=SBtable$Downstream_ID)
   links<-subset.data.frame(links,downID>=0) # get rid of -1
 
   #create network graph structure
   net <- igraph::graph_from_data_frame(d=links, vertices=SBtable, directed=T)
 
-  #set subbasin node parameters
-  #igraph::V(net)$size<-20*(SBtable$Area/mean(SBtable$Area))
-  #igraph::V(net)$label.dist=2*(SBtable$Area/mean(SBtable$Area))^0.6
-  igraph::V(net)$size<-0
-  igraph::V(net)$label.dist=1
-  igraph::V(net)$color="darkgreen"
-  igraph::V(net)$frame.color=NA
-  igraph::V(net)$label.cex=0.75
-  igraph::V(net)$label.family="sans"
-  igraph::V(net)$label.color="black"
-  igraph::V(net)$label.degree=pi/4
+  # Get subbasin coordinates
+  coords=data.frame(long=SBtable$AvgLongit,lat=SBtable$AvgLatit, SB = SBtable$SBID)
 
-  if (labeled==FALSE){igraph::V(net)$label<-NA}
+  # Get up and downstream links
+  g <- get.data.frame(net)
+  g$from.x <- coords$long[match(g$from,coords$SB)]
+  g$from.y <- coords$lat[match(g$from,coords$SB)]
+  g$to.x <- coords$long[match(g$to,coords$SB)]
+  g$to.y <- coords$lat[match(g$to,coords$SB)]
 
-  igraph::E(net)$color="blue"
-  #E(net)$curved="true"
-  coords=data.frame(long=SBtable$AvgLongit,lat=SBtable$AvgLatit) #long=x, lat=y
+  # Calculate Width based on upstream/total area
+  g$TotalUpstreamArea <- SBtable$TotalUpstreamArea[match(g$from, SBtable$SBID)]
+  g$Area <- SBtable$Area[match(g$from, SBtable$SBID)]
+  g$width <- ((g$TotalUpstreamArea+g$Area)/(max(SBtable$TotalUpstreamArea+SBtable$Area)))^0.8
 
-  vv<-igraph::head_of(net,igraph::E(net))
 
-  igraph::E(net)$width=20*((SBtable$TotalUpstreamArea[vv]+SBtable$Area[vv])/(max(SBtable$TotalUpstreamArea+SBtable$Area)))^0.8
+  #Create Plot
+  p1 <- ggplot()+
+    geom_segment(data=g,aes(x=from.x,xend = to.x, y=from.y,yend = to.y, size = width), colour="blue") +
+    geom_point(data = coords, aes(x = long, y = lat), color = "darkgreen")+
+    theme_bw()+
+    theme(panel.grid = element_blank(),
+          axis.ticks = element_blank(),
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.line = element_blank(),
+          legend.position = "none")
 
-  plot(net,layout=data.matrix(coords),edge.arrow.size=0.0)
+  if (labeled == TRUE) {
+    p1 <- p1 +
+      geom_text(data = coords, aes(x = long, y= lat, label = SB), hjust = 0, nudge_x = 0.001)
+  }
 
-  return (TRUE)
+  plot(p1)
+  return(p1)
 }

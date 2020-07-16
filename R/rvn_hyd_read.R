@@ -30,10 +30,10 @@
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven read.csv hydrograph
-#' @importFrom data.table fread
-#' @examples
 #'
+#' @importFrom data.table fread
+#'
+#' @examples
 #' # read in hydrograph sample csv data from RavenR package
 #' ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 #'
@@ -44,8 +44,10 @@
 #' head(myhyd$hyd)
 #' myhyd$units
 #'
+#'
+#' @keywords Raven read.csv hydrograph
 #' @export rvn_hyd_read
-rvn_hyd_read <- function(ff=NA,tzone="") {
+rvn_hyd_read <- function(ff=NA,tzone=NULL) {
 
   if (missing(ff)) {
     stop("Requires the full file path to the Hydrographs.csv file.")
@@ -60,17 +62,20 @@ rvn_hyd_read <- function(ff=NA,tzone="") {
   classes <- c(c('numeric','character','character'),rep('numeric',ncol(hydrographs)-3))
 
   # re-read with specified colClasses
-  hydrographs <- fread(ff,header=T,colClasses = classes,na.strings=c("---",'NA'))
+  hydrographs <- read.csv(ff,header=T,colClasses = classes,na.strings=c("---",'NA'))
 
   # need to fix the hourly model
-  date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S",tz=tzone)
+  if (is.null(tzone)) {
+    date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S")
+  } else {
+    date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S",tzone=tzone)
+  }
 
   if (length(which(is.na(date.time)))>0){
     print("rvn_hyd_read: Error in mapping day/time to POSIXct. Must be timezone without daylight savings")
     return()
   }
   cols <- colnames(hydrographs)
-
 
   # temporary fix while precip column leaves no space between precip and units
   if ("precip.mm.day." %in% cols) {

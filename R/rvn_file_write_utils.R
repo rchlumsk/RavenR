@@ -1,4 +1,3 @@
-#-----------------------------------------------------------------------------#
 #' Write common Raven file header. All lines are Appended.
 #'
 #' @param filename Name of the file, with extension
@@ -11,7 +10,6 @@
 #' @export writeRavenRFileInfo
 #'
 #' @examples
-#' \dontrun{}
 #' writeRavenRFileInfo(filename = 'HogwartsBasin.rvp',
 #'                     filetype = 'rvp ASCII Raven 2.9.1',
 #'                     author   = 'Harry Potter')
@@ -235,11 +233,10 @@ write.RavenTable <- function(attributes, units, df, filename,
 #' @param digits Number of digits to round value to (optional)
 #'
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
-#' @export write.RavenLabel
 #'
 #' @examples
-#' \dontrun{}
 #' write.RavenLabel('Duration', 'Hogwarts.rvi', value=365)
+#' @export write.RavenLabel
 write.RavenLabel <- function(label, filename, value=NULL, digits=NULL) {
   if (!is.null(digits)) {
     value <- round(value, digits)

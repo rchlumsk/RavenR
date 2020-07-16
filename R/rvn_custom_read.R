@@ -1,8 +1,8 @@
 #' Read Raven Custom Output files
 #'
-#' custom.read is used to read any Raven custom output file
+#' rvn_custom_read is used to read any Raven custom output file
 #'
-#' custom.read parses the filename and predicts the file format accordingly, so
+#' rvn_custom_read parses the filename and predicts the file format accordingly, so
 #' it is important to use the unmodified file names for this function. The use
 #' (or not) of a runname is accounted for.
 #'
@@ -27,11 +27,11 @@
 #'ff <- system.file("extdata","run1_SNOW_Daily_Average_ByHRU.csv", package="RavenR")
 #'
 #'# extract and plot custom data
-#'mycustomdata <- custom.read(ff)
+#'mycustomdata <- rvn_custom_read(ff)
 #'plot(mycustomdata[,5],main='Daily Average SNOW - HRU 5')
 #'
-#' @export custom.read
-custom.read <- function(ff=NA, no.runname=F) {
+#' @export rvn_custom_read
+rvn_custom_read <- function(ff=NA, no.runname=F) {
 
   if (missing(ff)) {
     stop("Requires the full file path to the Raven custom output file")

@@ -1,6 +1,8 @@
 #' EC Streamgauge File Conversion
 #'
-#' rvn_wsc_rvt converts Environment Canada historical streamgauge data,
+#' Note that this function may become superceeded by other rvt writing utiltiies.
+#'
+#' rvn_rvt_wsc converts Environment Canada historical streamgauge data,
 #' downloaded from the Water Survey Canada, into .rvt format files usable in
 #' Raven.
 #'
@@ -65,11 +67,11 @@
 #' rvn_wsc_rvt(ff,subIDs=c(3,11))
 #'
 #' # add custom station names, put subID number first in file
-#' rvn_wsc_rvt(ff,subIDs=c(3,11),stnNames<-c('Rob_Hill','Bob_River'),flip_number=T)
+#' rvn_rvt_wsc(ff,subIDs=c(3,11),stnNames<-c('Rob_Hill','Bob_River'),flip_number=T)
 #' }
 #'
-#' @export rvn_wsc_rvt
-rvn_wsc_rvt <- function(ff,subIDs,prd=NULL,stnNames=NULL,write_redirect=F,flip_number=F) {
+#' @export rvn_rvt_wsc
+rvn_rvt_wsc <- function(ff,subIDs,prd=NULL,stnNames=NULL,write_redirect=F,flip_number=F) {
 
   # data checks
   if (!(is.null(stnNames)) & (length(subIDs) != length(stnNames))) {

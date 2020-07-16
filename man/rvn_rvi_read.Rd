@@ -28,14 +28,12 @@ The .rvi file can have arbitrary contents outside of the :HydrologicProcesses-
 :EndHydrologicProcesses block and :SubBasins-:EndSubBasins command blocks.
 }
 \examples{
- \dontrun{
-  # sample workflow of rvh.read
-
-  rvi <- rvn_rvi_read("example.rvi")
+  # sample workflow of rvn_rvi_read
+  system.file("extdata","Nith.rvi", package="RavenR") \%>\%
+  rvn_rvi_read(.) -> rvi
 
   # get number of Hydrologic processes
   numProcss <- nrow(rvi$HydProcTable)
-}
 }
 \seealso{
 rvi.connections

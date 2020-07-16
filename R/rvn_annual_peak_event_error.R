@@ -28,80 +28,93 @@
 #'
 #' @param sim time series object of simulated flows
 #' @param obs time series object of observed flows
-#' @param rplot boolean whether to generate plot (default TRUE)
 #' @param add_line optionally adds a 1:1 line to the plot for reference
 #' (default TRUE)
 #' @param add_labels optionally adds labels for overpredict/underpredict on
 #' right side axis (default TRUE)
 #' @return \item{df_peak_event_error}{data frame of the calculated peak event
 #' errors}
-#' @seealso \code{\link{annual_peak}} to consider just the magnitude of each
-#' year's peak \code{\link{annual_peak_error}} to calculate errors in peaks
+#'
+#' @param rplot boolean whether to print the plot (default FALSE)
+#' @return returns a list with peak event error data in a data frame, and a ggplot object
+#'  \item{df_peak_event_error}{data frame of the calculated peak event errors}
+#'  \item{p1}{ggplot object with plotted annual peak event errors}
+#'
+#' @seealso \code{\link{rvn_annual_peak}} to consider just the magnitude of each
+#' year's peak \code{\link{rvn_annual_peak_error}} to calculate errors in peaks
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven annual peak event error diagnostics
-#' @examples
 #'
+#' @examples
 #' # load sample hydrograph data, two years worth of sim/obs
 #' data(hydrograph_data)
 #' sim <- hydrograph_data$hyd$Sub36
 #' obs <- hydrograph_data$hyd$Sub36_obs
 #'
 #' # create a plot of peak annual errors with default options
-#' rvn_annual_peak_event_error(sim,obs,rplot=T,add_line=T)
+#' peak1 <- rvn_annual_peak_event_error(sim, obs)
+#' peak1$df_peak_event_error
+#' peak1$p1
 #'
-#' # do not plot, just store the calculated peak errors
-#' peak_event_errors <- rvn_annual_peak_event_error(sim,obs,rplot=F)
+#' # plot directly and without labels
+#' rvn_annual_peak_event_error(sim, obs, add_line=T, rplot=T, add_labels=F)
 #'
+#'
+#' @keywords Raven annual peak event error diagnostics
 #' @export rvn_annual_peak_event_error
-rvn_annual_peak_event_error <- function (sim, obs, rplot = T, add_line = T, add_labels = T) {
-  df.peak.event <- annual.peak.event(sim, obs, rplot = F)
+rvn_annual_peak_event_error <- function(sim, obs, add_line = T, add_labels = T, rplot = F) {
+  df.peak.event <- rvn_annual_peak_event(sim, obs, rplot = F)$df_peak_event
   errs <- (df.peak.event$sim.peak.event - df.peak.event$obs.peak.event)/df.peak.event$obs.peak.event *
     100
   text.labels <- year(df.peak.event$obs.dates)
-  if (rplot) {
-    x.lab <- "Date (Water Year Ending)"
-    y.lab <- "% Error in Event Peaks"
-    title.lab <- ""
-    if (add_line) {
-      y.max <- max(0.5, max(errs))
-      y.min <- min(-0.5, min(errs))
-    }
-    else {
-      y.max <- max(errs)
-      y.min <- min(errs)
-    }
 
-    df.plot <- data.frame(cbind(text.labels,errs))
-    df.plot$text.labels <- as.factor(df.plot$text.labels)
-
-
-    p1 <- ggplot(data=df.plot)+
-      geom_point(aes(x=text.labels,y=errs))+
-      scale_y_continuous(limits=c(y.min,y.max),name=y.lab)+
-      scale_x_discrete(name=x.lab)+
-      theme_bw()
-
-    if (add_line) {
-      p1 <- p1+
-        geom_hline(yintercept=0,linetype=2)
-    }
-    if (add_labels) {
-      if (max(errs, na.rm = T)/2 > 0) {
-        p1 <- p1+
-          annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=max(errs,na.rm=T)/2,label="Overpredict",angle=90)
-      }
-      if (min(errs, na.rm = T)/2 < 0) {
-        p1 <- p1+
-          annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=min(errs,na.rm=T)/2,label="Underpredict",angle=90)
-      }
-    }
-    df <- data.frame(obs.dates = df.peak.event$obs.dates, errors = errs)
-    return(list(df.peak.event.error = df,plot=p1))
-  } else{
-    df <- data.frame(obs.dates = df.peak.event$obs.dates, errors = errs)
-    return(df.peak.event.error = df)
+  x.lab <- "Date (Water Year Ending)"
+  y.lab <- "% Error in Event Peaks"
+  title.lab <- ""
+  if (add_line) {
+    limit <- max(max(errs), abs(min(errs)))
+    y.max <- max(0.5, limit)
+    y.min <- min(-0.5, limit *-1)
+  } else {
+    y.max <- limit
+    y.min <- limit*-1
   }
+
+  df.plot <- data.frame(cbind(text.labels,errs))
+  df.plot$text.labels <- as.factor(df.plot$text.labels)
+
+  p1 <- ggplot(data=df.plot)+
+    geom_point(aes(x=text.labels,y=errs))+
+    scale_y_continuous(limits=c(y.min,y.max),name=y.lab)+
+    scale_x_discrete(name=x.lab)+
+    theme_RavenR()
+
+  if (add_line) {
+    p1 <- p1+
+      geom_hline(yintercept=0,linetype=2)
+  }
+  if (add_labels) {
+        p1 <- p1+
+        geom_text(x= max(as.numeric(df.plot$text.labels)+0.5),
+                  y= y.max/2,
+                  label= "Overpredict",
+                  angle=90,
+                  vjust = 0.5,
+                  hjust = 0.5)
+      p1 <- p1+
+        geom_text(x=max(as.numeric(df.plot$text.labels)+0.5),
+                  y= y.min/2,
+                  label="Underpredict",
+                  angle=90,
+                  vjust = 0.5,
+                  hjust = 0.5)
+    }
+
+  df <- data.frame(obs.dates = df.peak.event$obs.dates, errors = errs)
+
+  if (rplot) {plot(p1)}
+
+  return(list(df_peak_event_error = df,p1=p1))
 }

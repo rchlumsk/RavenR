@@ -17,34 +17,6 @@
 #' The winter_shading argument will add a transparent cyan shading for the
 #' December 1st to March 31st period in each year that is plotted.
 #'
-#' The range.mult arguments (range_mult_hyd, range_mult_precip) will increase the maximum value that is plotted in
-#' the flows and the precip values. This is useful in preventing overlap if
-#' precip is also plotted (i.e. with precip as well, range.mult=1.5 works
-#' well). This value should not be less than 1.0, otherwise the values will be
-#' cutoff in the plot. A value of 2 in each argument will ensure there is no overlap
-#' in the hydrographs and precipitation plots.
-#'
-#' ylabel is the label on the y axis, defined using y.lab in the plot function.
-#' This defaults to 'Flow [m3/s]' intended for plotting hydrographs.
-#'
-#' leg_pos is the position for the legend to be placed, e.g. 'topleft',
-#' 'right', etc., and is consistent with the legend function options. If this
-#' is left null, the function will place it either topleft or left, depending
-#' on whether precip is also plotted (i.e. left if precip added, topleft
-#' otherwise).
-#'
-#' leg_box is a boolean for whether to put the legend in an opaque. white box
-#' or not. If left as NULL, the function will automatically not use a white box
-#' and leave the background of the legend transparent.
-#'
-#' zero_axis can be used to set the min value of the y axis (or axes if precip
-#' also plotted) to zero. Note that by default, R will plot the values with a
-#' slight buffer for presentation. A warning that if this option is set to
-#' TRUE, the minimum value is set to zero without checking if any flow values
-#' are less than zero. This option should not be used for stage plotting, since
-#' most reservoirs are not in the range of 'zero' stage for normal operations,
-#' since stage is reported to elevation and not to stage bottom, typically.
-#'
 #' Note that a plot title is purposely omitted in order to allow the automatic
 #' generation of plot titles.
 #'
@@ -55,12 +27,6 @@
 #' @param prd period to use in plotting
 #' @param winter_shading optionally adds shading for winter months (default
 #' TRUE)
-#' @param range_mult_hyd range multiplier for max value in hydrograph (default 1.5)
-#' @param range_mult_precip range multiplier for max value in precipitation plot (default 1.5)
-#' @param ylabel text label for y-axis of the plot (default 'Flow [m3/s]')
-#' @param leg_pos string specifying legend placement on plot
-#' @param leg_box boolean on whether to put legend in an opaque box
-#' @param zero_axis fixes the y axis to start exactly at zero (default TRUE)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{flow.spaghetti}} to create a spaghetti plot of annual
 #' flow series
@@ -86,34 +52,12 @@
 #' ## range.mult=1.5 by default, leaves some overlap in plot axes
 #' rvn_hyd_plot(sim,obs,precip=precip)
 #'
-#' # hydrograph with no overlap, range.mult = 2
-#' rvn_hyd_plot(sim,obs,range_mult_hyd=2,range_mult_precip=2,precip=precip)
-#'
 #' # create a hydrograph with precip as well for a specific subperiod
 #' prd <- "2003-10-01/2004-10-01"
 #' rvn_hyd_plot(sim,obs,precip=precip,prd=prd)
 #'
 #' @export rvn_hyd_plot
-rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
-              winter_shading=T,range_mult_hyd=1.5,range_mult_precip=1.5,ylabel="Flow [m3/s]",leg_pos=NULL,leg_box=NULL,zero_axis=T) {
-
-  # check range.mult input
-  if (!(is.na(range_mult_hyd))) {
-    if (range_mult_hyd <= 0) {
-      stop("range_mult_hyd must be a positive value.")
-    }
-    if (range_mult_hyd < 1) {
-      warning("range_mult_hyd is less than one, plot may be cut off.")
-    }
-  }
-  if (!(is.na(range_mult_precip))) {
-    if (range_mult_precip <= 0) {
-      stop("range_mult_precip must be a positive value.")
-    }
-    if (range_mult_precip < 1) {
-      warning("range_mult_precip is less than one, plot may be cut off.")
-    }
-  }
+rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, winter_shading=T) {
 
   # select series to use as base in time determination
   if (!(is.null(sim))) {
@@ -125,11 +69,11 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
   } else {
     stop("Must supply at least one flow series to plot.")
   }
-
+  
   # determine period ----
   # determine the period to use
   if (!(is.null(prd))) {
-
+    
     # period is supplied; check that it makes sense
     firstsplit <- unlist(strsplit(prd,"/"))
     if (length(firstsplit) != 2) {
@@ -139,125 +83,92 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
         || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
       stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
     }
-    # add conversion to date with xts format check ?
-
   } else {
     # period is not supplied
-
     # define entire range as period
     N <- nrow(base)
     prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(base[1,1]),month(base[1,1]),day(base[1,1]),
                    year(base[N,1]),month(base[N,1]),day(base[N,1]) )
   }
-
-  ##### ------
-
-  # capture plotting parameters, restore afterwards
-  .pardefault <- par(no.readonly = T)
-
-  # set parameters for plotting; then plot
-  if(!(is.null(precip))) {
-    par(mar=c(5, 4, 4, 4) + 0.1)
-  }
-  if (zero_axis) {
-    # sets the interval calculation in plotting to be right to specified limits
-    # otherwise extends by 4% by default
-    par(yaxs='i')
-  }
-
-  y.max <- max(c(sim[prd],obs[prd],inflow[prd]),na.rm=T)*range_mult_hyd
-  if (zero_axis) {
-    y.min<-0
-  } else {
-    y.min <- min(c(sim[prd],obs[prd],inflow[prd]),na.rm=T)
-  }
-
-  plot(lubridate::date(base[prd]),base[prd],xlab="Date",ylab="Flow [m3/s]",
-       col='white',type='l',ylim=c(y.min,y.max), panel.first=grid())
-  if (winter_shading) {
-    # shaded winter months
-    temp <- base[((month(base[,1]) == 12) & (day(base[,1]) == 1)) | ((month(base[,1]) == 3) & (day(base[,1]) == 31))]
-    ep <- match(lubridate::date(temp),lubridate::date(base))
-    if (month(base[ep[1]])==3) {
-      ep <- ep[-1]
-    }
-    if (month(base[ep[length(ep)]])==12) {
-      ep <- ep[-length(ep)]
-    }
-    bc <- col.transparent('cyan',50)
-    for (k in seq(1,length(ep),2)) {
-      cord.x <- c(lubridate::date(base[ep[k]]),lubridate::date(base[ep[k]]),lubridate::date(base[ep[k+1]]),lubridate::date(base[ep[k+1]]))
-      cord.y <- c(-1e3,max(base,obs,na.rm=T)*1e3,max(base,obs,na.rm=T)*1e3,-1e3)
-      polygon(cord.x,cord.y,col=bc,border=NA)
-    }
-  }
-
-  # define legend items
-  leg.items <- c()
-  leg.cols <- c()
-  leg.lty <- c()
-  leg.lwd <- c()
-
+  
+  #Create X axis limits from period
+  x.min <- as.Date(unlist(strsplit(prd,"/"))[1])
+  x.max <- as.Date(unlist(strsplit(prd,"/"))[2])
+  
+  #Create data frame for plotting
+  df.plot <- data.frame()
+  
   if (!(is.null(sim))) {
-    lines(lubridate::date(sim),sim,col="red",lty=5)
-    leg.items <- c(leg.items,'sim')
-    leg.cols <- c(leg.cols,'red')
-    leg.lty <- c(leg.lty,5)
-    leg.lwd <- c(leg.lwd,1)
-  }
+    sim_temp <- fortify(sim)
+    sim_temp$ID <- "Sim"
+    colnames(sim_temp) <- c("Date","Flow","ID")
+    df.plot <- rbind(df.plot,sim_temp)
+  } 
   if (!(is.null(obs))) {
-    lines(lubridate::date(obs),obs,col='black')
-    leg.items <- c(leg.items,'obs')
-    leg.cols <- c(leg.cols,'black')
-    leg.lty <- c(leg.lty,1)
-    leg.lwd <- c(leg.lwd,1)
-  }
+    obs_temp <- fortify(obs)
+    obs_temp$ID <- "Obs"
+    colnames(obs_temp) <- c("Date","Flow","ID")
+    df.plot <- rbind(df.plot,obs_temp)
+  } 
   if (!(is.null(inflow))) {
-    lines(lubridate::date(sim),sim,col="green",lty=3)
-    leg.items <- c(leg.items,'inflow')
-    leg.cols <- c(leg.cols,'green')
-    leg.lty <- c(leg.lty,3)
-    leg.lwd <- c(leg.lwd,1)
+    inflow_temp <- fortify(inflow)
+    inflow_temp$ID <- "Inflow"
+    colnames(inflow_temp) <- c("Date","Flow","ID")
+    df.plot <- rbind(df.plot,inflow_temp)
   }
-  if (!(is.null(precip))) {
-    par(new=T)
-    precip.col <- col.transparent('blue',100)
-    plot(lubridate::date(precip[prd]),precip[prd],col=precip.col,lty=1,lwd=1,
-         type='h',ylim=rev(c(0,max(precip,na.rm=T)*range_mult_precip)),xaxt='n',yaxt='n',
-         xlab="",ylab="")
-    axis(4)
-    mtext("Precipitation [mm]",side=4,line=2.5)
-
-    leg.items <- c(leg.items,'precip')
-    leg.cols <- c(leg.cols,precip.col)
-    leg.lty <- c(leg.lty,1)
-    leg.lwd <- c(leg.lwd,1)
+  
+  df.plot$Date <- as.Date(as.character(df.plot$Date))
+  
+  p1 <- ggplot()+
+    geom_line(data=df.plot, aes(x=Date,y=Flow,color=ID))+
+    scale_x_date(limits = c(x.min,x.max))+
+    xlab("Date")+
+    ylab(expression("Flow ["*m^3*"/s]"))+
+    theme_bw()+
+    theme(legend.title = element_blank(),
+          legend.position = "bottom")
+  
+  #Shade Winter Months 
+  if (winter_shading){
+    
+    winter.start <- as.Date(df.plot$Date[month(df.plot$Date) == 12 & day(df.plot$Date) == 1])
+    winter.end <- as.Date(df.plot$Date[month(df.plot$Date) == 3 & day(df.plot$Date) == 31])
+    
+    shade <- data.frame(cbind(winter.start,winter.end))
+    shade$winter.start <- as.Date(shade$winter.start)
+    shade$winter.end <- as.Date(shade$winter.end)
+    shade$y.start <- -Inf
+    shade$y.end <- Inf
+    
+    p1 <- p1 + 
+      geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey",alpha=0.1)
+    
   }
-
-  if (is.null(leg_pos)) {
-    if (!(is.null(precip))) {
-      leg_pos <- 'left'
-    } else {
-      leg_pos <- 'topleft'
-    }
+  
+  #Add precipitation
+  if (!(is.null(precip))){
+    
+    df.precip.plot <- fortify(precip)
+    colnames(df.precip.plot)[1] <- "Date"
+    df.precip.plot$ID <- "Precip"
+    
+    df.precip.plot$Date <- as.Date(as.character(df.precip.plot$Date))
+    
+    p2 <- ggplot()+
+      geom_bar(data=df.precip.plot, aes(x=Date,y=precip), stat="identity", color = "blue")+
+      scale_x_date(limits = c(x.min,x.max))+
+      theme_bw()+
+      ylab("Precip [mm]")+
+      xlab("")
+    
+    
+    p1 <- cowplot::plot_grid(p2,p1,nrow=2)
+    
   }
-  if (is.null(leg_box)) {
-    leg_box <- 'n'
-  } else {
-    if (leg_box) {
-      leg_box <- 'o'
-    } else {
-      leg_box <- 'n'
-    }
-  }
-
-  # add legend to plot
-  legend(x=leg_pos,legend=leg.items,lty=leg.lty,col=leg.cols,
-         lwd=leg.lwd,bty=leg_box,cex=0.8,inset=0.01)
-
-  # restore plotting parameters
-  par(.pardefault)
-
-  return(TRUE)
+  
+  
+  
+  plot(p1)
+  return(p1)
 }
 

@@ -23,14 +23,12 @@
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
-#'  \dontrun{
-#'   # sample workflow of rvh.read
-#'
-#'   rvi <- rvn_rvi_read("example.rvi")
+#'   # sample workflow of rvn_rvi_read
+#'   system.file("extdata","Nith.rvi", package="RavenR") %>%
+#'   rvn_rvi_read(.) -> rvi
 #'
 #'   # get number of Hydrologic processes
 #'   numProcss <- nrow(rvi$HydProcTable)
-#'}
 #' @keywords Raven  rvi  Hydrologic Processes read
 #' @export rvn_rvi_read
 rvn_rvi_read<-function(filename)

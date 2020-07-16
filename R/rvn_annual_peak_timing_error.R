@@ -1,7 +1,7 @@
 #' Annual Peak Timing Errors
 #'
 #' rvn_annual_peak_timing_error creates a plot of the annual observed and simulated
-#' peak timing errors.
+#' peak timing errors, based on the water year.
 #'
 #' This function creates a plot of the peak timing errors in simulated peaks
 #' for each water year. The difference in days between the simulated peak and
@@ -26,90 +26,100 @@
 #'
 #' @param sim time series object of simulated flows
 #' @param obs time series object of observed flows
-#' @param rplot boolean whether to generate plot (default TRUE)
 #' @param add_line optionally adds a 1:1 line to the plot for reference
 #' (default TRUE)
 #' @param add_labels optionally adds labels for early peak/late peaks on right
 #' side axis (default TRUE)
-#' @return \item{df_peak_timing_error}{data frame of the calculated peak timing
-#' errors}
-#' @seealso \code{\link{annual_peak_event}} to consider the timing of peak
-#' events \code{\link{annual_peak_event_error}} to calculate errors in peak
+#' @param rplot boolean whether to print the plot (default FALSE)
+#' @return returns a list with peak timing errors in a data frame, and a ggplot object
+#'  \item{df_peak_timing_error}{data frame of the calculated peak timing errors}
+#'  \item{p1}{ggplot object with plotted annual peak errors}
+#'
+#' @seealso \code{\link{rvn_annual_peak_event}} to consider the timing of peak
+#' events \code{\link{rvn_annual_peak_event_error}} to calculate errors in peak
 #' events
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven annual peak timing error diagnostics
-#' @examples
 #'
+#' @examples
 #' # load sample hydrograph data, two years worth of sim/obs
-#' data(hydrograph_data)
-#' sim <- hydrograph_data$hyd$Sub36
-#' obs <- hydrograph_data$hyd$Sub36_o
+#' data(rvn_hydrograph_data)
+#' sim <- rvn_hydrograph_data$hyd$Sub36
+#' obs <- rvn_hydrograph_data$hyd$Sub36_obs
 #'
 #' # create a plot of peak timing errors with defaults
-#' rvn_annual_peak_timing_error(sim,obs)
+#' peak1 <- rvn_annual_peak_timing_error(sim, obs, add_line=T)
+#' peak1$df_peak_timing_error
+#' peak1$p1
 #'
-#' # create the plot without labels or 1:1 line or labels
-#' rvn_annual_peak_timing_error(sim,obs,add_line=F,add_labels=F)
+#' # plot directly and without labels
+#' rvn_annual_peak_timing_error(sim, obs, add_line=T, rplot=T, add_labels=F)
 #'
-#' # avoid plotting and
-#' timing_errs <- rvn_annual_peak_timing_error(sim,obs,rplot=F)
 #'
+#' @keywords Raven annual peak timing error diagnostics
 #' @export rvn_annual_peak_timing_error
-rvn_annual_peak_timing_error <- function (sim, obs, rplot = T, add_line = T, add_labels = T)
-{
-  max.obs <- apply.wyearly(obs, max, na.rm = T)[, 2]
-  max.obs.dates <- as.Date(apply.wyearly(obs, function(x) toString(lubridate::date(which.max.xts(x))))[,
+rvn_annual_peak_timing_error <- function (sim, obs, add_line = T, add_labels = T, rplot = F) {
+  max.obs <- rvn_apply_wyearly(obs, max, na.rm = T)[, 2]
+  max.obs.dates <- as.Date(rvn_apply_wyearly(obs, function(x) toString(lubridate::date(rvn_which_max_xts(x))))[,
                                                                                                        2])
-  max.sim <- apply.wyearly(sim, max, na.rm = T)[, 2]
-  max.sim.dates <- as.Date(apply.wyearly(sim, function(x) toString(lubridate::date(which.max.xts(x))))[,
+  max.sim <- rvn_apply_wyearly(sim, max, na.rm = T)[, 2]
+  max.sim.dates <- as.Date(rvn_apply_wyearly(sim, function(x) toString(lubridate::date(rvn_which_max_xts(x))))[,
                                                                                                        2])
-  date.end <- apply.wyearly(sim, mean)[, 1]
+  date.end <- rvn_apply_wyearly(sim, mean)[, 1]
   errs <- as.numeric(max.sim.dates - max.obs.dates)
   text.labels <- year(date.end)
-  if (rplot) {
-    x.lab <- "Date (Water year ending)"
-    y.lab <- "Day Difference in Peaks"
-    title.lab <- ""
-    if (add_line) {
-      y.max <- max(0.5, max(errs))
-      y.min <- min(-0.5, min(errs))
-    }
-    else {
-      y.max <- max(errs)
-      y.min <- min(errs)
-    }
 
-    df.plot <- data.frame(cbind(text.labels,errs))
-    df.plot$text.labels <- as.factor(df.plot$text.labels)
+  x.lab <- "Date (Water year ending)"
+  y.lab <- "Day Difference in Peaks"
+  title.lab <- ""
 
-    p1 <- ggplot(data=df.plot)+
-      geom_point(aes(x=text.labels,y=errs))+
-      scale_y_continuous(limits=c(y.min,y.max),name=y.lab)+
-      scale_x_discrete(name=x.lab)+
-      theme_bw()
-
-    if (add_line) {
-      p1 <- p1+
-        geom_hline(yintercept=0,linetype=2)
-    }
-
-    if (add_labels) {
-      if (max(errs, na.rm = T)/2 > 0) {
-        p1 <- p1+
-          annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=max(errs,na.rm=T)/2,label="Late Peak",angle=90)
-      }
-      if (min(errs, na.rm = T)/2 < 0) {
-        p1 <- p1+
-          annotate("text",x=max(as.numeric(df.plot$text.labels)+0.5),y=min(errs,na.rm=T)/2,label="Early Peak",angle=90)
-      }
-    }
-    df <- data.frame(date.end = date.end, peak.timing.errors = errs)
-    return(list(df.peak.timing.error = df,plot=p1))
-  } else{
-    df <- data.frame(date.end = date.end, peak.timing.errors = errs)
-    return(df.peak.timing.error = df)
+  if (add_line) {
+    limit <- max(max(errs), abs(min(errs)))
+    y.max <- max(0.5, limit)
+    y.min <- min(-0.5, limit *-1)
+  } else {
+    y.max <- limit
+    y.min <- limit*-1
   }
+
+  df.plot <- data.frame(cbind(text.labels,errs))
+  df.plot$text.labels <- as.factor(df.plot$text.labels)
+
+  p1 <- ggplot(data=df.plot)+
+    geom_point(aes(x=text.labels,y=errs))+
+    scale_y_continuous(limits=c(y.min,y.max),name=y.lab)+
+    scale_x_discrete(name=x.lab)+
+    theme_RavenR()
+
+  if (add_line) {
+    p1 <- p1+
+      geom_hline(yintercept=0,linetype=2)
+  }
+
+  if (add_labels) {
+    p1 <- p1+
+      geom_text(x= max(as.numeric(df.plot$text.labels)+0.5),
+                y= y.max/2,
+                label= "Late Peak",
+                angle=90,
+                vjust = 0.5,
+                hjust = 0.5,
+                size = 3.5)
+    p1 <- p1+
+      geom_text(x=max(as.numeric(df.plot$text.labels)+0.5),
+                y= y.min/2,
+                label="Early Peak",
+                angle=90,
+                vjust = 0.5,
+                hjust = 0.5,
+                size = 3.5)
+
+  }
+  df <- data.frame(date.end = date.end, peak.timing.errors = errs)
+
+  if (rplot) {plot(p1)}
+
+  return(list(df_peak_timing_error = df,p1=p1))
 }

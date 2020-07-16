@@ -73,11 +73,11 @@ alphabeticized order is not dependent on the station name, and the observed
 files will be in one set.
 }
 \examples{
-
+library(tidyhydat)
 stations <- c("05CB004","05CA002")
 
 # Gather station data/info using tidyhydat functions
-data <- hy_daily_flows(station_number = stations, start_date = "1996-01-01", end_date = "2000-01-01")
+data <- tidyhydat::hy_daily_flows(station_number = stations, start_date = "1996-01-01", end_date = "2000-01-01")
 
 station_info <- hy_stations(stations)
 

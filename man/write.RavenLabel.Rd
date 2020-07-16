@@ -19,7 +19,6 @@ write.RavenLabel(label, filename, value = NULL, digits = NULL)
 Writes common Raven labeled line to file, with optional value (appends)
 }
 \examples{
-\dontrun{}
 write.RavenLabel('Duration', 'Hogwarts.rvi', value=365)
 }
 \author{

@@ -13,7 +13,7 @@ rvn_forcings_plot(forcings, prd = NULL)
 }
 \description{
 rvn_forcings_plot generates a set of 5 plots (precip,temperature,PET,radiation,
-and potential melt), which summarize the watershed-averaged forcings.
+and potential melt), which summarize the watershed-averaged forcings. Returns a list with the individual plots.
 }
 \details{
 This function creates multiple plots from a ForcingFunctions.csv file

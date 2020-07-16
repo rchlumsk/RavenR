@@ -14,9 +14,10 @@ rvn_hyd_extract(subs = NA, hyd = NA, prd = NULL)
 \item{prd}{time period for plotting, as string. See details}
 }
 \value{
-\item{sim}{model simulation for specified column and period}
-\item{obs}{observed data for specified column and period}
-\item{inflow}{inflow simulation for specified column and period}
+returns a list with sim, obs, and inflow time series
+ \item{sim}{model simulation for specified column and period}
+ \item{obs}{observed data for specified column and period}
+ \item{inflow}{inflow simulation for specified column and period}
 }
 \description{
 rvn_hyd_extract is used for extracting data from the Raven hydrograph object.
@@ -45,15 +46,16 @@ the format "YYYY-MM-DD/YYYY-MM-DD", for example, "2006-10-01/2010-10-01". If
 no period is supplied, the entire time series will be used.
 }
 \examples{
-
 # read in hydrograph sample csv data from RavenR package
 ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 
 # read in Raven Hydrographs file, store into myhyd
-myhyd <- hyd.read(ff)
+myhyd <- rvn_hyd_read(ff)
 
 # no plot or observed data, specified period
 flow_36 <- rvn_hyd_extract(subs="Sub36",myhyd)
+
+attributes(flow_36)
 
 # plot the simulated flow values
 plot(flow_36$sim,col='red')
@@ -62,6 +64,7 @@ lines(flow_36$obs,lty=5,col='black')
 
 # example for precipitation
 myprecip <- rvn_hyd_extract(subs="precip",hyd=myhyd)
+
 
 }
 \seealso{

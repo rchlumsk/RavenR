@@ -1,32 +1,34 @@
 #' Plot Raven hydrologic process network
 #'
-#' This routine takes a connections datafrom generated using rvi.connections()
+#' This routine takes a connections datafrom generated using rvn_rvi_connections()
 #' and plots the connections information as a network graph.
 #'
-#' @param connections a dataframe of from-to connections generated using rvi.connections()
-#' @param pdfout name of pdf file to save the network plot to
+#' @param connections a dataframe of from-to connections generated using rvn_rvi_connections()
+#' @param plot boolean whether to print the plot, default TRUE
+#' @param pdfout name of pdf file to save the network plot to, if null no PDF is generated#'
 #'
-#' @return {TRUE}{returns TRUE if executed properly. Also generates a pdf plot in working directory.}
+#' @return {p1}{returns ggplot object. Also generates a .pdf file in working directory if pdfplot argument is not NULL.}
 #'
 #' @author James R. Craig, University of Waterloo
 #'
 #' @note tries to follow basic network structure, accomodates unrecognized state variables on LHS of plot
 #'
-#' @seealso  rvi.connections rvi.read
+#' @seealso \code{\link{rvn_rvi_connections}} to generate connections table from an rvi object
+#'
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
-#'  \dontrun{
-#'   # sample workflow of rvh.read
+#'  rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
 #'
-#'   rvi<-rvi.read("example.rvi")
+#'  # get number of Hydrologic processes
+#'  nrow(rvi$HydProcTable)
 #'
-#'   # get number of Hydrologic processes
-#'   numProcss<-nrow(rvi$HydProcTable)
-#'}
+#'  conn <- rvn_rvi_connections(rvi)
+#'  rvn_rvi_process_plot(conn)
+#'
 #' @keywords Raven  rvi  Hydrologic Processes
-#' @export rvn_rvi_hpnet_plot
-rvn_rvi_hpnet_plot<-function(connections,pdfout="network.pdf") {
+#' @export rvn_rvi_process_plot
+rvn_rvi_process_plot <- function(connections, plot=TRUE, pdfout=NULL) {
   require(igraph)
   source<-connections$From
   target<-connections$To
@@ -70,25 +72,37 @@ rvn_rvi_hpnet_plot<-function(connections,pdfout="network.pdf") {
     else { layout[i,2]=count; count=count+1;layout[i,1]=-2;}
   }
 
-  #print(layout)
-  pdf(pdfout)
-  plot.igraph(network,
-              layout=layout,#layout_nicely(network),
-              edge.color=linecol,
-              edge.arrow.size=0.5,
-              #            edge.label = nodes$process,
-              edge.label.family="sans",
-              edge.label.cex=0.4,
-              edge.lty=linetype,
-              #edge.curved=T,
-              frame.color="darkslategray2",
-              vertex.label.family="sans",
-              vertex.frame.color=NA,
-              vertex.shape="rectangle",
-              vertex.size=45,
-              vertex.size2=6,
-              vertex.label.cex=0.5,
-              vertex.color="darkslategray2")
-  dev.off()
-  return(TRUE)
+  #Convert Layout to Dataframe
+  layout <- as.data.frame(layout)
+  layout$Label <- verts
+
+  #Convert Network to dataframe
+  g <- get.data.frame(network)
+  g$from.x <- layout$V1[match(g$from,layout$Label)]
+  g$from.y <- layout$V2[match(g$from,layout$Label)]-0.1
+  g$to.x <- layout$V1[match(g$to,layout$Label)]
+  g$to.y <- layout$V2[match(g$to,layout$Label)]+0.1
+  g$to.y[g$from.y < g$to.y] <- g$to.y[g$from.y < g$to.y] -0.2 #adjust for arrow head
+
+  #x limits
+  x.min <- min(layout$V1)-2
+  x.max <- max(layout$V2)+2
+
+  #Create Plot
+  p1 <- ggplot()+
+    geom_segment(data=g,aes(x=from.x,xend = to.x, y=from.y,yend = to.y),
+                 arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "gray40") +
+    geom_label(data = layout, aes(x=V1, y=V2, label = Label), fill = "lightblue")+
+    xlim(c(x.min,x.max))+
+    theme_bw()+
+    theme(panel.grid = element_blank(),
+          axis.ticks = element_blank(),
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.line = element_blank(),
+          legend.position = "none")
+
+  if (plot) {p1}
+  if (!is.null(pdfout)) {ggsave(pdfout,p1, units = "in", height = 7, width = 7, dpi =300)}
+  return(p1)
 }
