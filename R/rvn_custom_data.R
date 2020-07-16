@@ -13,4 +13,11 @@
 #'
 #' @format A data frame with 730 rows, containg data for 32 HRUs from 2002-10-01 to 2004-09-29
 #'
+#' @examples
+#' # Preview data
+#' head(rvn_custom_data)
+#'
+#' # Plot data for first ten HRUs
+#' rvn_custom_output_plot(rvn_custom_data,IDs=seq(1,10),prd="2002-10-01/2003-09-01")
+#'
 "rvn_custom_data"

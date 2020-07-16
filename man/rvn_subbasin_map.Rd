@@ -8,7 +8,7 @@ rvn_subbasin_map(
   shpfilename,
   subIDcol,
   plot_date,
-  cust_data = NA,
+  cust_data,
   normalize_data = FALSE,
   invalid_stop = TRUE,
   basins_label = "subID",
@@ -47,16 +47,14 @@ Does not currently support discrete data such as land use. Ability to include in
 shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR")
 
 # Custom Output data from Raven for Nith basin
-cust_data <- custom.read(system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv",
-                                  package="RavenR"))
+cust_file <- system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv",
+                         package="RavenR")
+cust_data <- custom.read(cust_file)
 
-subIDcol <- 'subID' # attribute in shapefile with subbasin IDs
-plot_date <- "2003-03-30" # date for which to plot custom data
+subIDcol <- 'subID'        # attribute in shapefile with subbasin IDs
+plot_date <- "2003-03-30"  # date for which to plot custom data
 
 # function call
-
-rvn_subbasin_map(shpfilename,subIDcol)
-
 rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data, normalize=T)
 
 p1 <- rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data)

@@ -19,11 +19,11 @@
 #' @examples
 #'
 #' # read in custom output from sample data
-#' data("custom.data")
+#' ff <- system.file("extdata/run1_SNOW_Daily_Average_ByHRU.csv", package="RavenR")
+#' mycustomdata <- rvn_custom_read(ff)
 #'
-#' # plot custom data
-#' mycustomdata <- custom.data
-#' rvn_custom_output_plot(mycustomdata,IDs=seq(1,32),prd="2002-10-01/2003-09-01")
+#' # plot custom data (first 10 HRUs)
+#' rvn_custom_output_plot(mycustomdata, IDs=seq(1,10), prd="2002-10-01/2003-09-01")
 #'
 #' @export rvn_custom_output_plot
 rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
