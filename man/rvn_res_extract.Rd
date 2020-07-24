@@ -46,16 +46,25 @@ the format "YYYY-MM-DD/YYYY-MM-DD", for example, "2006-10-01/2010-10-01". If
 no period is supplied, the entire time series will be used.
 }
 \examples{
-ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
+# warning: example not run, sample example for associated files only
+\dontrun{
+# create full file path
+ff <- "C:/temp/model/output/run4_Reservoirs.csv")
 
-# Read in Raven Reservoirs file, store into myres
-myres <- rvn_res_read(ff)
+# read in Raven Reservoirs file, store into myres
+myres <- res.read(ff)
 
-# Extract stage using this function
-stage36 <- rvn_res_extract(subs="sub36",res=myres,prd="2002-10-01/2003-10-01")
+# no plot or observed data, specified period
+stage.24 <- rvn_res_extract(subs="sub24",res=myres,prd="2006-10-01/2010-10-01")
 
-# Example for precipitation
-precip <- rvn_res_extract(subs="precip",res=myres)
+# plot the simulated stage values
+plot(stage.24$sim,col='red')
+# plot observed values on same plot
+lines(stage.24$obs,lty=5)
+
+# example for precipitation
+myplot <- rvn_res_extract(subs="precip",res=myres)
+}
 
 }
 \seealso{

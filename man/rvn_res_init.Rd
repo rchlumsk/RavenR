@@ -4,15 +4,13 @@
 \alias{rvn_res_init}
 \title{Create initial conditions file for Reservoirs}
 \usage{
-rvn_res_init(ff, initial_stage = 0, output = "initial_res_conditions.rvc")
+rvn_res_init(ff = NA, initial_stage = 0)
 }
 \arguments{
 \item{ff}{full file path to the reservoir information file}
 
 \item{initial_stage}{an optional double for percentage of maximum stage to
 use as initial condition; default 0.0}
-
-\item{output}{file rvc lines are written to (default: initial_res_conditions.rvc)}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
@@ -47,14 +45,11 @@ initial stage is not less than the dry stage or greater than the maximum.
 \examples{
 # warning: example not run, sample example for associated files only
 \dontrun{
-# File location
-ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
+# set working directory to file location
+dir = "C:/temp/test"
+ff <- paste0(dir,"/","reservoir data.csv")
 
-#-- Output file name
-temprvc <- tempfile(pattern = "file", tmpdir = tempdir(), fileext = ".rvc")
-
-# Run function
-rvn_res_init(ff, initial_stage=0.4, output=temprvc)
+rvn_res_init(ff,initial_stage=0.4)
 }
 
 }

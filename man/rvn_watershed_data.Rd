@@ -49,12 +49,6 @@ The dataset contains the typical columns from the Raven outputted
 WatershedStorage.csv file, available for download in the Raven
 Tutorials (linked below).
 }
-\examples{
-# View data
-head(rvn_watershed_data$watershed.storage)
-# Also has units
-rvn_watershed_data$units
-}
 \seealso{
 \code{\link{rvn_watershed_read}} for reading in watershed storage output files
 }

@@ -53,6 +53,8 @@ Note that a plot title is purposely omitted in order to allow the automatic
 generation of plot titles.
 }
 \examples{
+# warning: example not run, sample example for associated files only
+\dontrun{
 # create a nice reservoir stage plot
 rvn_res_plot(sim,obs,zero_axis=F)
 
@@ -62,6 +64,7 @@ rvn_res_plot(sim,obs,precip=precip)
 # create a reservoir stage plot with precip as well for a specific subperiod
 prd <- "2003-10-01/2005-10-01"
 rvn_res_plot(sim,obs,precip=precip,prd=prd)
+}
 
 }
 \seealso{
