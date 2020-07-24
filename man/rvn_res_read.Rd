@@ -31,11 +31,8 @@ located in the current working directory, then simply the name of the file
 is sufficient.
 }
 \examples{
-# warning: example not run, sample example for associated files only
-\dontrun{
 # create full file path
-dir <- "C:/temp/model/output.csv")
-ff <- paste0(dir,"/","run4_ReservoirStages.csv")
+ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 
 # read in the Reservoir file
 myres <- rvn_res_read(ff)
@@ -43,7 +40,6 @@ myres <- rvn_res_read(ff)
 # view contents
 head(myres$res)
 res$units
-}
 
 }
 \seealso{

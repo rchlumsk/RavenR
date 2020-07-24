@@ -35,7 +35,7 @@
 #'
 #' @examples
 #' # read in hydrograph sample csv data from RavenR package
-#' ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
+#' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
 #'
 #' # read in Raven Hydrographs file, store into myhyd
 #' myhyd <- rvn_hyd_read(ff)

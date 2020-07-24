@@ -59,6 +59,7 @@
 #'
 #' @export rvn_hyd_plot
 rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, winter_shading=T) {
+  require(cowplot)
 
   # select series to use as base in time determination
   if (!(is.null(sim))) {
