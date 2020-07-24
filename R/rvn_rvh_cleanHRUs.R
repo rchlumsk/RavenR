@@ -29,10 +29,20 @@
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 #'
 #' @examples
-#'   #read in rvh file, clean contents and write back to new file
-#'   rvh<-rvn_rvh_read("example.rvh")
-#'   rvh<-rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,merg=TRUE)
-#'   rvh.overwrite("cleanmodel.rvh","example.rvh",rvh$HRUtable,rvh$SBtable)
+#'   # read in example rvh file
+#'   nith<-system.file("extdata","Nith.rvh",package = "RavenR")
+#'   rvh<-rvn_rvh_read(nith)
+#'
+#'   # clean contents (in this case, remove all HRUs covering less than 5% of the total area)
+#'   rvh<-rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merg=TRUE)
+#'
+#'   # write to new file, while preserving all unedited information using rvn_rvh_overwrite:
+#'   rvn_rvh_overwrite(nith,"Nith_cleaned.rvh",
+#'                     SBtable = rvh$SBtable,
+#'                     HRUtable = rvh$HRUtable)
+#'
+#'   # write just the Subbasin and HRU tables to new file using rvn_rvh_write:
+#'   rvn_rvh_write("Nith_cleaned_write.rvh", SBtable = rvh$SBtable, HRUtable = rvh$HRUtable)
 #'
 #' @keywords Raven  rvh  HRUs merge clean
 #' @export rvn_rvh_cleanhrus
@@ -142,5 +152,6 @@ rvn_rvh_cleanhrus<-function(HRUtab,SBtab,area_tol=0.001,merge=FALSE,elev_tol=50,
   }
   print(paste0("Initial area: ",toString(init_Area)," km2;  final area: ",toString(sum(HRUtab$Area)) ," km2"))
 
-  return (list(HRUtable=HRUtab)) # should also return re-classification information (e.g., similarity list for plotting results)
+#  return (list(HRUtable=HRUtab)) # should also return re-classification information (e.g., similarity list for plotting results)
+  return (data.frame(HRUtab))
 }

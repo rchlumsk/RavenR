@@ -17,8 +17,8 @@
 #' @param HRUshpfile polygon shapefile of HRUs with data column containing HRU IDs (.shp extension expected)
 #' @param Gridshpfile polygon shapefile of grid cells with data column containing cell IDs (.shp extension expected)
 #' @param ValidHRUIDs a vector of valid HRU IDs in the model
-#' @param HRUIDcol the name of the HRUshpfile polugon which contains the HRU IDs
-#' @param gridIDcol the name of the Gridshpfile polugon which contains the cell IDs
+#' @param HRUIDcol the name of the HRUshpfile polygon which contains the HRU IDs
+#' @param gridIDcol the name of the Gridshpfile polygon which contains the cell IDs
 #' @param outfile optional name of output Raven gaugeweights file
 #'
 #' @return \item{TRUE}{returns TRUE if executed properly. Also output GaugeWeights.rvi file}
@@ -33,32 +33,28 @@
 #' @keywords netcdf grid shapefile conversion
 #'
 #' @examples
+#'   # Example workflow
+#'   # load example rvh file
+#'   nith <- system.file("extdata",'Nith.rvh', package = "RavenR")
+#'   rvh <- rvn_rvh_read(nith)
 #'
-#'  \dontrun{
-#'   # netcdf.to.gridshp(2017052200.nc,11,GridCells)
-#'   rvn_gen_gridweights(ModelHRUs.shp,GridCells.shp,ValidHRUIDs,HRUIDcol="ID")
+#'   # define HRU shapefiles (needs to be added to library)
+#'   HRUshpfile <- system.file("extdata","Nith_HRU.shp",package = "RavenR")
 #'
-#'   # example workflow
-#'   #--------------------------------------------
-#'   setwd("C:/temp/RedDeer/")
+#'   # write grid shapefile from netcdf file
+#'   nithnc <- system.file("extdata","Nith.nc",package = "RavenR")
+#'   GridCells <- "Nith_GridCells.shp"
+#'   UTMzone <- 17
+#'   GRDshpfile <- rvn_netcdf_to_gridshp(nithnc,UTMzone,GridCells)
 #'
-#'   HRUshpfile<-"./maps/RedDeerHRUs.shp" # needs to have single column referring to HRU ID (here presumed 'HRU_ID')
-#'   GRDshpfile<-"./maps/RDPS_GridRedDeer2.shp"
-#'   rvh<-rvh.read("reddeer.rvh")
+#'   # generate .rvi file of grid weights
+#'   validHRUIDs <- rvh$HRUtable$ID
+#'   tmp <- rvn_gen_gridweights(HRUshpfile, GRDshpfile, validHRUIDs,
+#'    gridIDcol = 'GridIDs', HRUIDcol = "HRU_ID", outfile = "Nith_GridWeights.rvi)
 #'
-#'   validHRUIDs<-rvh$HRUtable$ID
-#'
-#'   tmp<-gridweights.gen(HRUshpfile,GRDshpfile, validHRUIDs, gridIDcol="GridIDs",HRUIDcol="HRU_ID",outfile="RDPSGridWeights.rvt")
-#'
-#'   #dsn=normalizePath(dirname(HRUshpfile))
-#'   #lay=substr(basename(HRUshpfile),1,nchar(basename(HRUshpfile))-4)
-#'   #HRUshp<-readOGR(dsn = dsn,layer = lay) # returns SpatialPolygonsDataFrame
-#'
-#'  }
 #' @export rvn_gen_gridweights
 rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs, HRUIDcol="HRU_ID",
                                 gridIDcol="cellID", outfile="GridWeights.rvt") {
-
   require(rgdal)
   require(rgeos)
 
