@@ -1,7 +1,7 @@
 #' Plots summary of watershed forcing functions
 #'
 #' rvn_forcings_plot generates a set of 5 plots (precip,temperature,PET,radiation,
-#' and potential melt), which summarize the watershed-averaged forcings. Returns a list with the individual plots. 
+#' and potential melt), which summarize the watershed-averaged forcings. Returns a list with the individual plots.
 #'
 #' This function creates multiple plots from a ForcingFunctions.csv file
 #' structure generating using RavenR's forcings.read function
@@ -32,9 +32,9 @@
 rvn_forcings_plot <-function(forcings,prd=NULL){
 
   require(cowplot)
-  
+
   plot.data <- fortify(forcings)
-  
+
   # Precipitation
   plot.data$Total_Precip <- plot.data$rain + plot.data$snow
   precip.data <- reshape::melt(plot.data, id.vars = "Index", measure.vars = c("Total_Precip","snow"))
@@ -44,19 +44,19 @@ rvn_forcings_plot <-function(forcings,prd=NULL){
     ylim(c(0,max(plot.data$Total_Precip)))+
     ylab("Precipitation (mm/d)")+
     xlab("")+
-    theme_bw()+
+    theme_Raven()+
     theme(legend.position = c(0.8,0.8),
           legend.title = element_blank(),
           legend.background = element_rect(fill = "transparent"),
           axis.title = element_text(size = 7))
-  
-  
+
+
   #Temperature
   temp.data <- reshape::melt(plot.data, id.vars = "Index", measure.vars = c("temp_daily_max", "temp_daily_min"))
   temp.data$color <- "red"
   temp.data$color[temp.data$value<0] <- "purple"
-  
-  
+
+
   p2 <- ggplot(temp.data)+
     geom_line(aes(x= Index, y= value, group = variable, color = color))+
     geom_hline(yintercept = 0)+
@@ -64,48 +64,48 @@ rvn_forcings_plot <-function(forcings,prd=NULL){
     ylim(c(min(plot.data$temp_daily_min),max(plot.data$temp_daily_max)))+
     ylab(expression(paste("Min/Max Daily Temperature (",degree,"C)")))+
     xlab("")+
-    theme_bw()+
+    theme_RavenR()+
     theme(legend.position = "none",
           axis.title = element_text(size = 7))
-  
-  #PET 
+
+  #PET
   p3 <- ggplot(plot.data)+
     geom_line(aes(x = Index, y = PET), color = "navy")+
     ylab('PET (mm/d)')+
     xlab("")+
-    theme_bw()+
+    theme_RavenR()+
     theme(legend.position = "none",
           axis.title = element_text(size = 7))
-  
-  #Radiation 
+
+  #Radiation
   plot.data$SW_LW <- plot.data$SW.radiation + plot.data$LW.radiation
   rad.data <- reshape::melt(plot.data, id.vars = "Index", measure.vars = c("LW.radiation","SW.radiation","ET.radiation","SW_LW"))
-  
+
   p4 <- ggplot(rad.data)+
     geom_line(aes(x = Index, y = value, color = variable))+
     scale_color_manual(values = c("black", "blue", "blue", "blue"))+
     ylab('Radiation (MJ/m2/d)')+
     xlab("")+
-    theme_bw()+
+    theme_RavenR()+
     theme(legend.position = "none",
           axis.title = element_text(size = 7))
-  
-  
+
+
   # Potential melt
   p5 <- ggplot(plot.data)+
     geom_line(aes(x = Index, y = potential.melt), color = "navy")+
     ylab('Potential Melt (mm/d)')+
     xlab("")+
-    theme_bw()+
+    theme_RavenR()+
     theme(legend.position = "none",
           axis.title = element_text(size = 7))
-  
+
   #Plot Title
   ts=forcings$snow
   N <- nrow(ts)
   titl <- sprintf("Watershed-averaged Forcings (%d-%02d-%02d to %i-%02d-%02d)",year(ts[1,1]),month(ts[1,1]),day(ts[1,1]),year(ts[N,1]),month(ts[N,1]),day(ts[N,1]) )
-  
-  
+
+
   # Change period if required
   if (!(is.null(prd))){
     # period is supplied; check that it makes sense
@@ -117,41 +117,41 @@ rvn_forcings_plot <-function(forcings,prd=NULL){
         || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
       stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
     }
-    
+
     p1 <- p1 +
       scale_x_datetime(limits = c(as.POSIXct(firstsplit[1]), as.POSIXct(firstsplit[2])))
-    
+
     p2 <- p2 +
       scale_x_datetime(limits = c(as.POSIXct(firstsplit[1]), as.POSIXct(firstsplit[2])))
-    
+
     p3 <- p3 +
       scale_x_datetime(limits = c(as.POSIXct(firstsplit[1]), as.POSIXct(firstsplit[2])))
-    
+
     p4 <- p4 +
       scale_x_datetime(limits = c(as.POSIXct(firstsplit[1]), as.POSIXct(firstsplit[2])))
-    
+
     p5 <- p5 +
       scale_x_datetime(limits = c(as.POSIXct(firstsplit[1]), as.POSIXct(firstsplit[2])))
-    
+
     ts=forcings$snow[prd]
     N <- nrow(ts)
     titl <- sprintf("Watershed-averaged Forcings (%d-%02d-%02d to %i-%02d-%02d)",year(ts[1,1]),month(ts[1,1]),day(ts[1,1]),year(ts[N,1]),month(ts[N,1]),day(ts[N,1]) )
-    
+
   }
-  
+
   #Add Title and Create 1 Plot
-  title <- ggdraw() + 
+  title <- ggdraw() +
     draw_label(titl, x = 0.5, hjust = 0.5)
   all_forcing_plots <- plot_grid(title,p1,p2,p3,p4,p5,ncol = 1, rel_heights = c(0.1,1,1,1,1,1))
-  
+
   plot(all_forcing_plots)
-  
-  forcing_plots <- list("Precipitation" = p1, 
+
+  forcing_plots <- list("Precipitation" = p1,
                         "Temperature" = p2,
                         "PET" = p3,
                         "Radiation" = p4,
                         "PotentialMelt" = p5,
                         "All Forcings" = all_forcing_plots)
-  
+
   return(forcing_plots)
 }
