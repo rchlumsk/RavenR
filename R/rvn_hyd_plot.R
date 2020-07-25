@@ -69,11 +69,11 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, win
   } else {
     stop("Must supply at least one flow series to plot.")
   }
-  
+
   # determine period ----
   # determine the period to use
   if (!(is.null(prd))) {
-    
+
     # period is supplied; check that it makes sense
     firstsplit <- unlist(strsplit(prd,"/"))
     if (length(firstsplit) != 2) {
@@ -90,84 +90,86 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, win
     prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(base[1,1]),month(base[1,1]),day(base[1,1]),
                    year(base[N,1]),month(base[N,1]),day(base[N,1]) )
   }
-  
+
   #Create X axis limits from period
   x.min <- as.Date(unlist(strsplit(prd,"/"))[1])
   x.max <- as.Date(unlist(strsplit(prd,"/"))[2])
-  
+
   #Create data frame for plotting
   df.plot <- data.frame()
-  
+
   if (!(is.null(sim))) {
     sim_temp <- fortify(sim)
     sim_temp$ID <- "Sim"
     colnames(sim_temp) <- c("Date","Flow","ID")
     df.plot <- rbind(df.plot,sim_temp)
-  } 
+  }
   if (!(is.null(obs))) {
     obs_temp <- fortify(obs)
     obs_temp$ID <- "Obs"
     colnames(obs_temp) <- c("Date","Flow","ID")
     df.plot <- rbind(df.plot,obs_temp)
-  } 
+  }
   if (!(is.null(inflow))) {
     inflow_temp <- fortify(inflow)
     inflow_temp$ID <- "Inflow"
     colnames(inflow_temp) <- c("Date","Flow","ID")
     df.plot <- rbind(df.plot,inflow_temp)
   }
-  
+
   df.plot$Date <- as.Date(as.character(df.plot$Date))
-  
+
   p1 <- ggplot()+
     geom_line(data=df.plot, aes(x=Date,y=Flow,color=ID))+
     scale_x_date(limits = c(x.min,x.max))+
     xlab("Date")+
-    ylab(expression("Flow ["*m^3*"/s]"))+
-    theme_bw()+
-    theme(legend.title = element_blank(),
-          legend.position = "bottom")
-  
-  #Shade Winter Months 
+    ylab(expression("Flow ("*m^3*"/s)"))+
+    theme_RavenR()+
+    theme(legend.position = "bottom") +
+    scale_colour_brewer(type = "qual", palette = 3)
+
+  #Shade Winter Months
   if (winter_shading){
-    
-    winter.start <- as.Date(df.plot$Date[month(df.plot$Date) == 12 & day(df.plot$Date) == 1])
-    winter.end <- as.Date(df.plot$Date[month(df.plot$Date) == 3 & day(df.plot$Date) == 31])
-    
+
+    winter.start <- as.Date(df.plot$Date[month(df.plot$Date) == 12 & day(df.plot$Date) == 1],
+                            origin = "1970-01-01")
+    winter.end <- as.Date(df.plot$Date[month(df.plot$Date) == 3 & day(df.plot$Date) == 31],
+                          origin = "1970-01-01")
+
     shade <- data.frame(cbind(winter.start,winter.end))
     shade$winter.start <- as.Date(shade$winter.start)
     shade$winter.end <- as.Date(shade$winter.end)
     shade$y.start <- -Inf
     shade$y.end <- Inf
-    
-    p1 <- p1 + 
+
+    p1 <- p1 +
       geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey",alpha=0.1)
-    
+
   }
-  
+
   #Add precipitation
   if (!(is.null(precip))){
-    
+
     df.precip.plot <- fortify(precip)
     colnames(df.precip.plot)[1] <- "Date"
     df.precip.plot$ID <- "Precip"
-    
+
     df.precip.plot$Date <- as.Date(as.character(df.precip.plot$Date))
-    
+
     p2 <- ggplot()+
       geom_bar(data=df.precip.plot, aes(x=Date,y=precip), stat="identity", color = "blue")+
       scale_x_date(limits = c(x.min,x.max))+
       theme_bw()+
-      ylab("Precip [mm]")+
+      ylab("Precip (mm)")+
       xlab("")
-    
-    
+
+
     p1 <- cowplot::plot_grid(p2,p1,nrow=2)
-    
+
   }
-  
-  
-  
+
+
+
   plot(p1)
   return(p1)
 }
