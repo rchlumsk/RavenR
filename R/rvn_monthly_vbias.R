@@ -65,7 +65,7 @@ rvn_monthly_vbias <- function (sim, obs, rplot = T, add_line = T, normalize = T,
   }
   else {
     diff <- (sim.monthly - obs.monthly)
-    y.lab <- "Flow Volume Bias [m3/s]"
+    y.lab <- "Flow Volume Bias (m3/s)"
   }
   for (k in 1:12) {
     mvbias[k] <- mean(diff[month(diff) == k, ], na.rm = T)
@@ -77,11 +77,13 @@ rvn_monthly_vbias <- function (sim, obs, rplot = T, add_line = T, normalize = T,
     df.plot$mvbias <- as.numeric(as.character(df.plot$mvbias))
     df.plot$nmon <- as.numeric(as.character(df.plot$nmon))
 
+    limit <- ceiling(max(abs(mvbias), na.rm = TRUE))
+
     p1 <- ggplot(df.plot)+
       geom_bar(aes(x=nmon,y=mvbias),stat="identity",width=0.5)+
       scale_y_continuous(name=y.lab)+
       scale_x_continuous(breaks=df.plot$nmon,labels=df.plot$x.label,name="")+
-      theme_bw()
+      theme_RavenR()
 
     if (add_line) {
       p1 <- p1+
@@ -90,11 +92,23 @@ rvn_monthly_vbias <- function (sim, obs, rplot = T, add_line = T, normalize = T,
     if (add_labels) {
       if (max(mvbias, na.rm = T)/2 > 0) {
         p1 <- p1+
-          annotate("text",x=max(as.numeric(df.plot$nmon)+0.5),y=max(mvbias,na.rm=T)/2,label="Overestimated",angle=90)
-      }
+          scale_y_continuous(name=y.lab, limits = c(-limit, limit)) +
+          geom_text(x= max(as.numeric(df.plot$nmon)+0.5),
+                    y= limit/2,
+                    label= "Overestimated",
+                    angle=90,
+                    vjust = 0.5,
+                    hjust = 0.5)
+          }
       if (min(mvbias, na.rm = T)/2 < 0) {
         p1 <- p1+
-          annotate("text",x=max(as.numeric(df.plot$nmon)+0.5),y=min(mvbias,na.rm=T)/2,label="Underestimated",angle=90)
+          geom_text(x= max(as.numeric(df.plot$nmon)+0.5),
+                    y= -limit/2,
+                    label= "Underestimated",
+                    angle=90,
+                    vjust = 0.5,
+                    hjust = 0.5)
+
       }
     }
     return(list(df.mvbias = mvbias,plot=p1))

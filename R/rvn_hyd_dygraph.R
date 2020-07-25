@@ -32,7 +32,7 @@ rvn_hyd_dygraph <- function(hy, timezone="UTC",basins="", figheight=400)
   }
 
   plotfunc <- function(basin){
-    hyd <- hyd.extract(subs = basin, hyd = hy)
+    hyd <- rvn_hyd_extract(subs = basin, hyd = hy)
     flow <- merge(hyd$sim, hyd$obs)
     return(dygraph(flow, group = 'flows', main = basin, height=figheight) %>%
              dyRangeSelector())

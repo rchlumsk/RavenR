@@ -64,36 +64,36 @@ rvn_flow_residuals <- function(sim,obs,ma_smooth=3,add.line=T,winter_shading=T) 
   df.plot <- fortify(resids)
   colnames(df.plot) <- c("Date","Resid")
   df.plot$Date <- as.Date(df.plot$Date)
-  
+
   p1 <- ggplot(df.plot)+
     geom_line(aes(x=Date,y=Resid))+
     ylab("Smoothed Residual")+
-    theme_bw()
-  
+    theme_RavenR()
+
   if (add.line){
     p1 <- p1 +
       geom_hline(yintercept=0,linetype="dashed")
   }
-  
-  if (winter.shading){
-    
-    
+
+  if (winter_shading){
+
+
     winter.start <- as.Date(df.plot$Date[month(df.plot$Date) == 12 & day(df.plot$Date) == 1])
     winter.end <- as.Date(df.plot$Date[month(df.plot$Date) == 3 & day(df.plot$Date) == 31])
-    
+
     shade <- data.frame(cbind(winter.start,winter.end))
     shade$winter.start <- as.Date(shade$winter.start)
     shade$winter.end <- as.Date(shade$winter.end)
     shade$y.start <- -Inf
     shade$y.end <- Inf
-    
-    p1 <- p1 + 
+
+    p1 <- p1 +
       geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey",alpha=0.3)
-    
-    
+
+
   }
-  
+
   resids <- list(resids = resids, plot = p1)
-  
+
   return(resids)
 }
