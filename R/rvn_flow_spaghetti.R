@@ -42,24 +42,24 @@ rvn_flow_spaghetti <- function(flow) {
 
   ticks.at <- seq(1, 366, 1)
   ticks.seq <- c(seq(274, 366, 1), seq(1, 273, 1))
-  
+
   plot.df <- fortify(flow)
   plot.df$doy <- lubridate::yday(plot.df$Index)
   plot.df$Year <- as.factor(year(plot.df$Index))
   colnames(plot.df)[2] <- "flow"
   plot.df$x_form <- plot.df$doy-273
   plot.df$x_form[month(plot.df$Index)<10] <- plot.df$x_form[month(plot.df$Index)<10]+365
-  
+
   labels <- c(seq(274,365,30),seq(1,270,30))
-  
-  
+
+
   p1 <- ggplot(plot.df)+
     geom_line(aes(x=x_form,y=flow,group=Year, color=Year))+
-    scale_y_continuous(name=expression("Flow ["*m^3*"/s]"))+
+    scale_y_continuous(name=expression("Flow ("*m^3*"/s)"))+
     scale_x_continuous(name="Day of Year", breaks=seq(1,365,30), labels = labels)+
-    theme_bw()
-  
-  
+    theme_RavenR()
+
+
   return(p1)
 }
 

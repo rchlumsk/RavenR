@@ -39,9 +39,9 @@
 #' rvn_flow_scatterplot(sim,obs,add_r2=T)
 #'
 #' @export rvn_flow_scatterplot
-rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F) {
-  x.lab <- expression("Observed Flow ["*m^3*"/s]")
-  y.lab <- expression("Simulated Flow ["*m^3*"/s]")
+rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F, add_eqn = F) {
+  x.lab <- expression("Observed Flow ("*m^3*"/s)")
+  y.lab <- expression("Simulated Flow ("*m^3*"/s)")
 
   plot.df <- fortify(cbind(sim,obs))
   colnames(plot.df) <- c("date","sim","obs")
@@ -51,19 +51,36 @@ rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F) {
     geom_point(aes(x=obs,y=sim))+
     scale_x_continuous(name=x.lab,limits=c(0,max.flow))+
     scale_y_continuous(name=y.lab,limits=c(0,max.flow))+
-    theme_bw()
+    theme_RavenR()
 
-  if (add.line){
+  if (add_line){
     p1 <- p1+
       geom_abline(linetype="dashed")
   }
 
-  if (add.r2) {
+  if (add_r2) {
     r2 <- 1 - (sum((obs - sim)^2, na.rm = T)/sum((obs - mean(obs,
                                                              na.rm = T))^2, na.rm = T))
     r2.label <- paste("R^2 == ", round(r2,2))
     p1 <- p1 +
-      annotate(geom="text",x=max.flow*0.9,y=max.flow*0.9,label=r2.label, parse=T)
+      geom_text(x= max(obs, sim, na.rm = TRUE)*0.9,
+                y= max(obs, sim, na.rm = TRUE)*0.18,
+                vjust = 1,
+                label=r2.label,
+                parse=T,
+                size = 3.5)
+
+    if (add_eqn){
+      m <- lm(sim ~ 0 + obs)
+      coeff <- round(as.numeric(m$coefficients[1]), 3)
+      equation <- paste0( "y = ", coeff, "x")
+      p1 <- p1 +
+        geom_text(x = max(obs, sim, na.rm = TRUE)*0.9,
+                  y = max(obs, sim, na.rm = TRUE)*0.1,
+                  vjust = 1,
+                  label = equation,
+                  size = 3.5)
+    }
   }
 
   return(p1)

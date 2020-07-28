@@ -56,8 +56,8 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     base <- sim
   } else if (!(is.null(obs))) {
     base <- obs
-  } else if (!(is.null(inStage))) {
-    base <- inStage
+  } else if (!(is.null(inflow))) {
+    base <- inflow
   } else {
     stop("Must supply at least one Stage series to plot.")
   }
@@ -107,9 +107,10 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     colnames(obs_temp) <- c("Date","Stage","ID")
     df.plot <- rbind(df.plot,obs_temp)
   }
-  if (!(is.null(inStage))) {
-    inStage_temp <- fortify(inStage)
-    inStage_temp$ID <- "InStage"
+
+  if (!(is.null(inflow))) {
+    inStage_temp <- fortify(inflow)
+    inStage_temp$ID <- "Inflow"
     colnames(inStage_temp) <- c("Date","Stage","ID")
     df.plot <- rbind(df.plot,inStage_temp)
   }
@@ -120,10 +121,10 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     geom_line(data=df.plot, aes(x=Date,y=Stage,color=ID))+
     scale_x_date(limits = c(x.min,x.max))+
     xlab("Date")+
-    ylab("Stage [m]")+
-    theme_bw()+
-    theme(legend.title = element_blank(),
-          legend.position = "bottom")
+    ylab("Stage (m)")+
+    theme_RavenR()+
+    theme(legend.position = "bottom") +
+    scale_colour_brewer(type = "qual", palette = 3)
 
   #Shade Winter Months
   if (winter_shading){
@@ -138,7 +139,7 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     shade$y.end <- Inf
 
     p1 <- p1 +
-      geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey",alpha=0.1)
+      geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey50",alpha=0.1, linetype=0)
 
   }
 
@@ -155,7 +156,7 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
       geom_bar(data=df.precip.plot, aes(x=Date,y=precip), stat="identity", color = "blue")+
       scale_x_date(limits = c(x.min,x.max))+
       theme_bw()+
-      ylab("Precip [mm]")+
+      ylab("Precip (mm)")+
       xlab("")
 
 

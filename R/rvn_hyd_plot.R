@@ -125,24 +125,28 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, win
     geom_line(data=df.plot, aes(x=Date,y=Flow,color=ID))+
     scale_x_date(limits = c(x.min,x.max))+
     xlab("Date")+
-    ylab(expression("Flow ["*m^3*"/s]"))+
-    theme_bw()+
-    theme(legend.title = element_blank(),
-          legend.position = "bottom")
+    ylab(expression("Flow ("*m^3*"/s)"))+
+    theme_RavenR()+
+    theme(legend.position = "bottom") +
+    scale_colour_brewer(type = "qual", palette = 3)
+
 
   #Shade Winter Months
   if (winter_shading){
 
-    winter.start <- unique(as.Date(df.plot$Date[month(df.plot$Date) == 12 & day(df.plot$Date) == 1]))
-    winter.end <- unique(as.Date(df.plot$Date[month(df.plot$Date) == 3 & day(df.plot$Date) == 31]))
+    winter.start <- as.Date(df.plot$Date[month(df.plot$Date) == 12 & day(df.plot$Date) == 1],
+                            origin = "1970-01-01")
+    winter.end <- as.Date(df.plot$Date[month(df.plot$Date) == 3 & day(df.plot$Date) == 31],
+                          origin = "1970-01-01")
+
+    shade <- data.frame(cbind(winter.start,winter.end))
+    shade$winter.start <- as.Date(shade$winter.start)
+    shade$winter.end <- as.Date(shade$winter.end)
+    shade$y.start <- -Inf
+    shade$y.end <- Inf
 
     p1 <- p1 +
-      geom_rect(aes(xmin=winter.start,
-                    xmax=winter.end,
-                    ymin=-Inf,
-                    ymax=Inf),
-                color="grey50",alpha=0.1, linetype=0)
-
+      geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey50",alpha=0.1, linetype=0)
   }
 
   #Add precipitation
@@ -158,7 +162,7 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, win
       geom_bar(data=df.precip.plot, aes(x=Date,y=precip), stat="identity", color = "blue")+
       scale_x_date(limits = c(x.min,x.max))+
       theme_bw()+
-      ylab("Precip [mm]")+
+      ylab("Precip (mm)")+
       xlab("")
 
 

@@ -74,7 +74,7 @@ rvn_annual_peak_error <- function(sim, obs, add_line = T,
 
   x.lab <- "Date (Water Year Ending)"
   y.lab <- "% Error in Peaks"
-  title.lab <- ""
+  #title.lab <- ""
   if (add_line) {
     limit <- max(max(errs), abs(min(errs)))
     y.max <- max(0.5, limit)
