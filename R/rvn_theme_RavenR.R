@@ -5,11 +5,11 @@
 #' This function sets up the default theme for all ggplots generated using a
 #' built in Raven R function. Made by adjusting the built in theme_bw()
 #'
-#'@export theme_RavenR
+#'@export rvn_theme_RavenR
 
 library(ggplot2)
 
-theme_RavenR <- function(){
+rvn_theme_RavenR <- function(){
   theme_bw() +
     theme(panel.border = element_rect(color = "black"),
           legend.title = element_blank())
