@@ -28,6 +28,7 @@
 #' @param ff full file path to the reservoir information file
 #' @param initial_stage an optional double for percentage of maximum stage to
 #' use as initial condition; default 0.0
+#' @param output file rvc lines are written to (default: initial_res_conditions.rvc)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{rvn_res_read}} for reading in the ReservoirStages.csv file
 #'
@@ -38,37 +39,41 @@
 #' @examples
 #' # warning: example not run, sample example for associated files only
 #' \dontrun{
-#' # set working directory to file location
-#' dir = "C:/temp/test"
-#' ff <- paste0(dir,"/","reservoir data.csv")
+#' # File location
+#' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
 #'
-#' rvn_res_init(ff,initial_stage=0.4)
+#' #-- Output file name
+#' temprvc <- tempfile(pattern = "file", tmpdir = tempdir(), fileext = ".rvc")
+#'
+#' # Run function
+#' rvn_res_init(ff, initial_stage=0.4, output=temprvc)
 #' }
 #'
 #' @export rvn_res_init
-rvn_res_init <- function(ff=NA,initial_stage=0.0) {
-
-  if (missing(ff)) {
-    stop("ff as a file path to reservoir data is required for this function.")
-  }
+rvn_res_init <- function(ff, initial_stage=0.0, output="initial_res_conditions.rvc") {
 
   if (initial_stage < 0 || initial_stage > 1) {
     stop("Initial stage must be between 0 and 1.")
   }
 
-  res <- read.csv(ff,header=T)
+  #res <- read.csv(ff,header=T)
+  res <- rvn_res_read(ff)
+  resdf <- res$res
 
   # initiate files
-  fc2 <- file("initial_res_conditions.rvc.temp",open='w+a')
-  writeLines(c('# Initial conditions for reservoirs in a Raven model','# Copy + Paste these lines into the rvc file','#'),fc2)
+  fc2 <- file(tempfile, open='w+a')
+  writeLines(c('# Initial conditions for reservoirs in a Raven model',
+               '# Copy + Paste these lines into the rvc file',
+               '#'), fc2)
 
-  subbasins <- unique(res[,1])
+  #-- Regex Magic - get subbasin columns, ignore obs
+  sb_cols <- grep('sub.[0-9]$',colnames(resdf), ignore.case = T, )
+  sb_id <- as.numeric(gsub('sub','',colnames(resdf)[sb_cols], ignore.case = T))
 
-  for (i in 1:length(subbasins)) {
-    dd <- res[res[,1] == subbasins[i],]
-
-    stage <- dd[,2]
-    writeLines(sprintf(':InitialReservoirStage  %i  %.2f',subbasins[i],min(stage)+initial_stage*(max(stage)-min(stage))),fc2)
+  for (i in 1:length(sb_cols)) {
+    stage <- coredata(resdf[,sb_cols[i]])
+    value <- min(stage) + initial_stage * (max(stage) - min(stage))
+    writeLines(sprintf(':InitialReservoirStage  %i  %.2f',sb_id[i], value), fc2)
   }
   close(fc2)
 

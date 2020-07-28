@@ -40,10 +40,11 @@
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs
-#' data(rvn_hydrograph_data)
-#' sim <- rvn_hydrograph_data$hyd$Sub36
-#' obs <- rvn_hydrograph_data$hyd$Sub36_obs
-#' precip <- rvn_hydrograph_data$hyd$precip
+#' ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
+#' run1 <- rvn_hyd_read(ff)
+#' sim <- run1$hyd$Sub36
+#' obs <- run1$hyd$Sub36_obs
+#' precip <- run1$hyd$precip
 #'
 #' # create a nice hydrograph
 #' rvn_hyd_plot(sim,obs,zero_axis=F)
@@ -58,6 +59,7 @@
 #'
 #' @export rvn_hyd_plot
 rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, winter_shading=T) {
+  require(cowplot)
 
   # select series to use as base in time determination
   if (!(is.null(sim))) {
@@ -128,6 +130,7 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, win
     theme(legend.position = "bottom") +
     scale_colour_brewer(type = "qual", palette = 3)
 
+
   #Shade Winter Months
   if (winter_shading){
 
@@ -143,8 +146,7 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, win
     shade$y.end <- Inf
 
     p1 <- p1 +
-      geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey",alpha=0.1)
-
+      geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey50",alpha=0.1, linetype=0)
   }
 
   #Add precipitation

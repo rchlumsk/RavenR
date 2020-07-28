@@ -13,12 +13,12 @@
 #' See also \href{http://raven.uwaterloo.ca/}{Raven page}
 #' @keywords Raven reservoir stage plotting
 #' @examples
-#'
 #' # read in Raven Reservoir Stages file
-#' resdata<-res.read("C:/TEMP/ReservoirStages.csv")
+#' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
+#' resdata <- rvn_res_read(ff)
 #'
 #' # view contents for all subbasins as dyGraph
-#' res<-res.dyGraphs(resdata,basins="sub11")
+#' res<-rvn_res_dygraph(resdata,basins="sub11")
 #' res[0]
 #' res[1]
 #'

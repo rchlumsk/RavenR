@@ -41,5 +41,9 @@
 #' \url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}
 #'
 #' @seealso \code{\link{rvn_watershed_read}} for reading in watershed storage output files
-#'
+#' @examples
+#' # View data
+#' head(rvn_watershed_data$watershed.storage)
+#' # Also has units
+#' rvn_watershed_data$units
 "rvn_watershed_data"

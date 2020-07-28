@@ -37,8 +37,6 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven stage reservoir
 #' @examples
-#' # warning: example not run, sample example for associated files only
-#' \dontrun{
 #' # create a nice reservoir stage plot
 #' rvn_res_plot(sim,obs,zero_axis=F)
 #'
@@ -48,12 +46,11 @@
 #' # create a reservoir stage plot with precip as well for a specific subperiod
 #' prd <- "2003-10-01/2005-10-01"
 #' rvn_res_plot(sim,obs,precip=precip,prd=prd)
-#' }
 #'
 #' @export rvn_res_plot
 rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
               winter_shading=T) {
-
+  require(cowplot)
   # select series to use as base in time determination
   if (!(is.null(sim))) {
     base <- sim
@@ -110,6 +107,7 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     colnames(obs_temp) <- c("Date","Stage","ID")
     df.plot <- rbind(df.plot,obs_temp)
   }
+
   if (!(is.null(inflow))) {
     inStage_temp <- fortify(inflow)
     inStage_temp$ID <- "Inflow"
@@ -141,7 +139,7 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     shade$y.end <- Inf
 
     p1 <- p1 +
-      geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey",alpha=0.1)
+      geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey50",alpha=0.1, linetype=0)
 
   }
 

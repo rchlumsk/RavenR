@@ -27,14 +27,16 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven read.csv exhaustive mass balance
 #' @examples
-#' read in file from package (RavenR/inst/extdata)
-#' ff <- system.file("extdata","ExhaustiveMassBalance_1.csv", package="RavenR")
+#' # Read in exhaustive MB file, create plot
+#' ff <- system.file("extdata","run1_ExhaustiveMassBalance.csv", package="RavenR")
+#' embd <- rvn_exhaustive_mb_read(ff)
 #'
-#' # read in exhaustive MB file, create plot
-#' embd <- RavenR::rvn_exhaustive_mb_read(ff)
-#' head(embd$exhaustivemb)
-#' plot(embd$exhaustivemb$SURFACE_WATER.Infiltration,
-#' ylab="Cumulative Surface Water Infiltration"
+#' # Preview data
+#' head(embd$exhaustive_mb)
+#'
+#' # Plot data
+#' plot(embd$exhaustive_mb$SURFACE_WATER.Infiltration,
+#'      main="Cumulative Surface Water Infiltration")
 #' @export rvn_exhaustive_mb_read
 rvn_exhaustive_mb_read <- function(ff=NA,join_categories=T) {
 
