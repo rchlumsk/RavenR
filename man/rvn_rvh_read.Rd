@@ -42,27 +42,26 @@ The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :Sub
 command blocks.
 }
 \examples{
- \dontrun{
-  # sample workflow of rvn_rvh_read
+  # load example rvh file
+  nith <- system.file("extdata","Nith.rvh",package = "RavenR")
+  rvh <- rvn_rvh_read(nith)
 
-  rvh<-rvn_rvh_read("example.rvh")
-
-  # get number of HRUs
-  numHRUs<-nrow(rvh$HRUtable)
+  # number of HRUs
+  numHRUs <- nrow(rvh$HRUtable)
 
   # total watershed area
-  watershed.area<-sum(rvh$HRUtable$Area)
+  watershed.area <- sum(rvh$HRUtable$Area)
 
-  # sub-table of headwater subbasins
-  headwaterBasins<-subset(rvh$SBtable,TotalUpstreamArea==0)
+  # sub-table of headwater basins
+  headwaterBasins <- subset(rvh$SBtable, TotalUpstreamArea == 0)
 
-  # sub-table of Forested HRUs
-  forestHRUs<-subset(rvh$HRUtable,LandUse=="FOREST")
+  # sub-table of Urban HRUs
+  urbanHRUs <- subset(rvh$HRUtable, LandUse == "URBAN")
 
-  # get total area upstream of subbasin "Raven_River" outlet
-  upstr<-(rvh$SBtable$TotalUpstreamArea+rvh$SBtable$Area)
-  gauge_area<-upstr[rvh$SBtable$Name=="Raven_River"]
- }
+  # get total area upstream of subbasin containing outlet
+  upstr <- cumsum(rvh$SBtable$Area)
+  upstr[rvh$SBtable$Downstream_ID == -1]
+
 }
 \seealso{
 \code{\link{rvn_rvh_write}} to write contents of the generated (and usually modified HRU and SubBasin tables)

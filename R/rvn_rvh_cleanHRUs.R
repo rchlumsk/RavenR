@@ -30,11 +30,11 @@
 #'
 #' @examples
 #'   # read in example rvh file
-#'   nith<-system.file("extdata","Nith.rvh",package = "RavenR")
-#'   rvh<-rvn_rvh_read(nith)
+#'   nith <- system.file("extdata","Nith.rvh",package = "RavenR")
+#'   rvh <- rvn_rvh_read(nith)
 #'
 #'   # clean contents (in this case, remove all HRUs covering less than 5% of the total area)
-#'   rvh<-rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merg=TRUE)
+#'   rvh <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merg=TRUE)
 #'
 #'   # write to new file, while preserving all unedited information using rvn_rvh_overwrite:
 #'   rvn_rvh_overwrite(nith,"Nith_cleaned.rvh",
@@ -88,6 +88,9 @@ rvn_rvh_cleanhrus<-function(HRUtab,SBtab,area_tol=0.001,merge=FALSE,elev_tol=50,
   # merge overly similar HRUs (varying minutely in elevation/slope/aspect)
   #-----------------------------------------------------------
   if (merge==TRUE){
+
+    HRUtab$similar <- NA
+
     for (i in 1:nrow(HRUtab))
     {
       if (i %% 100==0){print(i)}

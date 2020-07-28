@@ -26,15 +26,10 @@ uses ncdf.tools, sp, rgdal, deldir, and sna libraries
 }
 \examples{
 \dontrun{
-rvn_netcdf_to_gridshp(2017052200.nc,11,voronoi_out)
-
-# Example usage:
-setwd("C:/temp/")
-ncfile<-"force/2017052200.nc"
-UTMzone<-11
-outshp<-"maps/RDPS_Grid"
-netcdf.to.gridshp(ncfile,UTMzone,outshp)
-
+ncfile <- system.file("extdata/GlenAllan.nc", package="RavenR")
+UTMzone <- 17
+outshp <- "maps/RDPS_Grid"
+rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
 }
 
 

@@ -20,9 +20,9 @@ rvn_gen_gridweights(
 
 \item{ValidHRUIDs}{a vector of valid HRU IDs in the model}
 
-\item{HRUIDcol}{the name of the HRUshpfile polugon which contains the HRU IDs}
+\item{HRUIDcol}{the name of the HRUshpfile polygon which contains the HRU IDs}
 
-\item{gridIDcol}{the name of the Gridshpfile polugon which contains the cell IDs}
+\item{gridIDcol}{the name of the Gridshpfile polygon which contains the cell IDs}
 
 \item{outfile}{optional name of output Raven gaugeweights file}
 }
@@ -44,30 +44,6 @@ wt[k][g] for any k, over all g, is 1.0
 not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UTM zone;
  uses rgdal and rgeos libraries. *Both shapefiles should be in same projection!* Unfortunately, the
  accuracy of the gIntersection() routine leaves a bit to be desired...
-}
-\examples{
-
- \dontrun{
-  # netcdf.to.gridshp(2017052200.nc,11,GridCells)
-  rvn_gen_gridweights(ModelHRUs.shp,GridCells.shp,ValidHRUIDs,HRUIDcol="ID")
-
-  # example workflow
-  #--------------------------------------------
-  setwd("C:/temp/RedDeer/")
-
-  HRUshpfile<-"./maps/RedDeerHRUs.shp" # needs to have single column referring to HRU ID (here presumed 'HRU_ID')
-  GRDshpfile<-"./maps/RDPS_GridRedDeer2.shp"
-  rvh<-rvh.read("reddeer.rvh")
-
-  validHRUIDs<-rvh$HRUtable$ID
-
-  tmp<-gridweights.gen(HRUshpfile,GRDshpfile, validHRUIDs, gridIDcol="GridIDs",HRUIDcol="HRU_ID",outfile="RDPSGridWeights.rvt")
-
-  #dsn=normalizePath(dirname(HRUshpfile))
-  #lay=substr(basename(HRUshpfile),1,nchar(basename(HRUshpfile))-4)
-  #HRUshp<-readOGR(dsn = dsn,layer = lay) # returns SpatialPolygonsDataFrame
-
- }
 }
 \seealso{
 \code{\link{rvn_netcdf_to_gridshp}} for converting netcdf files to grid shapefile format

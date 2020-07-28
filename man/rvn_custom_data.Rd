@@ -19,6 +19,14 @@ for download in the Raven Tutorials (linked below).
 The Nith River model can be downloaded from the Raven Tutorials (tutorial #2)
 \url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}
 }
+\examples{
+# Preview data
+head(rvn_custom_data)
+
+# Plot data for first ten HRUs
+rvn_custom_output_plot(rvn_custom_data,IDs=seq(1,10),prd="2002-10-01/2003-09-01")
+
+}
 \seealso{
 \code{\link{rvn_custom_read}} for reading in custom output files
 

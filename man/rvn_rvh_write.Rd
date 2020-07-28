@@ -2,7 +2,7 @@
 % Please edit documentation in R/rvn_rvh_write.R
 \name{rvn_rvh_write}
 \alias{rvn_rvh_write}
-\alias{rvh.overwrite}
+\alias{rvn_rvh_overwrite}
 \title{Write/Overwrite Raven .rvh (watershed discretization) file.}
 \usage{
 rvn_rvh_write(
@@ -14,7 +14,7 @@ rvn_rvh_write(
   ...
 )
 
-rvh.overwrite(orig_file, filename, SBtable, HRUtable)
+rvn_rvh_overwrite(orig_file, filename, SBtable, HRUtable)
 }
 \arguments{
 \item{filename}{Name of .rvh file, with extension}
@@ -35,38 +35,18 @@ rvh.overwrite(orig_file, filename, SBtable, HRUtable)
 {TRUE}{returns TRUE if function runs properly}
 }
 \description{
-Given an HRU and SubBasin dataframe, writes to the specified .rvh file or, in the case of rvh.overwrite,
+Given an HRU and SubBasin dataframe, writes to the specified .rvh file or, in the case of rvn_rvh_overwrite,
 just overwrites the :SubBasins-:EndSubBasins and :HRUs-:EndHRUs blocks, retaining all other content.
 }
 \details{
-rvn_rvh_write is typically used to create a 'clean' .rvh file. rvh.overwrite is usually used
+rvn_rvh_write is typically used to create a 'clean' .rvh file. rvn_rvh_overwrite is usually used
   after reading an original .rvh file and processing the HRU and SubBasin tables, using (e.g., rvh.clean)
 }
 \section{Functions}{
 \itemize{
-\item \code{rvh.overwrite}: Overwrite contents of original .rvh file
+\item \code{rvn_rvh_overwrite}: Overwrite contents of original .rvh file
 }}
 
-\examples{
-\dontrun{
-# Create some blank tables
-sbs_data <- rvn_rvh_blankSBdf(nSubBasins = 1)
-HRU_data <- rvn_rvh_blankHRUdf(nHRUs = 3)
-
-# Write to files
-rvn_rvh_write('Output/BigRiver.rvh',
-              SBtable = sbs_data,
-              HRUtable = hru_data,
-              description = 'Big River Watershed Discretization File',
-              author = 'Raven Baxter')
-
-# Read in rvh file, clean contents and write back to new file
-rvh <- rvn_rvh_read("model.rvh")
-rvh <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable)
-rvh.overwrite("cleanmodel.rvh","model.rvh",rvh$HRUtable,rvh$SBtable)
-rvn_rvh_write("nostrings.rvh",rvh$HRUtable,rvh$SBtable)
-}
-}
 \seealso{
 \code{\link{rvn_rvh_read}} for the function used to read in the HRU and SubBasin data
 \code{\link{rvn_rvh_cleanhrus}} for the function used to process HRU dataframe\cr

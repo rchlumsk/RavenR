@@ -55,10 +55,11 @@ generation of plot titles.
 \examples{
 
 # load sample hydrograph data, two years worth of sim/obs
-data(rvn_hydrograph_data)
-sim <- rvn_hydrograph_data$hyd$Sub36
-obs <- rvn_hydrograph_data$hyd$Sub36_obs
-precip <- rvn_hydrograph_data$hyd$precip
+ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
+run1 <- rvn_hyd_read(ff)
+sim <- run1$hyd$Sub36
+obs <- run1$hyd$Sub36_obs
+precip <- run1$hyd$precip
 
 # create a nice hydrograph
 rvn_hyd_plot(sim,obs,zero_axis=F)

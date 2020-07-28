@@ -4,7 +4,7 @@
 \alias{rvn_flow_scatterplot}
 \title{Scatterplot of model flows}
 \usage{
-rvn_flow_scatterplot(sim, obs, add_line = T, add_r2 = F)
+rvn_flow_scatterplot(sim, obs, add_line = T, add_r2 = F, add_eqn = F)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}

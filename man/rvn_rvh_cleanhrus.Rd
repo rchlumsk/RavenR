@@ -48,10 +48,20 @@ rvh.clean removes HRUs in two ways:
     vegetation, soil profile and similar slope, aspect, and elevation)
 }
 \examples{
-  #read in rvh file, clean contents and write back to new file
-  rvh<-rvn_rvh_read("example.rvh")
-  rvh<-rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,merg=TRUE)
-  rvh.overwrite("cleanmodel.rvh","example.rvh",rvh$HRUtable,rvh$SBtable)
+  # read in example rvh file
+  nith <- system.file("extdata","Nith.rvh",package = "RavenR")
+  rvh <- rvn_rvh_read(nith)
+
+  # clean contents (in this case, remove all HRUs covering less than 5\% of the total area)
+  rvh <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merg=TRUE)
+
+  # write to new file, while preserving all unedited information using rvn_rvh_overwrite:
+  rvn_rvh_overwrite(nith,"Nith_cleaned.rvh",
+                    SBtable = rvh$SBtable,
+                    HRUtable = rvh$HRUtable)
+
+  # write just the Subbasin and HRU tables to new file using rvn_rvh_write:
+  rvn_rvh_write("Nith_cleaned_write.rvh", SBtable = rvh$SBtable, HRUtable = rvh$HRUtable)
 
 }
 \seealso{
