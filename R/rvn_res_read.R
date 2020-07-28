@@ -27,7 +27,7 @@
 #' @keywords Raven read.csv reservoir
 #' @examples
 #' # create full file path
-#' ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
+#' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
 #'
 #' # read in the Reservoir file
 #' myres <- rvn_res_read(ff)
