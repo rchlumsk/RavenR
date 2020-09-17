@@ -33,24 +33,22 @@
 #' @keywords netcdf grid shapefile conversion
 #'
 #' @examples
-#'   # Example workflow
-#'   # load example rvh file
-#'   nith <- system.file("extdata",'Nith.rvh', package = "RavenR")
-#'   rvh <- rvn_rvh_read(nith)
+#' # load example rvh file
+#' nith <- system.file("extdata",'Nith.rvh', package = "RavenR")
+#' rvh <- rvn_rvh_read(nith)
 #'
-#'   # define HRU shapefiles (needs to be added to library)
-#'   HRUshpfile <- system.file("extdata","Nith_HRU.shp",package = "RavenR")
+#' # define HRU shapefiles (needs to be added to library)
+#' HRUshpfile <- system.file("extdata","Nith_HRU.shp",package = "RavenR")
 #'
-#'   # write grid shapefile from netcdf file
-#'   nithnc <- system.file("extdata","Nith.nc",package = "RavenR")
-#'   GridCells <- "Nith_GridCells.shp"
-#'   UTMzone <- 17
-#'   GRDshpfile <- rvn_netcdf_to_gridshp(nithnc,UTMzone,GridCells)
+#' # write grid shapefile from netcdf file
+#' nithnc <- system.file("extdata","Nith.nc",package = "RavenR")
+#' GridCells <- "Nith_GridCells.shp"
+#' UTMzone <- 17
+#' GRDshpfile <- rvn_netcdf_to_gridshp(nithnc,UTMzone,GridCells)
 #'
-#'   # generate .rvi file of grid weights
-#'   validHRUIDs <- rvh$HRUtable$ID
-#'   tmp <- rvn_gen_gridweights(HRUshpfile, GRDshpfile, validHRUIDs,
-#'    gridIDcol = 'GridIDs', HRUIDcol = "HRU_ID", outfile = "Nith_GridWeights.rvi)
+#' # generate .rvi file of grid weights
+#' validHRUIDs <- rvh$HRUtable$ID
+#' tmp <- rvn_gen_gridweights(HRUshpfile, GRDshpfile, validHRUIDs, gridIDcol = 'GridIDs', HRUIDcol = "HRU_ID", outfile = "Nith_GridWeights.rvi)
 #'
 #' @export rvn_gen_gridweights
 rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs, HRUIDcol="HRU_ID",

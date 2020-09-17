@@ -1,17 +1,30 @@
-#' Raven R ggplot theme
+#' RavenR ggplot theme
 #'
-#' rvn_annual_peak makes the general Raven R Theme for all ggplots
+#' rvn_theme_RavenR makes the general Raven R Theme for all ggplots
 #'
 #' This function sets up the default theme for all ggplots generated using a
-#' built in Raven R function. Made by adjusting the built in theme_bw()
+#' built in Raven R function. Made by adjusting the built in theme_bw().
 #'
-#'@export rvn_theme_RavenR
-
-library(ggplot2)
-
+#' @return returns a theme for usage in ggplot2 figures
+#'
+#' @seealso \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
+#' volumes.
+#'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#'
+#' @examples
+#' # generate a basic ggplot and apply the RavenR theme
+#' ggplot(data=cars, aes(x=speed, y=dist))+
+#' geom_point()+
+#' rvn_theme_RavenR()
+#'
+#' @keywords RavenR theme ggplot plot figure aesthetics
+#'
+#' @export rvn_theme_RavenR
 rvn_theme_RavenR <- function(){
   theme_bw() +
     theme(panel.border = element_rect(color = "black"),
           legend.title = element_blank())
 }
-

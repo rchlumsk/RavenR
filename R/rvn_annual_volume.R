@@ -25,7 +25,7 @@
 #' @param axis_zero optionally sets the minimum volume on axes to zero (default
 #' FALSE)
 #' @return \item{df_volume}{data frame of the calculated annual volumes}
-#' @seealso \code{\link{flow_scatterplot}} to create a scatterplot of flow
+#' @seealso \code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow
 #' values
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
