@@ -22,8 +22,7 @@
 #' @param x xts vector to calculate FUN for
 #' @param FUN the function to be applied
 #' @param ... optional arguments to FUN
-#' @seealso \code{\link{rvn_apply_wyearly_cols}} for applying this function to
-#' multiple columns explicitly
+#' @seealso \code{\link{rvn_wyear_indices}} for obtaining endpoints in the water year
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/software.html}{James R.
 #' Craig's research page} for software downloads
@@ -31,40 +30,18 @@
 #' @examples
 #'
 #' # use sample forcing data (or use forcings_read to read in ForcingFunctions.csv)
-#' data(forcing_data)
-#' myforcings <- forcing_data
+#' data(rvn_forcing_data)
 #'
 #' # apply mean as FUN to daily average temperature
-#' rvn_apply_wyearly(myforcings$forcings$temp_daily_ave,mean,na.rm=T
+#' rvn_apply_wyearly(rvn_forcing_data$forcings$temp_daily_ave,mean,na.rm=T)
 #'
-#' # use rvn_apply_wyearly_cols to apply to multiple columns at once
-#' rvn_apply_wyearly_cols(myforcings$forcings[,2:6],max,na.rm=T)
+#' # apply max as FUN to all forcing data, with end points included for partial periods in each water year
+#' ## note that this uses the cmax function in RavenR rather than the base::max function
+#' rvn_apply_wyearly(rvn_forcing_data$forcings,cmax,na.rm=T)
 #'
 #' @export rvn_apply_wyearly
-rvn_apply_wyearly <- function(x,FUN,...) {
-
-  if (ncol(x) > 1) {
-    warning("More than one column in x, only the first will be used.")
-  }
-
-  temp <- x[((month(x[,1]) == 10) & (day(x[,1]) == 1)) | ((month(x[,1]) == 9) & (day(x[,1]) == 30))]
-  ep <- match(lubridate::date(temp),lubridate::date(x))
-
-  # remove all the unneccesary Sept 30th indices
-  ind <- rep(0,length(ep))
-  for (i in 1:(length(ep)-1)) {
-    if ((ep[i+1]-ep[i])==1) {
-      ind[i]=1
-    }
-  }
-  ep <- cbind(ep,ind)[ind==0,1]
-  # create data frame to store results, including end dates of water years
-  df <- data.frame("date_end"=lubridate::date(x[ep[2:length(ep)]]),"FUN"=rep(NA,length(ep)-1))
-  # get results and apply functions
-  for (i in 1:nrow(df)) {
-    temp <- x[ep[i]:(ep[i+1]-1)]
-    df[i,2] <- FUN(temp,...)
-    # df[i,2] <- lubridate::date(which.max.xts(temp))
-  }
-  return(df)
+rvn_apply_wyearly <- function(x,FUN,...,force.ends=F) {
+  ep <- rvn_wyear_indices(x, force.ends=force.ends)
+  period.apply(x, ep, FUN, ...) %>%
+    return(.)
 }

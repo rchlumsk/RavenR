@@ -59,7 +59,7 @@ rvn_flow_residuals(sim,obs,ma_smooth = 0, winter_shading = F)
 
 }
 \seealso{
-\code{\link{flow_scatterplot}} to create a scatterplot of flow
+\code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow
 values
 
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

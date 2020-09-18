@@ -64,7 +64,7 @@ rvn_forcings_plot <-function(forcings,prd=NULL){
     ylim(c(min(plot.data$temp_daily_min),max(plot.data$temp_daily_max)))+
     ylab(expression(paste("Min/Max Daily Temperature (",degree,"C)")))+
     xlab("")+
-    theme_RavenR()+
+    rvn_theme_RavenR()+
     theme(legend.position = "none",
           axis.title = element_text(size = 7))
 
@@ -73,7 +73,7 @@ rvn_forcings_plot <-function(forcings,prd=NULL){
     geom_line(aes(x = Index, y = PET), color = "navy")+
     ylab('PET (mm/d)')+
     xlab("")+
-    theme_RavenR()+
+    rvn_theme_RavenR()+
     theme(legend.position = "none",
           axis.title = element_text(size = 7))
 
@@ -86,7 +86,7 @@ rvn_forcings_plot <-function(forcings,prd=NULL){
     scale_color_manual(values = c("black", "blue", "blue", "blue"))+
     ylab('Radiation (MJ/m2/d)')+
     xlab("")+
-    theme_RavenR()+
+    rvn_theme_RavenR()+
     theme(legend.position = "none",
           axis.title = element_text(size = 7))
 
@@ -96,7 +96,7 @@ rvn_forcings_plot <-function(forcings,prd=NULL){
     geom_line(aes(x = Index, y = potential.melt), color = "navy")+
     ylab('Potential Melt (mm/d)')+
     xlab("")+
-    theme_RavenR()+
+    rvn_theme_RavenR()+
     theme(legend.position = "none",
           axis.title = element_text(size = 7))
 

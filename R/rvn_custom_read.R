@@ -15,7 +15,7 @@
 #' parsing the filename
 #' @return \item{custom.out}{data frame with the custom output data stored as xts
 #' object}
-#' @seealso \code{\link{customoutput.plot}} for plotting custom output
+#' @seealso \code{\link{rvn_custom_output_plot}} for plotting custom output
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the

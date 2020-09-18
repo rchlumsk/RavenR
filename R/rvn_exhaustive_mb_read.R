@@ -18,8 +18,8 @@
 #' @return \item{exhaustivemb}{data frame from the file with standardized
 #' names} \item{units}{vector corresponding to units of each column}
 #' \item{categories}{vector corresponding to the storage category of each column}
-#' @seealso \code{\link{hyd.read}} for reading in the Hydrographs.csv file
-#' \code{\link{watershedmeb.read}} for reading in the
+#' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
+#' \code{\link{rvn_exhaustive_mb_read}} for reading in the
 #' WatershedMassEnergyBalance.csv file
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

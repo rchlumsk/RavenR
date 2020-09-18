@@ -28,10 +28,10 @@
 #' @param winter_shading optionally adds shading for winter months (default
 #' TRUE)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
-#' @seealso \code{\link{flow.spaghetti}} to create a spaghetti plot of annual
+#' @seealso \code{\link{rvn_flow_spaghetti}} to create a spaghetti plot of annual
 #' flow series
 #'
-#' \code{\link{hyd.extract}} to extract time series from Raven objects
+#' \code{\link{rvn_hyd_extract}} to extract time series from Raven objects
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the

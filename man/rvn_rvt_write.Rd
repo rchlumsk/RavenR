@@ -57,7 +57,7 @@ rvn_rvt_write(flows,params = "HYDROGRAPH", units = "m3/s", ff = 'raven_rvt_write
 
 }
 \seealso{
-\code{\link{rvn_wsc_rvt}} to create an rvt file from Water Survey Canada (WSC) data
+\code{\link{rvn_rvt_wsc}} to create an rvt file from Water Survey Canada (WSC) data
 
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/Default.html}{James R.
 Craig's research page} for software downloads, including the

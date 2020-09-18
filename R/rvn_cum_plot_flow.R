@@ -25,7 +25,7 @@
 #' @param inflow optionally supply an inflow series to plot as well
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{rvn_flow_scatterplot}} for creating flow scatterplots
-#' @seealso \code{\link{rvn_cum_plot}} for creating generic cumulative function plotting
+#' @seealso \code{\link{rvn_cum_plot_flow}} for creating generic cumulative function plotting
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
@@ -101,10 +101,8 @@ rvn_cum_plot_flow <- function(sim=NULL,obs=NULL,inflow=NULL) {
     xlab("Date")+
     ylab(expression("Cummulative Volume ("*m^3*")"))+
     scale_colour_brewer(type = "qual", palette = 3) +
-    theme_RavenR()
-
+    rvn_theme_RavenR()
 
   return(cum_flow_plot)
-
 
 }

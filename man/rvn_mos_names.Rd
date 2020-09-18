@@ -28,7 +28,7 @@ rvn_mos_names(F)
 
 }
 \seealso{
-\code{\link{num.days.month}} for calculating the number of days in a
+\code{\link{rvn_num_days}} for calculating the number of days in a
 month
 }
 \keyword{months}

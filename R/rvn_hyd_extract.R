@@ -32,7 +32,7 @@
 #'  \item{obs}{observed data for specified column and period}
 #'  \item{inflow}{inflow simulation for specified column and period}
 #'
-#' @seealso \code{\link{hyd.read}} for reading in the Hydrographs.csv file and
+#' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file and
 #' creating the object required in this function.
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

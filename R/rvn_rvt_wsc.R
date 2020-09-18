@@ -50,7 +50,7 @@
 #' separate .rvt file
 #' @param flip_number (optional) put the subID first in the .rvt filename
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
-#' @seealso \code{\link{annual.peak.event}} to consider the timing of peak
+#' @seealso \code{\link{rvn_annual_peak_event}} to consider the timing of peak
 #' events
 #'
 #' Download EC streamgauge data from

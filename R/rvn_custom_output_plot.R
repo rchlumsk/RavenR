@@ -64,7 +64,7 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
     #Use step plot instead of lineplot
     p1 <- ggplot()+
       geom_step(data = df.plot, aes(x=Index,y=value,color=variable))+
-      theme_RavenR()+
+      rvn_theme_RavenR()+
       ylab(yaxis.title)+
       xlab("")+
       #ggtitle(plot.title) +
@@ -75,7 +75,7 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
 
     p1 <- ggplot()+
       geom_line(data = df.plot, aes(x=Index,y=value,color=variable))+
-      theme_RavenR()+
+      rvn_theme_RavenR()+
       ylab(yaxis.title)+
       xlab("")+
       #ggtitle(plot.title)+

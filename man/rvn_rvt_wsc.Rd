@@ -86,7 +86,7 @@ rvn_rvt_wsc(ff,subIDs=c(3,11),stnNames<-c('Rob_Hill','Bob_River'),flip_number=T)
 
 }
 \seealso{
-\code{\link{annual.peak.event}} to consider the timing of peak
+\code{\link{rvn_annual_peak_event}} to consider the timing of peak
 events
 
 Download EC streamgauge data from

@@ -36,8 +36,9 @@
 #'
 #' @keywords Raven observations weights rvt file write
 #'
-#' @seealso \code{\link{rvn_obsfile_rvt}} \code{\link{obsweights.gen}}
+#' @seealso \code{\link{rvn_rvt_obsfile}} \code{\link{rvn_gen_obsweights}}
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven website}
+#'
 #' @export rvn_rvt_obsweights
 rvn_rvt_obsweights <- function(filename,wts,SBID,typestr="HYDROGRAPH") {
   interval<-as.numeric(difftime(index(wts[2]) ,index(wts[1]) , units = c("days")))

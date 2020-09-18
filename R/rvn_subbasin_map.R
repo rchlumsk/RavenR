@@ -21,7 +21,7 @@
 #'
 #' @importFrom sf read_sf st_centroid st_coordinates
 #'
-#' @seealso \code{\link{subbasinNetwork.plot}} to create network plots
+#' @seealso \code{\link{rvn_subbasin_network_plot}} to create network plots
 #'
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

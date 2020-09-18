@@ -56,7 +56,7 @@ rvn_cum_plot_flow(sim[prd],obs[prd])
 \seealso{
 \code{\link{rvn_flow_scatterplot}} for creating flow scatterplots
 
-\code{\link{rvn_cum_plot}} for creating generic cumulative function plotting
+\code{\link{rvn_cum_plot_flow}} for creating generic cumulative function plotting
 
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 Craig's research page} for software downloads, including the

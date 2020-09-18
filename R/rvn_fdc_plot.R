@@ -111,7 +111,7 @@ rvn_fdc_plot <-function(sim=NULL,obs=NULL,prd=NULL,seasonal='F'){
                        name = expression("Daily Discharge ("*m^3*"/s)"),
                        limits = c(xmin,xmax))+
     scale_y_continuous(name = "% of flow less than daily discharge",limits = c(0,1))+
-    theme_RavenR()+
+    rvn_theme_RavenR()+
     #ggtitle("Flow Exceedance")+
     scale_colour_brewer(type = "qual", palette = 3)
 

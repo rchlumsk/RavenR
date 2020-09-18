@@ -60,7 +60,7 @@ volumes <- rvn_annual_volume(sim,obs,rplot=F)
 
 }
 \seealso{
-\code{\link{flow_scatterplot}} to create a scatterplot of flow
+\code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow
 values
 
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

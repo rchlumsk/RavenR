@@ -30,7 +30,7 @@ rvn_num_days(as.Date("2017-02-05"),as.Date("2017-02-12"))
 
 }
 \seealso{
-\code{\link{rvn_num_days.month}} for calculating the number of days in a
+\code{\link{rvn_num_days_month}} for calculating the number of days in a
 month
 }
 \keyword{days}

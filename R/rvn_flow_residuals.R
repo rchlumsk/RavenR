@@ -25,7 +25,7 @@
 #' @param winter_shading optionally adds a light blue shading to winter months
 #' (default TRUE)
 #' @return \item{resids}{residual time series}
-#' @seealso \code{\link{flow_scatterplot}} to create a scatterplot of flow
+#' @seealso \code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow
 #' values
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

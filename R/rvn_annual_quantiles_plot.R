@@ -54,7 +54,7 @@ rvn_annual_quantiles_plot <- function(qdat,
       scale_x_date(labels = date_format("%b")) +
       xlab('Day of Water Year') +
       ylab(expression("Daily Discharge ("*m^3*"/s)")) +
-      theme_RavenR()
+      rvn_theme_RavenR()
 
   } else {
     p1 <- p1 +

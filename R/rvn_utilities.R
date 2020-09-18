@@ -18,7 +18,7 @@
 #' # returns "hel"
 #'
 #' @export rvn_substrLeft
-rvn_substrLeft <- function(x, n){
+rvn_substrLeft <- function(x, n) {
   substr(x, 1,n)
 }
 
@@ -46,7 +46,7 @@ rvn_substrLeft <- function(x, n){
 #' # returns "lo world"
 #'
 #' @export rvn_substrMLeft
-rvn_substrMLeft <- function(x, n){
+rvn_substrMLeft <- function(x, n) {
   substr(x, n+1,nchar(x))
 }
 
@@ -74,7 +74,7 @@ rvn_substrMLeft <- function(x, n){
 #' # returns "hello wo"
 #'
 #' @export rvn_substrMRight
-rvn_substrMRight <- function(x, n){
+rvn_substrMRight <- function(x, n) {
   substr(x, 1,nchar(x)-n)
 }
 
@@ -102,7 +102,7 @@ rvn_substrMRight <- function(x, n){
 #' # returns "rld"
 #'
 #' @export rvn_substrRight
-rvn_substrRight <- function(x, n){
+rvn_substrRight <- function(x, n) {
   substr(x, nchar(x)-n+1, nchar(x))
 }
 
@@ -121,7 +121,7 @@ rvn_substrRight <- function(x, n){
 #' @seealso See original code on post in Stack Overflow
 #' \href{http://stackoverflow.com/questions/12995683/any-way-to-make-plot-points-in-scatterplot-more-transparent-in-rmaking}{
 #' plot points transparent in R}
-#' @seealso \code{\link{iscolour}} for checking validity of colour codes
+#' @seealso \code{\link{rvn_iscolour}} for checking validity of colour codes
 #' @keywords colour transparency
 #' @examples
 #'
@@ -135,8 +135,7 @@ rvn_substrRight <- function(x, n){
 #' points(rnorm(20),col=mycol)
 #'
 #' @export rvn_col_transparent
-rvn_col_transparent <- function(colour,trans)
-{
+rvn_col_transparent <- function(colour,trans) {
   # This function adds transparancy to a colour.
   # Define transparancy with an integer between 0 and 255
   # 0 being fully transparant and 255 being fully visable
@@ -170,7 +169,7 @@ rvn_col_transparent <- function(colour,trans)
 #' @seealso See original code on post in Stack Overflow
 #' \href{https://stackoverflow.com/questions/13289009/check-if-character-string-is-a-valid-color-representation?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa}{
 #' Check if character string is a valid color representation}
-#' @seealso \code{\link{col.transparent}} for creating transparent colour codes
+#' @seealso \code{\link{rvn_col_transparent}} for creating transparent colour codes
 #' @keywords colour check valid
 #' @examples
 #'
@@ -193,7 +192,7 @@ rvn_iscolour <- function(x) {
 #'
 #' @param short boolean to return shortened form of months
 #' @return \item{int}{number of days between the two days}
-#' @seealso \code{\link{num.days.month}} for calculating the number of days in a
+#' @seealso \code{\link{rvn_num_days}} for calculating the number of days in a
 #' month
 #' @keywords months year
 #' @examples
@@ -222,7 +221,7 @@ rvn_mos_names <- function(short=T) {
 #' @param date1 first day, date format
 #' @param date2 second day, date format
 #' @return \item{int}{number of days between the two days}
-#' @seealso \code{\link{rvn_num_days.month}} for calculating the number of days in a
+#' @seealso \code{\link{rvn_num_days_month}} for calculating the number of days in a
 #' month
 #' @keywords days number
 #' @examples
@@ -295,4 +294,34 @@ rvn_num_days_month <- function(date) {
 #' @export rvn_which_max_xts
 rvn_which_max_xts <- function(x) {
   return(x[which.max(x)])
+}
+
+
+#' @title cmax
+#'
+#' cmax standards for column maximum. It applies the base::max function over
+#' columns, which is advantageous for calculating the max within a column
+#' rather than the max of the whole data frame.
+#'
+#'
+#' @param x object to apply the max function to
+#' @param na.rm whether to remove na values from the calculation
+#'
+#' @return x with the max value in each column determined
+#'
+#' @seealso \code{\link{rvn_apply_wyearly}} where this function can be applied for the water year
+#'
+#' The original [SO post](https://stackoverflow.com/questions/51623745/how-to-use-apply-daily-period-apply-for-calculating-maximum-per-column-in-xts-ti)
+#'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' @keywords which max xts
+#' @examples
+#' data(rvn_hydrograph_data)
+#' rvn_which_max_xts(rvn_hydrograph_data$hyd$Sub43_obs)
+#'
+#' @export cmax
+cmax <- function(x, na.rm = FALSE) {
+  apply(x, 2, max, na.rm = na.rm)
 }

@@ -91,7 +91,7 @@ rvn_annual_peak_error <- function(sim, obs, add_line = T,
     geom_point(aes(x=text.labels,y=errs))+
     scale_y_continuous(limits=c(y.min,y.max),name=y.lab)+
     scale_x_discrete(name=x.lab)+
-    theme_RavenR()
+    rvn_theme_RavenR()
   if (add_line) {
     p1 <- p1+
       geom_hline(yintercept=0,linetype=2)

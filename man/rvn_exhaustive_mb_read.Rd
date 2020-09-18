@@ -44,8 +44,8 @@ plot(embd$exhaustive_mb$SURFACE_WATER.Infiltration,
      main="Cumulative Surface Water Infiltration")
 }
 \seealso{
-\code{\link{hyd.read}} for reading in the Hydrographs.csv file
-\code{\link{watershedmeb.read}} for reading in the
+\code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
+\code{\link{rvn_exhaustive_mb_read}} for reading in the
 WatershedMassEnergyBalance.csv file
 
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

@@ -48,7 +48,7 @@ rvn_flow_scatterplot(sim,obs,add_r2=T)
 
 }
 \seealso{
-\code{\link{forcings.read}} for reading in the ForcingFunctions
+\code{\link{rvn_forcings_read}} for reading in the ForcingFunctions
 file
 
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

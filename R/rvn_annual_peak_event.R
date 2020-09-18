@@ -93,7 +93,7 @@ rvn_annual_peak_event <- function (sim, obs, add_line = T, add_r2 = F, rplot = F
     geom_point()+
     scale_x_continuous(limits=x.lim, name=x.lab)+
     scale_y_continuous(limits=y.lim, name=y.lab)+
-    theme_RavenR()
+    rvn_theme_RavenR()
 
   if (add_line){
     p1 <- p1 +

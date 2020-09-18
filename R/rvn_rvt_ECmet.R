@@ -69,7 +69,7 @@
 #' @param rd_file (optional) name of the redirect file created (if write_redirect = TRUE)
 #' @param stndata_file (optional) name of the station data file created (if write_stndata = TRUE)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
-#' @seealso \code{\link{rvn_ECflow_rvt}} to convert WSC flow gauge data to Raven format
+#' @seealso \code{\link{rvn_rvt_wsc}} to convert WSC flow gauge data to Raven format
 #'
 #' Download EC climate data from
 #' \href{http://climate.weather.gc.ca/historical_data/search_historic_data_e.html}{EC

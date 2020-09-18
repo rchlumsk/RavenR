@@ -32,7 +32,7 @@ where nodes are located at SubBasin lat-long centroids, and edge widths of the n
 }
 \seealso{
 See also the \href{http://raven.uwaterloo.ca/}{Raven page}
-\code{\link{rvn_rvh_read}} to read in the subbasin data table
+\code{\link{rvn_subbasin_map}} to map results for subbasins.
 }
 \author{
 James R. Craig, University of Waterloo

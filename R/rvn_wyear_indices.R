@@ -1,23 +1,24 @@
 #' Water Year Indices
 #'
-#' wyear.indices returns the indices of the provided time series for the
-#' start/end of the water year (hardcoded as October 1st). Useful in evaluating
-#' the time series in various diagnostics.
+#' rvn_wyear_indices returns the indices of the provided time series for the
+#' start/end of the water year. The month/day of the water year defaults to October 1, but
+#' may be supplied as other values, for example as July 1 in the Australian water year.
+#' This functon is useful in supplying endpoints for water year evaluations.
 #'
-#' This function will return the indices for October 1st for each year in the
-#' time series object. If the series ends on a September 30th date, it will
-#' return the index for September 30th. If it starts or ends on a date that is
-#' not Oct 1st or Sept 30th, that portion of the data will be disregarded
-#' (index not return for that period).
+#' This function will return the indices for the specified date. Start and end indices representing partial
+#' periods are not supplied.
 #'
 #' The sim and obs should be of time series (xts) format.
 #'
-#' @param sim time series object to obtain indices for
+#' @param sim xts object or Date/POSITXtc series to obtain indices for
+#' @param mm month of water year (default 10)
+#' @param dd day of water year (default 1)
+#' @param force.ends whether to include series endpoints (default F)
 #' @return \item{wyear.ind}{array of indices corresponding to start/end of
 #' water years}
-#' @seealso \code{\link{wyear.indices.aus}} for Australian water year
 #'
-#' \code{\link{flow.scatterplot}} for creating flow scatterplots
+#' @seealso \code{\link{apply_wyearly}} to apply functions over the water year#'
+#' \code{\link{rvn_flow_scatterplot}} for creating flow scatterplots
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
@@ -26,25 +27,39 @@
 #' @examples
 #'
 #' # read in sample forcings data
-#' data("forcing.data")
-#' fdata <- forcing.data$forcings
+#' data(rvn_forcing_data)
 #'
-#' # get the indices of the start of the water year
-#' wyear.indices(fdata[,1])
+#' # get the indices of the start of the water year for October 1
+#' rvn_wyear_indices(rvn_forcing_data$forcings)
+#' rvn_wyear_indices(rvn_forcing_data$forcings) %>%
+#' rvn_forcing_data$forcings[., 1:2]
 #'
-#' # [1]    1 366 731
+#' # get the indices with endpoints
+#' rvn_wyear_indices(rvn_forcing_data$forcings,force.ends=T) %>%
+#' rvn_forcing_data$forcings[.,1:2]
 #'
-#' @export wyear.indices
-wyear.indices <- function(sim) {
-  temp <- sim[((month(sim[,1]) == 10) & (day(sim[,1]) == 1)) | ((month(sim[,1]) == 9) & (day(sim[,1]) == 30))]
-  ep <- match(lubridate::date(temp),lubridate::date(sim))
-  # remove all the unneccesary Sept 30th indices
-  ind <- rep(0,length(ep))
-  for (k in 1:(length(ep)-1)) {
-    if ((ep[k+1]-ep[k])==1) {
-      ind[k]=1
+#' # get the indices of the start of the water year for July 1
+#' rvn_wyear_indices(rvn_forcing_data$forcings, mm=7) %>%
+#' rvn_forcing_data$forcings[., 1:2]
+#'
+#' @export rvn_wyear_indices
+#' @importFrom lubridate month day
+rvn_wyear_indices <- function(sim,mm=10,dd=1,force.ends=F)
+{
+
+  if (is.null(dim(sim))) {
+    ep <- which(month(sim) == mm & day(sim) == dd)
+    if (force.ends) {
+      ep <- unique(c(1,ep,length(sim)))
     }
+  } else if (dim(sim)[2] >= 1) {
+    ep <- which(month(sim) == mm & day(sim) == dd)
+    if (force.ends) {
+      ep <- unique(c(1,ep,nrow(sim)))
+    }
+  } else {
+    return(F)
   }
-  ep <- cbind(ep,ind)[ind==0,1]
-  return("wyear.ind"=ep)
+
+  return(ep)
 }

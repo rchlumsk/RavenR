@@ -28,7 +28,7 @@
 #' @param iter_thresh value to overwrite default iteration threshold in drainage
 #' area calculation
 #' @return \item{areas_rvh}{matrix with calculated areas for each subbasin}
-#' @seealso \code{\link{forcings_read}} for analysis tools related to the
+#' @seealso \code{\link{rvn_forcings_read}} for analysis tools related to the
 #' forcing functions
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

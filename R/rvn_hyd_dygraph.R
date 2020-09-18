@@ -10,6 +10,7 @@
 #'
 #' @return {res}{a list of plot handles to dygraph plots}
 #'
+#'
 #' See also \href{http://raven.uwaterloo.ca/}{Raven page}
 #' @keywords Raven hydrograph plotting
 #' @examples
@@ -18,11 +19,17 @@
 #' hy <- rvn_hydrograph_data
 #'
 #' # view contents for subbasin 36 as dyGraph
-#' res<-rvn_hyd_dygraph(hy,basins="sub36")
+#' res<-rvn_hyd_dygraph(hy,basins="Sub36")
+#' res
+#'
+#' # view contents for all basins in hydrograph data
+#' rvn_hyd_dygraph(hy)
+#'
 #'
 #' @export rvn_hyd_dygraph
-rvn_hyd_dygraph <- function(hy, timezone="UTC",basins="", figheight=400)
-{
+#' @importFrom purrr map
+#' @importFrom dygraphs dygraph dyRangeSelector
+rvn_hyd_dygraph <- function(hy, timezone="UTC",basins="", figheight=400) {
 
   if (basins==""){
     basins<-sub('_obs', "", colnames(hy$hyd))
@@ -38,6 +45,6 @@ rvn_hyd_dygraph <- function(hy, timezone="UTC",basins="", figheight=400)
              dyRangeSelector())
   }
 
-  res <- map(basins, plotfunc) # calls plotfunc for each basin in list basins
+  res <- purrr::map(basins, plotfunc) # calls plotfunc for each basin in list basins
   return(res)
 }

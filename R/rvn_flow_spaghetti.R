@@ -57,8 +57,7 @@ rvn_flow_spaghetti <- function(flow) {
     geom_line(aes(x=x_form,y=flow,group=Year, color=Year))+
     scale_y_continuous(name=expression("Flow ("*m^3*"/s)"))+
     scale_x_continuous(name="Day of Year", breaks=seq(1,365,30), labels = labels)+
-    theme_RavenR()
-
+    rvn_theme_RavenR()
 
   return(p1)
 }

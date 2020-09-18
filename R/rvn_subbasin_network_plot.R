@@ -13,7 +13,7 @@
 #'
 #' @seealso
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
-#' \code{\link{rvn_rvh_read}} to read in the subbasin data table
+#' \code{\link{rvn_subbasin_map}} to map results for subbasins.
 #'
 #' @examples
 #'  # warning: example not run in compiling package

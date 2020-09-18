@@ -68,7 +68,7 @@ myprecip <- rvn_hyd_extract(subs="precip",hyd=myhyd)
 
 }
 \seealso{
-\code{\link{hyd.read}} for reading in the Hydrographs.csv file and
+\code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file and
 creating the object required in this function.
 
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

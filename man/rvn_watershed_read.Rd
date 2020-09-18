@@ -44,8 +44,8 @@ head(mywshd$watershed_storage)
 
 }
 \seealso{
-\code{\link{hyd.read}} for reading in the Hydrographs.csv file
-\code{\link{watershedmeb.read}} for reading in the
+\code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
+\code{\link{rvn_watershedmeb_read}} for reading in the
 WatershedMassEnergyBalance.csv file
 
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

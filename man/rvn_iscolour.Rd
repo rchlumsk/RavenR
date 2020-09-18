@@ -35,7 +35,7 @@ See original code on post in Stack Overflow
 \href{https://stackoverflow.com/questions/13289009/check-if-character-string-is-a-valid-color-representation?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa}{
 Check if character string is a valid color representation}
 
-\code{\link{col.transparent}} for creating transparent colour codes
+\code{\link{rvn_col_transparent}} for creating transparent colour codes
 }
 \keyword{check}
 \keyword{colour}

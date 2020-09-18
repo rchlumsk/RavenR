@@ -21,7 +21,7 @@
 #' (default TRUE)
 #' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
-#' @seealso \code{\link{forcings.read}} for reading in the ForcingFunctions
+#' @seealso \code{\link{rvn_forcings_read}} for reading in the ForcingFunctions
 #' file
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
@@ -51,7 +51,7 @@ rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F, add_eqn = F) {
     geom_point(aes(x=obs,y=sim))+
     scale_x_continuous(name=x.lab,limits=c(0,max.flow))+
     scale_y_continuous(name=y.lab,limits=c(0,max.flow))+
-    theme_RavenR()
+    rvn_theme_RavenR()
 
   if (add_line){
     p1 <- p1+

@@ -18,6 +18,7 @@ rvn_hyd_dygraph(hy, timezone = "UTC", basins = "", figheight = 400)
 \value{
 {res}{a list of plot handles to dygraph plots}
 
+
 See also \href{http://raven.uwaterloo.ca/}{Raven page}
 }
 \description{
@@ -30,7 +31,12 @@ structure read using rvn_hyd_read()
 hy <- rvn_hydrograph_data
 
 # view contents for subbasin 36 as dyGraph
-res<-rvn_hyd_dygraph(hy,basins="sub36")
+res<-rvn_hyd_dygraph(hy,basins="Sub36")
+res
+
+# view contents for all basins in hydrograph data
+rvn_hyd_dygraph(hy)
+
 
 }
 \keyword{Raven}

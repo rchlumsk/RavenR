@@ -16,7 +16,7 @@
 #' @param ff filename to write to without .rvt extension (added automatically)
 #' @return \item{flag}{returns TRUE if the function executed successfully}
 #'
-#' @seealso \code{\link{rvn_wsc_rvt}} to create an rvt file from Water Survey Canada (WSC) data
+#' @seealso \code{\link{rvn_rvt_wsc}} to create an rvt file from Water Survey Canada (WSC) data
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/Default.html}{James R.
 #' Craig's research page} for software downloads, including the

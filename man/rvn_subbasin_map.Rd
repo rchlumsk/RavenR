@@ -62,7 +62,7 @@ p1 + scale_fill_continuous(name="Daily Precip (mm/d)")
 
 }
 \seealso{
-\code{\link{subbasinNetwork.plot}} to create network plots
+\code{\link{rvn_subbasin_network_plot}} to create network plots
 
 See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.

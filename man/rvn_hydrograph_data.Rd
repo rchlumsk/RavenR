@@ -36,8 +36,8 @@ Hydrographs.csv file, available for download in the Raven Tutorials
 (linked below).
 }
 \seealso{
-\code{\link{custom.read}} for reading in custom output files
+\code{\link{rvn_custom_read}} for reading in custom output files
 
-\code{\link{customoutput.plot}} for plotting custom output
+\code{\link{rvn_custom_output_plot}} for plotting custom output
 }
 \keyword{datasets}

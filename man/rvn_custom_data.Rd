@@ -30,6 +30,6 @@ rvn_custom_output_plot(rvn_custom_data,IDs=seq(1,10),prd="2002-10-01/2003-09-01"
 \seealso{
 \code{\link{rvn_custom_read}} for reading in custom output files
 
-\code{\link{rvn_customoutput_plot}} for plotting custom output
+\code{\link{rvn_custom_output_plot}} for plotting custom output
 }
 \keyword{datasets}

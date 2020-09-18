@@ -80,7 +80,7 @@ rvn_annual_volume <- function (sim, obs, rplot = T, add_line = T, add_r2 = F) {
       geom_point()+
       scale_x_continuous(limits=x.lim, name=x.lab)+
       scale_y_continuous(limits=y.lim, name=y.lab)+
-      theme_RavenR()
+      rvn_theme_RavenR()
 
     if (add_line){
       p1 <- p1 +
