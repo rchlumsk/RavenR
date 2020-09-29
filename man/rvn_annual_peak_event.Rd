@@ -4,19 +4,31 @@
 \alias{rvn_annual_peak_event}
 \title{Annual Peak Event Comparison}
 \usage{
-rvn_annual_peak_event(sim, obs, add_line = T, add_r2 = F, rplot = F)
+rvn_annual_peak_event(
+  sim,
+  obs,
+  mm = 9,
+  dd = 30,
+  add_line = T,
+  add_r2 = F,
+  add_eqn = F
+)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
 
 \item{obs}{time series object of observed flows}
 
+\item{mm}{month of water year (default 9)}
+
+\item{dd}{day of water year (default 30)}
+
 \item{add_line}{optionally adds a 1:1 line to the plot for reference
 (default TRUE)}
 
 \item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
 
-\item{rplot}{boolean whether to print the plot (default FALSE)}
+\item{add_eqn}{optionally adds the equation for a linear regression line through the origin (default FALSE)}
 }
 \value{
 returns a list with peak data in a data frame, and a ggplot object
@@ -29,7 +41,7 @@ based on the water year.
 }
 \details{
 This function creates a scatterplot of the annual observed and simulated
-peaks, calculated for each available water year of data (Oct 1st hardcoded)
+peaks, calculated for each available water year of data
 within the two series provided; note that the difference between this and
 the annual.peak function is that here the peak event simulated for the same
 day as the peak event in observed data is used, instead of the largest
@@ -59,7 +71,7 @@ peak1$df_peak_event
 peak1$p1
 
 # add the r2 regression line and plot directly
-rvn_annual_peak_event(sim, obs, add_r2=T, rplot=T)
+rvn_annual_peak_event(sim, obs, add_r2=T)
 
 
 }

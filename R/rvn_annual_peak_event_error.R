@@ -6,10 +6,10 @@
 #' This function creates a plot of the percent errors in simulated peak events
 #' for each water year. The peaks are calculated as using flows from the same
 #' day as the peak event in the observed series, i.e. the timing of the peak is
-#' considered here. Note that the annual.peak.event function is first used to
+#' considered here. Note that the rvn_annual_peak_event function is first used to
 #' obtain the peaks in each year, then the percent errors are calculated.
 #'
-#' The percent errors are calculated as (QPsim-QPobs)/QPobs*100, where QP is
+#' The percent errors are calculated as (QP_sim-QP_obs)/QP_obs*100, where QP is
 #' the peak flow event.
 #'
 #' The sim and obs should be of time series (xts) format and are assumed to be
@@ -28,14 +28,13 @@
 #'
 #' @param sim time series object of simulated flows
 #' @param obs time series object of observed flows
+#' @param mm month of water year (default 9)
+#' @param dd day of water year (default 30)
 #' @param add_line optionally adds a 1:1 line to the plot for reference
 #' (default TRUE)
 #' @param add_labels optionally adds labels for overpredict/underpredict on
 #' right side axis (default TRUE)
-#' @return \item{df_peak_event_error}{data frame of the calculated peak event
-#' errors}
 #'
-#' @param rplot boolean whether to print the plot (default FALSE)
 #' @return returns a list with peak event error data in a data frame, and a ggplot object
 #'  \item{df_peak_event_error}{data frame of the calculated peak event errors}
 #'  \item{p1}{ggplot object with plotted annual peak event errors}
@@ -49,9 +48,9 @@
 #'
 #' @examples
 #' # load sample hydrograph data, two years worth of sim/obs
-#' data(hydrograph_data)
-#' sim <- hydrograph_data$hyd$Sub36
-#' obs <- hydrograph_data$hyd$Sub36_obs
+#' data(rvn_hydrograph_data)
+#' sim <- rvn_hydrograph_data$hyd$Sub36
+#' obs <- rvn_hydrograph_data$hyd$Sub36_obs
 #'
 #' # create a plot of peak annual errors with default options
 #' peak1 <- rvn_annual_peak_event_error(sim, obs)
@@ -59,13 +58,21 @@
 #' peak1$p1
 #'
 #' # plot directly and without labels
-#' rvn_annual_peak_event_error(sim, obs, add_line=T, rplot=T, add_labels=F)
+#' rvn_annual_peak_event_error(sim, obs, add_line=T,add_labels=F)$p1
+#'
+#' # plot for a water year of July 1
+#' ## note that partial period creates two points ending in 2004
+#' rvn_annual_peak_event_error(sim, obs, mm=6, add_line=T,add_labels=F)$p1
 #'
 #'
 #' @keywords Raven annual peak event error diagnostics
 #' @export rvn_annual_peak_event_error
-rvn_annual_peak_event_error <- function(sim, obs, add_line = T, add_labels = T, rplot = F) {
-  df.peak.event <- rvn_annual_peak_event(sim, obs, rplot = F)$df_peak_event
+#' @importFrom lubridate year date
+#' @importFrom ggplot2 ggplot aes geom_point geom_hline geom_text scale_x_discrete scale_y_continuous
+rvn_annual_peak_event_error <- function(sim, obs, mm=9, dd=30, add_line = T, add_labels = T)
+{
+
+  df.peak.event <- rvn_annual_peak_event(sim, obs, mm=mm, dd=dd)$df_peak_event
   errs <- (df.peak.event$sim.peak.event - df.peak.event$obs.peak.event)/df.peak.event$obs.peak.event *
     100
   text.labels <- year(df.peak.event$obs.dates)
@@ -113,8 +120,6 @@ rvn_annual_peak_event_error <- function(sim, obs, add_line = T, add_labels = T, 
     }
 
   df <- data.frame(obs.dates = df.peak.event$obs.dates, errors = errs)
-
-  if (rplot) {plot(p1)}
 
   return(list(df_peak_event_error = df,p1=p1))
 }

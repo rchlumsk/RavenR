@@ -4,7 +4,7 @@
 \alias{rvn_apply_wyearly}
 \title{Apply function for water year}
 \usage{
-rvn_apply_wyearly(x, FUN, ..., force.ends = F)
+rvn_apply_wyearly(x, FUN, ...)
 }
 \arguments{
 \item{x}{xts vector to calculate FUN for}
@@ -35,16 +35,19 @@ The rvn_apply_wyearly function applies to only one column at a time, otherwise
 only the first column will be used, with a warning.
 }
 \examples{
-
 # use sample forcing data (or use forcings_read to read in ForcingFunctions.csv)
 data(rvn_forcing_data)
 
 # apply mean as FUN to daily average temperature
 rvn_apply_wyearly(rvn_forcing_data$forcings$temp_daily_ave,mean,na.rm=T)
 
-# apply max as FUN to all forcing data, with end points included for partial periods in each water year
-## note that this uses the cmax function in RavenR rather than the base::max function
+# apply mean as FUN to all forcings
+rvn_apply_wyearly(rvn_forcing_data$forcings,mean,na.rm=T)
+
+apply maximum via RavenR::cmax as FUN to all forcings (takes the max in each column)
+## note that the base::max will not work properly here
 rvn_apply_wyearly(rvn_forcing_data$forcings,cmax,na.rm=T)
+
 
 }
 \seealso{

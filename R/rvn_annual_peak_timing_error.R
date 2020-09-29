@@ -26,11 +26,15 @@
 #'
 #' @param sim time series object of simulated flows
 #' @param obs time series object of observed flows
+#' @param mm month of water year (default 9)
+#' @param dd day of water year (default 30)
 #' @param add_line optionally adds a 1:1 line to the plot for reference
 #' (default TRUE)
 #' @param add_labels optionally adds labels for early peak/late peaks on right
 #' side axis (default TRUE)
-#' @param rplot boolean whether to print the plot (default FALSE)
+#'
+#'
+#'
 #' @return returns a list with peak timing errors in a data frame, and a ggplot object
 #'  \item{df_peak_timing_error}{data frame of the calculated peak timing errors}
 #'  \item{p1}{ggplot object with plotted annual peak errors}
@@ -60,14 +64,16 @@
 #'
 #' @keywords Raven annual peak timing error diagnostics
 #' @export rvn_annual_peak_timing_error
-rvn_annual_peak_timing_error <- function (sim, obs, add_line = T, add_labels = T, rplot = F) {
-  max.obs <- rvn_apply_wyearly(obs, max, na.rm = T)[, 2]
-  max.obs.dates <- as.Date(rvn_apply_wyearly(obs, function(x) toString(lubridate::date(rvn_which_max_xts(x))))[,
-                                                                                                       2])
-  max.sim <- rvn_apply_wyearly(sim, max, na.rm = T)[, 2]
-  max.sim.dates <- as.Date(rvn_apply_wyearly(sim, function(x) toString(lubridate::date(rvn_which_max_xts(x))))[,
-                                                                                                       2])
-  date.end <- rvn_apply_wyearly(sim, mean)[, 1]
+#' @importFrom lubridate year date
+#' @importFrom ggplot2 ggplot aes geom_point geom_hline geom_text scale_x_discrete scale_y_continuous
+rvn_annual_peak_timing_error <- function (sim, obs, mm=9, dd=30, add_line = T, add_labels = T)
+{
+
+  max.obs <- rvn_apply_wyearly_which_max_xts(obs, mm=mm, dd=dd)
+  max.obs.dates <- lubridate::date(max.obs)
+  max.sim <- rvn_apply_wyearly_which_max_xts(sim, mm=mm, dd=dd)
+  max.sim.dates <- lubridate::date(max.sim)
+  date.end <- lubridate::date(sim[rvn_wyear_indices(sim, mm=mm, dd=dd)])
   errs <- as.numeric(max.sim.dates - max.obs.dates)
   text.labels <- year(date.end)
 
@@ -118,8 +124,6 @@ rvn_annual_peak_timing_error <- function (sim, obs, add_line = T, add_labels = T
 
   }
   df <- data.frame(date.end = date.end, peak.timing.errors = errs)
-
-  if (rplot) {plot(p1)}
 
   return(list(df_peak_timing_error = df,p1=p1))
 }

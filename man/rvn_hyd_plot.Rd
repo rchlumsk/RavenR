@@ -31,7 +31,7 @@ TRUE)}
 \item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
-rvn_hyd_plot creates a hydrograph plot for the supplied flow series, or
+rvn_hyd_plot creates a hydrograph plot object for the supplied flow series, or
 equivalently a stage plot for reservoir stages.
 }
 \details{

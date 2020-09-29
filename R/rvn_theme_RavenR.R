@@ -23,8 +23,10 @@
 #' @keywords RavenR theme ggplot plot figure aesthetics
 #'
 #' @export rvn_theme_RavenR
+#' @importFrom ggplot2 theme theme_bw element_rect element_blank
 rvn_theme_RavenR <- function(){
   theme_bw() +
     theme(panel.border = element_rect(color = "black"),
-          legend.title = element_blank())
+          legend.title = element_blank())+
+    theme(axis.title = element_text(face = 'bold'))
 }

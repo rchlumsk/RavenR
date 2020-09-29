@@ -1,6 +1,6 @@
 #' Plot Hydrograph
 #'
-#' rvn_hyd_plot creates a hydrograph plot for the supplied flow series, or
+#' rvn_hyd_plot creates a hydrograph plot object for the supplied flow series, or
 #' equivalently a stage plot for reservoir stages.
 #'
 #' This function creates a hydrograph plot using the supplied time series; any
@@ -126,7 +126,7 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, win
     scale_x_date(limits = c(x.min,x.max))+
     xlab("Date")+
     ylab(expression("Flow ("*m^3*"/s)"))+
-    theme_RavenR()+
+    rvn_theme_RavenR()+
     theme(legend.position = "bottom") +
     scale_colour_brewer(type = "qual", palette = 3)
 
@@ -170,9 +170,6 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, win
 
   }
 
-
-
-  plot(p1)
   return(p1)
 }
 
