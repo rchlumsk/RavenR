@@ -11,7 +11,7 @@ rvn_substrLeft(x, n)
 \arguments{
 \item{x}{a string to manipulate}
 
-\item{n}{number of characters to use from the left side of the string}
+\item{n}{number of characters to remove from the left side of the string}
 }
 \description{
 substring from the Left

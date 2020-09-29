@@ -43,7 +43,9 @@ rvn_flow_spaghetti <- function(flow) {
   ticks.at <- seq(1, 366, 1)
   ticks.seq <- c(seq(274, 366, 1), seq(1, 273, 1))
 
-  plot.df <- fortify(flow)
+  # plot.df <- fortify(flow)
+  plot.df <- data.frame(flow)
+
   plot.df$doy <- lubridate::yday(plot.df$Index)
   plot.df$Year <- as.factor(year(plot.df$Index))
   colnames(plot.df)[2] <- "flow"

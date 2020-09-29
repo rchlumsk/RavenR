@@ -50,7 +50,7 @@ rvn_rvh_write is typically used to create a 'clean' .rvh file. rvn_rvh_overwrite
 \seealso{
 \code{\link{rvn_rvh_read}} for the function used to read in the HRU and SubBasin data
 \code{\link{rvn_rvh_cleanhrus}} for the function used to process HRU dataframe\cr
-For generating blank SubBasin and HRU tables, see: \code{\link{rvn_rvh_blankSBdf}} and \code{\link{rvn_rvh_blankHRUdf}}\cr
+For generating blank SubBasin and HRU tables, see: \code{\link{rvn_rvh_blankSBdf}} and \code{\link{rvn_rvh_blankHRUdf}}
 See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 }
 \author{

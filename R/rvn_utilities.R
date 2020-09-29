@@ -2,8 +2,9 @@
 #'
 #' rvn_substrLeft returns n characters from the left side of the supplied string x.
 #'
+#'
 #' @param x a string to manipulate
-#' @param n number of characters to use from the left side of the string
+#' @param n number of characters to remove from the left side of the string
 #' @seealso \code{\link{rvn_substrRight}} for using n characters from right side of
 #' string,
 #'
@@ -416,15 +417,98 @@ rvn_apply_wyearly_which_max_xts <- function(x, mm=9, dd=30)
 }
 
 
-#' Pipe operator
+#' @title Determine period of data
 #'
-#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
+#' rvn_get_prd either obtains the full period of a given xts object,
+#' or checks the provided prd against an xts object for consistency and issues
+#' a warning of an issue is found.
 #'
-#' @name %>%
-#' @rdname pipe
-#' @keywords internal
-#' @export
-#' @importFrom magrittr %>%
-#' @usage lhs \%>\% rhs
-NULL
+#' XXX to update error checking
+#'
+#' @param x xts object
+#' @param prd period argument in format YYYY-MM-DD/YYYY-MM-DD as a character
+#' @return {prd argument with warnings provided if needed}
+#' @seealso \code{\link{rvn_theme_RavenR}} provides a theme for the RavenR package
+#'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' @keywords get prd xts
+#' @examples
+#' data(rvn_hydrograph_data)
+#'
+#' # get full valid prd argument for xts object
+#' rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs)
+#'
+#' # check prd argument against xts object
+#' rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "2020-01-01/2020-02-01")
+#' rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "2002-24-01/2020-02-01")
+#' rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "20-24-01/2020-02-01")
+#'
+#'
+#' @export rvn_get_prd
+#' @importFrom lubridate date year month day
+rvn_get_prd <- function(x, prd=NULL)
+{
+# determine the period to use
+  if (!(is.null(prd))) {
 
+    # prd is supplied; check that it makes sense
+    firstsplit <- unlist(strsplit(prd,"/"))
+    if (length(firstsplit) != 2) {
+      stop("Check the format of supplied period argument prd; should be two dates separated by '/'.")
+    }
+    if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
+        || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
+      stop("Check the format of supplied period argument prd; two dates should be in YYYY-MM-DD format.")
+    }
+    # add conversion to date with xts format check ?
+
+    # check that both periods are valid dates
+   tryCatch(
+      {
+        as.Date(unlist(strsplit(prd,"/"))[1])
+      },
+      error=function(cond) {
+        message(paste("Issue with prd, %s does not appear to be a valid date in Y-M-D format:", unlist(strsplit(prd,"/"))[1]))
+        message(cond)
+        # return(FALSE)
+        stop()
+      },
+      warning=function(cond) {
+        message(paste("Warning with prd, %s does not appear to be a valid date in Y-M-D format:", unlist(strsplit(prd,"/"))[1]))
+        message(cond)
+      }
+    )
+
+    tryCatch(
+      {
+        as.Date(unlist(strsplit(prd,"/"))[2])
+      },
+      error=function(cond) {
+        message(paste("Issue with prd, %s does not appear to be a valid date in Y-M-D format:", unlist(strsplit(prd,"/"))[2]))
+        message(cond)
+        # return(FALSE)
+        stop()
+      },
+      warning=function(cond) {
+        message(paste("Warning with prd, %s does not appear to be a valid date in Y-M-D format:", unlist(strsplit(prd,"/"))[2]))
+        message(cond)
+      }
+    )
+
+    # check that the prd is valid for x
+    if (nrow(x[prd]) == 0) {
+      warning("x is empty for supplied prd argument")
+    }
+
+  } else {
+    # period is not supplied
+
+    # get the whole range
+    N <- nrow(x)
+    prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(x[1,1]),month(x[1,1]),day(x[1,1]),
+                   year(x[N,1]),month(x[N,1]),day(x[N,1]) )
+  }
+  return(prd)
+}
