@@ -1,4 +1,4 @@
-#' Generates a Raven grid weights file given an HRU shapefile and a grid shapefile
+#' @title Generates a Raven grid weights file given an HRU shapefile and a grid shapefile
 #'
 #' Generate grid weights file GaugeWeights.rvi given an HRU shapefile with HRU ID column
 #' HRUIDcol (default 'HRU_ID') and a grid shapefile with ID column gridIDcol (default: 'cellID')
@@ -33,6 +33,7 @@
 #' @keywords netcdf grid shapefile conversion
 #'
 #' @examples
+#'
 #' # load example rvh file
 #' nith <- system.file("extdata",'Nith.rvh', package = "RavenR")
 #' rvh <- rvn_rvh_read(nith)
@@ -48,13 +49,17 @@
 #'
 #' # generate .rvi file of grid weights
 #' validHRUIDs <- rvh$HRUtable$ID
-#' tmp <- rvn_gen_gridweights(HRUshpfile, GRDshpfile, validHRUIDs, gridIDcol = 'GridIDs', HRUIDcol = "HRU_ID", outfile = "Nith_GridWeights.rvi)
+#' tmp <- rvn_gen_gridweights(HRUshpfile, GRDshpfile, validHRUIDs,
+#' gridIDcol = 'GridIDs', HRUIDcol = "HRU_ID", outfile = "Nith_GridWeights.rvi")
 #'
 #' @export rvn_gen_gridweights
+#' @importFrom rgdal readOGR
+#' @importFrom rgeos gBuffer gIntersection
 rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs, HRUIDcol="HRU_ID",
-                                gridIDcol="cellID", outfile="GridWeights.rvt") {
-  require(rgdal)
-  require(rgeos)
+                                gridIDcol="cellID", outfile="GridWeights.rvt")
+{
+  # require(rgdal)
+  # require(rgeos)
 
   # read in HRU file
   #----------------------------------------------------------

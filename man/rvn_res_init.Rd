@@ -2,7 +2,32 @@
 % Please edit documentation in R/rvn_res_init.R
 \name{rvn_res_init}
 \alias{rvn_res_init}
-\title{Create initial conditions file for Reservoirs}
+\title{Create initial conditions file for Reservoirs
+
+rvn_res_init is used to write an initial conditions (rvc) format file for Raven,
+with the calculated reservoir stages written in.
+
+This function is used to write an initial conditions format file for Raven
+with the relevant initial reservoir stages. This file can be used directly
+as the model rvc file, or one may copy and paste the information into a
+separate rvc file for use (i.e. if there is other information to be included
+in the model rvc file).
+
+The supplied file in ff should be a csv file with the format headers of:
+SUBID,STAGE,FLOW,VOL,AREA. The header text is not important as the function
+assumes the order only, however some header must exist. The SUBID will be
+the integer of the subbasin where the reservoir is located, and will repeat
+the value for each point in the stage relationship provided. This is the
+only required variable. This format is the same as is requried for the
+res.fit function (thus the extra columns that are not used by this
+function).
+
+Each point in the stage relationship table is used, so if there exist
+multiple dry inflow points, the minimum stage of these points will be used
+as the 'minimum' stage.
+
+Also note that the initial stage must be between 0 and 1, so that the
+initial stage is not less than the dry stage or greater than the maximum.}
 \usage{
 rvn_res_init(ff, initial_stage = 0, output = "initial_res_conditions.rvc")
 }
@@ -18,10 +43,11 @@ use as initial condition; default 0.0}
 \item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
+Create initial conditions file for Reservoirs
+
 rvn_res_init is used to write an initial conditions (rvc) format file for Raven,
 with the calculated reservoir stages written in.
-}
-\details{
+
 This function is used to write an initial conditions format file for Raven
 with the relevant initial reservoir stages. This file can be used directly
 as the model rvc file, or one may copy and paste the information into a
@@ -45,9 +71,6 @@ Also note that the initial stage must be between 0 and 1, so that the
 initial stage is not less than the dry stage or greater than the maximum.
 }
 \examples{
-# warning: example not run, sample example for associated files only
-\dontrun{
-# File location
 ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
 
 #-- Output file name
@@ -55,7 +78,13 @@ temprvc <- tempfile(pattern = "file", tmpdir = tempdir(), fileext = ".rvc")
 
 # Run function
 rvn_res_init(ff, initial_stage=0.4, output=temprvc)
-}
+
+# view file
+readLines(temprvc)
+
+# cleanup temporary file
+unlink(temprvc)
+
 
 }
 \seealso{

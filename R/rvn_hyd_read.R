@@ -1,8 +1,10 @@
-#' Read in Raven Hydrograph file
+#' @title Read in Raven Hydrograph file
 #'
+#' @description
 #' rvn_hyd_read is used to read in the Hydrographs.csv file produced by the
 #' modelling Framework Raven.
 #'
+#' @details
 #' This function expects a full file path to the Hydrographs.csv file, then
 #' reads in the file using fread. The main advantage of this function is
 #' renaming the columns to nicer names and extracting the units into something
@@ -31,7 +33,6 @@
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #'
-#' @importFrom data.table fread
 #'
 #' @examples
 #' # read in hydrograph sample csv data from RavenR package
@@ -44,9 +45,9 @@
 #' head(myhyd$hyd)
 #' myhyd$units
 #'
-#'
 #' @keywords Raven read.csv hydrograph
 #' @export rvn_hyd_read
+#' @importFrom xts xts
 rvn_hyd_read <- function(ff=NA,tzone=NULL) {
 
   if (missing(ff)) {
@@ -55,8 +56,6 @@ rvn_hyd_read <- function(ff=NA,tzone=NULL) {
 
   #read hydrograph output
   hydrographs <- read.csv(ff,header=T,nrows=5)
-  # careful in date-time formats; excel can screw it up if csv is saved over. This works for
-  # an untouched Raven output file
 
   # assumed colClasses structure - mostly numeric except date and hour columns
   classes <- c(c('numeric','character','character'),rep('numeric',ncol(hydrographs)-3))

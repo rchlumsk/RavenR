@@ -1,5 +1,6 @@
-#' Create Raven observation data weight (rvt) file
+#' @title Create Raven observation data weight (rvt) file
 #'
+#' @description
 #' Creates an observation data weights file named filename from a continuous (gap-free) xts time series ts
 #' with values between 0 and 1
 #'

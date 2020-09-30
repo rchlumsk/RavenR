@@ -9,28 +9,26 @@ rvn_rvi_process_plot(connections, plot = TRUE, pdfout = NULL)
 \arguments{
 \item{connections}{a dataframe of from-to connections generated using rvn_rvi_connections()}
 
-\item{plot}{boolean whether to print the plot, default TRUE}
-
-\item{pdfout}{name of pdf file to save the network plot to, if null no PDF is generated#'}
+\item{pdfout}{name of pdf file to save the network plot to, if null no PDF is generated}
 }
 \value{
 {p1}{returns ggplot object. Also generates a .pdf file in working directory if pdfplot argument is not NULL.}
 }
 \description{
-This routine takes a connections datafrom generated using rvn_rvi_connections()
-and plots the connections information as a network graph.
+This routine takes a connections data from generated using rvn_rvi_connections()
+and returns the connections information as a network graph ggplot object.
+}
+\details{
+This function uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot.
 }
 \note{
 tries to follow basic network structure, accomodates unrecognized state variables on LHS of plot
 }
 \examples{
- rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
+rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
+conn <- rvn_rvi_connections(rvi)
 
- # get number of Hydrologic processes
- nrow(rvi$HydProcTable)
-
- conn <- rvn_rvi_connections(rvi)
- rvn_rvi_process_plot(conn)
+rvn_rvi_process_plot(conn)
 
 }
 \seealso{

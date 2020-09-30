@@ -2,7 +2,7 @@
 % Please edit documentation in R/rvn_rvt_read.R
 \name{rvn_rvt_read}
 \alias{rvn_rvt_read}
-\title{reads in a :MultiData or :Data format single .rvt (Raven time series) file}
+\title{Read .rvt (Raven time series) file}
 \usage{
 rvn_rvt_read(filename)
 }
@@ -15,15 +15,18 @@ Returns an xts time series with at least one dataset (multiple for :MultiData fi
 }
 \description{
 This routine reads in a valid Raven time series input (.rvt) file and returns the
-information as an xts time series. It supports :MultiData, :Data, :ObservedData,
+information as an xts time series.
+}
+\details{
+It supports :MultiData, :Data, :ObservedData,
 :BasinInflowHydrograph, and most of the other :Data-like time series commands. It does
 NOT support the master .rvt file with :Gauge or :GriddedForcing commands
 }
 \examples{
- # read in rvt file
- system.file('extdata','GlenAllan.rvt',package="RavenR")\%>\%
- rvn_rvt_read(.) -> rvt
- plot(rvt$TEMP_DAILY_MIN)
+# read in rvt file
+system.file('extdata','GlenAllan.rvt',package="RavenR")\%>\%
+rvn_rvt_read(.) -> rvt
+plot(rvt$TEMP_DAILY_MIN)
 
 }
 \seealso{

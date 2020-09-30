@@ -1,7 +1,9 @@
-#' Write Raven rvt file from Flow Series
+#' @title Write Raven rvt file from Flow Series
 #'
+#' @description
 #' rvn_rvt_flow generates a Raven rvt file from a flow series
 #'
+#' @details
 #' This function writes the rvt file for a given time series of
 #' flows. The supplied flows should be in the xts format. This
 #' function operates similarly to the ECflow.rvt function (
@@ -31,7 +33,7 @@
 #' @param write_redirect (optional) write the :RedirectToFile commands in a
 #' separate .rvt file
 #' @param flip_number (optional) put the subID first in the .rvt filename
-#' @return \item{flag}{returns TRUE if the function executed successfully}
+#' @return \item{TRUE}{returns TRUE if the function executed successfully}
 #' @seealso \code{\link{rvn_rvt_wsc}} to create an rvt file from Water Survey Canada (WSC) data
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/Default.html}{James R.
@@ -52,7 +54,9 @@
 #' rvn_rvt_flow(obs,subID=36,stnName="Nith_Obs1",write_redirect=T,flip_number=1)
 #'
 #' @export rvn_rvt_flow
-rvn_rvt_flow <- function(flow.series,subID,stnName,rvt_type='ObservationData',prd=NULL,write_redirect=F,flip_number=F) {
+rvn_rvt_flow <- function(flow.series,subID,stnName,
+                         rvt_type='ObservationData',prd=NULL,write_redirect=F,flip_number=F)
+{
 
   # list of known rvt flow data types to supply to Raven model
   known.rvt_types <- c("ObservationData","BasinInflowHydrograph","ReservoirExtraction")
@@ -62,20 +66,7 @@ rvn_rvt_flow <- function(flow.series,subID,stnName,rvt_type='ObservationData',pr
     stop(sprintf("Unknown rvt_type %s, please check.",rvt_type))
   }
 
-  # determine period ----
-  # determine the period to use
-  if (!(is.null(prd))) {
-
-    # period is supplied; check that it makes sense
-    firstsplit <- unlist(strsplit(prd,"/"))
-    if (length(firstsplit) != 2) {
-      stop("Check the format of supplied period; should be two dates separated by '/'.")
-    }
-    if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
-        || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
-      stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
-    }
-  }
+  prd <- rvn_get_prd(flow.sim, prd)
 
   # begin writing the support file
   if (write_redirect) {
@@ -117,6 +108,5 @@ rvn_rvt_flow <- function(flow.series,subID,stnName,rvt_type='ObservationData',pr
     close(fc.redirect)
   }
 
-  return("flag"=TRUE)
+  return(TRUE)
 }
-

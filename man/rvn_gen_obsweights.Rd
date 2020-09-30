@@ -2,7 +2,10 @@
 % Please edit documentation in R/rvn_gen_obsweights.R
 \name{rvn_gen_obsweights}
 \alias{rvn_gen_obsweights}
-\title{Create weights time series for calibration/diagnostic evaluation}
+\title{Create weights time series for calibration/diagnostic evaluation
+
+Creates an observation data weights time series based upon dates stored in
+an xts time series and criterion given by the user}
 \usage{
 rvn_gen_obsweights(
   ts,
@@ -29,6 +32,8 @@ the latter case, only the julian day of the enddate matters.}
 {wts}{returns numeric vector of weights}
 }
 \description{
+Create weights time series for calibration/diagnostic evaluation
+
 Creates an observation data weights time series based upon dates stored in
 an xts time series and criterion given by the user
 }

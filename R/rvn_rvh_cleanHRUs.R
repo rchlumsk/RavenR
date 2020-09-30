@@ -1,4 +1,4 @@
-#' Clean HRU data table.
+#' @title Clean HRU data table.
 #'
 #' Takes \code{\link{rvn_rvh_read}}-generated HRUtable and SBTable and returns cleaned HRUtable
 #' with (hopefully) fewer HRUs
@@ -156,5 +156,5 @@ rvn_rvh_cleanhrus<-function(HRUtab,SBtab,area_tol=0.001,merge=FALSE,elev_tol=50,
   print(paste0("Initial area: ",toString(init_Area)," km2;  final area: ",toString(sum(HRUtab$Area)) ," km2"))
 
 #  return (list(HRUtable=HRUtab)) # should also return re-classification information (e.g., similarity list for plotting results)
-  return (data.frame(HRUtab))
+  return(data.frame(HRUtab))
 }

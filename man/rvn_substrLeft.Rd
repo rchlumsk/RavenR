@@ -25,13 +25,9 @@ rvn_substrLeft("hello world",3)
 
 }
 \seealso{
-\code{\link{rvn_substrRight}} for using n characters from right side of
-string,
+\code{\link{rvn_substrRight}} for using n characters from right side of string
 
-\code{\link{rvn_substrMRight}} for removing n characters from the right side of
-a string,
-\code{\link{rvn_substrMLeft}} for removing n characters from the left side of a
-string
+\code{\link{rvn_substrMRight}} for removing n characters from the right side of a string
 }
 \keyword{left}
 \keyword{string}

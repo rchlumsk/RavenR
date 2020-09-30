@@ -1,16 +1,15 @@
-#' Generate grid overlay from netCDF file
+#' @title Generate grid overlay from netCDF file
 #'
 #' Takes the latitude-longitude cell coordinates from a netCDF file (assumed to be named 'lat' and 'long')
 #' generates an estimate of the grid polygons associated with each netCDF cell and exports this to a shapefile (outshp)
+#'
+#' Note that the function can fail due to bad netCDF file or inappropriate UTM zone;
 #'
 #' @param ncfile netCDF file with latitude and longitude variables
 #' @param UTMzone UTM zone for exported shapefile (integer)
 #' @param outshp name of output shapefile prefix (i.e., no .shp extension)
 #'
 #' @return \item{TRUE}{returns TRUE if executed properly. Also generates shapefile in folder}
-#'
-#' @details not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UTM zone;
-#' uses ncdf.tools, sp, rgdal, deldir, and sna libraries
 #'
 #' @seealso \code{\link{rvn_gen_gridweights}} for generating a shapefile of gridweights
 #'
@@ -20,30 +19,36 @@
 #'
 #' @author James R. Craig, University of Waterloo, 2019
 #' @keywords netcdf grid shapefile conversion
+#'
 #' @examples
-#' \dontrun{
 #' ncfile <- system.file("extdata/GlenAllan.nc", package="RavenR")
 #' UTMzone <- 17
 #' outshp <- "maps/RDPS_Grid"
 #' rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
-#' }
 #'
 #'
 #' @export rvn_netcdf_to_gridshp
+#' @importFrom sp coordinates proj4string spTransform Polygons SpatialPolygonsDataFrame SpatialPolygons
+#' @importFrom rgdal writeOGR
+#' @importFrom deldir deldir
 rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp)
 {
+  # require(ncdf.tools)
+  # @importFrom ncdf.tools readNcdf
 
-  require(ncdf.tools)
-  require(sp)
-  require(rgdal)
-  require(deldir)
-  require(sna)
+  # require(sp)
+  # require(rgdal)
+  # require(deldir)
+  # require(sna)
 
   # extract lat-long from netCDF file
   #-----------------------------------------------------------------------
-  mydata<-ncdf.tools::readNcdf(ncfile,var.name=c("lat"))
+  # nc_data <- nc_open(ncfile)
+  # ncdf4::ncvar_get(nc_data, "lat")
+
+  mydata<- readNcdf(ncfile,var.name=c("lat"))
   lat<-as.vector(t(mydata))
-  mydata<-ncdf.tools::readNcdf(ncfile,var.name=c("lon"))
+  mydata<- readNcdf(ncfile,var.name=c("lon"))
   long<-as.vector(t(mydata))
 
   ncols=length(mydata[1,])
@@ -66,7 +71,7 @@ rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp)
 
   # generate voronoi diagram
   #-----------------------------------------------------------------------
-  voronoi <- deldir::deldir(xx,yy)
+  voronoi <- deldir(xx,yy)
 
   #plot(xx, yy, type="n", asp=1)
   #points(xx,yy,  pch=20, col="red", cex=0.5)
@@ -89,10 +94,10 @@ rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp)
   # write to file
   #-----------------------------------------------------------------------
   unlink(paste0(outshp,".*")) # deletes old file if it exists
-  rgdal::writeOGR(voronoishp,dsn=getwd(),layer=outshp, driver="ESRI Shapefile")
+  writeOGR(voronoishp,dsn=getwd(),layer=outshp, driver="ESRI Shapefile")
 
   #plot(voronoishp,col="blue")
 
-  return (TRUE)
+  return(TRUE)
 }
 

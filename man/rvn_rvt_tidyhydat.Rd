@@ -15,18 +15,15 @@ rvn_rvt_tidyhydat(
 )
 }
 \arguments{
-\item{indata}{tibble of WSC flow data from tidyhydat's hy_daily_flows()
-function}
+\item{indata}{tibble of WSC flow data from tidyhydat's hy_daily_flows() function}
 
 \item{subIDs}{vector of subbasin IDs to correspond to the stations in indata}
 
 \item{prd}{(optional) data period to use in .rvt file}
 
-\item{stnNames}{(optional) character vector of alternative station names to
-use}
+\item{stnNames}{(optional) character vector of alternative station names to use}
 
-\item{write_redirect}{(optional) write the :RedirectToFile commands in a
-separate .rvt file}
+\item{write_redirect}{(optional) write the :RedirectToFile commands in a separate .rvt file}
 
 \item{flip_number}{(optional) put the subID first in the .rvt filename}
 

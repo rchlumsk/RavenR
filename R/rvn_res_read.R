@@ -37,7 +37,9 @@
 #' res$units
 #'
 #' @export rvn_res_read
-rvn_res_read <- function(ff=NA) {
+#' @importFrom xts xts
+rvn_res_read <- function(ff=NA)
+{
 
   if (missing(ff)) {
     stop("Requires the full file path to the ReservoirStages.csv file.")

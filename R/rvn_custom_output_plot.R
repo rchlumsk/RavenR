@@ -26,7 +26,11 @@
 #' rvn_custom_output_plot(mycustomdata, IDs=seq(1,10), prd="2002-10-01/2003-09-01")
 #'
 #' @export rvn_custom_output_plot
-rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
+#' @importFrom ggplot2 fortify ggplot aes geom_line ylab xlab scale_colour_brewer scale_x_datetime
+#' @importFrom reshape2 melt
+#' @importFrom xts xtsAttributes
+rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL)
+{
 
   #determine IDs lis, if null - includes all
   if (is.null(IDs)){
@@ -70,7 +74,6 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
       #ggtitle(plot.title) +
       scale_colour_brewer(type = "qual", palette = 3)
 
-
   } else { #line plot is default for state variables
 
     p1 <- ggplot()+
@@ -80,29 +83,28 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL){
       xlab("")+
       #ggtitle(plot.title)+
       scale_colour_brewer(type = "qual", palette = 3)
-
   }
 
-  # Change plot limits to period
-  # determine the period to use
-  if (!(is.null(prd))) {
-    # period is supplied; check that it makes sense
-    firstsplit <- unlist(strsplit(prd,"/"))
-    if (length(firstsplit) != 2) {
-      stop("Check the format of supplied period; should be two dates separated by '/'.")
-    }
-    if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
-        || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
-      stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
-    }
-    # add conversion to date with xts format check ?
+  # # Change plot limits to period
+  # # determine the period to use
+  # if (!(is.null(prd))) {
+  #   # period is supplied; check that it makes sense
+  #   firstsplit <- unlist(strsplit(prd,"/"))
+  #   if (length(firstsplit) != 2) {
+  #     stop("Check the format of supplied period; should be two dates separated by '/'.")
+  #   }
+  #   if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
+  #       || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
+  #     stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
+  #   }
+  #   # add conversion to date with xts format check ?
+
+  prd <- rvn_get_prd(cust, prd)
+  firstsplit <- unlist(strsplit(prd,"/"))
 
     #Limit plot to period
     p1 <- p1 +
       scale_x_datetime(limits=c(as.POSIXct(firstsplit[1]),as.POSIXct(firstsplit[2])))
-  }
-
- plot(p1)
 
  return(p1)
 }

@@ -20,20 +20,20 @@ This routine reads in a valid Raven main input (.rvi) file and returns the
 information about hydrological processes as a data table.
 }
 \details{
-does not like comma-delimited tables with a trailing comma
-}
-\note{
 does not like tabs in the .rvi file - it should be untabified first.
 The .rvi file can have arbitrary contents outside of the :HydrologicProcesses-
 :EndHydrologicProcesses block and :SubBasins-:EndSubBasins command blocks.
+
+does not like comma-delimited tables with a trailing comma
 }
 \examples{
-  # sample workflow of rvn_rvi_read
-  system.file("extdata","Nith.rvi", package="RavenR") \%>\%
-  rvn_rvi_read(.) -> rvi
+# sample workflow of rvn_rvi_read
+rvi <- system.file("extdata","Nith.rvi", package="RavenR") \%>\%
+rvn_rvi_read(.)
 
-  # get number of Hydrologic processes
-  numProcss <- nrow(rvi$HydProcTable)
+# get number of Hydrologic processes
+nrow(rvi$HydProcTable)
+
 }
 \seealso{
 rvi.connections

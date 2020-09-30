@@ -1,4 +1,4 @@
-#' Create initial conditions file for Reservoirs
+#' @title Create initial conditions file for Reservoirs
 #'
 #' rvn_res_init is used to write an initial conditions (rvc) format file for Raven,
 #' with the calculated reservoir stages written in.
@@ -37,9 +37,6 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven reservoir stage relationship initial conditions
 #' @examples
-#' # warning: example not run, sample example for associated files only
-#' \dontrun{
-#' # File location
 #' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
 #'
 #' #-- Output file name
@@ -47,10 +44,17 @@
 #'
 #' # Run function
 #' rvn_res_init(ff, initial_stage=0.4, output=temprvc)
-#' }
+#'
+#' # view file
+#' readLines(temprvc)
+#'
+#' # cleanup temporary file
+#' unlink(temprvc)
+#'
 #'
 #' @export rvn_res_init
-rvn_res_init <- function(ff, initial_stage=0.0, output="initial_res_conditions.rvc") {
+rvn_res_init <- function(ff, initial_stage=0.0, output="initial_res_conditions.rvc")
+{
 
   if (initial_stage < 0 || initial_stage > 1) {
     stop("Initial stage must be between 0 and 1.")
@@ -61,7 +65,7 @@ rvn_res_init <- function(ff, initial_stage=0.0, output="initial_res_conditions.r
   resdf <- res$res
 
   # initiate files
-  fc2 <- file(tempfile, open='w+a')
+  fc2 <- file(output, open='w+a')
   writeLines(c('# Initial conditions for reservoirs in a Raven model',
                '# Copy + Paste these lines into the rvc file',
                '#'), fc2)
@@ -71,7 +75,7 @@ rvn_res_init <- function(ff, initial_stage=0.0, output="initial_res_conditions.r
   sb_id <- as.numeric(gsub('sub','',colnames(resdf)[sb_cols], ignore.case = T))
 
   for (i in 1:length(sb_cols)) {
-    stage <- coredata(resdf[,sb_cols[i]])
+    stage <- as.numeric(resdf[,sb_cols[i]])
     value <- min(stage) + initial_stage * (max(stage) - min(stage))
     writeLines(sprintf(':InitialReservoirStage  %i  %.2f',sb_id[i], value), fc2)
   }

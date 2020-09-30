@@ -1,10 +1,10 @@
-#' EC Climate Station File Conversion
+#' @title EC Climate Station File Conversion
 #'
-#' Note - this function is designated to use data from the weathercan package
-#'
+#' @description
 #' rvn_rvt_ECmet converts Environment Canada historical meteorological data for a
 #' given station into the .rvt format usable in Raven.
 #'
+#' @details
 #' The function prints in the :MultiData format; the particular set of forcings to
 #' print can be set with the forcing_set command. The data should be downloaded
 #' with missing days included. The download website is linked below.
@@ -51,6 +51,8 @@
 #' (i.e. time gaps, not missing values) - check for missing data and issuing a
 #' warning that post-processing will be required
 #'
+#' Note - this function is designated to use data from the weathercan package
+#'
 #' ### FUNCTION IS CURRENTLY IN BETA MODE AND UNDERGOING TESTING + UPDATES ###
 #'
 #' Current limitations of the function: - quality control is not implemented;
@@ -95,8 +97,11 @@
 #' # forcing_set 2 includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
 #' rvn_rvt_ECmet(metdata = kam, forcing_set = 2, prefix = NULL, write_stndata = T, write_redirect = T)
 #'
-#' @export rvn_rvt_ECmet
 #'
+#' @export rvn_rvt_ECmet
+#' @importFrom xts xts
+#' @importFrom dplyr filter
+#' @importFrom ggplot2 autoplot theme element_blank
 rvn_rvt_ECmet <-  function(metdata, prd = NULL, stnName = NULL, forcing_set = 1, prefix = 'met_',
                            write_redirect = F, write_stndata = F, rd_file = "met_redirects.rvt",
                            stndata_file = "met_stndata.rvt") {
@@ -223,7 +228,7 @@ rvn_rvt_ECmet <-  function(metdata, prd = NULL, stnName = NULL, forcing_set = 1,
 
     # Provide a visual of generated time series
     print("Overview of generated timeseries")
-    print(autoplot(rr.ts, geom="line", main = sn)+theme_bw()+theme(axis.title.x = element_blank()))
+    print(autoplot(rr.ts, geom="line", main = sn)+rvn_theme_RavenR()+theme(axis.title.x = element_blank()))
   }
 
   ## Write geographic values of stations to main rvt file
@@ -257,35 +262,4 @@ rvn_rvt_ECmet <-  function(metdata, prd = NULL, stnName = NULL, forcing_set = 1,
   }
 
   return(TRUE)
-}
-
-#' Generate Raven .rvt files from EC Station data
-#'
-#' @param station_tbl tibble of Station info from weathercan::stations_search(). Can also be data.frame with station_ids column.
-#' @param start Date/Character. The start date of the data in YYYY-MM-DD format (applies to all stations_ids).
-#' @param end Date/Character. The end date of the data in YYYY-MM-DD format (applies to all station_ids).
-#' @param interval Character. Interval of the data, one of "hour", "day", "month".
-#' @param forcing_set Integer. Specifies the set of forcings to print to file, see \link{rvn_rvt_ECmet} (optional)
-#' @param ... Additional arguments passed to \link{rvn_rvt_ECmet}
-#'
-#' @return None
-#' @author Leland Scantlebury
-#' @export rvn_rvt_ECmet_fromStns
-#'
-#' @examples
-#' # Built for pipes
-#' weathercan::stations_search("Waterloo", interval="day") %>%
-#'             filter(station_id %in% c(4832, 4831)) %>%
-#'             rvn_rvt_ECmet_fromStns(start="1990-10-01", end="2000-09-30", interval="day")
-rvn_rvt_ECmet_fromStns <- function(station_tbl, start, end, interval, forcing_set = 1, ...) {
-
-  #-- Get data
-  datatbl <- weathercan::weather_dl(station_ids = station_tbl$station_id,
-                                    start = start, end = end, interval = interval)
-
-  #-- TODO: Error handling if no data
-
-  #-- Run rvn_rvt_ECmet
-  rvn_rvt_ECmet(metdata = datatbl, forcing_set =  ...)
-
 }

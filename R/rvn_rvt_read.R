@@ -1,7 +1,11 @@
-#' reads in a :MultiData or :Data format single .rvt (Raven time series) file
+#' @title Read .rvt (Raven time series) file
 #'
+#' @description
 #' This routine reads in a valid Raven time series input (.rvt) file and returns the
-#' information as an xts time series. It supports :MultiData, :Data, :ObservedData,
+#' information as an xts time series.
+#'
+#' @details
+#' It supports :MultiData, :Data, :ObservedData,
 #' :BasinInflowHydrograph, and most of the other :Data-like time series commands. It does
 #' NOT support the master .rvt file with :Gauge or :GriddedForcing commands
 #'
@@ -17,14 +21,15 @@
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
-#'  # read in rvt file
-#'  system.file('extdata','GlenAllan.rvt',package="RavenR")%>%
-#'  rvn_rvt_read(.) -> rvt
-#'  plot(rvt$TEMP_DAILY_MIN)
+#' # read in rvt file
+#' system.file('extdata','GlenAllan.rvt',package="RavenR")%>%
+#' rvn_rvt_read(.) -> rvt
+#' plot(rvt$TEMP_DAILY_MIN)
 #'
 #' @keywords Raven  rvt  time series
 #' @export rvn_rvt_read
-#'
+#' @importFrom xts xts
+#' @importFrom lubridate interval
 rvn_rvt_read<-function(filename) {
   stopifnot(file.exists(filename))
 
@@ -34,7 +39,6 @@ rvn_rvt_read<-function(filename) {
 
   mult<-grep(":MultiData", readLines(filename))
   is_multidata<-!(length(mult)==0)
-
 
   #find location of start and end of data (assumes :Data)
   if (!is_multidata){

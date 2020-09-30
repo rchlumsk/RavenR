@@ -34,6 +34,7 @@
 #' head(myforcings$forcings)
 #'
 #' @export rvn_forcings_read
+#' @importFrom xts xts
 rvn_forcings_read <- function(ff=NA) {
 
   if (missing(ff)) {
@@ -112,4 +113,3 @@ rvn_forcings_read <- function(ff=NA) {
 
   return(list("forcings" = watersheds, "units" = units))
 }
-

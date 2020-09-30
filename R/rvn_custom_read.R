@@ -23,14 +23,15 @@
 #' @keywords Raven read custom output
 #' @examples
 #'
-#'# find sample rvh file for Nith subwatershed
-#'ff <- system.file("extdata","run1_SNOW_Daily_Average_ByHRU.csv", package="RavenR")
+#' # find sample rvh file for Nith subwatershed
+#' ff <- system.file("extdata","run1_SNOW_Daily_Average_ByHRU.csv", package="RavenR")
 #'
-#'# extract and plot custom data
-#'mycustomdata <- rvn_custom_read(ff)
-#'plot(mycustomdata[,5],main='Daily Average SNOW - HRU 5')
+#' # extract and plot custom data
+#' mycustomdata <- rvn_custom_read(ff)
+#' plot(mycustomdata[,5],main='Daily Average SNOW - HRU 5')
 #'
 #' @export rvn_custom_read
+#' @importFrom xts xts
 rvn_custom_read <- function(ff=NA, no.runname=F) {
 
   if (missing(ff)) {

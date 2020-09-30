@@ -40,12 +40,10 @@ separate .rvt file}
 \item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
-Note - this function is designated to use data from the weathercan package
-}
-\details{
 rvn_rvt_ECmet converts Environment Canada historical meteorological data for a
 given station into the .rvt format usable in Raven.
-
+}
+\details{
 The function prints in the :MultiData format; the particular set of forcings to
 print can be set with the forcing_set command. The data should be downloaded
 with missing days included. The download website is linked below.
@@ -92,6 +90,8 @@ combining time series and ensuring there are no gaps in the data supplied
 (i.e. time gaps, not missing values) - check for missing data and issuing a
 warning that post-processing will be required
 
+Note - this function is designated to use data from the weathercan package
+
 ### FUNCTION IS CURRENTLY IN BETA MODE AND UNDERGOING TESTING + UPDATES ###
 
 Current limitations of the function: - quality control is not implemented;
@@ -111,6 +111,7 @@ rvn_rvt_ECmet(metdata = kam, forcing_set = 1)
 # set without prefix, station data and redirect files created
 # forcing_set 2 includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
 rvn_rvt_ECmet(metdata = kam, forcing_set = 2, prefix = NULL, write_stndata = T, write_redirect = T)
+
 
 }
 \seealso{

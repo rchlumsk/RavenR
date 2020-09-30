@@ -28,16 +28,17 @@
 #' @keywords Raven flow spaghetti diagnostics
 #' @examples
 #'
-#'# load sample hydrograph data, two years worth of sim/obs
-#'data(rvn_hydrograph_data)
-#'sim <- rvn_hydrograph_data$hyd$Sub36
-#'sim2 <- rvn_hydrograph_data$hyd$Sub43
+#' # load sample hydrograph data, two years worth of sim/obs
+#' data(rvn_hydrograph_data)
+#' sim <- rvn_hydrograph_data$hyd$Sub36
+#' sim2 <- rvn_hydrograph_data$hyd$Sub43
 #'
-#'# create spaghetti plot of simulated flows
-#'rvn_flow_spaghetti(sim)
-#'
+#' # create spaghetti plot of simulated flows
+#' rvn_flow_spaghetti(sim)
 #'
 #' @export rvn_flow_spaghetti
+#' @importFrom lubridate yday
+#' @importFrom ggplot2 ggplot geom_line scale_y_continuous scale_x_continuous aes
 rvn_flow_spaghetti <- function(flow) {
 
   ticks.at <- seq(1, 366, 1)
@@ -53,7 +54,6 @@ rvn_flow_spaghetti <- function(flow) {
   plot.df$x_form[month(plot.df$Index)<10] <- plot.df$x_form[month(plot.df$Index)<10]+365
 
   labels <- c(seq(274,365,30),seq(1,270,30))
-
 
   p1 <- ggplot(plot.df)+
     geom_line(aes(x=x_form,y=flow,group=Year, color=Year))+

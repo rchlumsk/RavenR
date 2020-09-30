@@ -2,14 +2,17 @@
 % Please edit documentation in R/rvn_utilities.R
 \name{rvn_apply_wyearly_which_max_xts}
 \alias{rvn_apply_wyearly_which_max_xts}
-\title{Apply which.max over water year periods}
+\title{which.max over water year periods
+
+rvn_apply_wyearly_which_max_xts applies the which.max function within each
+water year period, and returns the corresponding max values and dates in an xts format.}
 \usage{
 rvn_apply_wyearly_which_max_xts(x, mm = 9, dd = 30)
 }
 \arguments{
 \item{x}{xts object}
 
-\item{mm}{month of water year (default 9)}
+\item{mm}{month of water year ending (default 9)}
 
 \item{dd}{day of water year (default 30)}
 }
@@ -17,13 +20,13 @@ rvn_apply_wyearly_which_max_xts(x, mm = 9, dd = 30)
 {xts object with max values and corresponding dates}
 }
 \description{
+which.max over water year periods
+
 rvn_apply_wyearly_which_max_xts applies the which.max function within each
 water year period, and returns the corresponding max values and dates in an xts format.
 }
-\details{
-
-}
 \examples{
+
 data(rvn_hydrograph_data)
 
 # obtain peak observed flows in each water year period
@@ -32,14 +35,6 @@ rvn_apply_wyearly_which_max_xts(rvn_hydrograph_data$hyd$Sub43_obs)
 # will return a warning with no result if multiple columns supplied
 rvn_apply_wyearly_which_max_xts(rvn_hydrograph_data$hyd)
 
-}
-\seealso{
-\code{\link{which.max}} base which.max function
-\code{\link{rvn_which_max_xts}} for obtaining the max values and dates from an xts object
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
 \keyword{max}
 \keyword{which}

@@ -2,23 +2,36 @@
 % Please edit documentation in R/rvn_monthly_vbias.R
 \name{rvn_monthly_vbias}
 \alias{rvn_monthly_vbias}
-\title{Monthly Volume Bias}
+\title{Monthly Volume Bias
+
+rvn_monthly_vbias creates a plot of the monthly volume biases in the simulated
+flow series.
+
+This function calculates the monthly volume biases and optionally creates a
+plot of them. The monthly volume biases are averaged across all years of
+data. If normalized, the biases are calculated as:
+
+(Vi_sim - Vi_obs)/Vi_obs*100
+
+to be expressed as a percent error.
+
+The sim and obs should be of time series (xts) format and are assumed to be
+of the same length and time period. The flow series are assumed to be daily
+flows with units of m3/s. Note that a plot title is purposely omitted in
+order to allow the automatic generation of plot titles.
+
+The add_labels will add the labels of 'overestimated' and 'underestimated'
+to the right hand side axis if set to TRUE. This is useful in interpreting
+the plots. Note that the biases are calculated as sim_Volume - obs_Volume,
+which means that negative values mean the volume is underestimated, and
+positive values mean the volume is overestimated.}
 \usage{
-rvn_monthly_vbias(
-  sim,
-  obs,
-  rplot = T,
-  add_line = T,
-  normalize = T,
-  add_labels = T
-)
+rvn_monthly_vbias(sim, obs, add_line = T, normalize = T, add_labels = T)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
 
 \item{obs}{time series object of observed flows}
-
-\item{rplot}{boolean whether to generate plot (default TRUE)}
 
 \item{add_line}{optionally adds a horizontal line to the plot for reference
 (default TRUE)}
@@ -33,10 +46,11 @@ side axis (default TRUE)}
 \item{mvbias}{monthly volume biases}
 }
 \description{
+Monthly Volume Bias
+
 rvn_monthly_vbias creates a plot of the monthly volume biases in the simulated
 flow series.
-}
-\details{
+
 This function calculates the monthly volume biases and optionally creates a
 plot of them. The monthly volume biases are averaged across all years of
 data. If normalized, the biases are calculated as:

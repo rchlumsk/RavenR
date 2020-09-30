@@ -1,4 +1,4 @@
-#' Read Raven .rvh (watershed discretization) file
+#' @title Read Raven .rvh (watershed discretization) file
 #'
 #' This routine reads in a valid Raven watershed discretization (.rvh) file and returns the
 #' information about HRUs and Subbasins as data tables. It also returns a subbasin igraph
@@ -61,10 +61,10 @@
 #'
 #' @keywords Raven  rvh  HRUs  SubBasins
 #' @export rvn_rvh_read
+#' @importFrom igraph graph_from_data_frame ego ego_size V
 rvn_rvh_read<-function(filename)
 {
   stopifnot(file.exists(filename))
-
 
   # read subbasins table--------------------------------
   lineno<-grep(":SubBasins", readLines(filename), value = FALSE)
@@ -169,9 +169,9 @@ rvn_rvh_read<-function(filename)
   links<-subset.data.frame(links,downID>=0) # get rid of -1
 
   #create network graph structure
-  net <-igraph::graph_from_data_frame(d=links, vertices=out, directed=T)
-  egon<-igraph::ego(net,order=100,nodes=igraph::V(net),mode="in")
-  size<-igraph::ego_size(net,order=100,nodes=igraph::V(net),mode="in")
+  net <- graph_from_data_frame(d=links, vertices=out, directed=T)
+  egon <- ego(net,order=100, nodes=V(net),mode="in")
+  size<- ego_size(net,order=100, nodes=V(net),mode="in")
   count=1
   for (i in 1:nrow(out)){
     SBID=out$SBID[i]

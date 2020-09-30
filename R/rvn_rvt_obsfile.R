@@ -1,5 +1,6 @@
-#' Create Raven observation data (rvt) file
+#' @title Create Raven observation data (rvt) file
 #'
+#' @description
 #' Creates an observation data file named filename from a continuous (gap-free) xts time series ts
 #'
 #' @param filename observation data file to be created, with .rvt extension
@@ -14,15 +15,15 @@
 #' @author James R. Craig, University of Waterloo
 #'
 #' @examples
-#'  # locate hydrograph sample csv data from RavenR package
-#'  ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
+#' # locate hydrograph sample csv data from RavenR package
+#' ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 #'
-#'  # read in Raven Hydrographs file, store into mydata
-#'  mydata <- rvn_hyd_read(ff)
+#' # read in Raven Hydrographs file, store into mydata
+#' mydata <- rvn_hyd_read(ff)
 #'
-#'  # generate rvt file using just observations from Subbasin ID 36
-#'  flows <- rvn_ts_infill(mydata$hyd$Sub36_obs)
-#'  rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36, typestr = "HYDROGRAPH")
+#' # generate rvt file using just observations from Subbasin ID 36
+#' flows <- rvn_ts_infill(mydata$hyd$Sub36_obs)
+#' rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36, typestr = "HYDROGRAPH")
 #'
 #' @keywords Raven observations
 #'

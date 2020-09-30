@@ -1,4 +1,4 @@
-#' Create weights time series for calibration/diagnostic evaluation
+#' @title Create weights time series for calibration/diagnostic evaluation
 #'
 #' Creates an observation data weights time series based upon dates stored in
 #' an xts time series and criterion given by the user
@@ -56,6 +56,7 @@
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven website}
 #'
 #' @export rvn_gen_obsweights
+#' @importFrom lubridate interval yday
 rvn_gen_obsweights <- function(ts,criterion="BETWEEN",startdate="1785-10-05",enddate="2500-01-01") {
   # October 5, 1785 - date of the great pumpkin flood
 

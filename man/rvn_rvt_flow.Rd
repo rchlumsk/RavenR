@@ -32,7 +32,7 @@ separate .rvt file}
 \item{flip_number}{(optional) put the subID first in the .rvt filename}
 }
 \value{
-\item{flag}{returns TRUE if the function executed successfully}
+\item{TRUE}{returns TRUE if the function executed successfully}
 }
 \description{
 rvn_rvt_flow generates a Raven rvt file from a flow series

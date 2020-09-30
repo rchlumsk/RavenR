@@ -5,13 +5,10 @@
 #'
 #' @param x a string to manipulate
 #' @param n number of characters to remove from the left side of the string
-#' @seealso \code{\link{rvn_substrRight}} for using n characters from right side of
-#' string,
+#' @seealso \code{\link{rvn_substrRight}} for using n characters from right side of string
 #'
-#' \code{\link{rvn_substrMRight}} for removing n characters from the right side of
-#' a string,
-#' \code{\link{rvn_substrMLeft}} for removing n characters from the left side of a
-#' string
+#' \code{\link{rvn_substrMRight}} for removing n characters from the right side of a string
+#'
 #' @keywords string left
 #' @examples
 #'
@@ -116,7 +113,8 @@ rvn_substrRight <- function(x, n)
 #'
 #' rvn_col_transparent is used to adjust colour codes to introduce transparency
 #'
-#' Note that this function is not required for ggplot objects, as transparency can be added with the `alpha` parameter.
+#' Note that this function is not required for ggplot objects, as transparency can be
+#' added with the `alpha` parameter.
 #'
 #' @param colour time series containing columns you wish to reseasonalize. xts
 #' object
@@ -361,26 +359,22 @@ rvn_which_max_xts <- function(x)
 }
 
 
-#' Apply which.max over water year periods
+
+#' @title which.max over water year periods
 #'
 #' rvn_apply_wyearly_which_max_xts applies the which.max function within each
 #' water year period, and returns the corresponding max values and dates in an xts format.
 #'
-#' Note that the normal \code\link{xts::period.apply}} function overwrites date values with the
-#' water year ending periods
-#'
 #' @param x xts object
-#' @param mm month of water year (default 9)
+#' @param mm month of water year ending (default 9)
 #' @param dd day of water year (default 30)
-#' @return {xts object with max values and corresponding dates}
-#' @seealso \code{\link{which.max}} base which.max function
-#' \code{\link{rvn_which_max_xts}} for obtaining the max values and dates from an xts object
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' @return {xts object with max values and corresponding dates}
+#'
 #' @keywords which max xts
+#'
 #' @examples
+#'
 #' data(rvn_hydrograph_data)
 #'
 #' # obtain peak observed flows in each water year period
@@ -415,6 +409,7 @@ rvn_apply_wyearly_which_max_xts <- function(x, mm=9, dd=30)
     return(F)
   }
 }
+
 
 
 #' @title Determine period of data
@@ -470,13 +465,15 @@ rvn_get_prd <- function(x, prd=NULL)
         as.Date(unlist(strsplit(prd,"/"))[1])
       },
       error=function(cond) {
-        message(paste("Issue with prd, %s does not appear to be a valid date in Y-M-D format:", unlist(strsplit(prd,"/"))[1]))
+        message(paste("Issue with prd, %s does not appear to be a valid date in Y-M-D format:",
+                      unlist(strsplit(prd,"/"))[1]))
         message(cond)
         # return(FALSE)
         stop()
       },
       warning=function(cond) {
-        message(paste("Warning with prd, %s does not appear to be a valid date in Y-M-D format:", unlist(strsplit(prd,"/"))[1]))
+        message(paste("Warning with prd, %s does not appear to be a valid date in Y-M-D format:",
+                      unlist(strsplit(prd,"/"))[1]))
         message(cond)
       }
     )
@@ -486,13 +483,15 @@ rvn_get_prd <- function(x, prd=NULL)
         as.Date(unlist(strsplit(prd,"/"))[2])
       },
       error=function(cond) {
-        message(paste("Issue with prd, %s does not appear to be a valid date in Y-M-D format:", unlist(strsplit(prd,"/"))[2]))
+        message(paste("Issue with prd, %s does not appear to be a valid date in Y-M-D format:",
+                      unlist(strsplit(prd,"/"))[2]))
         message(cond)
         # return(FALSE)
         stop()
       },
       warning=function(cond) {
-        message(paste("Warning with prd, %s does not appear to be a valid date in Y-M-D format:", unlist(strsplit(prd,"/"))[2]))
+        message(paste("Warning with prd, %s does not appear to be a valid date in Y-M-D format:",
+                      unlist(strsplit(prd,"/"))[2]))
         message(cond)
       }
     )

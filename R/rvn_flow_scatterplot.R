@@ -39,6 +39,7 @@
 #' rvn_flow_scatterplot(sim,obs,add_r2=T)
 #'
 #' @export rvn_flow_scatterplot
+#' @importFrom ggplot2 ggplot geom_point scale_x_continuous scale_y_continuous geom_abline geom_text
 rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F, add_eqn = F) {
   x.lab <- expression("Observed Flow ("*m^3*"/s)")
   y.lab <- expression("Simulated Flow ("*m^3*"/s)")

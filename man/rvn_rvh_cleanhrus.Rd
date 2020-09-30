@@ -2,7 +2,10 @@
 % Please edit documentation in R/rvn_rvh_cleanHRUs.R
 \name{rvn_rvh_cleanhrus}
 \alias{rvn_rvh_cleanhrus}
-\title{Clean HRU data table.}
+\title{Clean HRU data table.
+
+Takes \code{\link{rvn_rvh_read}}-generated HRUtable and SBTable and returns cleaned HRUtable
+with (hopefully) fewer HRUs}
 \usage{
 rvn_rvh_cleanhrus(
   HRUtab,
@@ -37,6 +40,8 @@ rvn_rvh_cleanhrus(
 {hru_table}{revised HRU table as a dataframe}
 }
 \description{
+Clean HRU data table.
+
 Takes \code{\link{rvn_rvh_read}}-generated HRUtable and SBTable and returns cleaned HRUtable
 with (hopefully) fewer HRUs
 }

@@ -21,18 +21,26 @@ process type, algorithm, 'from' compartment, 'to' compartment, and conditional.
 }
 \description{
 This routine reads in a hydrologic process list from rvn_rvi_read() and generates
-the list of hydrologic process connections. It relies on a valid and up-to-date
-RavenProcessConnections.dat file. This file is provided with the RavenR package, but
+the list of hydrologic process connections.
+}
+\details{
+This function relies on a valid and up-to-date RavenProcessConnections.dat file.
+This file is provided with the RavenR package, but
 may be overrided by a more recent file if provided manually.
 }
 \examples{
-  rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
-  conn <- rvn_rvi_connections(rvi)
-  rvn_rvi_process_plot(conn)
+rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
+
+# get number of Hydrologic processes
+nrow(rvi$HydProcTable)
+
+conn <- rvn_rvi_connections(rvi)
+head(conn)
 
 }
 \seealso{
-\code{\link{rvn_rvi_read}} to read a .rvi file and generate an rvi object
+\code{\link{rvn_rvi_read}} to read a .rvi file and generate an rvi object, and
+\code{\link{rvn_rvi_process_plot}} to plot the process network produced in this function.
 
 See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 }
