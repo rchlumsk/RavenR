@@ -12,22 +12,24 @@ rvn_subbasin_network_plot(SBtable, labeled = FALSE)
 \item{labeled}{TRUE if the nodes are labeled with the SubBasin ID, SBID}
 }
 \value{
-{TRUE}{if function runs properly}
+{p1}{ggplot object of subbasin network plot}
 }
 \description{
-Takes the information gathered from an .rvh file via the function \code{\link{rvn_rvh_read}} and generates a plot of the subbasin network,
-where nodes are located at SubBasin lat-long centroids, and edge widths of the network correspond to contributing upstream area.
+Generates a plot of the subbasin network from rvh file information.
+}
+\details{
+Takes the information gathered from an .rvh file via the function \code{\link{rvn_rvh_read}} and
+generates a plot object of the subbasin network,
+where nodes are located at SubBasin lat-long centroids, and
+edge widths of the network correspond to contributing upstream area.
 }
 \examples{
- # warning: example not run in compiling package
-\dontrun{
- # read in rvh file
- # rvh<-rvn_rvh_read("example.rvh")
- rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package="RavenR"))
+# read in rvh file
+# rvh<-rvn_rvh_read("example.rvh")
+rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package="RavenR"))
 
- # create network plot of watershed structure from rvh file
- rvn_subbasin_network_plot(rvh$SBtable)
-}
+# create network plot of watershed structure from rvh file
+rvn_subbasin_network_plot(rvh$SBtable)
 
 }
 \seealso{

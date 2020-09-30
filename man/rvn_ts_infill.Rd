@@ -13,18 +13,20 @@ rvn_ts_infill(ts)
 {ts}{continuous xts time series}
 }
 \description{
+Infills missing time series values.
+}
+\details{
 Takes xts dataset, finds minimum interval between time stamps and
 returns a new regular interval xts with same data content, but NA values inbetween known
 data values
-}
-\details{
-only handles data with minimum time interval of 1 day; 1,2,3,4,6,8, or 12 hrs
+
+Only handles data with minimum time interval of 1 day; 1,2,3,4,6,8, or 12 hrs.
 }
 \examples{
-  dates <-seq(as.POSIXct("2012-05-01 00:00:00"), length=731, by="day")
-  mydata<-xts(rnorm(731),order.by=dates)
-  mydata<-mydata[wday(index(mydata))!=4] # remove wednesdays
-  out<-rvn_ts_infill(mydata)
+dates <-seq(as.POSIXct("2012-05-01 00:00:00"), length=731, by="day")
+mydata<-xts(rnorm(731),order.by=dates)
+mydata<-mydata[wday(index(mydata))!=4] # remove wednesdays
+out<-rvn_ts_infill(mydata)
 
 }
 \author{

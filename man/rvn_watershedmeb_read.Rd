@@ -10,10 +10,10 @@ rvn_watershedmeb_read(ff = NA)
 \item{ff}{full file path to the WatershedMassEnergyBalance.csv file}
 }
 \value{
-\item{watershedmeb}{data frame from the file with standardized
-names} \item{units}{vector corresponding to units of each column}
-\item{from}{vector of the 'from' compartments in file} \item{to}{vector of
-the 'to' compartments in file}
+\item{watershedmeb}{data frame from the file with standardized names}
+ \item{units}{vector corresponding to units of each column}
+ \item{from}{vector of the 'from' compartments in file}
+ \item{to}{vector of the 'to' compartments in file}
 }
 \description{
 rvn_watershedmeb_read is used to read in the WatershedMassEnergyBalance.csv file

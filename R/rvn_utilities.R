@@ -2,7 +2,6 @@
 #'
 #' rvn_substrLeft returns n characters from the left side of the supplied string x.
 #'
-#'
 #' @param x a string to manipulate
 #' @param n number of characters to remove from the left side of the string
 #' @seealso \code{\link{rvn_substrRight}} for using n characters from right side of string

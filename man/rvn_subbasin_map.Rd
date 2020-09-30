@@ -33,7 +33,7 @@ rvn_subbasin_map(
 \item{plot_invalid}{boolean indicating whether to plot invalid basins in grey (currently disabled)}
 }
 \value{
-\item{TRUE}{return TRUE if the function is executed properly}
+\item{p1}{ggplot object of subbasin map}
 }
 \description{
 Plots Raven custom output into a subbasin map

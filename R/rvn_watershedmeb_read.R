@@ -1,8 +1,10 @@
-#' Read in Raven WatershedMassEnergyBalance file
+#' @title Read in Raven WatershedMassEnergyBalance file
 #'
+#' @description
 #' rvn_watershedmeb_read is used to read in the WatershedMassEnergyBalance.csv file
 #' produced by the modelling Framework Raven.
 #'
+#' @details
 #' This function expects a full file path to the WatershedMassEnergyBalance.csv
 #' file, then reads in the file using read.csv. The main advantage of this
 #' functon is renaming the columns to nicer names and extracting the units into
@@ -14,17 +16,21 @@
 #' the file is sufficient.
 #'
 #' @param ff full file path to the WatershedMassEnergyBalance.csv file
-#' @return \item{watershedmeb}{data frame from the file with standardized
-#' names} \item{units}{vector corresponding to units of each column}
-#' \item{from}{vector of the 'from' compartments in file} \item{to}{vector of
-#' the 'to' compartments in file}
+#' @return
+#'  \item{watershedmeb}{data frame from the file with standardized names}
+#'  \item{units}{vector corresponding to units of each column}
+#'  \item{from}{vector of the 'from' compartments in file}
+#'  \item{to}{vector of the 'to' compartments in file}
+#'
 #' @seealso \code{\link{rvn_watershed_read}} for reading in the
 #' WatershedStorage.csv file
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#'
 #' @keywords Raven read.csv watershed mass energy balance
+#'
 #' @examples
 #'
 #' # locate RavenR Watershed Mass Energy Balance storage file
@@ -34,8 +40,9 @@
 #' mywshdmeb <- rvn_watershedmeb_read(ff)
 #'
 #' @export rvn_watershedmeb_read
-rvn_watershedmeb_read <- function(ff=NA) {
-
+#' @importFrom xts xts
+rvn_watershedmeb_read <- function(ff=NA)
+{
   if (missing(ff)) {
     stop("Requires the full file path to the WatershedMassEnergyBalance.csv file")
   }

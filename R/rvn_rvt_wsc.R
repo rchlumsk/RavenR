@@ -1,11 +1,11 @@
-#' EC Streamgauge File Conversion
+#' @title EC Streamgauge File Conversion
 #'
-#' Note that this function may become superceeded by other rvt writing utiltiies.
-#'
+#' @description
 #' rvn_rvt_wsc converts Environment Canada historical streamgauge data,
 #' downloaded from the Water Survey Canada, into .rvt format files usable in
 #' Raven.
 #'
+#' @details
 #' This function takes a single WSC flow file and converts the flow data for
 #' each station in the file into .rvt formatted files for a Raven model. If
 #' multiple stations exist in the .csv file,
@@ -60,18 +60,19 @@
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven streamgauge flow rvt conversion
+#'
 #' @examples
-#' # warning: example not run, sample example for associated files only
-#' \dontrun{
 #' ff <- 'Daily__May-12-2017_02_00_53PM.csv'
 #' rvn_wsc_rvt(ff,subIDs=c(3,11))
 #'
 #' # add custom station names, put subID number first in file
 #' rvn_rvt_wsc(ff,subIDs=c(3,11),stnNames<-c('Rob_Hill','Bob_River'),flip_number=T)
-#' }
 #'
 #' @export rvn_rvt_wsc
-rvn_rvt_wsc <- function(ff,subIDs,prd=NULL,stnNames=NULL,write_redirect=F,flip_number=F) {
+#' @importFrom xts xts
+#' @importFrom lubridate date
+rvn_rvt_wsc <- function(ff,subIDs,prd=NULL,stnNames=NULL,write_redirect=F,flip_number=F)
+{
 
   # data checks
   if (!(is.null(stnNames)) & (length(subIDs) != length(stnNames))) {
@@ -101,7 +102,7 @@ rvn_rvt_wsc <- function(ff,subIDs,prd=NULL,stnNames=NULL,write_redirect=F,flip_n
   }
 
   # check the stations in the supplied file
-  dd <- utils::read.table(ff,sep=",",skip=1,header=T)
+  dd <- read.table(ff,sep=",",skip=1,header=T)
 
   # fix to handle multi-byte marker/byte order marker,
   #   appears if there is more than one station per file
@@ -167,5 +168,5 @@ rvn_rvt_wsc <- function(ff,subIDs,prd=NULL,stnNames=NULL,write_redirect=F,flip_n
     close(fc.redirect)
   }
   return(TRUE)
-  }
+}
 

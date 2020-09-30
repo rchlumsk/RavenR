@@ -1,5 +1,6 @@
-#' Calculates Yearly Median, Upper and Lower Quantiles of Flow
+#' @title Calculates Yearly Median, Upper and Lower Quantiles of Flow
 #'
+#' @description
 #' Calculate the quantiles for each day of the year based on the supplied time series.
 #'
 #' @param hgdata Time series object of observed or simulated flows
@@ -29,7 +30,8 @@
 #' @importFrom lubridate month day year date
 #' @importFrom xts xts
 rvn_annual_quantiles <- function(hgdata, prd=NULL, mm=9,
-                           Qlower=0.1, Qupper=0.9, water_year=T) {
+                           Qlower=0.1, Qupper=0.9, water_year=T)
+{
 
   #-- Assuming hgdata is a daily xts object
   # TODO: Add support for other frequencies
