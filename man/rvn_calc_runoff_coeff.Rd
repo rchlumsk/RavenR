@@ -32,9 +32,6 @@ and generates data frame describing runoff coefficients of gauged basins and obs
 Uses precipitation from entire model run history.
 Only determines runoff coefficient from available data - prone to overestimation with poor observation coverage.
 }
-\details{
-requires igraph library
-}
 \examples{
 \dontrun{
  out <- rvn_calc_runoff_coeff("example.rvh","C:/TEMP/ouput/")

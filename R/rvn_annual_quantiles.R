@@ -18,7 +18,7 @@
 #' hyd_data
 #'
 #' # Pull out a specific hydrograph
-#' hgdata <- rvn_hydrograph_data$hyd$Sub36
+#' hgdata <- hyd_data$sim
 #'
 #' # Calculate quantiles
 #' qdat <- rvn_annual_quantiles(hgdata)

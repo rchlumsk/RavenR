@@ -10,9 +10,7 @@
 #' @param custfile (optional) file name (no directory) for Raven-generated custom output precip-by-subbasin file
 #' @param hydfile (optional) file name (no directory) for Raven-generated hydrographs file
 #' @param correct (optional) if TRUE, tries to correct runoff coefficient for missing data (assumes missing~0 flow)
-#'
 #' @return data frame with runoff coefficients of gauged basins
-#' @details requires igraph library
 #' @author James R. Craig, University of Waterloo
 #' @seealso See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 #'
@@ -37,9 +35,12 @@
 #'
 #' @keywords Raven  rvh  runoff coefficient
 #' @export rvn_calc_runoff_coeff
-
-rvn_calc_runoff_coeff <- function(rvhfile,outdir,custfile="PRECIP_Daily_Average_BySubbasin.csv",hydfile="Hydrographs.csv",correct=FALSE) {
-
+#' @importFrom igraph ego ego_size V
+rvn_calc_runoff_coeff <- function(rvhfile,outdir,
+                                  custfile="PRECIP_Daily_Average_BySubbasin.csv",
+                                  hydfile="Hydrographs.csv",
+                                  correct=FALSE)
+{
   custfile<-paste0(outdir,custfile)
   hydfile<-paste0(outdir,hydfile)
 

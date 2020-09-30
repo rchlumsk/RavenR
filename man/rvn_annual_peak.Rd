@@ -19,9 +19,9 @@ rvn_annual_peak(
 
 \item{obs}{time series object of observed flows}
 
-\item{mm}{month of water year (default 9)}
+\item{mm}{month of water year ending (default 9)}
 
-\item{dd}{day of water year (default 30)}
+\item{dd}{day of water year ending (default 30)}
 
 \item{add_line}{optionally adds a 1:1 line to the plot for reference (default TRUE)}
 

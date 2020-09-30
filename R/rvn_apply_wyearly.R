@@ -3,25 +3,17 @@
 #' rvn_apply_wyearly calculates a function FUN for the periods defined by the water
 #' year, similar to other functions of the form apply.<time period>, for
 #' example apply.daily, apply.monthly, etc. This is a function especially
-#' helpful to hydrology data or results. The assumed water year start is
-#' October 1st.
+#' helpful to hydrology data or results. The default water year start is
+#' October 1st, but may be adjusted with the mm and dd arguments. The values for
+#' mm and dd indicate the end of the water year period (i.e. mm=9 and dd=30 indicates
+#' a new water year on Oct 1).
 #'
-#' The function assumes an October 1st start to the water year. If the data
-#' supplied is from, e.g. 2008-10-01 to 2009-09-30, the function will use the
-#' September 30th date as the final day to apply the function for the water
-#' year.
-#'
-#' Note that currently the water year calculation is done from Oct 2 to Oct 1st
-#' (or September 30th) inclusive. For example in the Oct 1 2007 to Oct 1 2008
-#' water year, the end date is shown as "2008-10-01", and the function will be
-#' evaluated for the period 2007-10-02 - 2008-10-01, inclusive.
-#'
-#' The rvn_apply_wyearly function applies to only one column at a time, otherwise
-#' only the first column will be used, with a warning.
 #'
 #' @param x xts vector to calculate FUN for
 #' @param FUN the function to be applied
 #' @param ... optional arguments to FUN
+#' @param mm month of water year ending (default 9)
+#' @param dd day of water year ending (default 30)
 #' @seealso \code{\link{rvn_wyear_indices}} for obtaining endpoints in the water year
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/software.html}{James R.
@@ -37,15 +29,18 @@
 #' # apply mean as FUN to all forcings
 #' rvn_apply_wyearly(rvn_forcing_data$forcings,mean,na.rm=T)
 #'
-#' apply maximum via RavenR::cmax as FUN to all forcings (takes the max in each column)
+#' # apply maximum via RavenR::cmax as FUN to all forcings (takes the max in each column)
 #' ## note that the base::max will not work properly here
 #' rvn_apply_wyearly(rvn_forcing_data$forcings,cmax,na.rm=T)
 #'
+#' # apply to Australian water year (July 1)
+#' rvn_apply_wyearly(rvn_forcing_data$forcings,cmax,na.rm=T, mm=6, dd=30)
+#'
 #'
 #' @export rvn_apply_wyearly
-#' @importFrom xts reclass
-rvn_apply_wyearly <- function(x,FUN,...) {
-  rvn_wyear_indices(x) %>%
+#' @importFrom xts period.apply
+rvn_apply_wyearly <- function(x,FUN,...,mm=9,dd=30) {
+  rvn_wyear_indices(x, mm=mm, dd=dd) %>%
   period.apply(x, ., FUN, ...) %>%
     return(.)
 }

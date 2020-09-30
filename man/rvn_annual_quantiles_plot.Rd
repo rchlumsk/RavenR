@@ -9,7 +9,7 @@ rvn_annual_quantiles_plot(
   mediancolor = "black",
   ribboncolor = "grey60",
   ribbonalpha = 0.5,
-  addtoplot = NULL
+  explot = NULL
 )
 }
 \arguments{
@@ -21,33 +21,34 @@ rvn_annual_quantiles_plot(
 
 \item{ribbonalpha}{Transparency of lower/upper quantile ribbon}
 
-\item{addtoplot}{Existing ggplot object to which median line and quantile ribbon should be added}
+\item{explot}{Existing ggplot object to which median line and quantile ribbon should be added}
 }
 \value{
-Monthly Plot
+p1 ggplot object of quantiles plot
 }
 \description{
 Plot of Yearly Median, Upper and Lower Quantiles of Flow
 }
 \examples{
-data(hydrograph.data)
-
-# Pull out a specific hydrograph
-hgdata <- rvn_hydrograph_data$hyd$Sub36_obs
+system.file("extdata","run1_Hydrographs.csv", package="RavenR") \%>\%
+rvn_hyd_read(.) \%>\%
+rvn_hyd_extract(subs="Sub36",.) ->
+hyd_data
 
 # Calculate quantiles
-qdat <- yearly_quantile(hgdata)
+qdat <- rvn_annual_quantiles(hyd_data$obs)
+head(qdat)
 
 # Plot
-p <- rvn_yearly_quantile_plot(qdat)
-p  # To view
+p <- rvn_annual_quantiles_plot(qdat)
+p  # view plot
 
 # Add a second hydrograph to compare
-simdata <- rvn_hydrograph_data$hyd$Sub36
-qdat_sim <- rvn_annual_quantiles(hgdata)
+qdat_sim <- rvn_annual_quantiles(hyd_data$sim)
 
-p <- rvn_annual_quantiles_plot(qdat_sim, mediancolor = 'red', ribboncolor = 'red', addtoplot = p)
-p # To view
+p1 <- rvn_annual_quantiles_plot(qdat_sim, mediancolor = 'red', ribboncolor = 'red', explot = p)
+p1 # view plot
+
 }
 \author{
 Leland Scantlebury, \email{leland@scantle.com}

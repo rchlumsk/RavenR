@@ -37,34 +37,14 @@
 #' rvn_fdc_plot(sim,obs,seasonal=T)
 #'
 #' @export rvn_fdc_plot
+#' @importFrom ggplot2 fortify ggplot scale_x_continuous scale_y_continuous scale_colour_brewer
 rvn_fdc_plot <-function(sim=NULL,obs=NULL,prd=NULL,seasonal='F'){
 
   if (is.null(sim)) {
     stop("sim is required for plotting.")
   }
 
-  # determine period ----
-  # determine the period to use
-  if (!(is.null(prd))) {
-
-    # period is supplied; check that it makes sense
-    firstsplit <- unlist(strsplit(prd,"/"))
-    if (length(firstsplit) != 2) {
-      stop("Check the format of supplied period; should be two dates separated by '/'.")
-    }
-    if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
-        || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
-      stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
-    }
-    # add conversion to date with xts format check ?
-  }
-  else
-  {
-    # period is not supplied, define entire range as period
-    N <- nrow(sim)
-    prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(sim[1]),month(sim[1]),day(sim[1]),
-                   year(sim[N]),month(sim[N]),day(sim[N]) )
-  }
+  prd <- rvn_get_prd(sim, prd)
 
   summer=NULL
   winter=NULL
@@ -103,7 +83,6 @@ rvn_fdc_plot <-function(sim=NULL,obs=NULL,prd=NULL,seasonal='F'){
 
     plot.df <- rbind(plot.df, plot.df3,plot.df4)
   }
-
 
   p1 <-  ggplot(plot.df)+
     stat_ecdf(aes(x=Value, color=Type))+

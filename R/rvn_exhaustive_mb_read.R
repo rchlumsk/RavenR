@@ -38,6 +38,7 @@
 #' plot(embd$exhaustive_mb$SURFACE_WATER.Infiltration,
 #'      main="Cumulative Surface Water Infiltration")
 #' @export rvn_exhaustive_mb_read
+#' @importFrom xts xts
 rvn_exhaustive_mb_read <- function(ff=NA,join_categories=T) {
 
   if (missing(ff)) {

@@ -27,6 +27,6 @@
 rvn_theme_RavenR <- function(){
   theme_bw() +
     theme(panel.border = element_rect(color = "black"),
-          legend.title = element_blank())+
-    theme(axis.title = element_text(face = 'bold'))
+          legend.title = element_blank())
+    # theme(axis.title = element_text(face = 'bold'))
 }

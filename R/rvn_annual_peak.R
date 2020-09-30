@@ -20,8 +20,8 @@
 #'
 #' @param sim time series object of simulated flows
 #' @param obs time series object of observed flows
-#' @param mm month of water year (default 9)
-#' @param dd day of water year (default 30)
+#' @param mm month of water year ending (default 9)
+#' @param dd day of water year ending (default 30)
 #' @param add_line optionally adds a 1:1 line to the plot for reference (default TRUE)
 #' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
 #' @param add_eqn optionally adds the equation for a linear regression line through the origin (default FALSE)
