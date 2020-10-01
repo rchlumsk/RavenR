@@ -22,17 +22,19 @@
 #'
 #' @examples
 #' # read in rvh file
-#' # rvh<-rvn_rvh_read("example.rvh")
 #' rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package="RavenR"))
 #'
 #' # create network plot of watershed structure from rvh file
 #' rvn_subbasin_network_plot(rvh$SBtable)
 #'
+#' # include labels
+#' rvn_subbasin_network_plot(rvh$SBtable, labeled=T)
+#'
 #' @keywords Raven Network Stream Plot
 #'
 #' @export rvn_subbasin_network_plot
-#' @importFrom ggplot2 ggplot geom_segment geom_point theme aes geom_text
-#' @importFrom igraph graph_from_data_frame
+#' @importFrom ggplot2 ggplot geom_segment geom_point theme aes geom_text geom_label
+#' @importFrom igraph graph_from_data_frame get.data.frame
 #' @importFrom colorspace coords
 rvn_subbasin_network_plot <- function(SBtable,labeled=FALSE)
 {
@@ -41,13 +43,13 @@ rvn_subbasin_network_plot <- function(SBtable,labeled=FALSE)
   links<-subset.data.frame(links,downID>=0) # get rid of -1
 
   #create network graph structure
-  net <- graph_from_data_frame(d=links, vertices=SBtable, directed=T)
+  net <- igraph::graph_from_data_frame(d=links, vertices=SBtable, directed=T)
 
   # Get subbasin coordinates
   coords=data.frame(long=SBtable$AvgLongit,lat=SBtable$AvgLatit, SB = SBtable$SBID)
 
   # Get up and downstream links
-  g <- get.data.frame(net)
+  g <- igraph::get.data.frame(net)
   g$from.x <- coords$long[match(g$from,coords$SB)]
   g$from.y <- coords$lat[match(g$from,coords$SB)]
   g$to.x <- coords$long[match(g$to,coords$SB)]
@@ -72,7 +74,7 @@ rvn_subbasin_network_plot <- function(SBtable,labeled=FALSE)
 
   if (labeled == TRUE) {
     p1 <- p1 +
-      geom_text(data = coords, aes(x = long, y= lat, label = SB), hjust = 0, nudge_x = 0.001)
+      geom_label(data = coords, aes(x = long, y= lat, label = SB), hjust = 0, nudge_x = 0.001)
   }
 
   return(p1)

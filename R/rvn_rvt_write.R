@@ -101,7 +101,7 @@ rvn_rvt_write <- function(ts, params, units, dates=NULL, prd=NULL,
   #for (j in 1:nrow(ts)) {
   #  writeLines(sprintf(rep("%g ",ncol(ts)),ts[j,1:ncol(ts)]),fc)
   #}
-  write.RavenLabel('EndMultiData',fc)
+  rvn_write_Raven_label('EndMultiData',fc)
   close(fc)
 
   return("flag"=TRUE)

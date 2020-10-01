@@ -30,27 +30,26 @@
 #' @keywords subbasin map plot
 #' @examples
 #'
-#' # Raw sample data
+#' # Raw shapefile sample data
 #' shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR")
 #'
 #' # Custom Output data from Raven for Nith basin
 #' cust_file <- system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv",
 #'                          package="RavenR")
-#' cust_data <- custom.read(cust_file)
+#' cust_data <- rvn_custom_read(cust_file)
 #'
 #' subIDcol <- 'subID'        # attribute in shapefile with subbasin IDs
 #' plot_date <- "2003-03-30"  # date for which to plot custom data
 #'
-#' # function call
-#' rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data, normalize=T)
+#' # Generate plot object
+#' p1 <- rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data, normalize=T)
+#' p1
 #'
-#' p1 <- rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data)
-#' p1 + scale_fill_continuous(name="Daily Precip (mm/d)")
 #'
 #' @export rvn_subbasin_map
 #' @importFrom sf read_sf st_centroid st_coordinates
 #' @importFrom ggplot2 ggplot aes geom_sf theme geom_text
-rvn_subbasin_map <- function(shpfilename, subIDcol, plot_date, cust_data, normalize_data=FALSE,
+rvn_subbasin_map <- function(shpfilename, subIDcol, plot_date, cust_data=NULL, normalize_data=FALSE,
                        invalid_stop=TRUE, basins_label='subID', plot_invalid=F)
 {
 
@@ -65,6 +64,11 @@ rvn_subbasin_map <- function(shpfilename, subIDcol, plot_date, cust_data, normal
   if (is.null(shp.subs)){
     print("Invalid Subbasin ID column identifier")
   }
+
+  if (is.null(cust_data)) {
+    stop("cust_data must be provided")
+  }
+
   data.subs <- as.numeric(colnames(cust_data))
 
   # check if any invalid data columns in data

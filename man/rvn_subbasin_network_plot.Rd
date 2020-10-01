@@ -25,11 +25,13 @@ edge widths of the network correspond to contributing upstream area.
 }
 \examples{
 # read in rvh file
-# rvh<-rvn_rvh_read("example.rvh")
 rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package="RavenR"))
 
 # create network plot of watershed structure from rvh file
 rvn_subbasin_network_plot(rvh$SBtable)
+
+# include labels
+rvn_subbasin_network_plot(rvh$SBtable, labeled=T)
 
 }
 \seealso{

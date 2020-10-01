@@ -279,10 +279,16 @@ rvn_num_days_month <- function(date)
 
 #' @title cmax
 #'
-#' cmax standards for column maximum. It applies the base::max function over
+#' @description
+#' cmax standards for column maximum, applies the max function across columns.
+#'
+#' @details
+#' It applies the base::max function over
 #' columns, which is advantageous for calculating the max within a column
 #' rather than the max of the whole data frame.
 #'
+#' This function was included for usage with the apply.<period> and rvn_apply_wyearly
+#' function, as the base::max function does not work properly across columns.
 #'
 #' @param x object to apply the max function to
 #' @param na.rm whether to remove na values from the calculation
@@ -296,10 +302,13 @@ rvn_num_days_month <- function(date)
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords which max xts
+#' @keywords max columns
+#'
 #' @examples
 #' data(rvn_hydrograph_data)
-#' rvn_which_max_xts(rvn_hydrograph_data$hyd$Sub43_obs)
+#' cmax(rvn_hydrograph_data$hyd$Sub43_obs, na.rm=T)
+#'
+#' rvn_apply_wyearly(rvn_hydrograph_data$hyd, cmax, na.rm=T)
 #'
 #' @export cmax
 cmax <- function(x, na.rm = FALSE)

@@ -26,8 +26,8 @@ or a state variable name (e.g., SOIL[0] or SNOW)}
 TRUE returns TRUE if function runs properly
 }
 \description{
-Creates an observation data weights file named filename from a continuous (gap-free) xts time series ts
-with values between 0 and 1
+Writes observation weights generated from \code{\link{rvn_gen_obsweights}} to
+a Raven rvt format.
 }
 \details{
 Any NA values in the weights are converted to the flag -1.2345, used in Raven as NA values.

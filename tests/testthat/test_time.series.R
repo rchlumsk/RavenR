@@ -9,17 +9,17 @@ test_that("date manipulations are consistent", {
   expect_equal(lubridate::day(as.Date("2008-10-01")),1)
 })
 
-data("forcing.data")
-ff <- forcing.data$forcings
+data("rvn_forcing_data")
+ff <- rvn_forcing_data$forcings
 
 test_that("xts format functioning as expected", {
   expect_equal(ncol(ff),21)
   expect_equal(length(lubridate::date(ff)),731)
 })
 
-test_that("apply.wyearly functioning", {
-  expect_equal(nrow(apply.wyearly(ff,mean)),2)
-  expect_equal(ncol(apply.wyearly.cols(ff,max)),22)
+test_that("rvn_apply_wyearly functioning", {
+  expect_equal(nrow(rvn_apply_wyearly(ff,mean)),2)
+  expect_equal(ncol(rvn_apply_wyearly(ff,cmax)),21)
 })
 
 

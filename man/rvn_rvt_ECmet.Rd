@@ -83,24 +83,26 @@ that this works for iterations of this function.
 perform.qc is currently under construction and is not yet available; setting
 to TRUE will result in an warning.
 
-The function has several built-in data quality checks. These include: -
-checking that all supplied files are for the same climate station - ensuring
-the timestep (data resolution) is the same in each file - automatically
+The function has several built-in data quality checks. These include:
+- checking that all supplied files are for the same climate station
+- ensuring
+the timestep (data resolution) is the same in each file
+- automatically
 combining time series and ensuring there are no gaps in the data supplied
-(i.e. time gaps, not missing values) - check for missing data and issuing a
+(i.e. time gaps, not missing values)
+- check for missing data and issuing a
 warning that post-processing will be required
 
-Note - this function is designated to use data from the weathercan package
+Note: Data quality is not assessed in this package, such as consistency between
+minimum and maximum temperatures. Subdaily data is not currenty supported.
 
-### FUNCTION IS CURRENTLY IN BETA MODE AND UNDERGOING TESTING + UPDATES ###
-
-Current limitations of the function: - quality control is not implemented;
-does not check for common errors in data, does not infill missing values
-(required for running in Raven, thus pre-processing of files is likely
-required) - only handles daily data (subdaily or monthly not yet handled)
+Note: this function is designated to use data from the weathercan package. The
+weathercan package is external to RavenR and is not an explicit dependent package
+of RavenR.
 }
 \examples{
 # Download data using weathercan weather_dl
+library(weathercan)
 kam <- weather_dl(station_ids = 51423,
                   start = "2016-10-01", end = "2019-09-30", interval="day")
 
@@ -112,6 +114,8 @@ rvn_rvt_ECmet(metdata = kam, forcing_set = 1)
 # forcing_set 2 includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
 rvn_rvt_ECmet(metdata = kam, forcing_set = 2, prefix = NULL, write_stndata = T, write_redirect = T)
 
+# cleanup demo files
+unlink("met_KAMLOOPS_A.rvt.rvt")
 
 }
 \seealso{

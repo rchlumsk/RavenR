@@ -62,11 +62,11 @@
 #' @keywords Raven streamgauge flow rvt conversion
 #'
 #' @examples
-#' ff <- 'Daily__May-12-2017_02_00_53PM.csv'
-#' rvn_wsc_rvt(ff,subIDs=c(3,11))
+#' system.file("extdata",'Daily__Oct-1-2020_08_20_52PM.csv', package="RavenR")
+#' rvn_rvt_wsc(ff,subIDs=c(6))
 #'
 #' # add custom station names, put subID number first in file
-#' rvn_rvt_wsc(ff,subIDs=c(3,11),stnNames<-c('Rob_Hill','Bob_River'),flip_number=T)
+#' rvn_rvt_wsc(ff,subIDs=c(6),stnNames <- c('Grand River'),flip_number=T)
 #'
 #' @export rvn_rvt_wsc
 #' @importFrom xts xts

@@ -1,8 +1,10 @@
 #' @title Plot Hydrograph
 #'
+#' @description
 #' rvn_hyd_plot creates a hydrograph plot object for the supplied flow series, or
 #' equivalently a stage plot for reservoir stages.
 #'
+#' @details
 #' This function creates a hydrograph plot using the supplied time series; any
 #' series not supplied will not be plotted. If the precip time series is
 #' supplied, the secondary y axis will be used to plot the precip time series.
@@ -15,7 +17,9 @@
 #' which again can be obtained directly by using the hyd.extract function.
 #'
 #' The winter_shading argument will add a transparent cyan shading for the
-#' December 1st to March 31st period in each year that is plotted.
+#' specified period by wsdates in each year that is plotted.
+#'
+#' wsdates is formatted as c(winter start month, winter start day, winter end month, winter end day).
 #'
 #' Note that a plot title is purposely omitted in order to allow the automatic
 #' generation of plot titles.
@@ -25,8 +29,8 @@
 #' @param inflow time series object of inflows to subbasin
 #' @param precip time series object of precipitation
 #' @param prd period to use in plotting
-#' @param winter_shading optionally adds shading for winter months (default
-#' TRUE)
+#' @param winter_shading optionally adds shading for winter months (default FALSE)
+#' @param wsdates integer vector of winter shading period dates (see details)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{rvn_flow_spaghetti}} to create a spaghetti plot of annual
 #' flow series
@@ -47,21 +51,27 @@
 #' precip <- run1$hyd$precip
 #'
 #' # create a nice hydrograph
-#' rvn_hyd_plot(sim,obs,zero_axis=F)
+#' rvn_hyd_plot(sim,obs)
 #'
 #' # create a hydrograph with precip as well;
-#' ## range.mult=1.5 by default, leaves some overlap in plot axes
 #' rvn_hyd_plot(sim,obs,precip=precip)
 #'
 #' # create a hydrograph with precip as well for a specific subperiod
 #' prd <- "2003-10-01/2004-10-01"
 #' rvn_hyd_plot(sim,obs,precip=precip,prd=prd)
 #'
+#' # add the winter shading
+#' rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=T)
+#'
+#' # change winter shading dates
+#' rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=T, wsdates=c(11,1,4,15))
+#'
 #' @export rvn_hyd_plot
 #' @importFrom ggplot2 fortify ggplot geom_line scale_x_date xlab ylab theme aes scale_colour_brewer geom_bar
 #' @importFrom cowplot plot_grid
-rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, winter_shading=T) {
-  # require(cowplot)
+rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
+                         winter_shading=FALSE, wsdates=c(12,1,3,31))
+{
 
   # select series to use as base in time determination
   if (!(is.null(sim))) {
@@ -136,14 +146,14 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, win
   #Shade Winter Months
   if (winter_shading){
 
-    winter.start <- as.Date(df.plot$Date[month(df.plot$Date) == 12 & day(df.plot$Date) == 1],
+    winter.start <- as.Date(df.plot$Date[month(df.plot$Date) == wsdates[1] & day(df.plot$Date) == wsdates[2]],
                             origin = "1970-01-01")
-    winter.end <- as.Date(df.plot$Date[month(df.plot$Date) == 3 & day(df.plot$Date) == 31],
+    winter.end <- as.Date(df.plot$Date[month(df.plot$Date) == wsdates[3] & day(df.plot$Date) == wsdates[4]],
                           origin = "1970-01-01")
 
-    shade <- data.frame(cbind(winter.start,winter.end))
-    shade$winter.start <- as.Date(shade$winter.start)
-    shade$winter.end <- as.Date(shade$winter.end)
+    shade <- data.frame(winter.start,winter.end)
+    # shade$winter.start <- as.Date(shade$winter.start
+    # shade$winter.end <- as.Date(shade$winter.end)
     shade$y.start <- -Inf
     shade$y.end <- Inf
 
@@ -172,4 +182,3 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL, win
 
   return(p1)
 }
-
