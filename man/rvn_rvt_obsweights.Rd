@@ -4,7 +4,13 @@
 \alias{rvn_rvt_obsweights}
 \title{Create Raven observation data weight (rvt) file}
 \usage{
-rvn_rvt_obsweights(filename, wts, SBID, typestr = "HYDROGRAPH")
+rvn_rvt_obsweights(
+  filename = "_obsweights.rvt",
+  wts,
+  SBID = 1,
+  typestr = "HYDROGRAPH",
+  units = "m3/s"
+)
 }
 \arguments{
 \item{filename}{observation data file to be created, with .rvt extension}
@@ -17,11 +23,14 @@ rvn_rvt_obsweights(filename, wts, SBID, typestr = "HYDROGRAPH")
 or a state variable name (e.g., SOIL[0] or SNOW)}
 }
 \value{
-{TRUE}{returns TRUE if function runs properly}
+TRUE returns TRUE if function runs properly
 }
 \description{
 Creates an observation data weights file named filename from a continuous (gap-free) xts time series ts
 with values between 0 and 1
+}
+\details{
+Any NA values in the weights are converted to the flag -1.2345, used in Raven as NA values.
 }
 \examples{
  # locate hydrograph sample csv data from RavenR package
@@ -43,6 +52,9 @@ with values between 0 and 1
 
  # write observation weights to rvt file
  rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2, 36, typestr="HYDROGRAPH")
+
+ # cleanup example files
+ unlink(x=c("run1_Hydrographs.rvt","run1_Hydrographs_wts.rvt"))
 
 }
 \seealso{

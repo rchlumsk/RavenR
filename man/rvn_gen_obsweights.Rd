@@ -2,10 +2,7 @@
 % Please edit documentation in R/rvn_gen_obsweights.R
 \name{rvn_gen_obsweights}
 \alias{rvn_gen_obsweights}
-\title{Create weights time series for calibration/diagnostic evaluation
-
-Creates an observation data weights time series based upon dates stored in
-an xts time series and criterion given by the user}
+\title{Create weights time series for calibration/diagnostic evaluation}
 \usage{
 rvn_gen_obsweights(
   ts,
@@ -32,8 +29,6 @@ the latter case, only the julian day of the enddate matters.}
 {wts}{returns numeric vector of weights}
 }
 \description{
-Create weights time series for calibration/diagnostic evaluation
-
 Creates an observation data weights time series based upon dates stored in
 an xts time series and criterion given by the user
 }
@@ -66,6 +61,9 @@ only November, December and January timestamps have a weight of 1
  # and only after March 2003:
  wts2 <- rvn_gen_obsweights(flows,criterion = "AFTER", startdate="2003-03-01")
  wts2 <- wts2*wts # product merges weights
+
+ # show weights over time
+ plot(wts2)
 
  # write observation weights to rvt file
  rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2, 36, typestr="HYDROGRAPH")

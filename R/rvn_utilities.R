@@ -431,18 +431,22 @@ rvn_apply_wyearly_which_max_xts <- function(x, mm=9, dd=30)
 #' @examples
 #' data(rvn_hydrograph_data)
 #'
+#' # check if string is a valid prd argument
+#' rvn_get_prd(prd="2000-10-01/2002-09-30")
+#' # rvn_get_prd(prd="2000-10-01/2002-24-30") # returns error
+#'
 #' # get full valid prd argument for xts object
 #' rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs)
 #'
 #' # check prd argument against xts object
 #' rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "2020-01-01/2020-02-01")
-#' rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "2002-24-01/2020-02-01")
-#' rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "20-24-01/2020-02-01")
+#' # rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "2002-24-01/2020-02-01") # returns error
+#' # rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "20-24-01/2020-02-01")   # returns error
 #'
 #'
 #' @export rvn_get_prd
 #' @importFrom lubridate date year month day
-rvn_get_prd <- function(x, prd=NULL)
+rvn_get_prd <- function(x=NULL, prd=NULL)
 {
 # determine the period to use
   if (!(is.null(prd))) {
@@ -464,7 +468,7 @@ rvn_get_prd <- function(x, prd=NULL)
         as.Date(unlist(strsplit(prd,"/"))[1])
       },
       error=function(cond) {
-        message(paste("Issue with prd, %s does not appear to be a valid date in Y-M-D format:",
+        stop(paste("Issue with prd, %s does not appear to be a valid date in Y-M-D format:",
                       unlist(strsplit(prd,"/"))[1]))
         message(cond)
         # return(FALSE)
@@ -482,11 +486,10 @@ rvn_get_prd <- function(x, prd=NULL)
         as.Date(unlist(strsplit(prd,"/"))[2])
       },
       error=function(cond) {
-        message(paste("Issue with prd, %s does not appear to be a valid date in Y-M-D format:",
+        stop(paste("Issue with prd, %s does not appear to be a valid date in Y-M-D format:",
                       unlist(strsplit(prd,"/"))[2]))
         message(cond)
         # return(FALSE)
-        stop()
       },
       warning=function(cond) {
         message(paste("Warning with prd, %s does not appear to be a valid date in Y-M-D format:",
@@ -495,18 +498,58 @@ rvn_get_prd <- function(x, prd=NULL)
       }
     )
 
-    # check that the prd is valid for x
-    if (nrow(x[prd]) == 0) {
-      warning("x is empty for supplied prd argument")
+    if (!(is.null(x))) {
+      # check that the prd is valid for x
+      if (nrow(x[prd]) == 0) {
+        warning("x is empty for supplied prd argument")
+      }
     }
 
   } else {
     # period is not supplied
 
-    # get the whole range
-    N <- nrow(x)
-    prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(x[1,1]),month(x[1,1]),day(x[1,1]),
-                   year(x[N,1]),month(x[N,1]),day(x[N,1]) )
+    if (!(is.null(x))) {
+      # get the whole range
+      N <- nrow(x)
+      prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(x[1,1]),month(x[1,1]),day(x[1,1]),
+                     year(x[N,1]),month(x[N,1]),day(x[N,1]) )
+    }
   }
   return(prd)
+}
+
+
+#' @title Pads string with spaces, either right or left justified
+#'
+#' @description
+#' Pad string with spaces, justified on either the left or right
+#'
+#' @param string Text string
+#' @param width Number of characters total, including desired spaces
+#' @param just 'r' for right, 'l' for left
+#'
+#' @return {Padded string}
+#' @author Leland Scantlebury, \email{leland@@scantle.com}
+#'
+#' @examples
+#' # Returns '   To the right'
+#' rvn_stringpad('To the right', 15, just='r')
+#'
+#' @export rvn_stringpad
+rvn_stringpad <- function(string, width, just='r')
+{
+  slength <- nchar(string)
+  padlength <- width - slength
+  #-- Break if string is longer than the pad width
+  if (padlength < 0) {
+    stop('String exceeds total width')
+  }
+  #-- return a padded string
+  if (just == 'r') {
+    return(paste0(strrep(' ', padlength),
+                  string))
+  }
+  else if (just == 'l') {
+    return(paste0(string), strrep(' ', padlength))
+  }
 }

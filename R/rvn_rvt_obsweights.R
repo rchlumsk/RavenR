@@ -4,13 +4,16 @@
 #' Creates an observation data weights file named filename from a continuous (gap-free) xts time series ts
 #' with values between 0 and 1
 #'
+#' @details
+#' Any NA values in the weights are converted to the flag -1.2345, used in Raven as NA values.
+#'
 #' @param filename observation data file to be created, with .rvt extension
 #' @param wts xts time series with single data column of observation weights
 #' @param SBID Subbasin ID for hydrographs and reservoir stages or HRU ID for observations of state variables (e.g., snow depth)
 #' @param typestr Raven-recognized data type string: 'HYDROGRAPH', 'RESERVOIR_STAGE', 'RESERVOIR_INFLOW', 'RESERVOIR_NET_INFLOW',
 #' or a state variable name (e.g., SOIL[0] or SNOW)
 #'
-#' @return {TRUE}{returns TRUE if function runs properly}
+#' @return TRUE returns TRUE if function runs properly
 #'
 #' @author James R. Craig, University of Waterloo
 #'
@@ -35,25 +38,33 @@
 #'  # write observation weights to rvt file
 #'  rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2, 36, typestr="HYDROGRAPH")
 #'
+#'  # cleanup example files
+#'  unlink(x=c("run1_Hydrographs.rvt","run1_Hydrographs_wts.rvt"))
+#'
 #' @keywords Raven observations weights rvt file write
 #'
 #' @seealso \code{\link{rvn_rvt_obsfile}} \code{\link{rvn_gen_obsweights}}
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven website}
 #'
 #' @export rvn_rvt_obsweights
-rvn_rvt_obsweights <- function(filename,wts,SBID,typestr="HYDROGRAPH") {
-  interval<-as.numeric(difftime(index(wts[2]) ,index(wts[1]) , units = c("days")))
+#' @importFrom zoo index
+rvn_rvt_obsweights <- function(filename="_obsweights.rvt",wts,SBID=1,typestr="HYDROGRAPH",units="m3/s")
+{
+
+  intvl<-as.numeric(difftime(index(wts[2]), index(wts[1]) , units = c("days")))
 
   wts[wts>1]<-1.0
   wts[wts<0]<-0.0
   wts[is.na(wts)]<-(-1.2345)
 
-  line1<-paste0(":ObservationDataWeights ",typestr," ",SBID, " ",units)
-  line2<-paste0(strftime(start(ts), "%Y-%m-%d %H:%M:%S")," ", interval," ",length(ts))
+  line1 <- sprintf(":ObservationDataWeights %s %s # %s",typestr,SBID,units)
+  line2 <- sprintf("%s %s %i",strftime(start(wts), "%Y-%m-%d %H:%M:%S"),intvl,length(wts))
+  # line1<-paste0(":ObservationDataWeights ",typestr," ",SBID, " ",units)
+  # line2<-paste0(strftime(start(wts), "%Y-%m-%d %H:%M:%S")," ", intvl," ",length(wts))
 
   write(line1,append=FALSE,file=filename)
   write(line2,append=TRUE,file=filename)
-  write(ts, file = filename, ncolumns=1,append = TRUE, sep = " ")
+  write(wts, file = filename, ncolumns=1,append = TRUE, sep = " ")
   write(":EndObservationDataWeights",append=TRUE,file=filename)
   return(TRUE)
 }

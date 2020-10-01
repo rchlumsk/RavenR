@@ -10,7 +10,7 @@ a warning of an issue is found.
 
 XXX to update error checking}
 \usage{
-rvn_get_prd(x, prd = NULL)
+rvn_get_prd(x = NULL, prd = NULL)
 }
 \arguments{
 \item{x}{xts object}
@@ -32,13 +32,17 @@ XXX to update error checking
 \examples{
 data(rvn_hydrograph_data)
 
+# check if string is a valid prd argument
+rvn_get_prd(prd="2000-10-01/2002-09-30")
+# rvn_get_prd(prd="2000-10-01/2002-24-30") # returns error
+
 # get full valid prd argument for xts object
 rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs)
 
 # check prd argument against xts object
 rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "2020-01-01/2020-02-01")
-rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "2002-24-01/2020-02-01")
-rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "20-24-01/2020-02-01")
+# rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "2002-24-01/2020-02-01") # returns error
+# rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "20-24-01/2020-02-01")   # returns error
 
 
 }
