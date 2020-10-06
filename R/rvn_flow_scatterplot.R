@@ -17,9 +17,9 @@
 #'
 #' @param sim time series object of simulated flows
 #' @param obs time series object of observed flows
-#' @param add_line optionally adds a 1:1 line to the plot for reference
-#' (default TRUE)
+#' @param add_line optionally adds a 1:1 line to the plot for reference (default TRUE)
 #' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
+#' @param add_eqn optionally adds the equation for a linear regression line (default FALSE)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{rvn_forcings_read}} for reading in the ForcingFunctions
 #' file
@@ -38,9 +38,13 @@
 #' # plot the flow scatterplot, produce an R2 metric
 #' rvn_flow_scatterplot(sim,obs,add_r2=T)
 #'
+#' # plot again with a regression equation
+#' rvn_flow_scatterplot(sim,obs,add_r2=T,add_eqn=T)
+#'
 #' @export rvn_flow_scatterplot
 #' @importFrom ggplot2 ggplot geom_point scale_x_continuous scale_y_continuous geom_abline geom_text
-rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F, add_eqn = F) {
+rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F, add_eqn = F)
+{
   x.lab <- expression("Observed Flow ("*m^3*"/s)")
   y.lab <- expression("Simulated Flow ("*m^3*"/s)")
 
@@ -72,9 +76,10 @@ rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F, add_eqn = F) {
                 size = 3.5)
 
     if (add_eqn){
-      m <- lm(sim ~ 0 + obs)
-      coeff <- round(as.numeric(m$coefficients[1]), 3)
-      equation <- paste0( "y = ", coeff, "x")
+      m <- lm(sim ~  obs)
+      coeff <- round(as.numeric(m$coefficients), 3)
+      # equation <- paste0( "y = ", coeff[2], "x + ", coeff[1])
+      equation <- paste0( "y = ", coeff, "x ")
       p1 <- p1 +
         geom_text(x = max(obs, sim, na.rm = TRUE)*0.9,
                   y = max(obs, sim, na.rm = TRUE)*0.1,

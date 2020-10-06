@@ -33,6 +33,7 @@
 #'
 #' @keywords Raven  rvi  Hydrologic Processes read
 #' @export rvn_rvi_read
+#' @importFrom utils read.table
 rvn_rvi_read<-function(filename)
 {
   stopifnot(file.exists(filename))

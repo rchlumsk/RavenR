@@ -9,9 +9,9 @@ rvn_annual_peak_event(
   obs,
   mm = 9,
   dd = 30,
-  add_line = T,
-  add_r2 = F,
-  add_eqn = F
+  add_line = TRUE,
+  add_r2 = FALSE,
+  add_eqn = FALSE
 )
 }
 \arguments{
@@ -71,7 +71,7 @@ peak1$df_peak_event
 peak1$p1
 
 # add the r2 regression line and plot directly
-rvn_annual_peak_event(sim, obs, add_r2=T)
+rvn_annual_peak_event(sim, obs, add_r2=TRUE)
 
 
 }

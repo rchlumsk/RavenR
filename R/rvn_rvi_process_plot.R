@@ -29,9 +29,12 @@
 #' @keywords Raven  rvi  Hydrologic Processes
 #' @export rvn_rvi_process_plot
 #' @importFrom igraph get.data.frame graph_from_data_frame vertex.attributes
-#' @importFrom ggplot2 ggplot geom_segment geom_label xlim theme aes arrow unit
-rvn_rvi_process_plot <- function(connections, plot=TRUE, pdfout=NULL)
+#' @importFrom ggplot2 ggplot geom_segment geom_label xlim theme aes arrow unit ggsave
+rvn_rvi_process_plot <- function(connections, pdfout=NULL)
 {
+
+  from.x <- to.x <- from.y <- to.y <- V1 <- V2 <- Label <- NULL
+
   source<-connections$From
   target<-connections$To
   process<-connections$ProcessType

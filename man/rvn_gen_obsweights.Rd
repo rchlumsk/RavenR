@@ -53,13 +53,16 @@ only November, December and January timestamps have a weight of 1
 
  # generate rvt file using just observations from Subbasin ID 36
  flows <- rvn_ts_infill(mydata$hyd$Sub36_obs)
- rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36, typestr = "HYDROGRAPH")
+ rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36,
+   typestr = "HYDROGRAPH")
 
  # weight March-October flows:
- wts <- rvn_gen_obsweights(flows,criterion = "BETWEEN_CYCLIC", startdate="2000-03-01", enddate="2003-11-01")
+ wts <- rvn_gen_obsweights(flows,criterion = "BETWEEN_CYCLIC",
+   startdate="2000-03-01", enddate="2003-11-01")
 
  # and only after March 2003:
- wts2 <- rvn_gen_obsweights(flows,criterion = "AFTER", startdate="2003-03-01")
+ wts2 <- rvn_gen_obsweights(flows,criterion = "AFTER",
+   startdate="2003-03-01")
  wts2 <- wts2*wts # product merges weights
 
  # show weights over time

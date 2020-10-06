@@ -29,8 +29,9 @@
 #' @importFrom xts xts
 rvn_ts_infill <- function(ts)
 {
+
   # find intervals
-  ints<-as.numeric(difftime(index(ts[2:length(mydata),]), index(ts[1:length(mydata)-1,]) , units = c("days")))
+  ints<-as.numeric(difftime(index(ts[2:length(ts),]), index(ts[1:length(ts)-1,]) , units = c("days")))
 
   min_interval<-min(ints)
   max_interval<-max(ints)

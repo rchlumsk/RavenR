@@ -74,12 +74,14 @@ library(tidyhydat)
 stations <- c("05CB004","05CA002")
 
 # Gather station data/info using tidyhydat functions
-hd <- tidyhydat::hy_daily_flows(station_number = stations, start_date = "1996-01-01", end_date = "2000-01-01")
+hd <- tidyhydat::hy_daily_flows(station_number = stations,
+  start_date = "1996-01-01", end_date = "2000-01-01")
 
 station_info <- hy_stations(stations)
 
 # Create RVT files
-rvn_rvt_tidyhydat(hd, subIDs=c(3,11), stnNames=station_info$STATION_NAME, flip_number=T)
+rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
+  stnNames=station_info$STATION_NAME, flip_number=T)
 
 }
 \keyword{Raven}

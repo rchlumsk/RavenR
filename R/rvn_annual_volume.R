@@ -20,11 +20,9 @@
 #' @param obs time series object of observed flows
 #' @param mm month of water year ending (default 9)
 #' @param dd day of water year ending (default 30)
-#' @param add_line optionally adds a 1:1 line to the plot for reference
-#' (default TRUE)
+#' @param add_line optionally adds a 1:1 line to the plot for reference (default TRUE)
 #' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
-#' @param axis_zero optionally sets the minimum volume on axes to zero (default
-#' FALSE)
+#' @param add_eqn optionally adds the equation for a linear regression line through the origin (default FALSE)
 #' @return returns a list with annual volume data in a data frame, and a ggplot object
 #'  \item{df_volume}{data frame of the calculated annual volumes}
 #'  \item{p1}{ggplot object with plotted annual volumes}
@@ -84,6 +82,8 @@ rvn_annual_volume <- function (sim, obs, mm=9, dd=30, add_line = T, add_r2 = F, 
   y.lim = c(min(sum.obs, sum.sim, na.rm = T) * 0.9,
             max(sum.obs, sum.sim, na.rm = T) * 1.1)
 
+  obs.vol <- sim.vol <- NULL
+
   p1 <- ggplot(data=df,aes(x=obs.vol,y=sim.vol))+
     geom_point()+
     scale_x_continuous(limits=x.lim, name=x.lab)+
@@ -105,7 +105,6 @@ rvn_annual_volume <- function (sim, obs, mm=9, dd=30, add_line = T, add_r2 = F, 
                 label=r2.label,
                 parse=T,
                 size = 3.5)
-
   }
 
   if (add_eqn){

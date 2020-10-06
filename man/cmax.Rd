@@ -27,9 +27,9 @@ function, as the base::max function does not work properly across columns.
 }
 \examples{
 data(rvn_hydrograph_data)
-cmax(rvn_hydrograph_data$hyd$Sub43_obs, na.rm=T)
+cmax(rvn_hydrograph_data$hyd$Sub43_obs, na.rm=TRUE)
 
-rvn_apply_wyearly(rvn_hydrograph_data$hyd, cmax, na.rm=T)
+rvn_apply_wyearly(rvn_hydrograph_data$hyd, cmax, na.rm=TRUE)
 
 }
 \seealso{

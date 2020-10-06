@@ -30,7 +30,9 @@
 #' @seealso \code{\link{rvn_ts_infill}} for infilling time series, and  \code{\link{rvn_rvt_obsweights}} to write an rvt observation weights file
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven website}
 #' @export rvn_rvt_obsfile
-rvn_rvt_obsfile <- function(filename,ts,SBID,typestr="HYDROGRAPH", units="m3/s") {
+#' @importFrom zoo index
+rvn_rvt_obsfile <- function(filename,ts,SBID,typestr="HYDROGRAPH", units="m3/s")
+{
   # assumes time series ts is continuous
   interval<-as.numeric(difftime(index(ts[2]) ,index(ts[1]) , units = c("days")))
 

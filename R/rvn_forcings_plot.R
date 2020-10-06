@@ -41,6 +41,8 @@
 rvn_forcings_plot <-function(forcings,prd=NULL)
 {
 
+  Index <- value <- variable <- color <- PET <- potential.melt <- NULL
+
   # check prd and subset data
   prd <- rvn_get_prd(forcings,prd)
   forcings <- forcings[prd]

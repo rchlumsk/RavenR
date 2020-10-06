@@ -39,6 +39,8 @@
 rvn_subbasin_network_plot <- function(SBtable,labeled=FALSE)
 {
 
+  downID <- from.x <- to.x <- from.y <- to.y <- width <- long <- lat <- SB <- NULL
+
   links<-data.frame(SBID=SBtable$SBID,downID=SBtable$Downstream_ID)
   links<-subset.data.frame(links,downID>=0) # get rid of -1
 

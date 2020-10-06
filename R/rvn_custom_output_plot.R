@@ -26,11 +26,13 @@
 #' rvn_custom_output_plot(mycustomdata, IDs=seq(1,10), prd="2002-10-01/2003-09-01")
 #'
 #' @export rvn_custom_output_plot
-#' @importFrom ggplot2 fortify ggplot aes geom_line ylab xlab scale_colour_brewer scale_x_datetime
+#' @importFrom ggplot2 fortify ggplot aes geom_line ylab xlab scale_colour_brewer scale_x_datetime geom_step
 #' @importFrom reshape2 melt
 #' @importFrom xts xtsAttributes
 rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL)
 {
+
+  Index <- value <- variable <- NULL
 
   #determine IDs lis, if null - includes all
   if (is.null(IDs)){

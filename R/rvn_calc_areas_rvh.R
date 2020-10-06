@@ -53,6 +53,7 @@
 #' myareas <- rvn_calc_areas_rvh(ff,write_file=T)
 #'
 #' @export rvn_calc_areas_rvh
+#' @importFrom utils write.csv
 rvn_calc_areas_rvh <- function(ff,calc_da=T,write_file=F,iter_thresh=NA) {
 
   if (missing(ff)) { stop("Requires rvh file as ff")}

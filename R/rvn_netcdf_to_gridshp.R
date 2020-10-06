@@ -28,9 +28,10 @@
 #'
 #'
 #' @export rvn_netcdf_to_gridshp
-#' @importFrom sp coordinates proj4string spTransform Polygons SpatialPolygonsDataFrame SpatialPolygons
+#' @importFrom sp coordinates proj4string spTransform Polygons Polygon SpatialPolygonsDataFrame SpatialPolygons CRS
 #' @importFrom rgdal writeOGR
 #' @importFrom deldir deldir
+#' @importFrom methods slot
 rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp)
 {
   # require(ncdf.tools)
@@ -43,8 +44,13 @@ rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp)
 
   # extract lat-long from netCDF file
   #-----------------------------------------------------------------------
-  # nc_data <- nc_open(ncfile)
-  # ncdf4::ncvar_get(nc_data, "lat")
+  nc_data <- nc_open(ncfile)
+  ncdf4::ncvar_get(nc_data, "lat")
+  ncdf4::ncvar_get(nc_data, "latitude")
+  ncdf4::ncvar_get(nc_data, "Latitude")
+  ncdf4::ncvar_get(nc_data, "Northing")
+
+
 
   mydata<- readNcdf(ncfile,var.name=c("lat"))
   lat<-as.vector(t(mydata))

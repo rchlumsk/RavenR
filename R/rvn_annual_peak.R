@@ -49,21 +49,24 @@
 #' peak1$p1
 #'
 #' # plot with r2 and regression equation
-#' peak_df <- rvn_annual_peak(sim, obs, add_r2=T, add_eqn=T)
+#' peak_df <- rvn_annual_peak(sim, obs, add_r2=TRUE, add_eqn=TRUE)
 #' peak_df$p1
 #'
 #' @keywords Raven annual peak diagnostics
 #' @export rvn_annual_peak
+#' @importFrom stats lm
 #' @importFrom lubridate year date
 #' @importFrom ggplot2 ggplot aes geom_point geom_abline geom_text scale_x_continuous scale_y_continuous
-rvn_annual_peak <- function(sim, obs, mm=9, dd=30,add_line = T,
-                             add_r2 = F, add_eqn = F)
+rvn_annual_peak <- function(sim, obs, mm=9, dd=30,add_line = TRUE,
+                             add_r2 = FALSE, add_eqn = FALSE)
 {
 
   max.sim <- rvn_apply_wyearly_which_max_xts(sim, mm=mm, dd=dd)
   max.obs <- rvn_apply_wyearly_which_max_xts(obs, mm=mm, dd=dd)
   dates <- lubridate::date(sim[rvn_wyear_indices(sim, mm=mm, dd=dd)])
-  df <- data.frame(date.end = dates, sim.peak = as.numeric(max.sim), obs.peak = as.numeric(max.obs))
+  df <- data.frame("date.end" = dates,
+                   "sim.peak" = as.numeric(max.sim),
+                   "obs.peak" = as.numeric(max.obs))
 
   if (add_r2) {
     max.obs.mean <- mean(max.obs)
@@ -75,10 +78,10 @@ rvn_annual_peak <- function(sim, obs, mm=9, dd=30,add_line = T,
 
   x.lab <- expression("Observed Peak Discharge ("*m^3*"/s)")
   y.lab <- expression("Simulated Peak Discharge ("*m^3*"/s)")
-  x.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,
-            max(max.obs, max.sim, na.rm = T) * 1.1)
-  y.lim = c(min(max.obs, max.sim, na.rm = T) * 0.9,
-            max(max.obs, max.sim, na.rm = T) * 1.1)
+  x.lim = c(min(max.obs, max.sim, na.rm= TRUE) * 0.9,
+            max(max.obs, max.sim, na.rm= TRUE) * 1.1)
+  y.lim = c(min(max.obs, max.sim, na.rm= TRUE) * 0.9,
+            max(max.obs, max.sim, na.rm= TRUE) * 1.1)
 
   p1 <- ggplot(data=df,aes(x=max.obs,y=max.sim))+
     geom_point()+

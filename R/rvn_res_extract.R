@@ -61,6 +61,8 @@ rvn_res_extract <- function(subs=NA, res=NA, prd=NULL) {
     stop("res is required for this function; please supply the full output file from res.read.")
   }
 
+  mysub <- NULL
+
   # extract random pair
   reservoirs <- res$res
   units <- res$units

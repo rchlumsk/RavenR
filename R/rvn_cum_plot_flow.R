@@ -54,6 +54,8 @@ rvn_cum_plot_flow <- function(sim=NULL,obs=NULL,inflow=NULL, mm=9, dd=30) {
   sec.per.day <- 86400
   cum.sim <- NULL ; cum.obs <- NULL ; cum.inflow <- NULL
 
+  variable <- cum <- NULL
+
   # get the indicies of water years
   ep <- rvn_wyear_indices(sim, mm=mm, dd=dd)
 

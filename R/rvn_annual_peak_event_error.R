@@ -1,8 +1,10 @@
-#' Annual Peak Event Errors
+#' @title Annual Peak Event Errors
 #'
+#' @description
 #' rvn_annual_peak_event_error creates a plot of the annual observed and simulated
 #' peak event errors.
 #'
+#' @details
 #' This function creates a plot of the percent errors in simulated peak events
 #' for each water year. The peaks are calculated as using flows from the same
 #' day as the peak event in the observed series, i.e. the timing of the peak is
@@ -58,18 +60,19 @@
 #' peak1$p1
 #'
 #' # plot directly and without labels
-#' rvn_annual_peak_event_error(sim, obs, add_line=T,add_labels=F)$p1
+#' rvn_annual_peak_event_error(sim, obs, add_line=TRUE,add_labels=FALSE)$p1
 #'
 #' # plot for a water year of July 1
 #' ## note that partial period creates two points ending in 2004
-#' rvn_annual_peak_event_error(sim, obs, mm=6, add_line=T,add_labels=F)$p1
+#' rvn_annual_peak_event_error(sim, obs, mm=6, add_line=TRUE,add_labels=FALSE)$p1
 #'
 #'
 #' @keywords Raven annual peak event error diagnostics
 #' @export rvn_annual_peak_event_error
+#' @importFrom stats lm
 #' @importFrom lubridate year date
 #' @importFrom ggplot2 ggplot aes geom_point geom_hline geom_text scale_x_discrete scale_y_continuous
-rvn_annual_peak_event_error <- function(sim, obs, mm=9, dd=30, add_line = T, add_labels = T)
+rvn_annual_peak_event_error <- function(sim, obs, mm=9, dd=30, add_line = TRUE, add_labels = TRUE)
 {
 
   df.peak.event <- rvn_annual_peak_event(sim, obs, mm=mm, dd=dd)$df_peak_event

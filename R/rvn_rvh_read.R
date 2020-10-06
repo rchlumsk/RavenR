@@ -62,9 +62,12 @@
 #' @keywords Raven  rvh  HRUs  SubBasins
 #' @export rvn_rvh_read
 #' @importFrom igraph graph_from_data_frame ego ego_size V
+#' @importFrom utils read.table
 rvn_rvh_read<-function(filename)
 {
   stopifnot(file.exists(filename))
+
+  downID <- NULL
 
   # read subbasins table--------------------------------
   lineno<-grep(":SubBasins", readLines(filename), value = FALSE)

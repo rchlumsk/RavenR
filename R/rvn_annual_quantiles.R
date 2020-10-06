@@ -5,9 +5,10 @@
 #'
 #' @param hgdata Time series object of observed or simulated flows
 #' @param prd time period for subset in character format "YYYY-MM-DD/YYYY-MM-DD"
-#' @param mm month of water year ending (default 9)
 #' @param Qlower Decimal percentage of lower quantile value (default 0.1)
-#' @param Qupper Decimal percentage of upper quantile value (default 0.9)#'
+#' @param Qupper Decimal percentage of upper quantile value (default 0.9)
+#' @param water_year booolean on whether to sort quantiles by water year start date (default TRUE)
+#' @param mm month of water year ending (default 9)
 #' @return \item{qdat}{Time series object of monthly median and quantile values}
 #'
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
@@ -27,10 +28,12 @@
 #'
 #' @keywords quantile hydrograph flow statistics diagnostic
 #' @export rvn_annual_quantiles
-#' @importFrom lubridate month day year date
+#' @importFrom stats end aggregate quantile
+#' @importFrom lubridate month day year date years
 #' @importFrom xts xts
-rvn_annual_quantiles <- function(hgdata, prd=NULL, mm=9,
-                           Qlower=0.1, Qupper=0.9, water_year=T)
+rvn_annual_quantiles <- function(hgdata, prd=NULL,
+                           Qlower=0.1, Qupper=0.9,
+                           water_year=T, mm=9)
 {
 
   #-- Assuming hgdata is a daily xts object

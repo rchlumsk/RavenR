@@ -32,6 +32,7 @@
 #'
 #' @export rvn_custom_read
 #' @importFrom xts xts
+#' @importFrom utils read.csv
 rvn_custom_read <- function(ff=NA, no.runname=F) {
 
   if (missing(ff)) {

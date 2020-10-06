@@ -8,8 +8,7 @@ rvn_rvt_obsweights(
   filename = "_obsweights.rvt",
   wts,
   SBID = 1,
-  typestr = "HYDROGRAPH",
-  units = "m3/s"
+  typestr = "HYDROGRAPH"
 )
 }
 \arguments{
@@ -44,14 +43,17 @@ Any NA values in the weights are converted to the flag -1.2345, used in Raven as
  rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36, typestr = "HYDROGRAPH")
 
  # weight March-October flows:
- wts <- rvn_gen_obsweights(flows,criterion = "BETWEEN_CYCLIC", startdate="2000-03-01", enddate="2003-11-01")
+ wts <- rvn_gen_obsweights(flows,criterion = "BETWEEN_CYCLIC",
+   startdate="2000-03-01", enddate="2003-11-01")
 
  # and only after March 2003:
- wts2 <- rvn_gen_obsweights(flows,criterion = "AFTER", startdate="2003-03-01")
+ wts2 <- rvn_gen_obsweights(flows,criterion = "AFTER",
+   startdate="2003-03-01")
  wts2 <- wts2*wts # product merges weights
 
  # write observation weights to rvt file
- rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2, 36, typestr="HYDROGRAPH")
+ rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2,
+   36, typestr="HYDROGRAPH")
 
  # cleanup example files
  unlink(x=c("run1_Hydrographs.rvt","run1_Hydrographs_wts.rvt"))

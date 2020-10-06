@@ -6,43 +6,40 @@
 #' Only determines runoff coefficient from available data - prone to overestimation with poor observation coverage.
 #'
 #' @param rvhfile rvh filename (absolute or relative to working directory, with .rvh extension)
-#' @param outdir output directory containing PRECIP_Daily_Average_BySubbasin.csv (absolute or relative to working directory, with ending slash)
-#' @param custfile (optional) file name (no directory) for Raven-generated custom output precip-by-subbasin file
-#' @param hydfile (optional) file name (no directory) for Raven-generated hydrographs file
+#' @param custfile file path to Raven-generated custom output precip-by-subbasin file
+#' @param hydfile file path to Raven-generated hydrographs file
 #' @param correct (optional) if TRUE, tries to correct runoff coefficient for missing data (assumes missing~0 flow)
-#' @return data frame with runoff coefficients of gauged basins
+#' @return {data frame with runoff coefficients of gauged basins}
+#'
 #' @author James R. Craig, University of Waterloo
 #' @seealso See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 #'
 #' @examples
-#' \dontrun{
-#'  out <- rvn_calc_runoff_coeff("example.rvh","C:/TEMP/ouput/")
+#'  myrvh <- system.file("extdata","Nith.rvh", package="RavenR")
+#'  mycust <- system.file("extdata", "run1_PRECIP_Daily_Average_BySubbasin.csv", package="RavenR")
+#'  myhyd <- system.file("extdata", "run1_Hydrographs.csv", package="RavenR")
 #'
-#' # # Example usage:
-#' # runcoefs <- rvn_calc_runoff_coeff("reddeer.rvh","output/",correct=TRUE)
+#'  rcs <- rvn_calc_runoff_coeff(myrvh, mycust, myhyd, correct=TRUE)
+#'  rcs
 #'
-#' # # simple plot:
-#' #  plot(runcoefs$runoff_coeff_sim,col="red",ylim=c(0,1))
-#' #  points(runcoefs$runoff_coeff_obs,col="black")
-#' #
-#' # # bar plot:
-#' # runcoefs <- subset(runcoefs,select=c(runoff_coeff_sim,runoff_coeff_obs))
-#' # par(mar=c(15,5,5,5))
-#' # bp <- barplot(t(as.matrix(runcoefs)), main="Runoff Coefficient Comparison (w/ rough data coverage correction)", ylab = "Runoff coeff", ylim=c(0,1),beside=TRUE, col=c("blue","deepskyblue"),legend.text=c("sim","obs"),las=2)
-#' # ## Add text at top of bars
-#' # text(x = bp, y = c(rbind(runcoefs$runoff_coeff_sim,runcoefs$runoff_coeff_obs)), label = round(c(rbind(obs_cover*100,obs_cover*NA)),0), pos = 3, cex = 0.8, col = "red")
-#' }
+#'  # create a bar plot
+#'  runcoefs <- subset(rcs,select=c(runoff_coeff_sim,runoff_coeff_obs))
+#'
+#'  bp <- barplot(t(as.matrix(runcoefs)),
+#'   main="Runoff Coefficient Comparison (w/ rough data coverage correction)",
+#'   ylab = "Runoff coeff", ylim=c(0,3),beside=TRUE,
+#'   col=c("blue","deepskyblue"),legend.text=c("sim","obs"),las=2)
 #'
 #' @keywords Raven  rvh  runoff coefficient
 #' @export rvn_calc_runoff_coeff
 #' @importFrom igraph ego ego_size V
-rvn_calc_runoff_coeff <- function(rvhfile,outdir,
+rvn_calc_runoff_coeff <- function(rvhfile,
                                   custfile="PRECIP_Daily_Average_BySubbasin.csv",
                                   hydfile="Hydrographs.csv",
                                   correct=FALSE)
 {
-  custfile<-paste0(outdir,custfile)
-  hydfile<-paste0(outdir,hydfile)
+
+  SBID <- runoff_coeff_sim <- runoff_coeff_obs <- obs_cover <- NULL
 
   # open files
   #-------------------------------------------------------------
@@ -58,9 +55,9 @@ rvn_calc_runoff_coeff <- function(rvhfile,outdir,
     print(paste0("Cannot find ",hydfile))
     return (NA)
   }
-  rvh<-rvh.read(rvhfile)
-  precip<-custom.read(custfile)
-  hyd<-hyd.read(hydfile)
+  rvh <- rvn_rvh_read(rvhfile)
+  precip <- rvn_custom_read(custfile)
+  hyd <- rvn_hyd_read(hydfile)
 
   # get total average precip for length of simulation
   #-------------------------------------------------------------
@@ -70,8 +67,8 @@ rvn_calc_runoff_coeff <- function(rvhfile,outdir,
   # generate area-weighted average upstream precip, in mm
   #-------------------------------------------------------------
   net<-rvh$SBnetwork
-  egon<-igraph::ego(net,order=100,nodes=igraph::V(net),mode="in")
-  size<-igraph::ego_size(net,order=100,nodes=igraph::V(net),mode="in")
+  egon<-ego(net,order=100,nodes=V(net),mode="in")
+  size<-ego_size(net,order=100,nodes=V(net),mode="in")
 
   for (i in 1:nrow(rvh$SBtable)){
     SBID_this=rvh$SBtable$SBID[i]
@@ -84,7 +81,7 @@ rvn_calc_runoff_coeff <- function(rvhfile,outdir,
   gaugedSBs<-subset.data.frame(rvh$SBtable,rvh$SBtable$Gauged==1)
   for (i in 1:nrow(gaugedSBs)){
     #print(gaugedSBs$Name[i])
-    thishyd<-hyd.extract(subs=gaugedSBs$Name[i],hyd)
+    thishyd<-rvn_hyd_extract(subs=gaugedSBs$Name[i],hyd)
     if (is.null(thishyd$obs)){
       gaugedSBs$obs_cover[i]<-0
       gaugedSBs$simrunoff[i]<-NA

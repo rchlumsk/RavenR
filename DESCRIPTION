@@ -28,6 +28,7 @@ Imports:
     igraph,
     lubridate,
     magrittr,
+    methods,
     purrr,
     reshape2,
     rgdal,

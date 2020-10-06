@@ -38,6 +38,7 @@
 #'
 #' @export rvn_res_read
 #' @importFrom xts xts
+#' @importFrom utils read.csv
 rvn_res_read <- function(ff=NA)
 {
 

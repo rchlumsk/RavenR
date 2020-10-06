@@ -26,13 +26,13 @@
 #' # Add a second hydrograph to compare
 #' qdat_sim <- rvn_annual_quantiles(hyd_data$sim)
 #'
-#' p1 <- rvn_annual_quantiles_plot(qdat_sim, mediancolor = 'red', ribboncolor = 'red', explot = p)
+#' p1 <- rvn_annual_quantiles_plot(qdat_sim, mediancolor = 'blue', ribboncolor = 'red', explot = p)
 #' p1 # view plot
 #'
 #' @export rvn_annual_quantiles_plot
 #' @importFrom lubridate year date
 #' @importFrom ggplot2 ggplot aes geom_point geom_line geom_ribbon xlab ylab scale_x_date
-#' @importFrom scales label_date
+#' @importFrom scales label_date date_format
 rvn_annual_quantiles_plot <- function(qdat,
                                       mediancolor='black',
                                       ribboncolor='grey60',
@@ -43,14 +43,15 @@ rvn_annual_quantiles_plot <- function(qdat,
   # Export XTS object into df
   dates <- date(qdat)
   qdat <- data.frame(qdat)
-  qdat$date <- dates
+  qdat$dates <- dates
 
   # Rename Columns
-  names(qdat) <- c('Lower','Median','Upper','date')
+  names(qdat) <- c('Lower','Median','Upper','dates')
+  Lower <- Median <- Upper <- dates <- NULL # appeasing the R CMD CHECK with ggplot2 conflicts
 
   if(is.null(explot)) {
 
-    p1 <- ggplot(qdat, aes(x = date)) +
+    p1 <- ggplot(data=qdat, aes(x = dates)) +
       geom_ribbon(aes(ymin=Lower, ymax=Upper),
                   fill=ribboncolor,
                   alpha=ribbonalpha) +
@@ -64,9 +65,9 @@ rvn_annual_quantiles_plot <- function(qdat,
   } else {
     # add check that explot is a valid ggplot object
     p1 <- explot +
-      geom_ribbon(data=qdat, aes(ymin=Lower, ymax=Upper),
+      geom_ribbon(aes(ymin=Lower, ymax=Upper),
                   fill=ribboncolor, alpha=ribbonalpha) +
-      geom_line(data=qdat, aes(y=Median), color=mediancolor)
+      geom_line(aes(y=Median), color=mediancolor)
   }
 
   return(p1)

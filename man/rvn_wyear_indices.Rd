@@ -4,7 +4,7 @@
 \alias{rvn_wyear_indices}
 \title{Water Year Indices}
 \usage{
-rvn_wyear_indices(x, mm = 9, dd = 30, force.ends = F)
+rvn_wyear_indices(x, mm = 9, dd = 30)
 }
 \arguments{
 \item{x}{xts object or Date/POSITXtc series to obtain indices for}

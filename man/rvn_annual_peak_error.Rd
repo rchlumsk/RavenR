@@ -4,7 +4,14 @@
 \alias{rvn_annual_peak_error}
 \title{Annual Peak Errors}
 \usage{
-rvn_annual_peak_error(sim, obs, mm = 9, dd = 30, add_line = T, add_labels = T)
+rvn_annual_peak_error(
+  sim,
+  obs,
+  mm = 9,
+  dd = 30,
+  add_line = TRUE,
+  add_labels = TRUE
+)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
@@ -69,7 +76,7 @@ peak1$df_peak_error
 peak1$p1
 
 # plot directly and without labels
-rvn_annual_peak_error(sim, obs, add_line=T, add_labels=F)
+rvn_annual_peak_error(sim, obs, add_line=TRUE, add_labels=FALSE)
 
 
 }

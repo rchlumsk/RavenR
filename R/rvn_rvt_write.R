@@ -37,6 +37,7 @@
 #' rvn_rvt_write(flows,params = "HYDROGRAPH", units = "m3/s", ff = 'raven_rvt_write')
 #'
 #' @export rvn_rvt_write
+#' @importFrom stats start
 #' @importFrom xts is.xts
 #' @importFrom lubridate date
 #' @importFrom gdata write.fwf

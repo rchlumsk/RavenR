@@ -58,6 +58,8 @@ rvn_rvt_flow <- function(flow.series,subID,stnName,
                          rvt_type='ObservationData',prd=NULL,write_redirect=F,flip_number=F)
 {
 
+  flow.sim <- NULL
+
   # list of known rvt flow data types to supply to Raven model
   known.rvt_types <- c("ObservationData","BasinInflowHydrograph","ReservoirExtraction")
 

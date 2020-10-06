@@ -137,6 +137,7 @@ rvn_substrRight <- function(x, n)
 #' points(rnorm(20),col=mycol)
 #'
 #' @export rvn_col_transparent
+#' @importFrom grDevices col2rgb
 rvn_col_transparent <- function(colour,trans)
 {
   # This function adds transparancy to a colour.
@@ -207,7 +208,7 @@ rvn_iscolour <- function(x)
 #' rvn_mos_names(F)
 #'
 #' @export rvn_mos_names
-rvn_mos_names <- function(short=T)
+rvn_mos_names <- function(short=TRUE)
 {
   if (short) {
     return(c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
@@ -306,9 +307,9 @@ rvn_num_days_month <- function(date)
 #'
 #' @examples
 #' data(rvn_hydrograph_data)
-#' cmax(rvn_hydrograph_data$hyd$Sub43_obs, na.rm=T)
+#' cmax(rvn_hydrograph_data$hyd$Sub43_obs, na.rm=TRUE)
 #'
-#' rvn_apply_wyearly(rvn_hydrograph_data$hyd, cmax, na.rm=T)
+#' rvn_apply_wyearly(rvn_hydrograph_data$hyd, cmax, na.rm=TRUE)
 #'
 #' @export cmax
 cmax <- function(x, na.rm = FALSE)
@@ -357,8 +358,7 @@ rvn_which_max_xts <- function(x)
     df <- data.frame(date=lubridate::date(x)[which.max(x)],max=as.numeric(x[which.max(x)]))
     myxts <- xts(df$max, order.by=df$date)
     colnames(myxts) <- colnames(x)
-    myxts %>%
-    return(.)
+    return(myxts)
 
   } else {
     warning("x must be an xts object with one numeric column")
@@ -409,8 +409,7 @@ rvn_apply_wyearly_which_max_xts <- function(x, mm=9, dd=30)
 
     myxts <- xts(xx, order.by=dx)
     colnames(myxts) <- colnames(x)
-    myxts %>%
-      return(.)
+    return(myxts)
 
   } else {
     warning("x must be an xts object with one numeric column")

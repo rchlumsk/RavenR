@@ -48,6 +48,7 @@
 #' @keywords Raven read.csv hydrograph
 #' @export rvn_hyd_read
 #' @importFrom xts xts
+#' @importFrom utils read.csv
 rvn_hyd_read <- function(ff=NA,tzone=NULL) {
 
   if (missing(ff)) {

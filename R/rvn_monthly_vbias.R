@@ -56,6 +56,9 @@
 #' @importFrom xts apply.monthly
 rvn_monthly_vbias <- function (sim, obs, add_line = T, normalize = T, add_labels = T)
 {
+
+  nmon <- NULL
+
   obs.monthly <- apply.monthly(obs, sum, na.rm = T)
   sim.monthly <- apply.monthly(sim, sum, na.rm = T)
   mvbias <- matrix(NA, nrow = 12, ncol = 1)

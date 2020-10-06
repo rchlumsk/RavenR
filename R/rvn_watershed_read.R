@@ -39,6 +39,7 @@
 #' head(mywshd$watershed_storage)
 #'
 #' @export rvn_watershed_read
+#' @importFrom utils read.csv
 rvn_watershed_read <- function(ff=NA) {
 
   if (missing(ff)) {

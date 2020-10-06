@@ -7,10 +7,10 @@
 rvn_annual_quantiles(
   hgdata,
   prd = NULL,
-  mm = 9,
   Qlower = 0.1,
   Qupper = 0.9,
-  water_year = T
+  water_year = T,
+  mm = 9
 )
 }
 \arguments{
@@ -18,11 +18,13 @@ rvn_annual_quantiles(
 
 \item{prd}{time period for subset in character format "YYYY-MM-DD/YYYY-MM-DD"}
 
-\item{mm}{month of water year ending (default 9)}
-
 \item{Qlower}{Decimal percentage of lower quantile value (default 0.1)}
 
-\item{Qupper}{Decimal percentage of upper quantile value (default 0.9)#'}
+\item{Qupper}{Decimal percentage of upper quantile value (default 0.9)}
+
+\item{water_year}{booolean on whether to sort quantiles by water year start date (default TRUE)}
+
+\item{mm}{month of water year ending (default 9)}
 }
 \value{
 \item{qdat}{Time series object of monthly median and quantile values}

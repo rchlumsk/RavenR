@@ -37,12 +37,14 @@
 #' rvn_fdc_plot(sim,obs,seasonal=T)
 #'
 #' @export rvn_fdc_plot
-#' @importFrom ggplot2 fortify ggplot scale_x_continuous scale_y_continuous scale_colour_brewer
+#' @importFrom ggplot2 fortify ggplot scale_x_continuous scale_y_continuous scale_colour_brewer stat_ecdf
 rvn_fdc_plot <-function(sim=NULL,obs=NULL,prd=NULL,seasonal='F'){
 
   if (is.null(sim)) {
     stop("sim is required for plotting.")
   }
+
+  Value <- Type <- NULL
 
   prd <- rvn_get_prd(sim, prd)
 

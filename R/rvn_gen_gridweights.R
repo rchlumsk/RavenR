@@ -55,11 +55,12 @@
 #' @export rvn_gen_gridweights
 #' @importFrom rgdal readOGR
 #' @importFrom rgeos gBuffer gIntersection
+#' @importFrom methods slot
 rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs, HRUIDcol="HRU_ID",
                                 gridIDcol="cellID", outfile="GridWeights.rvt")
 {
-  # require(rgdal)
-  # require(rgeos)
+
+  validHRUIDs <- NULL
 
   # read in HRU file
   #----------------------------------------------------------

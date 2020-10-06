@@ -46,7 +46,7 @@ p  # view plot
 # Add a second hydrograph to compare
 qdat_sim <- rvn_annual_quantiles(hyd_data$sim)
 
-p1 <- rvn_annual_quantiles_plot(qdat_sim, mediancolor = 'red', ribboncolor = 'red', explot = p)
+p1 <- rvn_annual_quantiles_plot(qdat_sim, mediancolor = 'blue', ribboncolor = 'red', explot = p)
 p1 # view plot
 
 }

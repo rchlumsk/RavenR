@@ -1,5 +1,6 @@
 #' @describeIn rvn_rvh_write Overwrite contents of original .rvh file
 #' @export rvn_rvh_overwrite
+#' @importFrom utils write.table
 rvn_rvh_overwrite<-function(orig_file,filename,SBtable,HRUtable)
 {
   write("# -----------------------------------------------------",append=FALSE,file=filename)

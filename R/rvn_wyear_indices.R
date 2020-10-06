@@ -42,11 +42,11 @@
 #'
 #' @export rvn_wyear_indices
 #' @importFrom lubridate month day
-rvn_wyear_indices <- function(x,mm=9,dd=30,force.ends=F)
+rvn_wyear_indices <- function(x,mm=9,dd=30)
 {
   if (is.null(dim(x))) {
     ep <- which(lubridate::month(x) == mm & lubridate::day(x) == dd)
-    ep <- unique(c(0,ep,length(sim)))
+    ep <- unique(c(0,ep,length(x)))
   } else if (dim(x)[2] >= 1) {
     ep <- which(lubridate::month(x) == mm & lubridate::day(x) == dd)
     ep <- unique(c(0,ep,nrow(x)))

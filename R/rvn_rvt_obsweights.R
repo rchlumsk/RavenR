@@ -29,14 +29,17 @@
 #'  rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36, typestr = "HYDROGRAPH")
 #'
 #'  # weight March-October flows:
-#'  wts <- rvn_gen_obsweights(flows,criterion = "BETWEEN_CYCLIC", startdate="2000-03-01", enddate="2003-11-01")
+#'  wts <- rvn_gen_obsweights(flows,criterion = "BETWEEN_CYCLIC",
+#'    startdate="2000-03-01", enddate="2003-11-01")
 #'
 #'  # and only after March 2003:
-#'  wts2 <- rvn_gen_obsweights(flows,criterion = "AFTER", startdate="2003-03-01")
+#'  wts2 <- rvn_gen_obsweights(flows,criterion = "AFTER",
+#'    startdate="2003-03-01")
 #'  wts2 <- wts2*wts # product merges weights
 #'
 #'  # write observation weights to rvt file
-#'  rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2, 36, typestr="HYDROGRAPH")
+#'  rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2,
+#'    36, typestr="HYDROGRAPH")
 #'
 #'  # cleanup example files
 #'  unlink(x=c("run1_Hydrographs.rvt","run1_Hydrographs_wts.rvt"))
@@ -48,7 +51,7 @@
 #'
 #' @export rvn_rvt_obsweights
 #' @importFrom zoo index
-rvn_rvt_obsweights <- function(filename="_obsweights.rvt",wts,SBID=1,typestr="HYDROGRAPH",units="m3/s")
+rvn_rvt_obsweights <- function(filename="_obsweights.rvt",wts,SBID=1,typestr="HYDROGRAPH")
 {
 
   intvl<-as.numeric(difftime(index(wts[2]), index(wts[1]) , units = c("days")))
@@ -57,7 +60,7 @@ rvn_rvt_obsweights <- function(filename="_obsweights.rvt",wts,SBID=1,typestr="HY
   wts[wts<0]<-0.0
   wts[is.na(wts)]<-(-1.2345)
 
-  line1 <- sprintf(":ObservationDataWeights %s %s # %s",typestr,SBID,units)
+  line1 <- sprintf(":ObservationDataWeights %s %s",typestr,SBID)
   line2 <- sprintf("%s %s %i",strftime(start(wts), "%Y-%m-%d %H:%M:%S"),intvl,length(wts))
   # line1<-paste0(":ObservationDataWeights ",typestr," ",SBID, " ",units)
   # line2<-paste0(strftime(start(wts), "%Y-%m-%d %H:%M:%S")," ", intvl," ",length(wts))

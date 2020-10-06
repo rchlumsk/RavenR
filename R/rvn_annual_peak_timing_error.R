@@ -64,6 +64,7 @@
 #'
 #' @keywords Raven annual peak timing error diagnostics
 #' @export rvn_annual_peak_timing_error
+#' @importFrom stats lm
 #' @importFrom lubridate year date
 #' @importFrom ggplot2 ggplot aes geom_point geom_hline geom_text scale_x_discrete scale_y_continuous
 rvn_annual_peak_timing_error <- function (sim, obs, mm=9, dd=30, add_line = T, add_labels = T)

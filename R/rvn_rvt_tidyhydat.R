@@ -51,12 +51,14 @@
 #' stations <- c("05CB004","05CA002")
 #'
 #' # Gather station data/info using tidyhydat functions
-#' hd <- tidyhydat::hy_daily_flows(station_number = stations, start_date = "1996-01-01", end_date = "2000-01-01")
+#' hd <- tidyhydat::hy_daily_flows(station_number = stations,
+#'   start_date = "1996-01-01", end_date = "2000-01-01")
 #'
 #' station_info <- hy_stations(stations)
 #'
 #' # Create RVT files
-#' rvn_rvt_tidyhydat(hd, subIDs=c(3,11), stnNames=station_info$STATION_NAME, flip_number=T)
+#' rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
+#'   stnNames=station_info$STATION_NAME, flip_number=T)
 #'
 #' @export rvn_rvt_tidyhydat
 #' @importFrom dplyr distinct pull select
@@ -65,6 +67,9 @@ rvn_rvt_tidyhydat <- function(indata, subIDs, prd=NULL, stnNames=NULL,
                               write_redirect=F, flip_number=F,
                               rd_file = 'flow_stn_redirect_text.rvt')
 {
+
+  STATION_NUMBER <- Date <- Value <- NULL
+
   # data checks
   if (!(is.null(stnNames)) & (length(subIDs) != length(stnNames))) {
     stop("Length of subIDs must be the same as stnNames.")

@@ -64,6 +64,8 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     stop("Must supply at least one Stage series to plot.")
   }
 
+  Date <- Stage <- ID <- y.start <- y.end <- NULL
+
   prd <- rvn_get_prd(sim,prd)
 
   #Set X axis Limits based on period
@@ -100,7 +102,7 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     scale_x_date(limits = c(x.min,x.max))+
     xlab("Date")+
     ylab("Stage (m)")+
-    theme_RavenR()+
+    rvn_theme_RavenR()+
     theme(legend.position = "bottom") +
     scale_colour_brewer(type = "qual", palette = 3)
 
@@ -133,9 +135,9 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     p2 <- ggplot()+
       geom_bar(data=df.precip.plot, aes(x=Date,y=precip), stat="identity", color = "blue")+
       scale_x_date(limits = c(x.min,x.max))+
-      theme_bw()+
       ylab("Precip (mm)")+
-      xlab("")
+      xlab("")+
+      rvn_theme_RavenR()
 
     p1 <- plot_grid(p2,p1,nrow=2)
   }

@@ -71,6 +71,8 @@ rvn_hyd_extract <- function(subs=NA, hyd=NA, prd=NULL) {
     stop("hyd is required for this function; please supply the full output file from hyd.read.")
   }
 
+  mysub <- NULL
+
   # extract random pair
   hydrographs <- hyd$hyd
   units <- hyd$units

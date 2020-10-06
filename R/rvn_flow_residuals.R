@@ -63,6 +63,8 @@ rvn_flow_residuals <- function(sim,obs,ma_smooth=3,add.line=T,winter_shading=T) 
     resids <- rollapply(sim-obs,ma_smooth,mean,fill=NA)
   }
 
+  y.end <- y.start <- Date <- Resid <- NULL
+
   df.plot <- fortify(resids)
   colnames(df.plot) <- c("Date","Resid")
   df.plot$Date <- as.Date(df.plot$Date)

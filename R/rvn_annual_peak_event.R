@@ -53,22 +53,24 @@
 #' peak1$p1
 #'
 #' # add the r2 regression line and plot directly
-#' rvn_annual_peak_event(sim, obs, add_r2=T)
+#' rvn_annual_peak_event(sim, obs, add_r2=TRUE)
 #'
 #'
 #' @keywords Raven annual peak event diagnostics
 #' @export rvn_annual_peak_event
+#' @importFrom stats lm
 #' @importFrom lubridate year date
 #' @importFrom ggplot2 ggplot aes geom_point geom_abline geom_text scale_x_continuous scale_y_continuous
-rvn_annual_peak_event <- function (sim, obs, mm=9, dd=30, add_line = T, add_r2 = F, add_eqn = F)
+rvn_annual_peak_event <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r2 = FALSE, add_eqn = FALSE)
 {
 
   max.obs <- rvn_apply_wyearly_which_max_xts(obs, mm=mm, dd=dd)
   max.dates <- lubridate::date(max.obs)
   max.sim <- sim[max.dates]
 
-  df <- data.frame(obs.dates = max.dates, sim.peak.event = as.numeric(max.sim),
-                   obs.peak.event = as.numeric(max.obs))
+  df <- data.frame("obs.dates" = max.dates,
+                   "sim.peak.event" = as.numeric(max.sim),
+                   "obs.peak.event" = as.numeric(max.obs))
 
   if (add_r2) {
     max.obs.mean <- mean(max.obs)
@@ -87,6 +89,9 @@ rvn_annual_peak_event <- function (sim, obs, mm=9, dd=30, add_line = T, add_r2 =
             max(max.obs, max.sim, na.rm = T) * 1.1)
 
   #text.labels <- year(max.dates)
+
+  # appease R CMD CHECK with ggplot2
+  sim.peak.event <- obs.peak.event <- obs.dates <- NULL
 
   p1 <- ggplot(data=df,aes(x=obs.peak.event,y=sim.peak.event))+
     geom_point()+

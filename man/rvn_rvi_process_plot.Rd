@@ -4,7 +4,7 @@
 \alias{rvn_rvi_process_plot}
 \title{Plot Raven hydrologic process network}
 \usage{
-rvn_rvi_process_plot(connections, plot = TRUE, pdfout = NULL)
+rvn_rvi_process_plot(connections, pdfout = NULL)
 }
 \arguments{
 \item{connections}{a dataframe of from-to connections generated using rvn_rvi_connections()}

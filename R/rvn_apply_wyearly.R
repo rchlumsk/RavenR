@@ -39,8 +39,7 @@
 #'
 #' @export rvn_apply_wyearly
 #' @importFrom xts period.apply
-rvn_apply_wyearly <- function(x,FUN,...,mm=9,dd=30) {
-  rvn_wyear_indices(x, mm=mm, dd=dd) %>%
-  period.apply(x, ., FUN, ...) %>%
-    return(.)
+rvn_apply_wyearly <- function(x,FUN, ..., mm=9,dd=30) {
+  ep <- rvn_wyear_indices(x, mm=mm, dd=dd)
+  return(period.apply(x, ep, FUN, ...))
 }

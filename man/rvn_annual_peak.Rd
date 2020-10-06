@@ -9,9 +9,9 @@ rvn_annual_peak(
   obs,
   mm = 9,
   dd = 30,
-  add_line = T,
-  add_r2 = F,
-  add_eqn = F
+  add_line = TRUE,
+  add_r2 = FALSE,
+  add_eqn = FALSE
 )
 }
 \arguments{
@@ -66,7 +66,7 @@ peak1$df_peak
 peak1$p1
 
 # plot with r2 and regression equation
-peak_df <- rvn_annual_peak(sim, obs, add_r2=T, add_eqn=T)
+peak_df <- rvn_annual_peak(sim, obs, add_r2=TRUE, add_eqn=TRUE)
 peak_df$p1
 
 }

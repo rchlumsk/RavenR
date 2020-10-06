@@ -39,7 +39,10 @@
 #' @export rvn_flow_spaghetti
 #' @importFrom lubridate yday
 #' @importFrom ggplot2 ggplot geom_line scale_y_continuous scale_x_continuous aes
-rvn_flow_spaghetti <- function(flow) {
+rvn_flow_spaghetti <- function(flow)
+{
+
+  x_form <- Year <- NULL
 
   ticks.at <- seq(1, 366, 1)
   ticks.seq <- c(seq(274, 366, 1), seq(1, 273, 1))

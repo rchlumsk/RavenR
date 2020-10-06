@@ -73,6 +73,8 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
                          winter_shading=FALSE, wsdates=c(12,1,3,31))
 {
 
+  Date <- Flow <- ID <- y.start <- y.end <- NULL
+
   # select series to use as base in time determination
   if (!(is.null(sim))) {
     base <- sim

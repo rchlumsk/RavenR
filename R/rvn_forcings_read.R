@@ -35,6 +35,7 @@
 #'
 #' @export rvn_forcings_read
 #' @importFrom xts xts
+#' @importFrom utils read.csv
 rvn_forcings_read <- function(ff=NA) {
 
   if (missing(ff)) {

@@ -53,6 +53,8 @@ rvn_subbasin_map <- function(shpfilename, subIDcol, plot_date, cust_data=NULL, n
                        invalid_stop=TRUE, basins_label='subID', plot_invalid=F)
 {
 
+  X <- Y <- Value <- text <- NULL
+
   basinshp <- read_sf(shpfilename)
 
   if ( !(subIDcol %in% colnames(basinshp)) ) {
