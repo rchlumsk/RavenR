@@ -43,11 +43,11 @@ rvn_forcings_read <- function(ff=NA) {
   }
 
   # test reading and get format, number of columns
-  watersheds <- read.csv(ff,header=T,nrows=5)
+  watersheds <- read.csv(ff,header=TRUE,nrows=5)
   classes <- c(c('numeric','character','character'),rep('numeric',ncol(watersheds)-3))
 
   # re-read with specified colClasses
-  watersheds <- read.csv(ff,header=T,colClasses = classes,na.strings=c("---",'NA','1.#INF'))
+  watersheds <- read.csv(ff,header=TRUE,colClasses = classes,na.strings=c("---",'NA','1.#INF'))
 
   # careful in date-time formats; excel can screw it up if csv is saved over. This works for
   # un untouched Raven output file

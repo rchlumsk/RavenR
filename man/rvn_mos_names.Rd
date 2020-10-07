@@ -24,7 +24,7 @@ rvn_mos_names is used to return a string vector of months in the year
 months_of_the_year <- rvn_mos_names
 months_of_the_year
 
-rvn_mos_names(F)
+rvn_mos_names(FALSE)
 
 }
 \seealso{

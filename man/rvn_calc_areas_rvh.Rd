@@ -4,7 +4,7 @@
 \alias{rvn_calc_areas_rvh}
 \title{Calculate areas from Raven .rvh file}
 \usage{
-rvn_calc_areas_rvh(ff, calc_da = T, write_file = F, iter_thresh = NA)
+rvn_calc_areas_rvh(ff, calc_da = TRUE, write_file = FALSE, iter_thresh = NA)
 }
 \arguments{
 \item{ff}{full filepath to .rvh file}
@@ -52,13 +52,13 @@ ff <- system.file("extdata","Nith.rvh", package="RavenR")
 myareas <- rvn_calc_areas_rvh(ff)
 
 # avoid calculating drainage areas
-myareas <- rvn_calc_areas_rvh(ff,calc_da=F)
+myareas <- rvn_calc_areas_rvh(ff,calc_da=FALSE)
 
 # calculate drainage areas, adjust iteration threshold
 myareas <- rvn_calc_areas_rvh(ff,iter_thresh=1000)
 
 # write results to file
-myareas <- rvn_calc_areas_rvh(ff,write_file=T)
+myareas <- rvn_calc_areas_rvh(ff,write_file=TRUE)
 
 }
 \seealso{

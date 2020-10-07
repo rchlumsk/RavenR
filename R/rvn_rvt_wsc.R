@@ -66,12 +66,12 @@
 #' rvn_rvt_wsc(ff,subIDs=c(6))
 #'
 #' # add custom station names, put subID number first in file
-#' rvn_rvt_wsc(ff,subIDs=c(6),stnNames <- c('Grand River'),flip_number=T)
+#' rvn_rvt_wsc(ff,subIDs=c(6),stnNames <- c('Grand River'),flip_number=TRUE)
 #'
 #' @export rvn_rvt_wsc
 #' @importFrom xts xts
 #' @importFrom lubridate date
-rvn_rvt_wsc <- function(ff,subIDs,prd=NULL,stnNames=NULL,write_redirect=F,flip_number=F)
+rvn_rvt_wsc <- function(ff,subIDs,prd=NULL,stnNames=NULL,write_redirect=FALSE,flip_number=FALSE)
 {
 
   # data checks
@@ -102,7 +102,7 @@ rvn_rvt_wsc <- function(ff,subIDs,prd=NULL,stnNames=NULL,write_redirect=F,flip_n
   }
 
   # check the stations in the supplied file
-  dd <- read.table(ff,sep=",",skip=1,header=T)
+  dd <- read.table(ff,sep=",",skip=1,header=TRUE)
 
   # fix to handle multi-byte marker/byte order marker,
   #   appears if there is more than one station per file

@@ -21,17 +21,21 @@
 #' @keywords netcdf grid shapefile conversion
 #'
 #' @examples
+#'
+#' \dontrun{
 #' ncfile <- system.file("extdata/GlenAllan.nc", package="RavenR")
 #' UTMzone <- 17
 #' outshp <- "maps/RDPS_Grid"
 #' rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
+#' }
 #'
 #'
 #' @export rvn_netcdf_to_gridshp
 #' @importFrom sp coordinates proj4string spTransform Polygons Polygon SpatialPolygonsDataFrame SpatialPolygons CRS
 #' @importFrom rgdal writeOGR
-#' @importFrom deldir deldir
+#' @importFrom deldir deldir tile.list
 #' @importFrom methods slot
+#' @importFrom ncdf4 nc_open ncvar_get
 rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp)
 {
   # require(ncdf.tools)
@@ -45,16 +49,12 @@ rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp)
   # extract lat-long from netCDF file
   #-----------------------------------------------------------------------
   nc_data <- nc_open(ncfile)
-  ncdf4::ncvar_get(nc_data, "lat")
-  ncdf4::ncvar_get(nc_data, "latitude")
-  ncdf4::ncvar_get(nc_data, "Latitude")
-  ncdf4::ncvar_get(nc_data, "Northing")
+  lat <- ncdf4::ncvar_get(nc_data, "lat")
+  long <- ncdf4::ncvar_get(nc_data, "lon")
 
-
-
-  mydata<- readNcdf(ncfile,var.name=c("lat"))
+  # mydata<- readNcdf(ncfile,var.name=c("lat"))
   lat<-as.vector(t(mydata))
-  mydata<- readNcdf(ncfile,var.name=c("lon"))
+  # mydata<- readNcdf(ncfile,var.name=c("lon"))
   long<-as.vector(t(mydata))
 
   ncols=length(mydata[1,])
@@ -69,8 +69,8 @@ rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp)
   # transform lat-long to UTM zone
   #-----------------------------------------------------------------------
   latlong <- data.frame(ID = 1:2, X = long, Y = lat)
-  coordinates(latlong) <- c("X", "Y")
-  proj4string(latlong) <- CRS("+proj=longlat +datum=WGS84")  ## for example
+  sp::coordinates(latlong) <- c("X", "Y")
+  sp::proj4string(latlong) <- CRS("+proj=longlat +datum=WGS84")  ## for example
   res <- spTransform(latlong, CRS(paste0("+proj=utm +zone=",UTMzone," ellps=WGS84")))
   xx<-res@coords[1:length(long)]
   yy<-res@coords[length(long)+(1:length(long))]

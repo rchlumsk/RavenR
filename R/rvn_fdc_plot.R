@@ -13,7 +13,7 @@
 #' @param sim simulated hydrograph xts time series
 #' @param obs (optional) observed hydrograph xts time series
 #' @param prd (optional) time period over which the plot is generated
-#' @param seasonal (optional) add the winter and summer FDC
+#' @param seasonal (optional) boolean whether to add the winter and summer FDC
 #' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
 #' \code{\link{rvn_hyd_extract}} for extracting basin flow information from a
 #' rvn_hyd_read object
@@ -34,11 +34,11 @@
 #' rvn_fdc_plot(sim)
 #'
 #'  # create seasonal FDC plot with sim and obs data
-#' rvn_fdc_plot(sim,obs,seasonal=T)
+#' rvn_fdc_plot(sim,obs,seasonal=TRUE)
 #'
 #' @export rvn_fdc_plot
 #' @importFrom ggplot2 fortify ggplot scale_x_continuous scale_y_continuous scale_colour_brewer stat_ecdf
-rvn_fdc_plot <-function(sim=NULL,obs=NULL,prd=NULL,seasonal='F'){
+rvn_fdc_plot <-function(sim=NULL,obs=NULL,prd=NULL,seasonal=FALSE){
 
   if (is.null(sim)) {
     stop("sim is required for plotting.")
@@ -74,7 +74,7 @@ rvn_fdc_plot <-function(sim=NULL,obs=NULL,prd=NULL,seasonal='F'){
     plot.df <- rbind(plot.df, plot.df2)
   }
 
-  if (seasonal != "F"){
+  if (seasonal){
     plot.df3 <- fortify(summer)
     plot.df3$Type <- "Summer"
     colnames(plot.df3)[2] <- "Value"

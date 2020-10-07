@@ -61,10 +61,10 @@
 #' rvn_hyd_plot(sim,obs,precip=precip,prd=prd)
 #'
 #' # add the winter shading
-#' rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=T)
+#' rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=TRUE)
 #'
 #' # change winter shading dates
-#' rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=T, wsdates=c(11,1,4,15))
+#' rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=TRUE, wsdates=c(11,1,4,15))
 #'
 #' @export rvn_hyd_plot
 #' @importFrom ggplot2 fortify ggplot geom_line scale_x_date xlab ylab theme aes scale_colour_brewer geom_bar

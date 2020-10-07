@@ -30,7 +30,8 @@ rvn_rvh_overwrite<-function(orig_file,filename,SBtable,HRUtable)
   write(noHRUs[1:SBstr],append=TRUE,file=filename)
   write("  :Properties,SBID,Name,Downstream_ID,Profile,ReachLength,Gauged",append=TRUE,file=filename)
   write("  :Units			     ,none,none         ,none		,km				  ,none",append=TRUE,file=filename)
-  write.table(SBtable[c('SBID','Name','Downstream_ID','Profile','ReachLength','Gauged')],quote=FALSE,row.names=FALSE,col.names=FALSE,sep=", ",append=TRUE,file=filename)
+  write.table(SBtable[c('SBID','Name','Downstream_ID','Profile','ReachLength','Gauged')],quote=FALSE,
+              row.names=FALSE,col.names=FALSE,sep=", ",append=TRUE,file=filename)
 
   write(noHRUs[SBend:HRUstr],append=TRUE,file=filename)
 

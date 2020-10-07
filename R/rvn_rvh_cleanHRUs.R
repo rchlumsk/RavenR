@@ -47,7 +47,8 @@
 #' @keywords Raven  rvh  HRUs merge clean
 #' @export rvn_rvh_cleanhrus
 #'
-rvn_rvh_cleanhrus<-function(HRUtab,SBtab,area_tol=0.001,merge=FALSE,elev_tol=50,slope_tol=4,aspect_tol=20,ProtectedHRUList=c())
+rvn_rvh_cleanhrus<-function(HRUtab,SBtab,area_tol=0.001,merge=FALSE,
+                            elev_tol=50,slope_tol=4,aspect_tol=20,ProtectedHRUList=c())
 {
   #routine:
   init_nHRUs<-nrow(HRUtab)

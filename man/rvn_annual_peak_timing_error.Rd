@@ -9,8 +9,8 @@ rvn_annual_peak_timing_error(
   obs,
   mm = 9,
   dd = 30,
-  add_line = T,
-  add_labels = T
+  add_line = TRUE,
+  add_labels = TRUE
 )
 }
 \arguments{
@@ -66,12 +66,12 @@ sim <- rvn_hydrograph_data$hyd$Sub36
 obs <- rvn_hydrograph_data$hyd$Sub36_obs
 
 # create a plot of peak timing errors with defaults
-peak1 <- rvn_annual_peak_timing_error(sim, obs, add_line=T)
+peak1 <- rvn_annual_peak_timing_error(sim, obs, add_line=TRUE)
 peak1$df_peak_timing_error
 peak1$p1
 
 # plot directly and without labels
-rvn_annual_peak_timing_error(sim, obs, add_line=T, rplot=T, add_labels=F)
+rvn_annual_peak_timing_error(sim, obs, add_line=T, add_labels=FALSE)
 
 
 }

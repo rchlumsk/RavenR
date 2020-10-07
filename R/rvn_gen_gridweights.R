@@ -34,6 +34,8 @@
 #'
 #' @examples
 #'
+#' \dontrun{
+#'
 #' # load example rvh file
 #' nith <- system.file("extdata",'Nith.rvh', package = "RavenR")
 #' rvh <- rvn_rvh_read(nith)
@@ -51,6 +53,8 @@
 #' validHRUIDs <- rvh$HRUtable$ID
 #' tmp <- rvn_gen_gridweights(HRUshpfile, GRDshpfile, validHRUIDs,
 #' gridIDcol = 'GridIDs', HRUIDcol = "HRU_ID", outfile = "Nith_GridWeights.rvi")
+#'
+#' }
 #'
 #' @export rvn_gen_gridweights
 #' @importFrom rgdal readOGR

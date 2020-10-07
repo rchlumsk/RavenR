@@ -1,7 +1,9 @@
-#' Read Raven Custom Output files
+#' @title Read Raven Custom Output files
 #'
+#' @description
 #' rvn_custom_read is used to read any Raven custom output file
 #'
+#' @details
 #' rvn_custom_read parses the filename and predicts the file format accordingly, so
 #' it is important to use the unmodified file names for this function. The use
 #' (or not) of a runname is accounted for.
@@ -11,9 +13,9 @@
 #' included in the rav.obj attributes.
 #'
 #' @param ff full file path to the custom output file
-#' @param no.runname boolean for whether a runName is supplied, important for
+#' @param no_runname boolean for whether a runName is supplied, important for
 #' parsing the filename
-#' @return \item{custom.out}{data frame with the custom output data stored as xts
+#' @return \item{custom_out}{data frame with the custom output data stored as xts
 #' object}
 #' @seealso \code{\link{rvn_custom_output_plot}} for plotting custom output
 #'
@@ -33,7 +35,7 @@
 #' @export rvn_custom_read
 #' @importFrom xts xts
 #' @importFrom utils read.csv
-rvn_custom_read <- function(ff=NA, no.runname=F) {
+rvn_custom_read <- function(ff=NA, no_runname=FALSE) {
 
   if (missing(ff)) {
     stop("Requires the full file path to the Raven custom output file")
@@ -45,11 +47,11 @@ rvn_custom_read <- function(ff=NA, no.runname=F) {
   namelist <- unlist(strsplit(fname,"_"))
 
   # JRC: to fix: currently won't be able to handle long variable name with no runname prefix unless
-  #              no.runname is specified (i.e., it won't figure it out on its own)
+  #              no_runname is specified (i.e., it won't figure it out on its own)
 
   # determine properties from file name
   if (length(namelist) >= 5) {
-    if (no.runname==F){
+    if (no_runname==FALSE){
       runname <- namelist[1]
       vv <- paste(namelist[2:(length(namelist)-3)],collapse="_")
     } else {
@@ -114,9 +116,9 @@ rvn_custom_read <- function(ff=NA, no.runname=F) {
     # replace with xtsAttribute ??
   attr(dd,'runname')<-runname
   attr(dd,'datatype')<-vv
-  attr(dd,'time.agg')<-time.type
-  attr(dd,'stat.agg')<-stat.type
-  attr(dd,'space.agg')<-space.type
+  attr(dd,'time_agg')<-time.type
+  attr(dd,'stat_agg')<-stat.type
+  attr(dd,'space_agg')<-space.type
 
-  return("custom.out"=dd)
+  return("custom_out"=dd)
 }

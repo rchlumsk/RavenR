@@ -51,11 +51,11 @@
 #' rvn_rvt_flow(obs,subID=36,stnName="Nith_Obs1",flip_number=1)
 #'
 #' # also write out the redirect file
-#' rvn_rvt_flow(obs,subID=36,stnName="Nith_Obs1",write_redirect=T,flip_number=1)
+#' rvn_rvt_flow(obs,subID=36,stnName="Nith_Obs1",write_redirect=TRUE,flip_number=1)
 #'
 #' @export rvn_rvt_flow
 rvn_rvt_flow <- function(flow.series,subID,stnName,
-                         rvt_type='ObservationData',prd=NULL,write_redirect=F,flip_number=F)
+                         rvt_type='ObservationData',prd=NULL,write_redirect=FALSE,flip_number=FALSE)
 {
 
   flow.sim <- NULL

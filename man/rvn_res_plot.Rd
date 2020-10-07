@@ -30,7 +30,7 @@ rvn_res_plot(
   inflow = NULL,
   precip = NULL,
   prd = NULL,
-  winter_shading = T
+  winter_shading = TRUE
 )
 }
 \arguments{
@@ -75,7 +75,7 @@ generation of plot titles.
 }
 \examples{
 # create a nice reservoir stage plot
-rvn_res_plot(sim,obs,zero_axis=F)
+rvn_res_plot(sim,obs,zero_axis=FALSE)
 
 # create a reservoir stage plot with precip as well
 rvn_res_plot(sim,obs,precip=precip)

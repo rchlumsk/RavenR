@@ -28,7 +28,7 @@
 #' rvn_subbasin_network_plot(rvh$SBtable)
 #'
 #' # include labels
-#' rvn_subbasin_network_plot(rvh$SBtable, labeled=T)
+#' rvn_subbasin_network_plot(rvh$SBtable, labeled=TRUE)
 #'
 #' @keywords Raven Network Stream Plot
 #'
@@ -45,7 +45,7 @@ rvn_subbasin_network_plot <- function(SBtable,labeled=FALSE)
   links<-subset.data.frame(links,downID>=0) # get rid of -1
 
   #create network graph structure
-  net <- igraph::graph_from_data_frame(d=links, vertices=SBtable, directed=T)
+  net <- igraph::graph_from_data_frame(d=links, vertices=SBtable, directed=TRUE)
 
   # Get subbasin coordinates
   coords=data.frame(long=SBtable$AvgLongit,lat=SBtable$AvgLatit, SB = SBtable$SBID)

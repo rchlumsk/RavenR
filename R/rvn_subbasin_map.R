@@ -42,7 +42,7 @@
 #' plot_date <- "2003-03-30"  # date for which to plot custom data
 #'
 #' # Generate plot object
-#' p1 <- rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data, normalize=T)
+#' p1 <- rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data, normalize=TRUE)
 #' p1
 #'
 #'
@@ -50,7 +50,7 @@
 #' @importFrom sf read_sf st_centroid st_coordinates
 #' @importFrom ggplot2 ggplot aes geom_sf theme geom_text
 rvn_subbasin_map <- function(shpfilename, subIDcol, plot_date, cust_data=NULL, normalize_data=FALSE,
-                       invalid_stop=TRUE, basins_label='subID', plot_invalid=F)
+                       invalid_stop=TRUE, basins_label='subID', plot_invalid=FALSE)
 {
 
   X <- Y <- Value <- text <- NULL

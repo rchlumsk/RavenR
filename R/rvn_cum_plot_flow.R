@@ -49,7 +49,8 @@
 #'
 #' @export rvn_cum_plot_flow
 #' @importFrom ggplot2 fortify geom_line aes scale_y_continuous xlab ylab scale_colour_brewer
-rvn_cum_plot_flow <- function(sim=NULL,obs=NULL,inflow=NULL, mm=9, dd=30) {
+rvn_cum_plot_flow <- function(sim=NULL,obs=NULL,inflow=NULL, mm=9, dd=30)
+{
 
   sec.per.day <- 86400
   cum.sim <- NULL ; cum.obs <- NULL ; cum.inflow <- NULL
@@ -81,7 +82,7 @@ rvn_cum_plot_flow <- function(sim=NULL,obs=NULL,inflow=NULL, mm=9, dd=30) {
     cum.inflow <- cum.inflow*sec.per.day
   }
 
-  max.vol <- max(cum.sim,cum.obs,cum.inflow,na.rm=T)*1.1
+  max.vol <- max(cum.sim,cum.obs,cum.inflow,na.rm=TRUE)*1.1
 
   df.plot <- data.frame(cbind(fortify(sim),cum.sim,"sim"))
   colnames(df.plot) <- c("date","value","cum","variable")

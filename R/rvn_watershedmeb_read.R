@@ -49,18 +49,18 @@ rvn_watershedmeb_read <- function(ff=NA)
   }
 
   # test reading and get format, number of columns
-  watersheds <- read.csv(ff,header=T,nrows=5)
+  watersheds <- read.csv(ff,header=TRUE,nrows=5)
   classes <- c(c('numeric','character','character'),rep('numeric',ncol(watersheds)-3))
   cols <- colnames(watersheds)
 
   # read in and store the to and from rows
-  from_row <- read.csv(ff,header=F,nrows=1,skip=1)[4:length(cols)]
-  to_row   <- read.csv(ff,header=F,nrows=1,skip=2)[4:length(cols)]
+  from_row <- read.csv(ff,header=FALSE,nrows=1,skip=1)[4:length(cols)]
+  to_row   <- read.csv(ff,header=FALSE,nrows=1,skip=2)[4:length(cols)]
   colnames(from_row) <- cols[4:length(cols)]
   colnames(to_row) <- cols[4:length(cols)]
 
   # re-read with specified colClasses
-  watersheds <- read.csv(ff,header=F,skip=3,colClasses = classes,na.strings=c("---",'NA','1.#INF'))
+  watersheds <- read.csv(ff,header=FALSE,skip=3,colClasses = classes,na.strings=c("---",'NA','1.#INF'))
   colnames(watersheds) <- cols # assigning headers back
 
   # careful in date-time formats; excel can screw it up if csv is saved over. This works for

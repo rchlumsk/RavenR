@@ -33,7 +33,7 @@
 #' @importFrom xts xts
 rvn_annual_quantiles <- function(hgdata, prd=NULL,
                            Qlower=0.1, Qupper=0.9,
-                           water_year=T, mm=9)
+                           water_year=TRUE, mm=9)
 {
 
   #-- Assuming hgdata is a daily xts object
@@ -63,7 +63,7 @@ rvn_annual_quantiles <- function(hgdata, prd=NULL,
     monthday[month(monthday) > mm] = monthday[month(monthday) > mm] - years(1)
   }
   qdat <- xts(aggregate(hgdata, by=monthday, quantile,
-                        probs=c(Qlower, .5, Qupper), na.rm=T))
+                        probs=c(Qlower, .5, Qupper), na.rm=TRUE))
 
   return(qdat)
 }

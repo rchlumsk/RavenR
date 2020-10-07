@@ -46,12 +46,12 @@
 #' rvn_flow_residuals(sim, obs, ma_smooth=10)
 #'
 #' # turn off the smoothing and winter shading
-#' rvn_flow_residuals(sim,obs,ma_smooth = 0, winter_shading = F)
+#' rvn_flow_residuals(sim,obs,ma_smooth = 0, winter_shading = FALSE)
 #'
 #' @export rvn_flow_residuals
 #' @importFrom zoo rollapply
 #' @importFrom ggplot2 fortify ggplot geom_line ylab geom_hline geom_rect aes
-rvn_flow_residuals <- function(sim,obs,ma_smooth=3,add.line=T,winter_shading=T) {
+rvn_flow_residuals <- function(sim,obs,ma_smooth=3,add.line=TRUE,winter_shading=TRUE) {
 
   if ( ma_smooth < 0) {
     stop("Requires a non-negative integer for ma_smooth ")

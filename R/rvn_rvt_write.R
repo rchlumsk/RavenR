@@ -96,9 +96,9 @@ rvn_rvt_write <- function(ts, params, units, dates=NULL, prd=NULL,
                    file = fc,
                    append = TRUE,
                    justify = 'right',
-                   colnames = F,
+                   colnames = FALSE,
                    sep = ', ',
-                   scientific = T)
+                   scientific = TRUE)
   #for (j in 1:nrow(ts)) {
   #  writeLines(sprintf(rep("%g ",ncol(ts)),ts[j,1:ncol(ts)]),fc)
   #}

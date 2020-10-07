@@ -4,7 +4,13 @@
 \alias{rvn_flow_scatterplot}
 \title{Scatterplot of model flows}
 \usage{
-rvn_flow_scatterplot(sim, obs, add_line = T, add_r2 = F, add_eqn = F)
+rvn_flow_scatterplot(
+  sim,
+  obs,
+  add_line = TRUE,
+  add_r2 = FALSE,
+  add_eqn = FALSE
+)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
@@ -45,10 +51,10 @@ sim <- rvn_hydrograph_data$hyd$Sub36
 obs <- rvn_hydrograph_data$hyd$Sub36_ob
 
 # plot the flow scatterplot, produce an R2 metric
-rvn_flow_scatterplot(sim,obs,add_r2=T)
+rvn_flow_scatterplot(sim,obs,add_r2=TRUE)
 
 # plot again with a regression equation
-rvn_flow_scatterplot(sim,obs,add_r2=T,add_eqn=T)
+rvn_flow_scatterplot(sim,obs,add_r2=TRUE,add_eqn=TRUE)
 
 }
 \seealso{

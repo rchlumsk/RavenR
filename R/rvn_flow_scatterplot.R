@@ -36,21 +36,21 @@
 #' obs <- rvn_hydrograph_data$hyd$Sub36_ob
 #'
 #' # plot the flow scatterplot, produce an R2 metric
-#' rvn_flow_scatterplot(sim,obs,add_r2=T)
+#' rvn_flow_scatterplot(sim,obs,add_r2=TRUE)
 #'
 #' # plot again with a regression equation
-#' rvn_flow_scatterplot(sim,obs,add_r2=T,add_eqn=T)
+#' rvn_flow_scatterplot(sim,obs,add_r2=TRUE,add_eqn=TRUE)
 #'
 #' @export rvn_flow_scatterplot
 #' @importFrom ggplot2 ggplot geom_point scale_x_continuous scale_y_continuous geom_abline geom_text
-rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F, add_eqn = F)
+rvn_flow_scatterplot <- function(sim,obs,add_line=TRUE,add_r2=FALSE, add_eqn = FALSE)
 {
   x.lab <- expression("Observed Flow ("*m^3*"/s)")
   y.lab <- expression("Simulated Flow ("*m^3*"/s)")
 
   plot.df <- fortify(cbind(sim,obs))
   colnames(plot.df) <- c("date","sim","obs")
-  max.flow <- max(obs, sim, na.rm = T)
+  max.flow <- max(obs, sim, na.rm = TRUE)
 
   p1 <- ggplot(plot.df)+
     geom_point(aes(x=obs,y=sim))+
@@ -64,8 +64,8 @@ rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F, add_eqn = F)
   }
 
   if (add_r2) {
-    r2 <- 1 - (sum((obs - sim)^2, na.rm = T)/sum((obs - mean(obs,
-                                                             na.rm = T))^2, na.rm = T))
+    r2 <- 1 - (sum((obs - sim)^2, na.rm = TRUE)/sum((obs - mean(obs,
+                                                             na.rm = TRUE))^2, na.rm = TRUE))
     r2.label <- paste("R^2 == ", round(r2,2))
     p1 <- p1 +
       geom_text(x= max(obs, sim, na.rm = TRUE)*0.9,

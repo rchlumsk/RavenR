@@ -30,10 +30,13 @@ generates an estimate of the grid polygons associated with each netCDF cell and 
 Note that the function can fail due to bad netCDF file or inappropriate UTM zone;
 }
 \examples{
+
+\dontrun{
 ncfile <- system.file("extdata/GlenAllan.nc", package="RavenR")
 UTMzone <- 17
 outshp <- "maps/RDPS_Grid"
 rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
+}
 
 
 }

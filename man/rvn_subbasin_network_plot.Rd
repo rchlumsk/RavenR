@@ -31,7 +31,7 @@ rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package="RavenR"))
 rvn_subbasin_network_plot(rvh$SBtable)
 
 # include labels
-rvn_subbasin_network_plot(rvh$SBtable, labeled=T)
+rvn_subbasin_network_plot(rvh$SBtable, labeled=TRUE)
 
 }
 \seealso{

@@ -49,21 +49,21 @@
 #' rvn_monthly_vbias(sim,obs)
 #'
 #' # check unnormalzied monthly volume biases; see the larger volumes in certain periods
-#' rvn_monthly_vbias(sim,obs,normalize = F)
+#' rvn_monthly_vbias(sim,obs,normalize = FALSE)
 #'
 #' @export rvn_monthly_vbias
 #' @importFrom ggplot2 ggplot geom_bar aes scale_y_continuous scale_x_continuous geom_hline geom_text
 #' @importFrom xts apply.monthly
-rvn_monthly_vbias <- function (sim, obs, add_line = T, normalize = T, add_labels = T)
+rvn_monthly_vbias <- function (sim, obs, add_line = TRUE, normalize = TRUE, add_labels = TRUE)
 {
 
   nmon <- NULL
 
-  obs.monthly <- apply.monthly(obs, sum, na.rm = T)
-  sim.monthly <- apply.monthly(sim, sum, na.rm = T)
+  obs.monthly <- apply.monthly(obs, sum, na.rm = TRUE)
+  sim.monthly <- apply.monthly(sim, sum, na.rm = TRUE)
   mvbias <- matrix(NA, nrow = 12, ncol = 1)
   colnames(mvbias) <- c("mvbias")
-  rownames(mvbias) <- RavenR::rvn_mos_names(T)
+  rownames(mvbias) <- RavenR::rvn_mos_names(TRUE)
   if (normalize) {
     diff <- (sim.monthly - obs.monthly)/obs.monthly * 100
     y.lab <- "% Flow Volume Bias"
@@ -73,7 +73,7 @@ rvn_monthly_vbias <- function (sim, obs, add_line = T, normalize = T, add_labels
     y.lab <- "Flow Volume Bias (m3/s)"
   }
   for (k in 1:12) {
-    mvbias[k] <- mean(diff[month(diff) == k, ], na.rm = T)
+    mvbias[k] <- mean(diff[month(diff) == k, ], na.rm = TRUE)
   }
 
   df.plot <- data.frame(cbind(seq(1,12),rownames(mvbias),mvbias))
@@ -94,7 +94,7 @@ rvn_monthly_vbias <- function (sim, obs, add_line = T, normalize = T, add_labels
       geom_hline(yintercept=0,linetype=2)
   }
   if (add_labels) {
-    if (max(mvbias, na.rm = T)/2 > 0) {
+    if (max(mvbias, na.rm = TRUE)/2 > 0) {
       p1 <- p1+
         scale_y_continuous(name=y.lab, limits = c(-limit, limit)) +
         geom_text(x= max(as.numeric(df.plot$nmon)+0.5),
@@ -104,7 +104,7 @@ rvn_monthly_vbias <- function (sim, obs, add_line = T, normalize = T, add_labels
                   vjust = 0.5,
                   hjust = 0.5)
         }
-    if (min(mvbias, na.rm = T)/2 < 0) {
+    if (min(mvbias, na.rm = TRUE)/2 < 0) {
       p1 <- p1+
         geom_text(x= max(as.numeric(df.plot$nmon)+0.5),
                   y= -limit/2,

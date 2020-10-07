@@ -55,7 +55,7 @@ rvn_ts_infill <- function(ts)
     all.times <- xts(order.by=seq(dates[1], dates[length(ts)], by=byflag))
 
     # Merge - missing values are NA
-    out <- merge(all.times, ts, all=T)
+    out <- merge(all.times, ts, all=TRUE)
     return (out)
   }
   return (ts)

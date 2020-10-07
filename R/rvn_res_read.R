@@ -47,7 +47,7 @@ rvn_res_read <- function(ff=NA)
   }
 
   #read reservoir output
-  reservoirs <- read.csv(ff,header=T,nrows=5)
+  reservoirs <- read.csv(ff,header=TRUE,nrows=5)
   # careful in date-time formats; excel can screw it up if csv is saved over. This works for
   # an untouched Raven output file
 
@@ -55,7 +55,7 @@ rvn_res_read <- function(ff=NA)
   classes <- c(c('numeric','character','character'),rep('numeric',ncol(reservoirs)-3))
 
   # re-read with specified colClasses
-  reservoirs <- read.csv(ff,header=T,colClasses = classes,na.strings=c("---",'NA'))
+  reservoirs <- read.csv(ff,header=TRUE,colClasses = classes,na.strings=c("---",'NA'))
 
 
   # need to fix the hourly model
@@ -85,16 +85,16 @@ rvn_res_read <- function(ff=NA)
 
     if (length(mysplit) == 2) {
       units[i] = mysplit[2]
-      obs_flag[i] = F
+      obs_flag[i] = FALSE
       newcols[i] = mysplit[1]
     } else if (length(mysplit) == 3) {
       if (mysplit[2] == "observed") {
         units[i] = mysplit[3]
-        obs_flag[i] = T
+        obs_flag[i] = TRUE
         newcols[i] = sprintf("%s_obs",mysplit[1])
       } else if (mysplit[2] == "res.inflow") {
         units[i] = mysplit[3]
-        obs_flag[i] = F
+        obs_flag[i] = FALSE
         newcols[i] = sprintf("%s_inflow",mysplit[1])
       }
     }

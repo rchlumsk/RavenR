@@ -24,17 +24,17 @@
 #' data(rvn_forcing_data)
 #'
 #' # apply mean as FUN to daily average temperature
-#' rvn_apply_wyearly(rvn_forcing_data$forcings$temp_daily_ave,mean,na.rm=T)
+#' rvn_apply_wyearly(rvn_forcing_data$forcings$temp_daily_ave,mean,na.rm=TRUE)
 #'
 #' # apply mean as FUN to all forcings
-#' rvn_apply_wyearly(rvn_forcing_data$forcings,mean,na.rm=T)
+#' rvn_apply_wyearly(rvn_forcing_data$forcings,mean,na.rm=TRUE)
 #'
 #' # apply maximum via RavenR::cmax as FUN to all forcings (takes the max in each column)
 #' ## note that the base::max will not work properly here
-#' rvn_apply_wyearly(rvn_forcing_data$forcings,cmax,na.rm=T)
+#' rvn_apply_wyearly(rvn_forcing_data$forcings,cmax,na.rm=TRUE)
 #'
 #' # apply to Australian water year (July 1)
-#' rvn_apply_wyearly(rvn_forcing_data$forcings,cmax,na.rm=T, mm=6, dd=30)
+#' rvn_apply_wyearly(rvn_forcing_data$forcings,cmax,na.rm=TRUE, mm=6, dd=30)
 #'
 #'
 #' @export rvn_apply_wyearly

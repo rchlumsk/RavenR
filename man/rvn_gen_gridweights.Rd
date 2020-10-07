@@ -59,6 +59,8 @@ not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UT
 }
 \examples{
 
+\dontrun{
+
 # load example rvh file
 nith <- system.file("extdata",'Nith.rvh', package = "RavenR")
 rvh <- rvn_rvh_read(nith)
@@ -76,6 +78,8 @@ GRDshpfile <- rvn_netcdf_to_gridshp(nithnc,UTMzone,GridCells)
 validHRUIDs <- rvh$HRUtable$ID
 tmp <- rvn_gen_gridweights(HRUshpfile, GRDshpfile, validHRUIDs,
 gridIDcol = 'GridIDs', HRUIDcol = "HRU_ID", outfile = "Nith_GridWeights.rvi")
+
+}
 
 }
 \seealso{

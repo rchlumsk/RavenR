@@ -43,9 +43,9 @@ rvn_write_Raven_table <- function(attributes, units, df, filename,
             file = filename,
             append = TRUE,
             justify = justify,
-            colnames = F,
+            colnames = FALSE,
             sep = sep,
-            scientific = T,
+            scientific = TRUE,
             ...)
 
   return(TRUE)

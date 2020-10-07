@@ -9,7 +9,7 @@ rvn_annual_quantiles(
   prd = NULL,
   Qlower = 0.1,
   Qupper = 0.9,
-  water_year = T,
+  water_year = TRUE,
   mm = 9
 )
 }

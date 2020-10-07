@@ -51,7 +51,7 @@ rvn_wyear_indices <- function(x,mm=9,dd=30)
     ep <- which(lubridate::month(x) == mm & lubridate::day(x) == dd)
     ep <- unique(c(0,ep,nrow(x)))
   } else {
-    return(F)
+    return(FALSE)
   }
   return(ep)
 }

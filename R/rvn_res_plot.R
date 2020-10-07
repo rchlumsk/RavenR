@@ -38,7 +38,7 @@
 #' @keywords Raven stage reservoir
 #' @examples
 #' # create a nice reservoir stage plot
-#' rvn_res_plot(sim,obs,zero_axis=F)
+#' rvn_res_plot(sim,obs,zero_axis=FALSE)
 #'
 #' # create a reservoir stage plot with precip as well
 #' rvn_res_plot(sim,obs,precip=precip)
@@ -51,7 +51,7 @@
 #' @importFrom ggplot2 fortify ggplot geom_line scale_x_date xlab ylab theme aes scale_colour_brewer geom_bar
 #' @importFrom cowplot plot_grid
 rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
-              winter_shading=T)
+              winter_shading=TRUE)
 {
   # select series to use as base in time determination
   if (!(is.null(sim))) {

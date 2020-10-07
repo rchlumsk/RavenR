@@ -26,7 +26,8 @@
 #'
 #' @export rvn_theme_RavenR
 #' @importFrom ggplot2 theme theme_bw element_rect element_blank
-rvn_theme_RavenR <- function(){
+rvn_theme_RavenR <- function()
+{
   theme_bw() +
     theme(panel.border = element_rect(color = "black"),
           legend.title = element_blank())

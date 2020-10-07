@@ -26,7 +26,13 @@ the plots. Note that the biases are calculated as sim_Volume - obs_Volume,
 which means that negative values mean the volume is underestimated, and
 positive values mean the volume is overestimated.}
 \usage{
-rvn_monthly_vbias(sim, obs, add_line = T, normalize = T, add_labels = T)
+rvn_monthly_vbias(
+  sim,
+  obs,
+  add_line = TRUE,
+  normalize = TRUE,
+  add_labels = TRUE
+)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
@@ -81,7 +87,7 @@ obs <- rvn_hydrograph_data$hyd$Sub36_obs
 rvn_monthly_vbias(sim,obs)
 
 # check unnormalzied monthly volume biases; see the larger volumes in certain periods
-rvn_monthly_vbias(sim,obs,normalize = F)
+rvn_monthly_vbias(sim,obs,normalize = FALSE)
 
 }
 \seealso{

@@ -98,7 +98,8 @@
 #'
 #' # set without prefix, station data and redirect files created
 #' # forcing_set 2 includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
-#' rvn_rvt_ECmet(metdata = kam, forcing_set = 2, prefix = NULL, write_stndata = T, write_redirect = T)
+#' rvn_rvt_ECmet(metdata = kam, forcing_set = 2,
+#'   prefix = NULL, write_stndata = TRUE, write_redirect = TRUE)
 #'
 #' # cleanup demo files
 #' unlink("met_KAMLOOPS_A.rvt.rvt")
@@ -108,7 +109,7 @@
 #' @importFrom dplyr filter
 #' @importFrom ggplot2 autoplot theme element_blank
 rvn_rvt_ECmet <-  function(metdata, prd = NULL, stnName = NULL, forcing_set = 1, prefix = 'met_',
-                           write_redirect = F, write_stndata = F, rd_file = "met_redirects.rvt",
+                           write_redirect = FALSE, write_stndata = FALSE, rd_file = "met_redirects.rvt",
                            stndata_file = "met_stndata.rvt") {
 
   ## params
@@ -237,7 +238,7 @@ rvn_rvt_ECmet <-  function(metdata, prd = NULL, stnName = NULL, forcing_set = 1,
   }
 
   ## Write geographic values of stations to main rvt file
-  md <-  do.call("rbind",lapply(ws$station[ws$status == T],function(s){
+  md <-  do.call("rbind",lapply(ws$station[ws$status == TRUE],function(s){
     md <- metdata[metdata$station_id==s, c("station_name","lat","lon","elev")]
     md <- data.frame(md[!duplicated(md),], "rvt.name" = ws$rvt.name[ws$station==s])
   }))

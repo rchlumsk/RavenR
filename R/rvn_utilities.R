@@ -205,7 +205,7 @@ rvn_iscolour <- function(x)
 #' months_of_the_year <- rvn_mos_names
 #' months_of_the_year
 #'
-#' rvn_mos_names(F)
+#' rvn_mos_names(FALSE)
 #'
 #' @export rvn_mos_names
 rvn_mos_names <- function(short=TRUE)
@@ -362,7 +362,7 @@ rvn_which_max_xts <- function(x)
 
   } else {
     warning("x must be an xts object with one numeric column")
-    return(F)
+    return(FALSE)
   }
 }
 
@@ -413,7 +413,7 @@ rvn_apply_wyearly_which_max_xts <- function(x, mm=9, dd=30)
 
   } else {
     warning("x must be an xts object with one numeric column")
-    return(F)
+    return(FALSE)
   }
 }
 

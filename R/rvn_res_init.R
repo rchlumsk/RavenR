@@ -71,8 +71,8 @@ rvn_res_init <- function(ff, initial_stage=0.0, output="initial_res_conditions.r
                '#'), fc2)
 
   #-- Regex Magic - get subbasin columns, ignore obs
-  sb_cols <- grep('sub.[0-9]$',colnames(resdf), ignore.case = T, )
-  sb_id <- as.numeric(gsub('sub','',colnames(resdf)[sb_cols], ignore.case = T))
+  sb_cols <- grep('sub.[0-9]$',colnames(resdf), ignore.case = TRUE, )
+  sb_id <- as.numeric(gsub('sub','',colnames(resdf)[sb_cols], ignore.case = TRUE))
 
   for (i in 1:length(sb_cols)) {
     stage <- as.numeric(resdf[,sb_cols[i]])

@@ -9,9 +9,9 @@ rvn_annual_volume(
   obs,
   mm = 9,
   dd = 30,
-  add_line = T,
-  add_r2 = F,
-  add_eqn = F
+  add_line = TRUE,
+  add_r2 = FALSE,
+  add_eqn = FALSE
 )
 }
 \arguments{
@@ -63,7 +63,7 @@ obs <- rvn_hydrograph_data$hyd$Sub36_obs
 rvn_annual_volume(sim,obs)
 
 # create a plot of the annual volumes with r2
-rvn_annual_volume(sim,obs,add_r2=T, add_eqn=T)
+rvn_annual_volume(sim,obs,add_r2=TRUE, add_eqn=TRUE)
 
 # calculate annual volumes for different water years (e.g. ending Oct 31)
 vv <- rvn_annual_volume(sim, obs, mm=10, dd=31)

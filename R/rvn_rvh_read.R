@@ -82,7 +82,9 @@ rvn_rvh_read<-function(filename)
   }
   cnames<-c("SBID","Name","Downstream_ID","Profile","ReachLength","Gauged")
   #print(paste0("read sbs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
-  SubBasinTab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,header=FALSE,blank.lines.skip=TRUE, strip.white=TRUE,stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
+  SubBasinTab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,
+                          col.names=cnames,header=FALSE,blank.lines.skip=TRUE, strip.white=TRUE,
+                          stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
   SubBasinTab$Name<-trimws(SubBasinTab$Name)
   #print('done reading sbs')
   #untabify
@@ -102,7 +104,8 @@ rvn_rvh_read<-function(filename)
   cnames<-c("ID","Area","Elevation","Latitude","Longitude","SBID","LandUse","Vegetation","SoilProfile","Terrain","Aquifer","Slope","Aspect")
 
   #print(paste0("read HRUs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
-  HRUtab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,header=FALSE,blank.lines.skip=TRUE,strip.white=TRUE,stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
+  HRUtab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,
+                     header=FALSE,blank.lines.skip=TRUE,strip.white=TRUE,stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
   #print('done reading HRUs')
   #untabify
   #HRUtab <- as.data.frame(sapply(HRUtab, function(x) gsub("\t", "", x)))
@@ -172,7 +175,7 @@ rvn_rvh_read<-function(filename)
   links<-subset.data.frame(links,downID>=0) # get rid of -1
 
   #create network graph structure
-  net <- graph_from_data_frame(d=links, vertices=out, directed=T)
+  net <- graph_from_data_frame(d=links, vertices=out, directed=TRUE)
   egon <- ego(net,order=100, nodes=V(net),mode="in")
   size<- ego_size(net,order=100, nodes=V(net),mode="in")
   count=1

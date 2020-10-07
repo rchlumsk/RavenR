@@ -8,7 +8,6 @@
 #' @return outdf data.frame object
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
 #'
-#'
 #' @examples
 #' soil_classes <- data.frame('Attributes' = c('DEFAULT','ALTERNATIVE'),
 #'                            'SAND'      = c(0.4316, 0.3000),
@@ -63,7 +62,7 @@ rvn_df_to_Raven_table <- function(attributes, units, df, parameters=FALSE)
 
   # Mix n' match
   outdf <- data.frame(rbind(attributes, units),
-                      row.names = NULL, stringsAsFactors = F)
+                      row.names = NULL, stringsAsFactors = FALSE)
   names(df) <- outnames
   names(outdf) <- outnames
 

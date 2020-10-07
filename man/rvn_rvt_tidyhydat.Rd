@@ -9,8 +9,8 @@ rvn_rvt_tidyhydat(
   subIDs,
   prd = NULL,
   stnNames = NULL,
-  write_redirect = F,
-  flip_number = F,
+  write_redirect = FALSE,
+  flip_number = FALSE,
   rd_file = "flow_stn_redirect_text.rvt"
 )
 }
@@ -81,7 +81,7 @@ station_info <- hy_stations(stations)
 
 # Create RVT files
 rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
-  stnNames=station_info$STATION_NAME, flip_number=T)
+  stnNames=station_info$STATION_NAME, flip_number=TRUE)
 
 }
 \keyword{Raven}

@@ -10,8 +10,8 @@ rvn_rvt_ECmet(
   stnName = NULL,
   forcing_set = 1,
   prefix = "met_",
-  write_redirect = F,
-  write_stndata = F,
+  write_redirect = FALSE,
+  write_stndata = FALSE,
   rd_file = "met_redirects.rvt",
   stndata_file = "met_stndata.rvt"
 )
@@ -112,7 +112,8 @@ rvn_rvt_ECmet(metdata = kam, forcing_set = 1)
 
 # set without prefix, station data and redirect files created
 # forcing_set 2 includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
-rvn_rvt_ECmet(metdata = kam, forcing_set = 2, prefix = NULL, write_stndata = T, write_redirect = T)
+rvn_rvt_ECmet(metdata = kam, forcing_set = 2,
+  prefix = NULL, write_stndata = TRUE, write_redirect = TRUE)
 
 # cleanup demo files
 unlink("met_KAMLOOPS_A.rvt.rvt")

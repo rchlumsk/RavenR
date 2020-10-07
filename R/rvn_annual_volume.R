@@ -44,7 +44,7 @@
 #' rvn_annual_volume(sim,obs)
 #'
 #' # create a plot of the annual volumes with r2
-#' rvn_annual_volume(sim,obs,add_r2=T, add_eqn=T)
+#' rvn_annual_volume(sim,obs,add_r2=TRUE, add_eqn=TRUE)
 #'
 #' # calculate annual volumes for different water years (e.g. ending Oct 31)
 #' vv <- rvn_annual_volume(sim, obs, mm=10, dd=31)
@@ -52,15 +52,15 @@
 #' vv$p1
 #'
 #' @export rvn_annual_volume
-rvn_annual_volume <- function (sim, obs, mm=9, dd=30, add_line = T, add_r2 = F, add_eqn=F)
+rvn_annual_volume <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r2 = FALSE, add_eqn=FALSE)
 {
   sec.per.day <- 86400
 
-  sum.sim <- rvn_apply_wyearly(sim, sum, mm=mm, dd=dd, na.rm = T)
+  sum.sim <- rvn_apply_wyearly(sim, sum, mm=mm, dd=dd, na.rm = TRUE)
   dates <- lubridate::date(sum.sim)
   sum.sim <- as.numeric(sum.sim)
 
-  sum.obs <- rvn_apply_wyearly(obs, sum, mm=mm, dd=dd, na.rm = T) %>%
+  sum.obs <- rvn_apply_wyearly(obs, sum, mm=mm, dd=dd, na.rm = TRUE) %>%
     as.numeric()
 
   sum.sim <- sum.sim * sec.per.day
@@ -77,10 +77,10 @@ rvn_annual_volume <- function (sim, obs, mm=9, dd=30, add_line = T, add_r2 = F, 
   x.lab <- expression("Observed Volume ("*m^3*")")
   y.lab <- expression("Simulated Volume ("*m^3*")")
   title.lab <- ""
-  x.lim = c(min(sum.obs, sum.sim, na.rm = T) * 0.9,
-            max(sum.obs, sum.sim, na.rm = T) * 1.1)
-  y.lim = c(min(sum.obs, sum.sim, na.rm = T) * 0.9,
-            max(sum.obs, sum.sim, na.rm = T) * 1.1)
+  x.lim = c(min(sum.obs, sum.sim, na.rm = TRUE) * 0.9,
+            max(sum.obs, sum.sim, na.rm = TRUE) * 1.1)
+  y.lim = c(min(sum.obs, sum.sim, na.rm = TRUE) * 0.9,
+            max(sum.obs, sum.sim, na.rm = TRUE) * 1.1)
 
   obs.vol <- sim.vol <- NULL
 
@@ -103,7 +103,7 @@ rvn_annual_volume <- function (sim, obs, mm=9, dd=30, add_line = T, add_r2 = F, 
                 vjust = 1,
                 hjust = 0,
                 label=r2.label,
-                parse=T,
+                parse=TRUE,
                 size = 3.5)
   }
 

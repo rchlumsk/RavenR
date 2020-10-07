@@ -40,6 +40,8 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven plot extract reservoir
 #' @examples
+#'
+#' \dontrun{
 #' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
 #'
 #' # Read in Raven Reservoirs file, store into myres
@@ -50,6 +52,8 @@
 #'
 #' # Example for precipitation
 #' precip <- rvn_res_extract(subs="precip",res=myres)
+#'
+#' }
 #'
 #' @export rvn_res_extract
 rvn_res_extract <- function(subs=NA, res=NA, prd=NULL) {

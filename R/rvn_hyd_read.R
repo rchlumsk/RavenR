@@ -56,13 +56,13 @@ rvn_hyd_read <- function(ff=NA,tzone=NULL) {
   }
 
   #read hydrograph output
-  hydrographs <- read.csv(ff,header=T,nrows=5)
+  hydrographs <- read.csv(ff,header=TRUE,nrows=5)
 
   # assumed colClasses structure - mostly numeric except date and hour columns
   classes <- c(c('numeric','character','character'),rep('numeric',ncol(hydrographs)-3))
 
   # re-read with specified colClasses
-  hydrographs <- read.csv(ff,header=T,colClasses = classes,na.strings=c("---",'NA'))
+  hydrographs <- read.csv(ff,header=TRUE,colClasses = classes,na.strings=c("---",'NA'))
 
   # need to fix the hourly model
   if (is.null(tzone)) {
@@ -99,20 +99,20 @@ rvn_hyd_read <- function(ff=NA,tzone=NULL) {
 
     if (length(mysplit) == 2) {
       units[i] = mysplit[2]
-      obs_flag[i] = F
+      obs_flag[i] = FALSE
       newcols[i] = mysplit[1]
     } else if (length(mysplit) >= 3) {
       if (mysplit[2] == "observed") {
         units[i] = mysplit[3]
-        obs_flag[i] = T
+        obs_flag[i] = TRUE
         newcols[i] = sprintf("%s_obs",mysplit[1])
       } else if (mysplit[2] == "inflow") {
         units[i] = mysplit[3]
-        obs_flag[i] = F
+        obs_flag[i] = FALSE
         newcols[i] = sprintf("%s_resinflow",mysplit[1])
       } else if (mysplit[3] == "inflow") {
         units[i] = mysplit[4]
-        obs_flag[i] = F
+        obs_flag[i] = FALSE
         newcols[i] = sprintf("%s_resinflow",mysplit[1])
       }
     }

@@ -9,8 +9,8 @@ rvn_rvt_wsc(
   subIDs,
   prd = NULL,
   stnNames = NULL,
-  write_redirect = F,
-  flip_number = F
+  write_redirect = FALSE,
+  flip_number = FALSE
 )
 }
 \arguments{
@@ -77,7 +77,7 @@ system.file("extdata",'Daily__Oct-1-2020_08_20_52PM.csv', package="RavenR")
 rvn_rvt_wsc(ff,subIDs=c(6))
 
 # add custom station names, put subID number first in file
-rvn_rvt_wsc(ff,subIDs=c(6),stnNames <- c('Grand River'),flip_number=T)
+rvn_rvt_wsc(ff,subIDs=c(6),stnNames <- c('Grand River'),flip_number=TRUE)
 
 }
 \seealso{
