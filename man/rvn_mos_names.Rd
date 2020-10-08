@@ -6,7 +6,7 @@
 
 rvn_mos_names is used to return a string vector of months in the year}
 \usage{
-rvn_mos_names(short = T)
+rvn_mos_names(short = TRUE)
 }
 \arguments{
 \item{short}{boolean to return shortened form of months}
@@ -24,7 +24,7 @@ rvn_mos_names is used to return a string vector of months in the year
 months_of_the_year <- rvn_mos_names
 months_of_the_year
 
-rvn_mos_names(F)
+rvn_mos_names(FALSE)
 
 }
 \seealso{

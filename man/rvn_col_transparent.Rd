@@ -6,7 +6,8 @@
 
 rvn_col_transparent is used to adjust colour codes to introduce transparency
 
-Note that this function is not required for ggplot objects, as transparency can be added with the `alpha` parameter.}
+Note that this function is not required for ggplot objects, as transparency can be
+added with the `alpha` parameter.}
 \usage{
 rvn_col_transparent(colour, trans)
 }
@@ -25,7 +26,8 @@ Add Transparency to Colours
 
 rvn_col_transparent is used to adjust colour codes to introduce transparency
 
-Note that this function is not required for ggplot objects, as transparency can be added with the `alpha` parameter.
+Note that this function is not required for ggplot objects, as transparency can be
+added with the `alpha` parameter.
 }
 \examples{
 

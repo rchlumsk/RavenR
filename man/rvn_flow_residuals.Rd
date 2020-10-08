@@ -4,7 +4,13 @@
 \alias{rvn_flow_residuals}
 \title{Scatterplot of model flows}
 \usage{
-rvn_flow_residuals(sim, obs, ma_smooth = 3, add.line = T, winter_shading = T)
+rvn_flow_residuals(
+  sim,
+  obs,
+  ma_smooth = 3,
+  add.line = TRUE,
+  winter_shading = TRUE
+)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
@@ -55,7 +61,7 @@ rvn_flow_residuals(sim,obs)
 rvn_flow_residuals(sim, obs, ma_smooth=10)
 
 # turn off the smoothing and winter shading
-rvn_flow_residuals(sim,obs,ma_smooth = 0, winter_shading = F)
+rvn_flow_residuals(sim,obs,ma_smooth = 0, winter_shading = FALSE)
 
 }
 \seealso{

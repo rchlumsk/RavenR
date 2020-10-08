@@ -28,11 +28,12 @@
 #'
 #' @param sim time series object of simulated flows
 #' @param obs time series object of observed flows
+#' @param mm month of water year (default 9)
+#' @param dd day of water year (default 30)
 #' @param add_line optionally adds a 1:1 line to the plot for reference
 #' (default TRUE)
 #' @param add_labels optionally adds labels for overpredict/underpredict on
 #' right side axis (default TRUE)
-#' @param rplot boolean whether to print the plot (default FALSE)
 #' @return returns a list with peak errors in a data frame, and a ggplot object
 #'  \item{df_peak_error}{data frame of the calculated peak errors}
 #'  \item{p1}{ggplot object with plotted annual peak errors}
@@ -55,22 +56,26 @@
 #' obs <- hyd_data$obs
 #'
 #' # create a plot of annual peak errors with default options
-#' peak1 <- rvn_annual_peak_error(sim, obs, add_line=T)
+#' peak1 <- rvn_annual_peak_error(sim, obs)
 #' peak1$df_peak_error
 #' peak1$p1
 #'
 #' # plot directly and without labels
-#' rvn_annual_peak_error(sim, obs, add_line=T, rplot=T, add_labels=F)
+#' rvn_annual_peak_error(sim, obs, add_line=TRUE, add_labels=FALSE)
 #'
 #'
 #' @keywords Raven annual peak error diagnostics
 #' @export rvn_annual_peak_error
-rvn_annual_peak_error <- function(sim, obs, add_line = T,
-                                   add_labels = T, rplot = F) {
-  df.peak <- rvn_annual_peak(sim, obs, rplot = F)$df_peak
+#' @importFrom stats lm
+#' @importFrom lubridate year date
+#' @importFrom ggplot2 ggplot aes geom_point geom_hline geom_text scale_x_discrete scale_y_continuous
+rvn_annual_peak_error <- function(sim, obs, mm=9, dd=30, add_line = TRUE, add_labels = TRUE)
+{
+
+  df.peak <- rvn_annual_peak(sim, obs, mm=mm, dd=dd)$df_peak
   errs <- (df.peak$sim.peak - df.peak$obs.peak)/df.peak$obs.peak *
     100
-  text.labels <- year(df.peak$date.end)
+  text.labels <- lubridate::year(df.peak$date.end)
 
   x.lab <- "Date (Water Year Ending)"
   y.lab <- "% Error in Peaks"
@@ -114,8 +119,6 @@ rvn_annual_peak_error <- function(sim, obs, add_line = T,
                 hjust = 0.5)
   }
   df <- data.frame(date.end = df.peak$date.end, errors = errs)
-
-  if (rplot) {plot(p1)}
 
   return(list(df_peak_error = df,p1=p1))
 }

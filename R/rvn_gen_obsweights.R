@@ -1,5 +1,6 @@
-#' Create weights time series for calibration/diagnostic evaluation
+#' @title Create weights time series for calibration/diagnostic evaluation
 #'
+#' @description
 #' Creates an observation data weights time series based upon dates stored in
 #' an xts time series and criterion given by the user
 #'
@@ -25,6 +26,7 @@
 #' then the opposite is true, e.g, for startdate="2002-11-01" and enddate "2002-01-31",
 #' only November, December and January timestamps have a weight of 1
 #'
+#'
 #' @return {wts}{returns numeric vector of weights}
 #'
 #' @author James R. Craig, University of Waterloo
@@ -38,14 +40,20 @@
 #'
 #'  # generate rvt file using just observations from Subbasin ID 36
 #'  flows <- rvn_ts_infill(mydata$hyd$Sub36_obs)
-#'  rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36, typestr = "HYDROGRAPH")
+#'  rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36,
+#'    typestr = "HYDROGRAPH")
 #'
 #'  # weight March-October flows:
-#'  wts <- rvn_gen_obsweights(flows,criterion = "BETWEEN_CYCLIC", startdate="2000-03-01", enddate="2003-11-01")
+#'  wts <- rvn_gen_obsweights(flows,criterion = "BETWEEN_CYCLIC",
+#'    startdate="2000-03-01", enddate="2003-11-01")
 #'
 #'  # and only after March 2003:
-#'  wts2 <- rvn_gen_obsweights(flows,criterion = "AFTER", startdate="2003-03-01")
+#'  wts2 <- rvn_gen_obsweights(flows,criterion = "AFTER",
+#'    startdate="2003-03-01")
 #'  wts2 <- wts2*wts # product merges weights
+#'
+#'  # show weights over time
+#'  plot(wts2)
 #'
 #'  # write observation weights to rvt file
 #'  rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2, 36, typestr="HYDROGRAPH")
@@ -56,18 +64,27 @@
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven website}
 #'
 #' @export rvn_gen_obsweights
-rvn_gen_obsweights <- function(ts,criterion="BETWEEN",startdate="1785-10-05",enddate="2500-01-01") {
+#' @importFrom lubridate yday
+#' @importFrom zoo index
+rvn_gen_obsweights <- function(ts,criterion="BETWEEN",startdate="1785-10-05",enddate="2500-01-01")
+{
   # October 5, 1785 - date of the great pumpkin flood
 
   # interval
   wts<-0.0*ts
-  startdate<-as.Date(startdate)
-  enddate<-as.Date(enddate)
+  # startdate<-as.Date(startdate)
+  # enddate<-as.Date(enddate)
+
+  # check for valid prd
+  prd <- sprintf("%s/%s",startdate,enddate)
+  # error check prd input as character
+  prd <- rvn_get_prd(prd=prd)
 
   if ((criterion=="BETWEEN") || (criterion=="AFTER") || (criterion=="BEFORE"))
   {
-    interval<-interval((startdate),(enddate))
-    wts[index(ts) %within% interval]<-1
+    # intvl<-interval((startdate),(enddate))
+    # wts[index(ts) %within% intvl]<-1
+    wts[prd] <- 1
   }
   else if (criterion=="BETWEEN_CYCLIC")
   {

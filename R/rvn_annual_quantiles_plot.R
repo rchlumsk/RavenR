@@ -4,48 +4,54 @@
 #' @param mediancolor Color for the median line
 #' @param ribboncolor Color for the lower/upper quantile ribbon
 #' @param ribbonalpha Transparency of lower/upper quantile ribbon
-#' @param addtoplot Existing ggplot object to which median line and quantile ribbon should be added
+#' @param explot Existing ggplot object to which median line and quantile ribbon should be added
 #'
-#' @return Monthly Plot
+#' @return p1 ggplot object of quantiles plot
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
 #'
 #' @examples
-#' data(hydrograph.data)
-#'
-#' # Pull out a specific hydrograph
-#' hgdata <- rvn_hydrograph_data$hyd$Sub36_obs
+#' system.file("extdata","run1_Hydrographs.csv", package="RavenR") %>%
+#' rvn_hyd_read(.) %>%
+#' rvn_hyd_extract(subs="Sub36",.) ->
+#' hyd_data
 #'
 #' # Calculate quantiles
-#' qdat <- yearly_quantile(hgdata)
+#' qdat <- rvn_annual_quantiles(hyd_data$obs)
+#' head(qdat)
 #'
 #' # Plot
-#' p <- rvn_yearly_quantile_plot(qdat)
-#' p  # To view
+#' p <- rvn_annual_quantiles_plot(qdat)
+#' p  # view plot
 #'
 #' # Add a second hydrograph to compare
-#' simdata <- rvn_hydrograph_data$hyd$Sub36
-#' qdat_sim <- rvn_annual_quantiles(hgdata)
+#' qdat_sim <- rvn_annual_quantiles(hyd_data$sim)
 #'
-#' p <- rvn_annual_quantiles_plot(qdat_sim, mediancolor = 'red', ribboncolor = 'red', addtoplot = p)
-#' p # To view
+#' p1 <- rvn_annual_quantiles_plot(qdat_sim, mediancolor = 'blue', ribboncolor = 'red', explot = p)
+#' p1 # view plot
+#'
 #' @export rvn_annual_quantiles_plot
+#' @importFrom lubridate year date
+#' @importFrom ggplot2 ggplot aes geom_point geom_line geom_ribbon xlab ylab scale_x_date
+#' @importFrom scales label_date date_format
 rvn_annual_quantiles_plot <- function(qdat,
                                       mediancolor='black',
                                       ribboncolor='grey60',
                                       ribbonalpha=0.5,
-                                      addtoplot=NULL) {
+                                      explot=NULL)
+{
 
   # Export XTS object into df
   dates <- date(qdat)
   qdat <- data.frame(qdat)
-  qdat$date <- dates
+  qdat$dates <- dates
 
   # Rename Columns
-  names(qdat) <- c('Lower','Median','Upper','date')
+  names(qdat) <- c('Lower','Median','Upper','dates')
+  Lower <- Median <- Upper <- dates <- NULL # appeasing the R CMD CHECK with ggplot2 conflicts
 
-  if(is.null(addtoplot)) {
+  if(is.null(explot)) {
 
-    p1 <- ggplot(qdat, aes(x = date)) +
+    p1 <- ggplot(data=qdat, aes(x = dates)) +
       geom_ribbon(aes(ymin=Lower, ymax=Upper),
                   fill=ribboncolor,
                   alpha=ribbonalpha) +
@@ -57,11 +63,12 @@ rvn_annual_quantiles_plot <- function(qdat,
       rvn_theme_RavenR()
 
   } else {
-    p1 <- p1 +
-      geom_ribbon(data=qdat, aes(ymin=Lower, ymax=Upper),
+    # add check that explot is a valid ggplot object
+    p1 <- explot +
+      geom_ribbon(aes(ymin=Lower, ymax=Upper),
                   fill=ribboncolor, alpha=ribbonalpha) +
-      geom_line(data=qdat, aes(y=Median), color=mediancolor)
+      geom_line(aes(y=Median), color=mediancolor)
   }
 
-  return(p)
+  return(p1)
 }

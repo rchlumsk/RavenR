@@ -1,11 +1,14 @@
-#' Plot Raven hydrologic process network
+#' @title Plot Raven hydrologic process network
 #'
-#' This routine takes a connections datafrom generated using rvn_rvi_connections()
-#' and plots the connections information as a network graph.
+#' @description
+#' This routine takes a connections data from generated using rvn_rvi_connections()
+#' and returns the connections information as a network graph ggplot object.
+#'
+#' @details
+#' This function uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot.
 #'
 #' @param connections a dataframe of from-to connections generated using rvn_rvi_connections()
-#' @param plot boolean whether to print the plot, default TRUE
-#' @param pdfout name of pdf file to save the network plot to, if null no PDF is generated#'
+#' @param pdfout name of pdf file to save the network plot to, if null no PDF is generated
 #'
 #' @return {p1}{returns ggplot object. Also generates a .pdf file in working directory if pdfplot argument is not NULL.}
 #'
@@ -18,18 +21,20 @@
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
-#'  rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
+#' rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
+#' conn <- rvn_rvi_connections(rvi)
 #'
-#'  # get number of Hydrologic processes
-#'  nrow(rvi$HydProcTable)
-#'
-#'  conn <- rvn_rvi_connections(rvi)
-#'  rvn_rvi_process_plot(conn)
+#' rvn_rvi_process_plot(conn)
 #'
 #' @keywords Raven  rvi  Hydrologic Processes
 #' @export rvn_rvi_process_plot
-rvn_rvi_process_plot <- function(connections, plot=TRUE, pdfout=NULL) {
-  require(igraph)
+#' @importFrom igraph get.data.frame graph_from_data_frame vertex.attributes
+#' @importFrom ggplot2 ggplot geom_segment geom_label xlim theme aes arrow unit ggsave
+rvn_rvi_process_plot <- function(connections, pdfout=NULL)
+{
+
+  from.x <- to.x <- from.y <- to.y <- V1 <- V2 <- Label <- NULL
+
   source<-connections$From
   target<-connections$To
   process<-connections$ProcessType
@@ -94,15 +99,14 @@ rvn_rvi_process_plot <- function(connections, plot=TRUE, pdfout=NULL) {
                  arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "gray40") +
     geom_label(data = layout, aes(x=V1, y=V2, label = Label), fill = "lightblue")+
     xlim(c(x.min,x.max))+
-    theme_bw()+
     theme(panel.grid = element_blank(),
           axis.ticks = element_blank(),
           axis.text = element_blank(),
           axis.title = element_blank(),
           axis.line = element_blank(),
-          legend.position = "none")
+          legend.position = "none")+
+    rvn_theme_RavenR()
 
-  if (plot) {p1}
   if (!is.null(pdfout)) {ggsave(pdfout,p1, units = "in", height = 7, width = 7, dpi =300)}
   return(p1)
 }

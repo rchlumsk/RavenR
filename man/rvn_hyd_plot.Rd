@@ -10,7 +10,8 @@ rvn_hyd_plot(
   inflow = NULL,
   precip = NULL,
   prd = NULL,
-  winter_shading = T
+  winter_shading = FALSE,
+  wsdates = c(12, 1, 3, 31)
 )
 }
 \arguments{
@@ -24,14 +25,15 @@ rvn_hyd_plot(
 
 \item{prd}{period to use in plotting}
 
-\item{winter_shading}{optionally adds shading for winter months (default
-TRUE)}
+\item{winter_shading}{optionally adds shading for winter months (default FALSE)}
+
+\item{wsdates}{integer vector of winter shading period dates (see details)}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
-rvn_hyd_plot creates a hydrograph plot for the supplied flow series, or
+rvn_hyd_plot creates a hydrograph plot object for the supplied flow series, or
 equivalently a stage plot for reservoir stages.
 }
 \details{
@@ -47,7 +49,9 @@ this is not a concern. The supplied time series should be in xts format,
 which again can be obtained directly by using the hyd.extract function.
 
 The winter_shading argument will add a transparent cyan shading for the
-December 1st to March 31st period in each year that is plotted.
+specified period by wsdates in each year that is plotted.
+
+wsdates is formatted as c(winter start month, winter start day, winter end month, winter end day).
 
 Note that a plot title is purposely omitted in order to allow the automatic
 generation of plot titles.
@@ -62,15 +66,20 @@ obs <- run1$hyd$Sub36_obs
 precip <- run1$hyd$precip
 
 # create a nice hydrograph
-rvn_hyd_plot(sim,obs,zero_axis=F)
+rvn_hyd_plot(sim,obs)
 
 # create a hydrograph with precip as well;
-## range.mult=1.5 by default, leaves some overlap in plot axes
 rvn_hyd_plot(sim,obs,precip=precip)
 
 # create a hydrograph with precip as well for a specific subperiod
 prd <- "2003-10-01/2004-10-01"
 rvn_hyd_plot(sim,obs,precip=precip,prd=prd)
+
+# add the winter shading
+rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=TRUE)
+
+# change winter shading dates
+rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=TRUE, wsdates=c(11,1,4,15))
 
 }
 \seealso{

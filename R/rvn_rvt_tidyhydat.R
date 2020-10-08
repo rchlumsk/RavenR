@@ -1,9 +1,11 @@
-#' EC Streamgauge File Conversion from tidyhydat
+#' @title EC Streamgauge File Conversion from tidyhydat
 #'
+#' @description
 #' rvn_rvt_tidyhydat converts Environment Canada historical streamgauge data,
 #' accessed via the tidyhydat package, into .rvt format files usable in
 #' Raven.
 #'
+#' @details
 #' This function takes a single flow tibble generated from tidyhydat and converts the flow data for
 #' each station in the file into .rvt formatted files for a Raven model. If
 #' multiple stations exist in the .csv file, multiple observation files are created
@@ -33,14 +35,11 @@
 #' alphabeticized order is not dependent on the station name, and the observed
 #' files will be in one set.
 #'
-#' @param indata tibble of WSC flow data from tidyhydat's hy_daily_flows()
-#' function
+#' @param indata tibble of WSC flow data from tidyhydat's hy_daily_flows() function
 #' @param subIDs vector of subbasin IDs to correspond to the stations in indata
 #' @param prd (optional) data period to use in .rvt file
-#' @param stnNames (optional) character vector of alternative station names to
-#' use
-#' @param write_redirect (optional) write the :RedirectToFile commands in a
-#' separate .rvt file
+#' @param stnNames (optional) character vector of alternative station names to use
+#' @param write_redirect (optional) write the :RedirectToFile commands in a separate .rvt file
 #' @param rd_file (optional) name of the redirect file created (if write_redirect = TRUE)
 #' @param flip_number (optional) put the subID first in the .rvt filename
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
@@ -52,34 +51,31 @@
 #' stations <- c("05CB004","05CA002")
 #'
 #' # Gather station data/info using tidyhydat functions
-#' data <- tidyhydat::hy_daily_flows(station_number = stations, start_date = "1996-01-01", end_date = "2000-01-01")
+#' hd <- tidyhydat::hy_daily_flows(station_number = stations,
+#'   start_date = "1996-01-01", end_date = "2000-01-01")
 #'
 #' station_info <- hy_stations(stations)
 #'
 #' # Create RVT files
-#' rvn_rvt_tidyhydat(data, subIDs=c(3,11), stnNames=station_info$STATION_NAME, flip_number=T)
+#' rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
+#'   stnNames=station_info$STATION_NAME, flip_number=TRUE)
 #'
 #' @export rvn_rvt_tidyhydat
-rvn_rvt_tidyhydat <- function(indata, subIDs, prd=NULL, stnNames=NULL, write_redirect=F, flip_number=F,
-                              rd_file = 'flow_stn_redirect_text.rvt') {
+#' @importFrom dplyr distinct pull select
+#' @importFrom xts xts
+rvn_rvt_tidyhydat <- function(indata, subIDs, prd=NULL, stnNames=NULL,
+                              write_redirect=FALSE, flip_number=FALSE,
+                              rd_file = 'flow_stn_redirect_text.rvt')
+{
+
+  STATION_NUMBER <- Date <- Value <- NULL
 
   # data checks
   if (!(is.null(stnNames)) & (length(subIDs) != length(stnNames))) {
     stop("Length of subIDs must be the same as stnNames.")
   }
 
-  # determine the period to use
-  if (!(is.null(prd))) {
-    # period is supplied; check that it makes sense
-    firstsplit <- unlist(strsplit(prd,"/"))
-    if (length(firstsplit) != 2) {
-      stop("Check the format of supplied period; should be two dates separated by '/'.")
-    }
-    if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
-        || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
-      stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
-    }
-  }
+  # prd <- rvn_get_prd(indata, prd)
 
   stns<-pull(distinct(select(indata,STATION_NUMBER)),STATION_NUMBER)
 
@@ -143,4 +139,3 @@ rvn_rvt_tidyhydat <- function(indata, subIDs, prd=NULL, stnNames=NULL, write_red
   }
   return(TRUE)
 }
-

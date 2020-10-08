@@ -3,14 +3,11 @@
 #' rvn_substrLeft returns n characters from the left side of the supplied string x.
 #'
 #' @param x a string to manipulate
-#' @param n number of characters to use from the left side of the string
-#' @seealso \code{\link{rvn_substrRight}} for using n characters from right side of
-#' string,
+#' @param n number of characters to remove from the left side of the string
+#' @seealso \code{\link{rvn_substrRight}} for using n characters from right side of string
 #'
-#' \code{\link{rvn_substrMRight}} for removing n characters from the right side of
-#' a string,
-#' \code{\link{rvn_substrMLeft}} for removing n characters from the left side of a
-#' string
+#' \code{\link{rvn_substrMRight}} for removing n characters from the right side of a string
+#'
 #' @keywords string left
 #' @examples
 #'
@@ -18,7 +15,8 @@
 #' # returns "hel"
 #'
 #' @export rvn_substrLeft
-rvn_substrLeft <- function(x, n) {
+rvn_substrLeft <- function(x, n)
+{
   substr(x, 1,n)
 }
 
@@ -46,7 +44,8 @@ rvn_substrLeft <- function(x, n) {
 #' # returns "lo world"
 #'
 #' @export rvn_substrMLeft
-rvn_substrMLeft <- function(x, n) {
+rvn_substrMLeft <- function(x, n)
+{
   substr(x, n+1,nchar(x))
 }
 
@@ -74,7 +73,8 @@ rvn_substrMLeft <- function(x, n) {
 #' # returns "hello wo"
 #'
 #' @export rvn_substrMRight
-rvn_substrMRight <- function(x, n) {
+rvn_substrMRight <- function(x, n)
+{
   substr(x, 1,nchar(x)-n)
 }
 
@@ -102,7 +102,8 @@ rvn_substrMRight <- function(x, n) {
 #' # returns "rld"
 #'
 #' @export rvn_substrRight
-rvn_substrRight <- function(x, n) {
+rvn_substrRight <- function(x, n)
+{
   substr(x, nchar(x)-n+1, nchar(x))
 }
 
@@ -111,7 +112,8 @@ rvn_substrRight <- function(x, n) {
 #'
 #' rvn_col_transparent is used to adjust colour codes to introduce transparency
 #'
-#' Note that this function is not required for ggplot objects, as transparency can be added with the `alpha` parameter.
+#' Note that this function is not required for ggplot objects, as transparency can be
+#' added with the `alpha` parameter.
 #'
 #' @param colour time series containing columns you wish to reseasonalize. xts
 #' object
@@ -135,7 +137,9 @@ rvn_substrRight <- function(x, n) {
 #' points(rnorm(20),col=mycol)
 #'
 #' @export rvn_col_transparent
-rvn_col_transparent <- function(colour,trans) {
+#' @importFrom grDevices col2rgb
+rvn_col_transparent <- function(colour,trans)
+{
   # This function adds transparancy to a colour.
   # Define transparancy with an integer between 0 and 255
   # 0 being fully transparant and 255 being fully visable
@@ -178,7 +182,8 @@ rvn_col_transparent <- function(colour,trans) {
 #'#   TRUE    TRUE   FALSE    TRUE   FALSE    TRUE
 #'
 #' @export rvn_iscolour
-rvn_iscolour <- function(x) {
+rvn_iscolour <- function(x)
+{
   sapply(x, function(X) {
     tryCatch(is.matrix(col2rgb(X)),
              error = function(e) FALSE)
@@ -200,10 +205,11 @@ rvn_iscolour <- function(x) {
 #' months_of_the_year <- rvn_mos_names
 #' months_of_the_year
 #'
-#' rvn_mos_names(F)
+#' rvn_mos_names(FALSE)
 #'
 #' @export rvn_mos_names
-rvn_mos_names <- function(short=T) {
+rvn_mos_names <- function(short=TRUE)
+{
   if (short) {
     return(c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
   } else {
@@ -230,7 +236,8 @@ rvn_mos_names <- function(short=T) {
 #' # 7
 #'
 #' @export rvn_num_days
-rvn_num_days <- function(date1,date2) {
+rvn_num_days <- function(date1,date2)
+{
 
   # update with this syntax?
   # as.numeric(difftime(index(date1) ,index(date2) , units = c("days")))
@@ -262,7 +269,8 @@ rvn_num_days <- function(date1,date2) {
 #' # 31
 #'
 #' @export rvn_num_days_month
-rvn_num_days_month <- function(date) {
+rvn_num_days_month <- function(date)
+{
   m <- format(date, format="%m")
   while (format(date, format="%m") == m) {
     date <- date + 1
@@ -270,39 +278,18 @@ rvn_num_days_month <- function(date) {
   return(as.integer(format(date - 1, format="%d")))
 }
 
-
-#' @title Which Max (xts)
-#'
-#' rvn_which_max_xts applies the which.max function and returns an xts object
-#' with the maximum value and associated date.
-#'
-#' This function is intended to act as the which.max function, applicable
-#' to xts objects and returning values in an xts format.
-#'
-#' @param x xts object to apply which.max to
-#' @return \item{x[which.max(x)]}{returned object}
-#' @seealso \code{\link{which.max}} base which.max function
-#'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords which max xts
-#' @examples
-#' data(rvn_hydrograph_data)
-#' rvn_which_max_xts(rvn_hydrograph_data$hyd$Sub43_obs)
-#'
-#' @export rvn_which_max_xts
-rvn_which_max_xts <- function(x) {
-  return(x[which.max(x)])
-}
-
-
 #' @title cmax
 #'
-#' cmax standards for column maximum. It applies the base::max function over
+#' @description
+#' cmax standards for column maximum, applies the max function across columns.
+#'
+#' @details
+#' It applies the base::max function over
 #' columns, which is advantageous for calculating the max within a column
 #' rather than the max of the whole data frame.
 #'
+#' This function was included for usage with the apply.<period> and rvn_apply_wyearly
+#' function, as the base::max function does not work properly across columns.
 #'
 #' @param x object to apply the max function to
 #' @param na.rm whether to remove na values from the calculation
@@ -316,12 +303,261 @@ rvn_which_max_xts <- function(x) {
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' @keywords max columns
+#'
+#' @examples
+#' data(rvn_hydrograph_data)
+#' cmax(rvn_hydrograph_data$hyd$Sub43_obs, na.rm=TRUE)
+#'
+#' rvn_apply_wyearly(rvn_hydrograph_data$hyd, cmax, na.rm=TRUE)
+#'
+#' @export cmax
+cmax <- function(x, na.rm = FALSE)
+{
+  apply(x, 2, max, na.rm = na.rm)
+}
+
+#' @title which.max for xts objects
+#'
+#' rvn_which_max_xts applies the which.max function and returns an xts object
+#' with the maximum value and associated date.
+#'
+#' This function is intended to act as the which.max function, applicable
+#' to xts objects and returning values in an xts format.
+#'
+#' Note that when deploying the rvn_apply_wyearly function, the dates are overwritten
+#' and the dates of the water year ending periods are displayed rather than the event dates.
+#' In order to obtain the corresponding dates when using the rvn_apply_wyearly function, please use
+#' \code{\link{rvn_apply_wyearly_which_max_xts}}.
+#'
+#' @param x xts object to apply which.max to
+#' @return {xts object with max value and corresponding date}
+#' @seealso \code{\link{which.max}} base which.max function
+#' \code{\link{rvn_apply_wyearly_which_max_xts}} for using apply_wyearly with the rvn_which_max_xts function
+#'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords which max xts
 #' @examples
 #' data(rvn_hydrograph_data)
+#'
+#' # obtain the peak observed flow and the corresponding date
 #' rvn_which_max_xts(rvn_hydrograph_data$hyd$Sub43_obs)
 #'
-#' @export cmax
-cmax <- function(x, na.rm = FALSE) {
-  apply(x, 2, max, na.rm = na.rm)
+#' # note that the usual rvn_apply_wyearly does not provide the correct dates with this function
+#' rvn_apply_wyearly(rvn_hydrograph_data$hyd$Sub43_obs, rvn_which_max_xts)
+#'
+#' @export rvn_which_max_xts
+#' @importFrom lubridate date
+rvn_which_max_xts <- function(x)
+{
+  # return(x[which.max(x)])
+  if ("xts" %in% class(x) & ncol(x) == 1 ) {
+
+    df <- data.frame(date=lubridate::date(x)[which.max(x)],max=as.numeric(x[which.max(x)]))
+    myxts <- xts(df$max, order.by=df$date)
+    colnames(myxts) <- colnames(x)
+    return(myxts)
+
+  } else {
+    warning("x must be an xts object with one numeric column")
+    return(FALSE)
+  }
+}
+
+
+
+#' @title which.max over water year periods
+#'
+#' rvn_apply_wyearly_which_max_xts applies the which.max function within each
+#' water year period, and returns the corresponding max values and dates in an xts format.
+#'
+#' @param x xts object
+#' @param mm month of water year ending (default 9)
+#' @param dd day of water year (default 30)
+#'
+#' @return {xts object with max values and corresponding dates}
+#'
+#' @keywords which max xts
+#'
+#' @examples
+#'
+#' data(rvn_hydrograph_data)
+#'
+#' # obtain peak observed flows in each water year period
+#' rvn_apply_wyearly_which_max_xts(rvn_hydrograph_data$hyd$Sub43_obs)
+#'
+#' # will return a warning with no result if multiple columns supplied
+#' rvn_apply_wyearly_which_max_xts(rvn_hydrograph_data$hyd)
+#'
+#' @export rvn_apply_wyearly_which_max_xts
+#' @importFrom lubridate date
+#' @importFrom xts xts
+rvn_apply_wyearly_which_max_xts <- function(x, mm=9, dd=30)
+{
+  # return(x[which.max(x)])
+  if ("xts" %in% class(x) & ncol(x) == 1 ) {
+    ep <- rvn_wyear_indices(x,mm=mm,dd=dd)
+    dx <- as.Date(rep(NA,length(ep)-1))
+    xx <- rep(NA,length(ep)-1)
+
+    for (i in 1:(length(ep)-1)) {
+      dx[i] <- lubridate::date(x[ep[i]:ep[i+1]])[which.max(x[ep[i]:ep[i+1]])]
+      xx[i] <- as.numeric(x[ep[i]:ep[i+1]][which.max(x[ep[i]:ep[i+1]])])
+    }
+
+    myxts <- xts(xx, order.by=dx)
+    colnames(myxts) <- colnames(x)
+    return(myxts)
+
+  } else {
+    warning("x must be an xts object with one numeric column")
+    return(FALSE)
+  }
+}
+
+
+
+#' @title Determine period of data
+#'
+#' rvn_get_prd either obtains the full period of a given xts object,
+#' or checks the provided prd against an xts object for consistency and issues
+#' a warning of an issue is found.
+#'
+#' XXX to update error checking
+#'
+#' @param x xts object
+#' @param prd period argument in format YYYY-MM-DD/YYYY-MM-DD as a character
+#' @return {prd argument with warnings provided if needed}
+#' @seealso \code{\link{rvn_theme_RavenR}} provides a theme for the RavenR package
+#'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' @keywords get prd xts
+#' @examples
+#' data(rvn_hydrograph_data)
+#'
+#' # check if string is a valid prd argument
+#' rvn_get_prd(prd="2000-10-01/2002-09-30")
+#' # rvn_get_prd(prd="2000-10-01/2002-24-30") # returns error
+#'
+#' # get full valid prd argument for xts object
+#' rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs)
+#'
+#' # check prd argument against xts object
+#' rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "2020-01-01/2020-02-01")
+#' # rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "2002-24-01/2020-02-01") # returns error
+#' # rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "20-24-01/2020-02-01")   # returns error
+#'
+#'
+#' @export rvn_get_prd
+#' @importFrom lubridate date year month day
+rvn_get_prd <- function(x=NULL, prd=NULL)
+{
+# determine the period to use
+  if (!(is.null(prd))) {
+
+    # prd is supplied; check that it makes sense
+    firstsplit <- unlist(strsplit(prd,"/"))
+    if (length(firstsplit) != 2) {
+      stop("Check the format of supplied period argument prd; should be two dates separated by '/'.")
+    }
+    if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
+        || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
+      stop("Check the format of supplied period argument prd; two dates should be in YYYY-MM-DD format.")
+    }
+    # add conversion to date with xts format check ?
+
+    # check that both periods are valid dates
+   tryCatch(
+      {
+        as.Date(unlist(strsplit(prd,"/"))[1])
+      },
+      error=function(cond) {
+        stop(paste("Issue with prd, %s does not appear to be a valid date in Y-M-D format:",
+                      unlist(strsplit(prd,"/"))[1]))
+        message(cond)
+        # return(FALSE)
+        stop()
+      },
+      warning=function(cond) {
+        message(paste("Warning with prd, %s does not appear to be a valid date in Y-M-D format:",
+                      unlist(strsplit(prd,"/"))[1]))
+        message(cond)
+      }
+    )
+
+    tryCatch(
+      {
+        as.Date(unlist(strsplit(prd,"/"))[2])
+      },
+      error=function(cond) {
+        stop(paste("Issue with prd, %s does not appear to be a valid date in Y-M-D format:",
+                      unlist(strsplit(prd,"/"))[2]))
+        message(cond)
+        # return(FALSE)
+      },
+      warning=function(cond) {
+        message(paste("Warning with prd, %s does not appear to be a valid date in Y-M-D format:",
+                      unlist(strsplit(prd,"/"))[2]))
+        message(cond)
+      }
+    )
+
+    if (!(is.null(x))) {
+      # check that the prd is valid for x
+      if (nrow(x[prd]) == 0) {
+        warning("x is empty for supplied prd argument")
+      }
+    }
+
+  } else {
+    # period is not supplied
+
+    if (!(is.null(x))) {
+      # get the whole range
+      N <- nrow(x)
+      prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(x[1,1]),month(x[1,1]),day(x[1,1]),
+                     year(x[N,1]),month(x[N,1]),day(x[N,1]) )
+    }
+  }
+  return(prd)
+}
+
+
+#' @title Pads string with spaces, either right or left justified
+#'
+#' @description
+#' Pad string with spaces, justified on either the left or right
+#'
+#' @param string Text string
+#' @param width Number of characters total, including desired spaces
+#' @param just 'r' for right, 'l' for left
+#'
+#' @return {Padded string}
+#' @author Leland Scantlebury, \email{leland@@scantle.com}
+#'
+#' @examples
+#' # Returns '   To the right'
+#' rvn_stringpad('To the right', 15, just='r')
+#'
+#' @export rvn_stringpad
+rvn_stringpad <- function(string, width, just='r')
+{
+  slength <- nchar(string)
+  padlength <- width - slength
+  #-- Break if string is longer than the pad width
+  if (padlength < 0) {
+    stop('String exceeds total width')
+  }
+  #-- return a padded string
+  if (just == 'r') {
+    return(paste0(strrep(' ', padlength),
+                  string))
+  }
+  else if (just == 'l') {
+    return(paste0(string), strrep(' ', padlength))
+  }
 }

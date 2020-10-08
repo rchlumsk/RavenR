@@ -4,7 +4,7 @@
 \alias{rvn_fdc_plot}
 \title{Plots summary of watershed forcing functions}
 \usage{
-rvn_fdc_plot(sim = NULL, obs = NULL, prd = NULL, seasonal = "F")
+rvn_fdc_plot(sim = NULL, obs = NULL, prd = NULL, seasonal = FALSE)
 }
 \arguments{
 \item{sim}{simulated hydrograph xts time series}
@@ -13,7 +13,7 @@ rvn_fdc_plot(sim = NULL, obs = NULL, prd = NULL, seasonal = "F")
 
 \item{prd}{(optional) time period over which the plot is generated}
 
-\item{seasonal}{(optional) add the winter and summer FDC}
+\item{seasonal}{(optional) boolean whether to add the winter and summer FDC}
 }
 \description{
 rvn_fdc_plot generation a flow duration curve plot.
@@ -39,7 +39,7 @@ obs <- run1$hyd$Sub36_obs
 rvn_fdc_plot(sim)
 
  # create seasonal FDC plot with sim and obs data
-rvn_fdc_plot(sim,obs,seasonal=T)
+rvn_fdc_plot(sim,obs,seasonal=TRUE)
 
 }
 \seealso{

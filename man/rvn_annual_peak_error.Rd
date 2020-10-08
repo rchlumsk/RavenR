@@ -4,20 +4,29 @@
 \alias{rvn_annual_peak_error}
 \title{Annual Peak Errors}
 \usage{
-rvn_annual_peak_error(sim, obs, add_line = T, add_labels = T, rplot = F)
+rvn_annual_peak_error(
+  sim,
+  obs,
+  mm = 9,
+  dd = 30,
+  add_line = TRUE,
+  add_labels = TRUE
+)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
 
 \item{obs}{time series object of observed flows}
 
+\item{mm}{month of water year (default 9)}
+
+\item{dd}{day of water year (default 30)}
+
 \item{add_line}{optionally adds a 1:1 line to the plot for reference
 (default TRUE)}
 
 \item{add_labels}{optionally adds labels for overpredict/underpredict on
 right side axis (default TRUE)}
-
-\item{rplot}{boolean whether to print the plot (default FALSE)}
 }
 \value{
 returns a list with peak errors in a data frame, and a ggplot object
@@ -62,12 +71,12 @@ sim <- hyd_data$sim
 obs <- hyd_data$obs
 
 # create a plot of annual peak errors with default options
-peak1 <- rvn_annual_peak_error(sim, obs, add_line=T)
+peak1 <- rvn_annual_peak_error(sim, obs)
 peak1$df_peak_error
 peak1$p1
 
 # plot directly and without labels
-rvn_annual_peak_error(sim, obs, add_line=T, rplot=T, add_labels=F)
+rvn_annual_peak_error(sim, obs, add_line=TRUE, add_labels=FALSE)
 
 
 }

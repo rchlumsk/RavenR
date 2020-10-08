@@ -40,6 +40,8 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven plot extract reservoir
 #' @examples
+#'
+#' \dontrun{
 #' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
 #'
 #' # Read in Raven Reservoirs file, store into myres
@@ -51,6 +53,8 @@
 #' # Example for precipitation
 #' precip <- rvn_res_extract(subs="precip",res=myres)
 #'
+#' }
+#'
 #' @export rvn_res_extract
 rvn_res_extract <- function(subs=NA, res=NA, prd=NULL) {
 
@@ -60,6 +64,8 @@ rvn_res_extract <- function(subs=NA, res=NA, prd=NULL) {
   if (missing(res)) {
     stop("res is required for this function; please supply the full output file from res.read.")
   }
+
+  mysub <- NULL
 
   # extract random pair
   reservoirs <- res$res
@@ -112,28 +118,30 @@ rvn_res_extract <- function(subs=NA, res=NA, prd=NULL) {
     myinflow <- reservoirs[,ind.inflow]
   }
 
-  # determine the period to use
-  if (!(is.null(prd))) {
+  # # determine the period to use
+  # if (!(is.null(prd))) {
+  #
+  #   # period is supplied; check that it makes sense
+  #   firstsplit <- unlist(strsplit(prd,"/"))
+  #   if (length(firstsplit) != 2) {
+  #     stop("Check the format of supplied period argument prd; should be two dates separated by '/'.")
+  #   }
+  #   if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
+  #       || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
+  #     stop("Check the format of supplied period argument prd; two dates should be in YYYY-MM-DD format.")
+  #   }
+  #   # add conversion to date with xts format check ?
+  #
+  # } else {
+  #   # period is not supplied
+  #
+  #   # not using smart.period function and no period supplied; use whole range
+  #   N <- nrow(reservoirs)
+  #   prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(reservoirs[1,1]),month(reservoirs[1,1]),day(reservoirs[1,1]),
+  #                     year(reservoirs[N,1]),month(reservoirs[N,1]),day(reservoirs[N,1]) )
+  # }
 
-    # period is supplied; check that it makes sense
-    firstsplit <- unlist(strsplit(prd,"/"))
-    if (length(firstsplit) != 2) {
-      stop("Check the format of supplied period argument prd; should be two dates separated by '/'.")
-    }
-    if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
-        || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
-      stop("Check the format of supplied period argument prd; two dates should be in YYYY-MM-DD format.")
-    }
-    # add conversion to date with xts format check ?
-
-  } else {
-    # period is not supplied
-
-    # not using smart.period function and no period supplied; use whole range
-    N <- nrow(reservoirs)
-    prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(reservoirs[1,1]),month(reservoirs[1,1]),day(reservoirs[1,1]),
-                      year(reservoirs[N,1]),month(reservoirs[N,1]),day(reservoirs[N,1]) )
-  }
+  prd <- rvn_get_prd(mysim, prd)
 
   # return values
   return(list("sim" = mysim[prd,1], "obs" = myobs[prd,1],"inflow"=myinflow[prd,1]))

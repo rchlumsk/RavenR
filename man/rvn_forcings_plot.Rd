@@ -11,6 +11,9 @@ rvn_forcings_plot(forcings, prd = NULL)
 
 \item{prd}{(optional) time period over which the plots are generated}
 }
+\value{
+forcing_plots list of ggplot objects of individual forcing plots and the combined plot
+}
 \description{
 rvn_forcings_plot generates a set of 5 plots (precip,temperature,PET,radiation,
 and potential melt), which summarize the watershed-averaged forcings. Returns a list with the individual plots.
@@ -26,11 +29,13 @@ data("rvn_forcing_data")
 fdata <- rvn_forcing_data$forcings
 
 # plot forcings data
-rvn_forcings_plot(fdata)
+p1 <- rvn_forcings_plot(fdata)
+p1$Precipitation
+p1$AllForcings
 
-plot subset of forcing data for 2002-2003 water year
+# plot subset of forcing data for 2002-2003 water year
 prd = "2002-10-01/2003-09-30"
-rvn_forcings_plot(fdata,prd)
+rvn_forcings_plot(fdata,prd)$AllForcings
 
 }
 \seealso{

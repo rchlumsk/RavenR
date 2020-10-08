@@ -9,8 +9,8 @@ rvn_rvt_wsc(
   subIDs,
   prd = NULL,
   stnNames = NULL,
-  write_redirect = F,
-  flip_number = F
+  write_redirect = FALSE,
+  flip_number = FALSE
 )
 }
 \arguments{
@@ -32,13 +32,11 @@ separate .rvt file}
 \item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
-Note that this function may become superceeded by other rvt writing utiltiies.
-}
-\details{
 rvn_rvt_wsc converts Environment Canada historical streamgauge data,
 downloaded from the Water Survey Canada, into .rvt format files usable in
 Raven.
-
+}
+\details{
 This function takes a single WSC flow file and converts the flow data for
 each station in the file into .rvt formatted files for a Raven model. If
 multiple stations exist in the .csv file,
@@ -75,14 +73,11 @@ alphabeticized order is not dependent on the station name, and the observed
 files will be in one set.
 }
 \examples{
-# warning: example not run, sample example for associated files only
-\dontrun{
-ff <- 'Daily__May-12-2017_02_00_53PM.csv'
-rvn_wsc_rvt(ff,subIDs=c(3,11))
+system.file("extdata",'Daily__Oct-1-2020_08_20_52PM.csv', package="RavenR")
+rvn_rvt_wsc(ff,subIDs=c(6))
 
 # add custom station names, put subID number first in file
-rvn_rvt_wsc(ff,subIDs=c(3,11),stnNames<-c('Rob_Hill','Bob_River'),flip_number=T)
-}
+rvn_rvt_wsc(ff,subIDs=c(6),stnNames <- c('Grand River'),flip_number=TRUE)
 
 }
 \seealso{

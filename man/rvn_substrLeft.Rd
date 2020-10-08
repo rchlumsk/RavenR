@@ -11,7 +11,7 @@ rvn_substrLeft(x, n)
 \arguments{
 \item{x}{a string to manipulate}
 
-\item{n}{number of characters to use from the left side of the string}
+\item{n}{number of characters to remove from the left side of the string}
 }
 \description{
 substring from the Left
@@ -25,13 +25,9 @@ rvn_substrLeft("hello world",3)
 
 }
 \seealso{
-\code{\link{rvn_substrRight}} for using n characters from right side of
-string,
+\code{\link{rvn_substrRight}} for using n characters from right side of string
 
-\code{\link{rvn_substrMRight}} for removing n characters from the right side of
-a string,
-\code{\link{rvn_substrMLeft}} for removing n characters from the left side of a
-string
+\code{\link{rvn_substrMRight}} for removing n characters from the right side of a string
 }
 \keyword{left}
 \keyword{string}

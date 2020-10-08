@@ -4,20 +4,30 @@
 \alias{rvn_annual_peak}
 \title{Annual Peak Comparison}
 \usage{
-rvn_annual_peak(sim, obs, add_line = T, add_r2 = F, add_eqn = F, rplot = F)
+rvn_annual_peak(
+  sim,
+  obs,
+  mm = 9,
+  dd = 30,
+  add_line = TRUE,
+  add_r2 = FALSE,
+  add_eqn = FALSE
+)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
 
 \item{obs}{time series object of observed flows}
 
+\item{mm}{month of water year ending (default 9)}
+
+\item{dd}{day of water year ending (default 30)}
+
 \item{add_line}{optionally adds a 1:1 line to the plot for reference (default TRUE)}
 
 \item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
 
-\item{rplot}{boolean whether to print the plot (default FALSE)}
-
-\item{add_egn}{optionally adds the equation for a linear regression line through the origin (default FALSE)}
+\item{add_eqn}{optionally adds the equation for a linear regression line through the origin (default FALSE)}
 }
 \value{
 returns a list with peak data in a data frame, and a ggplot object
@@ -51,13 +61,13 @@ sim <- rvn_hydrograph_data$hyd$Sub36
 obs <- rvn_hydrograph_data$hyd$Sub36_obs
 
 # create a plot of annual peaks with default options
-peak1 <- rvn_annual_peak(sim, obs, add_line=T, add_r2=F)
+peak1 <- rvn_annual_peak(sim, obs)
 peak1$df_peak
 peak1$p1
 
-# plot with r2 and axes to zero; store results
-peak_df <- rvn_annual_peak(sim, obs, add_line=T,
-add_r2=T, rplot=T)
+# plot with r2 and regression equation
+peak_df <- rvn_annual_peak(sim, obs, add_r2=TRUE, add_eqn=TRUE)
+peak_df$p1
 
 }
 \seealso{

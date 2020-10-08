@@ -1,7 +1,9 @@
-#' Write Raven rvt file from Time Series
+#' @title Write Raven rvt file from Time Series
 #'
+#' @description
 #' rvn_rvt_write generates a Raven rvt file from a time series
 #'
+#' @details
 #' This function writes the rvt file for a given time series dataset. The function will write out
 #' the entirety of the columns provided in the given xts object. Please ensure that the
 #' parameters supplied in the params and units objects match the xts object supplied.
@@ -35,9 +37,13 @@
 #' rvn_rvt_write(flows,params = "HYDROGRAPH", units = "m3/s", ff = 'raven_rvt_write')
 #'
 #' @export rvn_rvt_write
+#' @importFrom stats start
+#' @importFrom xts is.xts
+#' @importFrom lubridate date
+#' @importFrom gdata write.fwf
 rvn_rvt_write <- function(ts, params, units, dates=NULL, prd=NULL,
-                          tt="00:00:00", dt=1.0, ff="raven_rvt_write.rvt") {
-
+                          tt="00:00:00", dt=1.0, ff="raven_rvt_write.rvt")
+{
   # Deal with dates
   if(!is.null(dates)) {
     min_date <- start(ts)
@@ -50,19 +56,21 @@ rvn_rvt_write <- function(ts, params, units, dates=NULL, prd=NULL,
     }
   }
 
-  # determine the period to use
-  if (!(is.null(prd))) {
+  # # determine the period to use
+  # if (!(is.null(prd))) {
+  #
+  #   # period is supplied; check that it makes sense
+  #   firstsplit <- unlist(strsplit(prd,"/"))
+  #   if (length(firstsplit) != 2) {
+  #     stop("Check the format of supplied period; should be two dates separated by '/'.")
+  #   }
+  #   if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
+  #       || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
+  #     stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
+  #   }
+  # }
 
-    # period is supplied; check that it makes sense
-    firstsplit <- unlist(strsplit(prd,"/"))
-    if (length(firstsplit) != 2) {
-      stop("Check the format of supplied period; should be two dates separated by '/'.")
-    }
-    if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
-        || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
-      stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
-    }
-  }
+  prd <- rvn_get_prd(ts,prd)
 
   # begin writing rvt file
   if (!(is.null(prd))) {
@@ -84,19 +92,18 @@ rvn_rvt_write <- function(ts, params, units, dates=NULL, prd=NULL,
   writeLines(units,fc)
   # write.fwf writes nicely-spaced tables, but perhaps this isn't desired in the
   # RVT file since it often isn't edited by hand (and the spaces take up more disk space!)
-  gdata::write.fwf(x = ts,
+  write.fwf(x = ts,
                    file = fc,
                    append = TRUE,
                    justify = 'right',
-                   colnames = F,
+                   colnames = FALSE,
                    sep = ', ',
-                   scientific = T)
+                   scientific = TRUE)
   #for (j in 1:nrow(ts)) {
   #  writeLines(sprintf(rep("%g ",ncol(ts)),ts[j,1:ncol(ts)]),fc)
   #}
-  write.RavenLabel('EndMultiData',fc)
+  rvn_write_Raven_label('EndMultiData',fc)
   close(fc)
 
   return("flag"=TRUE)
 }
-

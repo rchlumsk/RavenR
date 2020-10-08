@@ -41,7 +41,6 @@ sim2 <- rvn_hydrograph_data$hyd$Sub43
 # create spaghetti plot of simulated flows
 rvn_flow_spaghetti(sim)
 
-
 }
 \seealso{
 \code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow

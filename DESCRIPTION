@@ -14,39 +14,41 @@ Maintainer: Robert Chlumsky <rchlumsk@uwaterloo.ca>
 Description: Provides useful functions for pre- and post-processing Raven output.
 Note: Package is active development; please report errors and suggestions for development to rchlumsk@uwaterloo.ca.
 Depends:
-    R (>= 3.3.0),
-    gdata,
-    methods,
-    lubridate,
-    xts,
-    zoo,
-    dplyr,
-    sf,
-    rgdal,
-    ggplot2,
-    scales,
-    gdata
+    R (>= 4.0.0)
 Imports:
-    data.table,
+    colorspace,
+    cowplot,
+    deldir,
+    dplyr,
+    dygraphs,
+    gdata,
+    ggplot2,
+    grDevices,
+    graphics,
     igraph,
-    dygraphs
+    lubridate,
+    magrittr,
+    methods,
+    purrr,
+    reshape2,
+    rgdal,
+    rgeos,
+    scales,
+    sf,
+    sp,
+    stats,
+    utils,
+    xts,
+    zoo
 Suggests:
-    knitr,
-    rmarkdown,
-    roxygen2,
-    testthat,
-    formatR,
     devtools,
-    htmlwidgets,
     magick,
-    gifski,
-    magick,
-    gifski,
-    maptools,
-    rgdal
+    knitr,
+    weathercan,
+    tidyhydat
 URL: https://github.com/rchlumsk/RavenR
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: TRUE
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr

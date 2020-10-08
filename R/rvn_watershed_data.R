@@ -1,4 +1,4 @@
-#' Watershed Storage Data from Raven
+#' @title Watershed Storage Data from Raven
 #'
 #' A dataset formatted to the xts package, read in by the watershed.read function.
 #' The dataset contains the typical columns from the Raven outputted

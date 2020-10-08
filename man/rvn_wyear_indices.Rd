@@ -4,55 +4,50 @@
 \alias{rvn_wyear_indices}
 \title{Water Year Indices}
 \usage{
-rvn_wyear_indices(sim, mm = 10, dd = 1, force.ends = F)
+rvn_wyear_indices(x, mm = 9, dd = 30)
 }
 \arguments{
-\item{sim}{xts object or Date/POSITXtc series to obtain indices for}
+\item{x}{xts object or Date/POSITXtc series to obtain indices for}
 
-\item{mm}{month of water year (default 10)}
+\item{mm}{month of water year (default 9)}
 
-\item{dd}{day of water year (default 1)}
-
-\item{force.ends}{whether to include series endpoints (default F)}
+\item{dd}{day of water year (default 30)}
 }
 \value{
-\item{wyear.ind}{array of indices corresponding to start/end of
+\item{ep}{array of indices corresponding to start/end of
 water years}
 }
 \description{
 rvn_wyear_indices returns the indices of the provided time series for the
-start/end of the water year. The month/day of the water year defaults to October 1, but
-may be supplied as other values, for example as July 1 in the Australian water year.
-This functon is useful in supplying endpoints for water year evaluations.
+start/end of the water year. The month/day of the water year defaults to September 30 for
+an October 1 water year cycle. However, this may be supplied as other values,
+for example as June 30th for a July 1 water year (i.e. the Australian water year).
+This function is useful in supplying endpoints for water year evaluations.
 }
 \details{
-This function will return the indices for the specified date. Start and end indices representing partial
-periods are not supplied.
-
-The sim and obs should be of time series (xts) format.
+Note that this function is meant to emulate the \code{\link{endpoints}} function
+for a water year period. The first and last points are included in all supplied endpoints,
+which may introduce partial periods to the analysis.#'
 }
 \examples{
 
 # read in sample forcings data
 data(rvn_forcing_data)
 
-# get the indices of the start of the water year for October 1
+# get the indices of the water year for October 1 (the default)
 rvn_wyear_indices(rvn_forcing_data$forcings)
 rvn_wyear_indices(rvn_forcing_data$forcings) \%>\%
 rvn_forcing_data$forcings[., 1:2]
 
-# get the indices with endpoints
-rvn_wyear_indices(rvn_forcing_data$forcings,force.ends=T) \%>\%
-rvn_forcing_data$forcings[.,1:2]
-
 # get the indices of the start of the water year for July 1
-rvn_wyear_indices(rvn_forcing_data$forcings, mm=7) \%>\%
+## note that the last period is the last index, and not a complete water year period
+rvn_wyear_indices(rvn_forcing_data$forcings, mm=6, dd=30) \%>\%
 rvn_forcing_data$forcings[., 1:2]
 
 }
 \seealso{
-\code{\link{apply_wyearly}} to apply functions over the water year#'
-\code{\link{rvn_flow_scatterplot}} for creating flow scatterplots
+\code{\link{rvn_apply_wyearly}} to apply functions over the water year
+\code{\link{endpoints}} workhorse function for generating endpoints in xts for other periods
 
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 Craig's research page} for software downloads, including the

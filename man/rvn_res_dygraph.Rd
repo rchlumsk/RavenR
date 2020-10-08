@@ -2,7 +2,10 @@
 % Please edit documentation in R/rvn_res_dygraph.R
 \name{rvn_res_dygraph}
 \alias{rvn_res_dygraph}
-\title{Plot Raven reservoir/lake stage time series using dygraph}
+\title{Plot Raven reservoir/lake stage time series using dygraph
+
+rvn_res_dygraph plots modeled vs observed stage plots when supplied with reservoir stage data
+structure read using hyd.read()}
 \usage{
 rvn_res_dygraph(resdata, timezone = "UTC", basins = "", figheight = 400)
 }
@@ -21,6 +24,8 @@ a list of plot handles to dygraph plots
 See also \href{http://raven.uwaterloo.ca/}{Raven page}
 }
 \description{
+Plot Raven reservoir/lake stage time series using dygraph
+
 rvn_res_dygraph plots modeled vs observed stage plots when supplied with reservoir stage data
 structure read using hyd.read()
 }
@@ -30,9 +35,10 @@ ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
 resdata <- rvn_res_read(ff)
 
 # view contents for all subbasins as dyGraph
-res<-rvn_res_dygraph(resdata,basins="sub11")
-res[0]
-res[1]
+dyplots <- rvn_res_dygraph(resdata)
+dyplots[[1]]
+dyplots[[2]]
+
 
 }
 \keyword{Raven}

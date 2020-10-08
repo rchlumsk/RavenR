@@ -4,7 +4,7 @@
 \alias{rvn_exhaustive_mb_read}
 \title{Read in Raven Exhaustive Mass Balance file}
 \usage{
-rvn_exhaustive_mb_read(ff = NA, join_categories = T)
+rvn_exhaustive_mb_read(ff = NA, join_categories = TRUE)
 }
 \arguments{
 \item{ff}{full file path to the ExhaustiveMassBalance.csv file}
@@ -18,7 +18,7 @@ names} \item{units}{vector corresponding to units of each column}
 \item{categories}{vector corresponding to the storage category of each column}
 }
 \description{
-watershed.read is used to read in the ExhaustiveMassBalance.csv file produced by
+rvn_exhaustive_mb_read is used to read in the ExhaustiveMassBalance.csv file produced by
 the modelling Framework Raven.
 }
 \details{

@@ -2,7 +2,12 @@
 % Please edit documentation in R/rvn_netcdf_to_gridshp.R
 \name{rvn_netcdf_to_gridshp}
 \alias{rvn_netcdf_to_gridshp}
-\title{Generate grid overlay from netCDF file}
+\title{Generate grid overlay from netCDF file
+
+Takes the latitude-longitude cell coordinates from a netCDF file (assumed to be named 'lat' and 'long')
+generates an estimate of the grid polygons associated with each netCDF cell and exports this to a shapefile (outshp)
+
+Note that the function can fail due to bad netCDF file or inappropriate UTM zone;}
 \usage{
 rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
 }
@@ -17,14 +22,15 @@ rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
 \item{TRUE}{returns TRUE if executed properly. Also generates shapefile in folder}
 }
 \description{
+Generate grid overlay from netCDF file
+
 Takes the latitude-longitude cell coordinates from a netCDF file (assumed to be named 'lat' and 'long')
 generates an estimate of the grid polygons associated with each netCDF cell and exports this to a shapefile (outshp)
-}
-\details{
-not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UTM zone;
-uses ncdf.tools, sp, rgdal, deldir, and sna libraries
+
+Note that the function can fail due to bad netCDF file or inappropriate UTM zone;
 }
 \examples{
+
 \dontrun{
 ncfile <- system.file("extdata/GlenAllan.nc", package="RavenR")
 UTMzone <- 17

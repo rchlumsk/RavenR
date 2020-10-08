@@ -1,29 +1,37 @@
-#' Infill discontinuous time series with blank values
+#' @title Infill discontinuous time series with blank values
 #'
+#' @description
+#' Infills missing time series values.
+#'
+#' @details
 #' Takes xts dataset, finds minimum interval between time stamps and
 #' returns a new regular interval xts with same data content, but NA values inbetween known
 #' data values
 #'
-#' @param ts valid xts time series
+#' Only handles data with minimum time interval of 1 day; 1,2,3,4,6,8, or 12 hrs.
 #'
-#' @details only handles data with minimum time interval of 1 day; 1,2,3,4,6,8, or 12 hrs
+#' @param ts valid xts time series
 #'
 #' @return {ts}{continuous xts time series}
 #'
 #' @author James R. Craig, University of Waterloo
 #'
 #' @examples
-#'   dates <-seq(as.POSIXct("2012-05-01 00:00:00"), length=731, by="day")
-#'   mydata<-xts(rnorm(731),order.by=dates)
-#'   mydata<-mydata[wday(index(mydata))!=4] # remove wednesdays
-#'   out<-rvn_ts_infill(mydata)
+#' dates <-seq(as.POSIXct("2012-05-01 00:00:00"), length=731, by="day")
+#' mydata<-xts(rnorm(731),order.by=dates)
+#' mydata<-mydata[wday(index(mydata))!=4] # remove wednesdays
+#' out<-rvn_ts_infill(mydata)
 #'
 #' @keywords timeseries infill
 #'
-rvn_ts_infill<-function(ts)
+#' @export rvn_ts_infill
+#' @importFrom zoo index
+#' @importFrom xts xts
+rvn_ts_infill <- function(ts)
 {
+
   # find intervals
-  ints<-as.numeric(difftime(index(ts[2:length(mydata),]) ,index(ts[1:length(mydata)-1,]) , units = c("days")))
+  ints<-as.numeric(difftime(index(ts[2:length(ts),]), index(ts[1:length(ts)-1,]) , units = c("days")))
 
   min_interval<-min(ints)
   max_interval<-max(ints)
@@ -47,7 +55,7 @@ rvn_ts_infill<-function(ts)
     all.times <- xts(order.by=seq(dates[1], dates[length(ts)], by=byflag))
 
     # Merge - missing values are NA
-    out <- merge(all.times, ts, all=T)
+    out <- merge(all.times, ts, all=TRUE)
     return (out)
   }
   return (ts)

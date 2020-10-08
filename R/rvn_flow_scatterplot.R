@@ -17,9 +17,9 @@
 #'
 #' @param sim time series object of simulated flows
 #' @param obs time series object of observed flows
-#' @param add_line optionally adds a 1:1 line to the plot for reference
-#' (default TRUE)
+#' @param add_line optionally adds a 1:1 line to the plot for reference (default TRUE)
 #' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
+#' @param add_eqn optionally adds the equation for a linear regression line (default FALSE)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{rvn_forcings_read}} for reading in the ForcingFunctions
 #' file
@@ -36,16 +36,21 @@
 #' obs <- rvn_hydrograph_data$hyd$Sub36_ob
 #'
 #' # plot the flow scatterplot, produce an R2 metric
-#' rvn_flow_scatterplot(sim,obs,add_r2=T)
+#' rvn_flow_scatterplot(sim,obs,add_r2=TRUE)
+#'
+#' # plot again with a regression equation
+#' rvn_flow_scatterplot(sim,obs,add_r2=TRUE,add_eqn=TRUE)
 #'
 #' @export rvn_flow_scatterplot
-rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F, add_eqn = F) {
+#' @importFrom ggplot2 ggplot geom_point scale_x_continuous scale_y_continuous geom_abline geom_text
+rvn_flow_scatterplot <- function(sim,obs,add_line=TRUE,add_r2=FALSE, add_eqn = FALSE)
+{
   x.lab <- expression("Observed Flow ("*m^3*"/s)")
   y.lab <- expression("Simulated Flow ("*m^3*"/s)")
 
   plot.df <- fortify(cbind(sim,obs))
   colnames(plot.df) <- c("date","sim","obs")
-  max.flow <- max(obs, sim, na.rm = T)
+  max.flow <- max(obs, sim, na.rm = TRUE)
 
   p1 <- ggplot(plot.df)+
     geom_point(aes(x=obs,y=sim))+
@@ -59,8 +64,8 @@ rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F, add_eqn = F) {
   }
 
   if (add_r2) {
-    r2 <- 1 - (sum((obs - sim)^2, na.rm = T)/sum((obs - mean(obs,
-                                                             na.rm = T))^2, na.rm = T))
+    r2 <- 1 - (sum((obs - sim)^2, na.rm = TRUE)/sum((obs - mean(obs,
+                                                             na.rm = TRUE))^2, na.rm = TRUE))
     r2.label <- paste("R^2 == ", round(r2,2))
     p1 <- p1 +
       geom_text(x= max(obs, sim, na.rm = TRUE)*0.9,
@@ -71,9 +76,10 @@ rvn_flow_scatterplot <- function(sim,obs,add_line=T,add_r2=F, add_eqn = F) {
                 size = 3.5)
 
     if (add_eqn){
-      m <- lm(sim ~ 0 + obs)
-      coeff <- round(as.numeric(m$coefficients[1]), 3)
-      equation <- paste0( "y = ", coeff, "x")
+      m <- lm(sim ~  obs)
+      coeff <- round(as.numeric(m$coefficients), 3)
+      # equation <- paste0( "y = ", coeff[2], "x + ", coeff[1])
+      equation <- paste0( "y = ", coeff, "x ")
       p1 <- p1 +
         geom_text(x = max(obs, sim, na.rm = TRUE)*0.9,
                   y = max(obs, sim, na.rm = TRUE)*0.1,

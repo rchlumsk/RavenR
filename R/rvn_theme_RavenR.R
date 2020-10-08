@@ -1,7 +1,9 @@
-#' RavenR ggplot theme
+#' @title RavenR ggplot theme
 #'
+#' @description
 #' rvn_theme_RavenR makes the general Raven R Theme for all ggplots
 #'
+#' @details
 #' This function sets up the default theme for all ggplots generated using a
 #' built in Raven R function. Made by adjusting the built in theme_bw().
 #'
@@ -23,8 +25,11 @@
 #' @keywords RavenR theme ggplot plot figure aesthetics
 #'
 #' @export rvn_theme_RavenR
-rvn_theme_RavenR <- function(){
+#' @importFrom ggplot2 theme theme_bw element_rect element_blank
+rvn_theme_RavenR <- function()
+{
   theme_bw() +
     theme(panel.border = element_rect(color = "black"),
           legend.title = element_blank())
+    # theme(axis.title = element_text(face = 'bold'))
 }
