@@ -52,7 +52,7 @@ rvn_cum_plot_flow <- function(sim=NULL,obs=NULL,inflow=NULL) {
   cum.sim <- NULL ; cum.obs <- NULL ; cum.inflow <- NULL
 
   # get the indicies of water years
-  ep <- wyear.indices(sim)
+  ep <- rvn_wyear_indices(sim)
 
   cum.sim <- matrix(NA,nrow=nrow(sim))
   for (k in 1:(length(ep)-1)) {

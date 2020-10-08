@@ -25,6 +25,7 @@ Start a new RStudio session by opening RStudio. If you don't have RavenR yet ins
 # install.packages("devtools")
 library(devtools)
 devtools::install_github("rchlumsk/RavenR")
+# package igraph new version is having some issue, updating the package doesn't work. Use to install.packages("igraph", type = "binary") to install old version.
 ```
 
 Load the RavenR library from the console and view its contents with the following commands:
@@ -37,7 +38,7 @@ ls("package:RavenR") # view all functions in RavenR
 You can look at what any one of these functions does by typing out the name of the function beginning with a question mark, which will show the help information at the right of the RStudio environment.
 
 ```{r}
-?flow.scatterplot
+?rvn_flow_scatterplot
 ```
 
 ## Sample Data in RavenR
@@ -45,10 +46,13 @@ You can look at what any one of these functions does by typing out the name of t
 The RavenR package contains a number of sample data files, which are useful for training purposes and testing of functions. The package contains sample data both in R format (under RavenR/data) and as raw data files in their native formats (RavenR/inst/extdata). The sample data set from the RavenR package (in R format) can be loaded in using the data function (with either quotes or just the name of the data), e.g.,
 
 ```{r R Sample Data, message=FALSE, warning=FALSE, results='hide'}
-data(forcing.data)
-?forcing.data
-data("hydrograph.data")
-?hydrograph.data
+data("rvn_forcing_data")
+?rvn_forcing_data
+```
+
+```{r R Sample Data, message=FALSE, warning=FALSE, results='hide'}
+data("rvn_hydrograph_data")
+?rvn_hydrograph_data
 ```
 Notice as well that the sample data set in R format also has a built in help file to describe the data.
 
@@ -73,27 +77,27 @@ Start by finding the raw **run1_ForcingFunctions.csv** file with the **system.fi
 ```{r Forcings}
 ff <- system.file("extdata","run1_ForcingFunctions.csv",package="RavenR")
 # ff <- "mydirectory/ForcingFunctions.csv" # replace with your own file
-ff_data <- RavenR::forcings.read(ff)
+ff_data <- RavenR::rvn_forcings_read(ff)
 head(ff_data$forcings[,1:6])
 ```
 
-Now we can plot the forcing data using the forcings.plot function. This creates an output of the five main forcings from the data set.
+Now we can plot the forcing data using the rvn_forcings_plot function. This creates an output of the five main forcings from the data set.
 
-```{r, fig.height=10, fig.width=7}
-forcings.plot(ff_data$forcings)
-```
+#```{r, fig.height=10, fig.width=7}
+#rvn_forcings_plot(ff_data$forcings)
+#```
 
 This is typically a reasonable reality check on the model forcings. 
 
-We can similarly access the hydrograph fit. Here the hydrograph sample data is located with the usual **system.file** command, then read into R with the **hyd.read** function intended for reading Hydrographs file. The flows from a specific subbasin can be extracted using the hyd.extract function, which is done here for subbasin 36. The precipitation can be extracted similarly.
+We can similarly access the hydrograph fit. Here the hydrograph sample data is located with the usual **system.file** command, then read into R with the **rvn_hyd_read** function intended for reading Hydrographs file. The flows from a specific subbasin can be extracted using the hyd.extract function, which is done here for subbasin 36. The precipitation can be extracted similarly.
 
 ```{r Hydrograph, fig.height=5, fig.width=6}
 ff <- system.file("extdata","run1_Hydrographs.csv",package="RavenR")
 # ff <- "mydirectory/Hydrographs.csv" # replace with your own file
-hy <- hyd.read(ff)
+hy <- rvn_hyd_read(ff)
 head(hy$hyd)
-flow36 <- hyd.extract("Sub36",hy)
-precip <- hyd.extract("precip",hy)$sim
+flow36 <- rvn_hyd_extract("Sub36",hy)
+precip <- rvn_hyd_extract("precip",hy)$sim
 ```
 
 The hydrograph object flow3 now stores the simulated hydrograph (`flow36$sim`) and the observed hydrograph (`flow36$obs`), and the null subobject (`flow36$inflow`). The precip object stores the entire time series of watershed-averaged precip (`precip$sim`). We can plot the simulated and observed hydrograph with the simple commands:
@@ -105,22 +109,22 @@ lines(lubridate::date(flow36$obs),flow36$obs,col='black')
 
 Or using the special hydrograph plot function, which is part of the RavenR library. This function save some of the trouble of plotting the precipitation on the secondary axis.
 
-```{r, fig.height=5, fig.width=6}
-hyd.plot(sim=flow36$sim, obs=flow36$obs, precip=precip)
-```
+#```{r, fig.height=5, fig.width=6}
+#rvn_hyd_plot(sim=flow36$sim, obs=flow36$obs, precip=precip)
+#```
 
 There are some other helpful functions in RavenR for understanding our hydrographs.
 
 ```{r Spaghetti Plot, fig.height=5, fig.width=6}
-flow.spaghetti(flow36$sim)
-flowdurcurve.plot(flow36$sim)
+rvn_flow_spaghetti(flow36$sim)
+#rvn_flowdurcurve_plot(flow36$sim) # missing function
 ```
 
 We can also use some of the Raven plots to get some diagnostics and comparisons on the simulated and observed hydrographs.
 
 ```{r, fig.height=5, fig.width=6}
-cum.plot.flow(flow36$sim, obs=flow36$obs)
-annual.volume(flow36$sim, flow36$obs)
+#rvn_cum_plot_flow(flow36$sim, obs=flow36$obs) # wyear.indices in rvn_cum_plot_flow is not updated. Tried to update it but unsucessful.
+rvn_annual_volume(flow36$sim, flow36$obs)
 ```
 
 A helpful plot for understanding the volume bias on a monthly breakdown is the **monthly.vbias** function, which plots out the volume bias between the simulated and observed hydrographs by month.
@@ -198,7 +202,7 @@ cust.data <- custom.read(system.file("extdata","run1_SNOW_Daily_Average_BySubbas
                                      package="RavenR"))
 leg.title <- 'Legend \nSnowpack (mm)'
 colour1 <- "grey40"
-colour2 <- "white"
+colour2 <- "white"               
 num.classes <- 5
 plot.title <- 'Daily Average Snowpack (mm)'
 # Feel free to adjust the date range here, although many dates make this slow to run!
@@ -255,7 +259,7 @@ ls("package:RavenR")
 Using the ?help option (where help is the name of a RavenR command), figure out how to plot:
 
 1. a comparison of annual peak flows, and
-2. the mean and median annual observed flow using the barplot() function (hint: use the apply.wyearly function to calculate annual mean and median)
+2. the mean and median annual observed flow using the barplot() function (hint: use the rvn_apply_wyearly function to calculate annual mean and median)
   
 ## Building a model workflow script
 
