@@ -84,7 +84,7 @@ head(ff_data$forcings[,1:6])
 Now we can plot the forcing data using the rvn_forcings_plot function. This creates an output of the five main forcings from the data set.
 
 #```{r, fig.height=10, fig.width=7}
-#rvn_forcings_plot(ff_data$forcings)
+#rvn_forcings_plot(ff_data$forcings) #Error in theme_Raven() : could not find function "theme_Raven" 
 #```
 
 This is typically a reasonable reality check on the model forcings. 
@@ -117,13 +117,19 @@ There are some other helpful functions in RavenR for understanding our hydrograp
 
 ```{r Spaghetti Plot, fig.height=5, fig.width=6}
 rvn_flow_spaghetti(flow36$sim)
-#rvn_flowdurcurve_plot(flow36$sim) # missing function
+```
+
+```{r Flow Duration Curve Plot, fig.height=5, fig.width=6}
+rvn_fdc_plot(flow36$sim) 
 ```
 
 We can also use some of the Raven plots to get some diagnostics and comparisons on the simulated and observed hydrographs.
 
 ```{r, fig.height=5, fig.width=6}
-#rvn_cum_plot_flow(flow36$sim, obs=flow36$obs) # wyear.indices in rvn_cum_plot_flow is not updated. Tried to update it but unsucessful.
+rvn_cum_plot_flow(flow36$sim, obs=flow36$obs) 
+```
+
+```{r, fig.height=5, fig.width=6}
 rvn_annual_volume(flow36$sim, flow36$obs)
 ```
 
