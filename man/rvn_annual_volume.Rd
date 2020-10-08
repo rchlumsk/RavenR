@@ -4,33 +4,43 @@
 \alias{rvn_annual_volume}
 \title{Annual Volume Comparison}
 \usage{
-rvn_annual_volume(sim, obs, rplot = T, add_line = T, add_r2 = F)
+rvn_annual_volume(
+  sim,
+  obs,
+  mm = 9,
+  dd = 30,
+  add_line = TRUE,
+  add_r2 = FALSE,
+  add_eqn = FALSE
+)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
 
 \item{obs}{time series object of observed flows}
 
-\item{rplot}{boolean whether to generate plot (default TRUE)}
+\item{mm}{month of water year ending (default 9)}
 
-\item{add_line}{optionally adds a 1:1 line to the plot for reference
-(default TRUE)}
+\item{dd}{day of water year ending (default 30)}
+
+\item{add_line}{optionally adds a 1:1 line to the plot for reference (default TRUE)}
 
 \item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
 
-\item{axis_zero}{optionally sets the minimum volume on axes to zero (default
-FALSE)}
+\item{add_eqn}{optionally adds the equation for a linear regression line through the origin (default FALSE)}
 }
 \value{
-\item{df_volume}{data frame of the calculated annual volumes}
+returns a list with annual volume data in a data frame, and a ggplot object
+ \item{df_volume}{data frame of the calculated annual volumes}
+ \item{p1}{ggplot object with plotted annual volumes}
 }
 \description{
 rvn_annual_volume creates a plot of the annual observed and simulated volumes.
 }
 \details{
 This function creates a scatterplot of the annual observed and simulated
-volumes, calculated for each available water year of data (Oct 1st
-hardcoded) within the two series provided. The sim and obs should be of time
+volumes, calculated for each available water year of data within the two series provided.
+The sim and obs should be of time
 series (xts) format and are assumed to be of the same length and time
 period. Note that missing values in the observed series will impact the
 volume estimation, and it is recommended that the NA values are filled in
@@ -45,18 +55,20 @@ generation of plot titles.
 \examples{
 
 # load sample hydrograph data, two years worth of sim/obs
-data(hydrograph_data)
-sim <- hydrograph_data$hyd$Sub36
-obs <- hydrograph_data$hyd$Sub36_o
+data(rvn_hydrograph_data)
+sim <- rvn_hydrograph_data$hyd$Sub36
+obs <- rvn_hydrograph_data$hyd$Sub36_obs
 
 # create a plot of the annual volumes with defaults
 rvn_annual_volume(sim,obs)
 
-# create a plot of the annual volumes with r2 and axis set to zero
-rvn_annual_volume(sim,obs,add_r2=T,axis_zero=T)
+# create a plot of the annual volumes with r2
+rvn_annual_volume(sim,obs,add_r2=TRUE, add_eqn=TRUE)
 
-# store results of annual volumes
-volumes <- rvn_annual_volume(sim,obs,rplot=F)
+# calculate annual volumes for different water years (e.g. ending Oct 31)
+vv <- rvn_annual_volume(sim, obs, mm=10, dd=31)
+vv$df.volume
+vv$p1
 
 }
 \seealso{

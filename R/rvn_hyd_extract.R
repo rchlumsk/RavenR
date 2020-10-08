@@ -1,4 +1,4 @@
-#' Extract function for Raven Hydrograph object
+#' @title Extract function for Raven Hydrograph object
 #'
 #' rvn_hyd_extract is used for extracting data from the Raven hydrograph object.
 #' Works for objects from rvn_hyd_extract function (from the Hydrographs.csv file).
@@ -71,6 +71,8 @@ rvn_hyd_extract <- function(subs=NA, hyd=NA, prd=NULL) {
     stop("hyd is required for this function; please supply the full output file from hyd.read.")
   }
 
+  mysub <- NULL
+
   # extract random pair
   hydrographs <- hyd$hyd
   units <- hyd$units
@@ -109,27 +111,28 @@ rvn_hyd_extract <- function(subs=NA, hyd=NA, prd=NULL) {
   }
 
   # determine the period to use
-  if (!(is.null(prd))) {
-
-    # prd is supplied; check that it makes sense
-    firstsplit <- unlist(strsplit(prd,"/"))
-    if (length(firstsplit) != 2) {
-      stop("Check the format of supplied period argument prd; should be two dates separated by '/'.")
-    }
-    if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
-        || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
-      stop("Check the format of supplied period argument prd; two dates should be in YYYY-MM-DD format.")
-    }
-    # add conversion to date with xts format check ?
-
-  } else {
-    # period is not supplied
-
-    # not using smart.period function and no period supplied; use whole range
-    N <- nrow(hydrographs)
-    prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(hydrographs[1,1]),month(hydrographs[1,1]),day(hydrographs[1,1]),
-                      year(hydrographs[N,1]),month(hydrographs[N,1]),day(hydrographs[N,1]) )
-  }
+  # if (!(is.null(prd))) {
+  #
+  #   # prd is supplied; check that it makes sense
+  #   firstsplit <- unlist(strsplit(prd,"/"))
+  #   if (length(firstsplit) != 2) {
+  #     stop("Check the format of supplied period argument prd; should be two dates separated by '/'.")
+  #   }
+  #   if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
+  #       || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
+  #     stop("Check the format of supplied period argument prd; two dates should be in YYYY-MM-DD format.")
+  #   }
+  #   # add conversion to date with xts format check ?
+  #
+  # } else {
+  #   # period is not supplied
+  #
+  #   # not using smart.period function and no period supplied; use whole range
+  #   N <- nrow(hydrographs)
+  #   prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(hydrographs[1,1]),month(hydrographs[1,1]),day(hydrographs[1,1]),
+  #                     year(hydrographs[N,1]),month(hydrographs[N,1]),day(hydrographs[N,1]) )
+  # }
+  prd <- rvn_get_prd(mysim, prd)
 
   # return values
   return(list("sim" = mysim[prd,1], "obs" = myobs[prd,1],"resinflow"=myinflow[prd,1]))

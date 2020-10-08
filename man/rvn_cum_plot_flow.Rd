@@ -4,7 +4,7 @@
 \alias{rvn_cum_plot_flow}
 \title{Cumulative Plot of model flows}
 \usage{
-rvn_cum_plot_flow(sim = NULL, obs = NULL, inflow = NULL)
+rvn_cum_plot_flow(sim = NULL, obs = NULL, inflow = NULL, mm = 9, dd = 30)
 }
 \arguments{
 \item{sim}{time series object of simulated flows}
@@ -12,6 +12,10 @@ rvn_cum_plot_flow(sim = NULL, obs = NULL, inflow = NULL)
 \item{obs}{optionally supply an inflow series to plot as well}
 
 \item{inflow}{optionally supply an inflow series to plot as well}
+
+\item{mm}{month of water year ending (default 9)}
+
+\item{dd}{day of water year ending (default 30)}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}

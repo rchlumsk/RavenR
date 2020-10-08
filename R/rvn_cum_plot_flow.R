@@ -23,6 +23,8 @@
 #' @param sim time series object of simulated flows
 #' @param obs optionally supply an inflow series to plot as well
 #' @param inflow optionally supply an inflow series to plot as well
+#' @param mm month of water year ending (default 9)
+#' @param dd day of water year ending (default 30)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{rvn_flow_scatterplot}} for creating flow scatterplots
 #' @seealso \code{\link{rvn_cum_plot_flow}} for creating generic cumulative function plotting
@@ -46,13 +48,17 @@
 #' rvn_cum_plot_flow(sim[prd],obs[prd])
 #'
 #' @export rvn_cum_plot_flow
-rvn_cum_plot_flow <- function(sim=NULL,obs=NULL,inflow=NULL) {
+#' @importFrom ggplot2 fortify geom_line aes scale_y_continuous xlab ylab scale_colour_brewer
+rvn_cum_plot_flow <- function(sim=NULL,obs=NULL,inflow=NULL, mm=9, dd=30)
+{
 
   sec.per.day <- 86400
   cum.sim <- NULL ; cum.obs <- NULL ; cum.inflow <- NULL
 
+  variable <- cum <- NULL
+
   # get the indicies of water years
-  ep <- rvn_wyear_indices(sim)
+  ep <- rvn_wyear_indices(sim, mm=mm, dd=dd)
 
   cum.sim <- matrix(NA,nrow=nrow(sim))
   for (k in 1:(length(ep)-1)) {
@@ -76,7 +82,7 @@ rvn_cum_plot_flow <- function(sim=NULL,obs=NULL,inflow=NULL) {
     cum.inflow <- cum.inflow*sec.per.day
   }
 
-  max.vol <- max(cum.sim,cum.obs,cum.inflow,na.rm=T)*1.1
+  max.vol <- max(cum.sim,cum.obs,cum.inflow,na.rm=TRUE)*1.1
 
   df.plot <- data.frame(cbind(fortify(sim),cum.sim,"sim"))
   colnames(df.plot) <- c("date","value","cum","variable")
@@ -104,5 +110,4 @@ rvn_cum_plot_flow <- function(sim=NULL,obs=NULL,inflow=NULL) {
     rvn_theme_RavenR()
 
   return(cum_flow_plot)
-
 }

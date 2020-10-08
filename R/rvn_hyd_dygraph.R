@@ -19,11 +19,12 @@
 #' hy <- rvn_hydrograph_data
 #'
 #' # view contents for subbasin 36 as dyGraph
-#' res<-rvn_hyd_dygraph(hy,basins="Sub36")
-#' res
+#' dyplots <- rvn_hyd_dygraph(hy,basins="Sub36")
+#' dyplots
 #'
 #' # view contents for all basins in hydrograph data
 #' rvn_hyd_dygraph(hy)
+#'
 #'
 #'
 #' @export rvn_hyd_dygraph
@@ -45,6 +46,6 @@ rvn_hyd_dygraph <- function(hy, timezone="UTC",basins="", figheight=400) {
              dyRangeSelector())
   }
 
-  res <- purrr::map(basins, plotfunc) # calls plotfunc for each basin in list basins
-  return(res)
+  dyplots <- purrr::map(basins, plotfunc) # calls plotfunc for each basin in list basins
+  return(dyplots)
 }

@@ -4,7 +4,7 @@
 #' based on the water year.
 #'
 #' This function creates a scatterplot of the annual observed and simulated
-#' peaks, calculated for each available water year of data (Oct 1st hardcoded)
+#' peaks, calculated for each available water year of data
 #' within the two series provided; note that the difference between this and
 #' the annual.peak function is that here the peak event simulated for the same
 #' day as the peak event in observed data is used, instead of the largest
@@ -24,11 +24,12 @@
 #'
 #' @param sim time series object of simulated flows
 #' @param obs time series object of observed flows
-#' @param rplot boolean whether to generate plot (default TRUE)
+#' @param mm month of water year (default 9)
+#' @param dd day of water year (default 30)
 #' @param add_line optionally adds a 1:1 line to the plot for reference
 #' (default TRUE)
 #' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
-#' @param rplot boolean whether to print the plot (default FALSE)
+#' @param add_eqn optionally adds the equation for a linear regression line through the origin (default FALSE)
 #' @return returns a list with peak data in a data frame, and a ggplot object
 #'  \item{df_peak_event}{data frame of the calculated peak events}
 #'  \item{p1}{ggplot object with plotted annual peaks}
@@ -52,24 +53,24 @@
 #' peak1$p1
 #'
 #' # add the r2 regression line and plot directly
-#' rvn_annual_peak_event(sim, obs, add_r2=T, rplot=T)
+#' rvn_annual_peak_event(sim, obs, add_r2=TRUE)
 #'
 #'
 #' @keywords Raven annual peak event diagnostics
 #' @export rvn_annual_peak_event
-rvn_annual_peak_event <- function (sim, obs, add_line = T, add_r2 = F, rplot = F) {
-  max.obs <- rvn_apply_wyearly(obs, max, na.rm = T)[, 2]
-  max.dates <- as.Date(rvn_apply_wyearly(obs, function(x) toString(lubridate::date(rvn_which_max_xts(x))))[,
-                                                                                                   2])
-  ind <- matrix(NA, nrow = length(max.obs), ncol = 1)
-  for (k in 1:length(max.obs)) {
-    ind[k] <- which(year(obs) == year(max.dates[k]) & month(obs) ==
-                      month(max.dates[k]) & day(obs) == day(max.dates[k]))
-  }
-  max.sim <- as.numeric(sim[ind])
+#' @importFrom stats lm
+#' @importFrom lubridate year date
+#' @importFrom ggplot2 ggplot aes geom_point geom_abline geom_text scale_x_continuous scale_y_continuous
+rvn_annual_peak_event <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r2 = FALSE, add_eqn = FALSE)
+{
 
-  df <- data.frame(obs.dates = max.dates, sim.peak.event = max.sim,
-                   obs.peak.event = max.obs)
+  max.obs <- rvn_apply_wyearly_which_max_xts(obs, mm=mm, dd=dd)
+  max.dates <- lubridate::date(max.obs)
+  max.sim <- sim[max.dates]
+
+  df <- data.frame("obs.dates" = max.dates,
+                   "sim.peak.event" = as.numeric(max.sim),
+                   "obs.peak.event" = as.numeric(max.obs))
 
   if (add_r2) {
     max.obs.mean <- mean(max.obs)
@@ -88,6 +89,9 @@ rvn_annual_peak_event <- function (sim, obs, add_line = T, add_r2 = F, rplot = F
             max(max.obs, max.sim, na.rm = T) * 1.1)
 
   #text.labels <- year(max.dates)
+
+  # appease R CMD CHECK with ggplot2
+  sim.peak.event <- obs.peak.event <- obs.dates <- NULL
 
   p1 <- ggplot(data=df,aes(x=obs.peak.event,y=sim.peak.event))+
     geom_point()+
@@ -112,7 +116,17 @@ rvn_annual_peak_event <- function (sim, obs, add_line = T, add_r2 = F, rplot = F
                 size = 3.5)
   }
 
-  if (rplot) {plot(p1)}
+  if (add_eqn){
+    m <- lm(max.sim ~ 0 + max.obs)
+    coeff <- round(as.numeric(m$coefficients[1]), 3)
+    equation <- paste0( "y = ", coeff, "x")
+    p1 <- p1 +
+      geom_text(x = max(max.obs, max.sim),
+                y = min(max.sim, max.obs)*1.1,
+                vjust = 1,
+                label = equation,
+                size = 3.5)
+  }
 
   return(list(df_peak_event = df,p1=p1))
 }

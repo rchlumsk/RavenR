@@ -1,10 +1,14 @@
-#' Calculates Yearly Median, Upper and Lower Quantiles of Flow
+#' @title Calculates Yearly Median, Upper and Lower Quantiles of Flow
+#'
+#' @description
+#' Calculate the quantiles for each day of the year based on the supplied time series.
 #'
 #' @param hgdata Time series object of observed or simulated flows
-#' @param minyear Integer of minimum year (optional)
-#' @param maxyear Integer of maximum year (optional)
+#' @param prd time period for subset in character format "YYYY-MM-DD/YYYY-MM-DD"
 #' @param Qlower Decimal percentage of lower quantile value (default 0.1)
-#' @param Qupper Decimal percentage of upper quantile value (default 0.9)#'
+#' @param Qupper Decimal percentage of upper quantile value (default 0.9)
+#' @param water_year booolean on whether to sort quantiles by water year start date (default TRUE)
+#' @param mm month of water year ending (default 9)
 #' @return \item{qdat}{Time series object of monthly median and quantile values}
 #'
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
@@ -16,7 +20,7 @@
 #' hyd_data
 #'
 #' # Pull out a specific hydrograph
-#' hgdata <- rvn_hydrograph_data$hyd$Sub36
+#' hgdata <- hyd_data$sim
 #'
 #' # Calculate quantiles
 #' qdat <- rvn_annual_quantiles(hgdata)
@@ -24,29 +28,42 @@
 #'
 #' @keywords quantile hydrograph flow statistics diagnostic
 #' @export rvn_annual_quantiles
-rvn_annual_quantiles <- function(hgdata, minyear=NULL, maxyear=NULL,
-                           Qlower=0.1, Qupper=0.9, water_year=T) {
+#' @importFrom stats end aggregate quantile
+#' @importFrom lubridate month day year date years
+#' @importFrom xts xts
+rvn_annual_quantiles <- function(hgdata, prd=NULL,
+                           Qlower=0.1, Qupper=0.9,
+                           water_year=TRUE, mm=9)
+{
 
   #-- Assuming hgdata is a daily xts object
   # TODO: Add support for other frequencies
 
+  # RC TO DO:
+  # - update subsetting to use the prd argument, replace min year/ max year
+  # update to have water year just be a sorting? make the sorting flexible to mm/dd arguments
+
   #-- Handle if no min/max passed
-  if (is.null(minyear)) { minyear <- year(start(hgdata))}
-  if (is.null(maxyear)) { maxyear <- year(end(hgdata))}
+  # if (is.null(minyear)) { minyear <- year(start(hgdata))}
+  # if (is.null(maxyear)) { maxyear <- year(end(hgdata))}
 
   #-- Subset by date
-  hgdata <- hgdata[paste0(toString(minyear),"/",toString(maxyear))]
+  prd <- rvn_get_prd(hgdata, prd)
+  hgdata <- hgdata[prd]
+
+  maxyear <- year(end(hgdata))
 
   #-- Aggregate to Quantiles by Day
   # (Uses maxyear as placeholder for year)
   monthday <- as.Date(paste0(toString(maxyear), "-", month(hgdata), "-", day(hgdata)))
   if (water_year) {
     # Year is arbitrary, so subtract a year post-Oct to create water years
-    #SAG comment: is this right? shouldn't you be adding a year post October?
-    monthday[month(monthday) > 9] = monthday[month(monthday) > 9] - years(1)
+    # RC to do - do this calculation based on yday to get support for month and day parameters in water year
+    ## would support June 15th water year, for example
+    monthday[month(monthday) > mm] = monthday[month(monthday) > mm] - years(1)
   }
   qdat <- xts(aggregate(hgdata, by=monthday, quantile,
-                        probs=c(Qlower, .5, Qupper), na.rm=T))
+                        probs=c(Qlower, .5, Qupper), na.rm=TRUE))
 
   return(qdat)
 }

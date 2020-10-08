@@ -10,8 +10,8 @@ rvn_rvt_ECmet(
   stnName = NULL,
   forcing_set = 1,
   prefix = "met_",
-  write_redirect = F,
-  write_stndata = F,
+  write_redirect = FALSE,
+  write_stndata = FALSE,
   rd_file = "met_redirects.rvt",
   stndata_file = "met_stndata.rvt"
 )
@@ -40,12 +40,10 @@ separate .rvt file}
 \item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
-Note - this function is designated to use data from the weathercan package
-}
-\details{
 rvn_rvt_ECmet converts Environment Canada historical meteorological data for a
 given station into the .rvt format usable in Raven.
-
+}
+\details{
 The function prints in the :MultiData format; the particular set of forcings to
 print can be set with the forcing_set command. The data should be downloaded
 with missing days included. The download website is linked below.
@@ -85,22 +83,26 @@ that this works for iterations of this function.
 perform.qc is currently under construction and is not yet available; setting
 to TRUE will result in an warning.
 
-The function has several built-in data quality checks. These include: -
-checking that all supplied files are for the same climate station - ensuring
-the timestep (data resolution) is the same in each file - automatically
+The function has several built-in data quality checks. These include:
+- checking that all supplied files are for the same climate station
+- ensuring
+the timestep (data resolution) is the same in each file
+- automatically
 combining time series and ensuring there are no gaps in the data supplied
-(i.e. time gaps, not missing values) - check for missing data and issuing a
+(i.e. time gaps, not missing values)
+- check for missing data and issuing a
 warning that post-processing will be required
 
-### FUNCTION IS CURRENTLY IN BETA MODE AND UNDERGOING TESTING + UPDATES ###
+Note: Data quality is not assessed in this package, such as consistency between
+minimum and maximum temperatures. Subdaily data is not currenty supported.
 
-Current limitations of the function: - quality control is not implemented;
-does not check for common errors in data, does not infill missing values
-(required for running in Raven, thus pre-processing of files is likely
-required) - only handles daily data (subdaily or monthly not yet handled)
+Note: this function is designated to use data from the weathercan package. The
+weathercan package is external to RavenR and is not an explicit dependent package
+of RavenR.
 }
 \examples{
 # Download data using weathercan weather_dl
+library(weathercan)
 kam <- weather_dl(station_ids = 51423,
                   start = "2016-10-01", end = "2019-09-30", interval="day")
 
@@ -110,7 +112,11 @@ rvn_rvt_ECmet(metdata = kam, forcing_set = 1)
 
 # set without prefix, station data and redirect files created
 # forcing_set 2 includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
-rvn_rvt_ECmet(metdata = kam, forcing_set = 2, prefix = NULL, write_stndata = T, write_redirect = T)
+rvn_rvt_ECmet(metdata = kam, forcing_set = 2,
+  prefix = NULL, write_stndata = TRUE, write_redirect = TRUE)
+
+# cleanup demo files
+unlink("met_KAMLOOPS_A.rvt.rvt")
 
 }
 \seealso{

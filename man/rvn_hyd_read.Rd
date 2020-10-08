@@ -48,7 +48,6 @@ myhyd <- rvn_hyd_read(ff)
 head(myhyd$hyd)
 myhyd$units
 
-
 }
 \seealso{
 \code{\link{rvn_hyd_extract}} for extraction tools related to the

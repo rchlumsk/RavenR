@@ -1,8 +1,10 @@
-#' Read in Raven Exhaustive Mass Balance file
+#' @title Read in Raven Exhaustive Mass Balance file
 #'
-#' watershed.read is used to read in the ExhaustiveMassBalance.csv file produced by
+#' @description
+#' rvn_exhaustive_mb_read is used to read in the ExhaustiveMassBalance.csv file produced by
 #' the modelling Framework Raven.
 #'
+#' @details
 #' This function expects a full file path to the ExhaustiveMassBalance.csv file,
 #' then reads in the file using read.csv. The main advantage of this functon is
 #' renaming the columns to nicer names and extracting the units into something
@@ -38,14 +40,15 @@
 #' plot(embd$exhaustive_mb$SURFACE_WATER.Infiltration,
 #'      main="Cumulative Surface Water Infiltration")
 #' @export rvn_exhaustive_mb_read
-rvn_exhaustive_mb_read <- function(ff=NA,join_categories=T) {
+#' @importFrom xts xts
+rvn_exhaustive_mb_read <- function(ff=NA,join_categories=TRUE) {
 
   if (missing(ff)) {
     stop("Requires the full file path to the ExhaustiveMassBalance.csv file")
   }
 
   # test reading and get format, number of columns
-  emb <- read.csv(ff,header=F,nrows=5,stringsAsFactors = F)
+  emb <- read.csv(ff,header=FALSE,nrows=5,stringsAsFactors = FALSE)
   classes <- c(c('numeric','character','character'),rep('numeric',ncol(emb)-3))
   categories <- as.character(emb[1,4:ncol(emb)])
   ss1 <- categories[1]
@@ -58,7 +61,7 @@ rvn_exhaustive_mb_read <- function(ff=NA,join_categories=T) {
   }
 
   # re-read with specified colClasses
-  emb <- read.csv(ff,header=T,skip=1,colClasses = classes,na.strings=c("---",'NA','1.#INF'))
+  emb <- read.csv(ff,header=TRUE,skip=1,colClasses = classes,na.strings=c("---",'NA','1.#INF'))
 
   # careful in date-time formats; excel can screw it up if csv is saved over. This works for
   # un untouched Raven output file

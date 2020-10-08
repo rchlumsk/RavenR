@@ -4,16 +4,16 @@
 \alias{rvn_custom_read}
 \title{Read Raven Custom Output files}
 \usage{
-rvn_custom_read(ff = NA, no.runname = F)
+rvn_custom_read(ff = NA, no_runname = FALSE)
 }
 \arguments{
 \item{ff}{full file path to the custom output file}
 
-\item{no.runname}{boolean for whether a runName is supplied, important for
+\item{no_runname}{boolean for whether a runName is supplied, important for
 parsing the filename}
 }
 \value{
-\item{custom.out}{data frame with the custom output data stored as xts
+\item{custom_out}{data frame with the custom output data stored as xts
 object}
 }
 \description{

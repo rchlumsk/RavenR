@@ -4,7 +4,12 @@
 \alias{rvn_rvt_obsweights}
 \title{Create Raven observation data weight (rvt) file}
 \usage{
-rvn_rvt_obsweights(filename, wts, SBID, typestr = "HYDROGRAPH")
+rvn_rvt_obsweights(
+  filename = "_obsweights.rvt",
+  wts,
+  SBID = 1,
+  typestr = "HYDROGRAPH"
+)
 }
 \arguments{
 \item{filename}{observation data file to be created, with .rvt extension}
@@ -17,11 +22,14 @@ rvn_rvt_obsweights(filename, wts, SBID, typestr = "HYDROGRAPH")
 or a state variable name (e.g., SOIL[0] or SNOW)}
 }
 \value{
-{TRUE}{returns TRUE if function runs properly}
+TRUE returns TRUE if function runs properly
 }
 \description{
-Creates an observation data weights file named filename from a continuous (gap-free) xts time series ts
-with values between 0 and 1
+Writes observation weights generated from \code{\link{rvn_gen_obsweights}} to
+a Raven rvt format.
+}
+\details{
+Any NA values in the weights are converted to the flag -1.2345, used in Raven as NA values.
 }
 \examples{
  # locate hydrograph sample csv data from RavenR package
@@ -35,14 +43,20 @@ with values between 0 and 1
  rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36, typestr = "HYDROGRAPH")
 
  # weight March-October flows:
- wts <- rvn_gen_obsweights(flows,criterion = "BETWEEN_CYCLIC", startdate="2000-03-01", enddate="2003-11-01")
+ wts <- rvn_gen_obsweights(flows,criterion = "BETWEEN_CYCLIC",
+   startdate="2000-03-01", enddate="2003-11-01")
 
  # and only after March 2003:
- wts2 <- rvn_gen_obsweights(flows,criterion = "AFTER", startdate="2003-03-01")
+ wts2 <- rvn_gen_obsweights(flows,criterion = "AFTER",
+   startdate="2003-03-01")
  wts2 <- wts2*wts # product merges weights
 
  # write observation weights to rvt file
- rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2, 36, typestr="HYDROGRAPH")
+ rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2,
+   36, typestr="HYDROGRAPH")
+
+ # cleanup example files
+ unlink(x=c("run1_Hydrographs.rvt","run1_Hydrographs_wts.rvt"))
 
 }
 \seealso{

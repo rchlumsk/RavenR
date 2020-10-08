@@ -8,11 +8,11 @@ rvn_subbasin_map(
   shpfilename,
   subIDcol,
   plot_date,
-  cust_data,
+  cust_data = NULL,
   normalize_data = FALSE,
   invalid_stop = TRUE,
   basins_label = "subID",
-  plot_invalid = F
+  plot_invalid = FALSE
 )
 }
 \arguments{
@@ -33,7 +33,7 @@ rvn_subbasin_map(
 \item{plot_invalid}{boolean indicating whether to plot invalid basins in grey (currently disabled)}
 }
 \value{
-\item{TRUE}{return TRUE if the function is executed properly}
+\item{p1}{ggplot object of subbasin map}
 }
 \description{
 Plots Raven custom output into a subbasin map
@@ -43,22 +43,21 @@ Does not currently support discrete data such as land use. Ability to include in
 }
 \examples{
 
-# Raw sample data
+# Raw shapefile sample data
 shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR")
 
 # Custom Output data from Raven for Nith basin
 cust_file <- system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv",
                          package="RavenR")
-cust_data <- custom.read(cust_file)
+cust_data <- rvn_custom_read(cust_file)
 
 subIDcol <- 'subID'        # attribute in shapefile with subbasin IDs
 plot_date <- "2003-03-30"  # date for which to plot custom data
 
-# function call
-rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data, normalize=T)
+# Generate plot object
+p1 <- rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data, normalize=TRUE)
+p1
 
-p1 <- rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data)
-p1 + scale_fill_continuous(name="Daily Precip (mm/d)")
 
 }
 \seealso{

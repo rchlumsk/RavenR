@@ -1,5 +1,6 @@
-#' Read Raven .rvi (watershed discretization) file
+#' @title Read Raven .rvi (watershed discretization) file
 #'
+#' @description
 #' This routine reads in a valid Raven main input (.rvi) file and returns the
 #' information about hydrological processes as a data table.
 #'
@@ -13,24 +14,26 @@
 #'
 #' @author James R. Craig, University of Waterloo
 #'
-#' @note does not like tabs in the .rvi file - it should be untabified first.
+#' @details does not like tabs in the .rvi file - it should be untabified first.
 #' The .rvi file can have arbitrary contents outside of the :HydrologicProcesses-
 #' :EndHydrologicProcesses block and :SubBasins-:EndSubBasins command blocks.
 #'
-#' @details does not like comma-delimited tables with a trailing comma
+#' does not like comma-delimited tables with a trailing comma
 #'
 #' @seealso  rvi.connections
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
-#'   # sample workflow of rvn_rvi_read
-#'   system.file("extdata","Nith.rvi", package="RavenR") %>%
-#'   rvn_rvi_read(.) -> rvi
+#' # sample workflow of rvn_rvi_read
+#' rvi <- system.file("extdata","Nith.rvi", package="RavenR") %>%
+#' rvn_rvi_read(.)
 #'
-#'   # get number of Hydrologic processes
-#'   numProcss <- nrow(rvi$HydProcTable)
+#' # get number of Hydrologic processes
+#' nrow(rvi$HydProcTable)
+#'
 #' @keywords Raven  rvi  Hydrologic Processes read
 #' @export rvn_rvi_read
+#' @importFrom utils read.table
 rvn_rvi_read<-function(filename)
 {
   stopifnot(file.exists(filename))

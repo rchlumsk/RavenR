@@ -46,10 +46,12 @@
 #' rvn_flow_residuals(sim, obs, ma_smooth=10)
 #'
 #' # turn off the smoothing and winter shading
-#' rvn_flow_residuals(sim,obs,ma_smooth = 0, winter_shading = F)
+#' rvn_flow_residuals(sim,obs,ma_smooth = 0, winter_shading = FALSE)
 #'
 #' @export rvn_flow_residuals
-rvn_flow_residuals <- function(sim,obs,ma_smooth=3,add.line=T,winter_shading=T) {
+#' @importFrom zoo rollapply
+#' @importFrom ggplot2 fortify ggplot geom_line ylab geom_hline geom_rect aes
+rvn_flow_residuals <- function(sim,obs,ma_smooth=3,add.line=TRUE,winter_shading=TRUE) {
 
   if ( ma_smooth < 0) {
     stop("Requires a non-negative integer for ma_smooth ")
@@ -61,6 +63,8 @@ rvn_flow_residuals <- function(sim,obs,ma_smooth=3,add.line=T,winter_shading=T) 
     resids <- rollapply(sim-obs,ma_smooth,mean,fill=NA)
   }
 
+  y.end <- y.start <- Date <- Resid <- NULL
+
   df.plot <- fortify(resids)
   colnames(df.plot) <- c("Date","Resid")
   df.plot$Date <- as.Date(df.plot$Date)
@@ -68,7 +72,7 @@ rvn_flow_residuals <- function(sim,obs,ma_smooth=3,add.line=T,winter_shading=T) 
   p1 <- ggplot(df.plot)+
     geom_line(aes(x=Date,y=Resid))+
     ylab("Smoothed Residual")+
-    theme_RavenR()
+    rvn_theme_RavenR()
 
   if (add.line){
     p1 <- p1 +
@@ -76,8 +80,6 @@ rvn_flow_residuals <- function(sim,obs,ma_smooth=3,add.line=T,winter_shading=T) 
   }
 
   if (winter_shading){
-
-
     winter.start <- as.Date(df.plot$Date[month(df.plot$Date) == 12 & day(df.plot$Date) == 1])
     winter.end <- as.Date(df.plot$Date[month(df.plot$Date) == 3 & day(df.plot$Date) == 31])
 
@@ -89,8 +91,6 @@ rvn_flow_residuals <- function(sim,obs,ma_smooth=3,add.line=T,winter_shading=T) 
 
     p1 <- p1 +
       geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey",alpha=0.3)
-
-
   }
 
   resids <- list(resids = resids, plot = p1)

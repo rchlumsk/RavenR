@@ -1,4 +1,4 @@
-#' Read Raven .rvh (watershed discretization) file
+#' @title Read Raven .rvh (watershed discretization) file
 #'
 #' This routine reads in a valid Raven watershed discretization (.rvh) file and returns the
 #' information about HRUs and Subbasins as data tables. It also returns a subbasin igraph
@@ -61,10 +61,13 @@
 #'
 #' @keywords Raven  rvh  HRUs  SubBasins
 #' @export rvn_rvh_read
+#' @importFrom igraph graph_from_data_frame ego ego_size V
+#' @importFrom utils read.table
 rvn_rvh_read<-function(filename)
 {
   stopifnot(file.exists(filename))
 
+  downID <- NULL
 
   # read subbasins table--------------------------------
   lineno<-grep(":SubBasins", readLines(filename), value = FALSE)
@@ -79,7 +82,9 @@ rvn_rvh_read<-function(filename)
   }
   cnames<-c("SBID","Name","Downstream_ID","Profile","ReachLength","Gauged")
   #print(paste0("read sbs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
-  SubBasinTab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,header=FALSE,blank.lines.skip=TRUE, strip.white=TRUE,stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
+  SubBasinTab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,
+                          col.names=cnames,header=FALSE,blank.lines.skip=TRUE, strip.white=TRUE,
+                          stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
   SubBasinTab$Name<-trimws(SubBasinTab$Name)
   #print('done reading sbs')
   #untabify
@@ -99,7 +104,8 @@ rvn_rvh_read<-function(filename)
   cnames<-c("ID","Area","Elevation","Latitude","Longitude","SBID","LandUse","Vegetation","SoilProfile","Terrain","Aquifer","Slope","Aspect")
 
   #print(paste0("read HRUs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
-  HRUtab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,header=FALSE,blank.lines.skip=TRUE,strip.white=TRUE,stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
+  HRUtab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,
+                     header=FALSE,blank.lines.skip=TRUE,strip.white=TRUE,stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
   #print('done reading HRUs')
   #untabify
   #HRUtab <- as.data.frame(sapply(HRUtab, function(x) gsub("\t", "", x)))
@@ -169,9 +175,9 @@ rvn_rvh_read<-function(filename)
   links<-subset.data.frame(links,downID>=0) # get rid of -1
 
   #create network graph structure
-  net <-igraph::graph_from_data_frame(d=links, vertices=out, directed=T)
-  egon<-igraph::ego(net,order=100,nodes=igraph::V(net),mode="in")
-  size<-igraph::ego_size(net,order=100,nodes=igraph::V(net),mode="in")
+  net <- graph_from_data_frame(d=links, vertices=out, directed=TRUE)
+  egon <- ego(net,order=100, nodes=V(net),mode="in")
+  size<- ego_size(net,order=100, nodes=V(net),mode="in")
   count=1
   for (i in 1:nrow(out)){
     SBID=out$SBID[i]

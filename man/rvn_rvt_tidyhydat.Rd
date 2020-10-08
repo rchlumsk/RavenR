@@ -9,24 +9,21 @@ rvn_rvt_tidyhydat(
   subIDs,
   prd = NULL,
   stnNames = NULL,
-  write_redirect = F,
-  flip_number = F,
+  write_redirect = FALSE,
+  flip_number = FALSE,
   rd_file = "flow_stn_redirect_text.rvt"
 )
 }
 \arguments{
-\item{indata}{tibble of WSC flow data from tidyhydat's hy_daily_flows()
-function}
+\item{indata}{tibble of WSC flow data from tidyhydat's hy_daily_flows() function}
 
 \item{subIDs}{vector of subbasin IDs to correspond to the stations in indata}
 
 \item{prd}{(optional) data period to use in .rvt file}
 
-\item{stnNames}{(optional) character vector of alternative station names to
-use}
+\item{stnNames}{(optional) character vector of alternative station names to use}
 
-\item{write_redirect}{(optional) write the :RedirectToFile commands in a
-separate .rvt file}
+\item{write_redirect}{(optional) write the :RedirectToFile commands in a separate .rvt file}
 
 \item{flip_number}{(optional) put the subID first in the .rvt filename}
 
@@ -77,12 +74,14 @@ library(tidyhydat)
 stations <- c("05CB004","05CA002")
 
 # Gather station data/info using tidyhydat functions
-data <- tidyhydat::hy_daily_flows(station_number = stations, start_date = "1996-01-01", end_date = "2000-01-01")
+hd <- tidyhydat::hy_daily_flows(station_number = stations,
+  start_date = "1996-01-01", end_date = "2000-01-01")
 
 station_info <- hy_stations(stations)
 
 # Create RVT files
-rvn_rvt_tidyhydat(data, subIDs=c(3,11), stnNames=station_info$STATION_NAME, flip_number=T)
+rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
+  stnNames=station_info$STATION_NAME, flip_number=TRUE)
 
 }
 \keyword{Raven}

@@ -2,11 +2,7 @@
 % Please edit documentation in R/rvn_utilities.R
 \name{cmax}
 \alias{cmax}
-\title{cmax
-
-cmax standards for column maximum. It applies the base::max function over
-columns, which is advantageous for calculating the max within a column
-rather than the max of the whole data frame.}
+\title{cmax}
 \usage{
 cmax(x, na.rm = FALSE)
 }
@@ -19,15 +15,21 @@ cmax(x, na.rm = FALSE)
 x with the max value in each column determined
 }
 \description{
-cmax
-
-cmax standards for column maximum. It applies the base::max function over
+cmax standards for column maximum, applies the max function across columns.
+}
+\details{
+It applies the base::max function over
 columns, which is advantageous for calculating the max within a column
 rather than the max of the whole data frame.
+
+This function was included for usage with the apply.<period> and rvn_apply_wyearly
+function, as the base::max function does not work properly across columns.
 }
 \examples{
 data(rvn_hydrograph_data)
-rvn_which_max_xts(rvn_hydrograph_data$hyd$Sub43_obs)
+cmax(rvn_hydrograph_data$hyd$Sub43_obs, na.rm=TRUE)
+
+rvn_apply_wyearly(rvn_hydrograph_data$hyd, cmax, na.rm=TRUE)
 
 }
 \seealso{
@@ -39,6 +41,5 @@ See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 Craig's research page} for software downloads, including the
 \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{columns}
 \keyword{max}
-\keyword{which}
-\keyword{xts}

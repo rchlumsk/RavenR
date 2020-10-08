@@ -6,29 +6,31 @@
 \usage{
 rvn_annual_quantiles(
   hgdata,
-  minyear = NULL,
-  maxyear = NULL,
+  prd = NULL,
   Qlower = 0.1,
   Qupper = 0.9,
-  water_year = T
+  water_year = TRUE,
+  mm = 9
 )
 }
 \arguments{
 \item{hgdata}{Time series object of observed or simulated flows}
 
-\item{minyear}{Integer of minimum year (optional)}
-
-\item{maxyear}{Integer of maximum year (optional)}
+\item{prd}{time period for subset in character format "YYYY-MM-DD/YYYY-MM-DD"}
 
 \item{Qlower}{Decimal percentage of lower quantile value (default 0.1)}
 
-\item{Qupper}{Decimal percentage of upper quantile value (default 0.9)#'}
+\item{Qupper}{Decimal percentage of upper quantile value (default 0.9)}
+
+\item{water_year}{booolean on whether to sort quantiles by water year start date (default TRUE)}
+
+\item{mm}{month of water year ending (default 9)}
 }
 \value{
 \item{qdat}{Time series object of monthly median and quantile values}
 }
 \description{
-Calculates Yearly Median, Upper and Lower Quantiles of Flow
+Calculate the quantiles for each day of the year based on the supplied time series.
 }
 \examples{
 system.file("extdata","run1_Hydrographs.csv", package="RavenR") \%>\%
@@ -37,7 +39,7 @@ rvn_hyd_extract(subs="Sub36",.) ->
 hyd_data
 
 # Pull out a specific hydrograph
-hgdata <- rvn_hydrograph_data$hyd$Sub36
+hgdata <- hyd_data$sim
 
 # Calculate quantiles
 qdat <- rvn_annual_quantiles(hgdata)

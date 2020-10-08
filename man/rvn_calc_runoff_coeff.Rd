@@ -6,7 +6,6 @@
 \usage{
 rvn_calc_runoff_coeff(
   rvhfile,
-  outdir,
   custfile = "PRECIP_Daily_Average_BySubbasin.csv",
   hydfile = "Hydrographs.csv",
   correct = FALSE
@@ -15,16 +14,14 @@ rvn_calc_runoff_coeff(
 \arguments{
 \item{rvhfile}{rvh filename (absolute or relative to working directory, with .rvh extension)}
 
-\item{outdir}{output directory containing PRECIP_Daily_Average_BySubbasin.csv (absolute or relative to working directory, with ending slash)}
+\item{custfile}{file path to Raven-generated custom output precip-by-subbasin file}
 
-\item{custfile}{(optional) file name (no directory) for Raven-generated custom output precip-by-subbasin file}
-
-\item{hydfile}{(optional) file name (no directory) for Raven-generated hydrographs file}
+\item{hydfile}{file path to Raven-generated hydrographs file}
 
 \item{correct}{(optional) if TRUE, tries to correct runoff coefficient for missing data (assumes missing~0 flow)}
 }
 \value{
-data frame with runoff coefficients of gauged basins
+{data frame with runoff coefficients of gauged basins}
 }
 \description{
 Reads model.rvh file and daily avg subbasin precip file (usually PRECIP_Daily_Average_BySubbasin.csv)
@@ -32,27 +29,21 @@ and generates data frame describing runoff coefficients of gauged basins and obs
 Uses precipitation from entire model run history.
 Only determines runoff coefficient from available data - prone to overestimation with poor observation coverage.
 }
-\details{
-requires igraph library
-}
 \examples{
-\dontrun{
- out <- rvn_calc_runoff_coeff("example.rvh","C:/TEMP/ouput/")
+ myrvh <- system.file("extdata","Nith.rvh", package="RavenR")
+ mycust <- system.file("extdata", "run1_PRECIP_Daily_Average_BySubbasin.csv", package="RavenR")
+ myhyd <- system.file("extdata", "run1_Hydrographs.csv", package="RavenR")
 
-# # Example usage:
-# runcoefs <- rvn_calc_runoff_coeff("reddeer.rvh","output/",correct=TRUE)
+ rcs <- rvn_calc_runoff_coeff(myrvh, mycust, myhyd, correct=TRUE)
+ rcs
 
-# # simple plot:
-#  plot(runcoefs$runoff_coeff_sim,col="red",ylim=c(0,1))
-#  points(runcoefs$runoff_coeff_obs,col="black")
-#
-# # bar plot:
-# runcoefs <- subset(runcoefs,select=c(runoff_coeff_sim,runoff_coeff_obs))
-# par(mar=c(15,5,5,5))
-# bp <- barplot(t(as.matrix(runcoefs)), main="Runoff Coefficient Comparison (w/ rough data coverage correction)", ylab = "Runoff coeff", ylim=c(0,1),beside=TRUE, col=c("blue","deepskyblue"),legend.text=c("sim","obs"),las=2)
-# ## Add text at top of bars
-# text(x = bp, y = c(rbind(runcoefs$runoff_coeff_sim,runcoefs$runoff_coeff_obs)), label = round(c(rbind(obs_cover*100,obs_cover*NA)),0), pos = 3, cex = 0.8, col = "red")
-}
+ # create a bar plot
+ runcoefs <- subset(rcs,select=c(runoff_coeff_sim,runoff_coeff_obs))
+
+ bp <- barplot(t(as.matrix(runcoefs)),
+  main="Runoff Coefficient Comparison (w/ rough data coverage correction)",
+  ylab = "Runoff coeff", ylim=c(0,3),beside=TRUE,
+  col=c("blue","deepskyblue"),legend.text=c("sim","obs"),las=2)
 
 }
 \seealso{

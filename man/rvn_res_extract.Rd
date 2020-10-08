@@ -46,6 +46,8 @@ the format "YYYY-MM-DD/YYYY-MM-DD", for example, "2006-10-01/2010-10-01". If
 no period is supplied, the entire time series will be used.
 }
 \examples{
+
+\dontrun{
 ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
 
 # Read in Raven Reservoirs file, store into myres
@@ -56,6 +58,8 @@ stage36 <- rvn_res_extract(subs="sub36",res=myres,prd="2002-10-01/2003-10-01")
 
 # Example for precipitation
 precip <- rvn_res_extract(subs="precip",res=myres)
+
+}
 
 }
 \seealso{
