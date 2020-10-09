@@ -16,11 +16,11 @@
 #'
 #' @details
 #' for criterion ='BEFORE', all timestamps prior to the enddate have a
-#' weight of 1, 0 otherwise
+#' weight of 1, 0 otherwise \cr
 #' for criterion ='AFTER', all timestamps after the startdate have a
-#' weight of 1, 0 otherwise
+#' weight of 1, 0 otherwise \cr
 #' for criterion ='BETWEEN', all timestamps after the startdate and before
-#' the enddate have a weight of 1, 0 otherwise
+#' the enddate have a weight of 1, 0 otherwise \cr
 #' for criterion ='BETWEEN_CYCLIC', all julian days after the startdate and before
 #' the enddate have a weight of 1, 0 otherwise; if startdate is more than enddate,
 #' then the opposite is true, e.g, for startdate="2002-11-01" and enddate "2002-01-31",
@@ -57,6 +57,9 @@
 #'
 #'  # write observation weights to rvt file
 #'  rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2, 36, typestr="HYDROGRAPH")
+#'
+#'  # cleanup example files
+#'  unlink(x=c("run1_Hydrographs.rvt","run1_Hydrographs_wts.rvt"))
 #'
 #' @keywords Raven observations weights generate
 #'

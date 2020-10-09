@@ -1,5 +1,6 @@
 #' @title Read Raven .rvh (watershed discretization) file
 #'
+#' @description
 #' This routine reads in a valid Raven watershed discretization (.rvh) file and returns the
 #' information about HRUs and Subbasins as data tables. It also returns a subbasin igraph
 #' network object which describes stream network connectivity and adds additional HRU-derived

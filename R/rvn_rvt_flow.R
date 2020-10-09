@@ -41,7 +41,6 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven rvt flow file
 #' @examples
-#'
 #' # load sample hydrograph data, two years worth of sim/obs
 #' data(rvn_hydrograph_data)
 #' obs <- rvn_hydrograph_data$hyd$Sub36_obs
