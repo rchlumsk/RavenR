@@ -1,4 +1,4 @@
-#' @title Plot Reservoir Stage
+#' Plot Reservoir Stage
 #'
 #' rvn_res_plot creates a reservoir stage plot for the supplied flow series, or
 #' equivalently a stage plot for reservoir stages.
@@ -38,7 +38,7 @@
 #' @keywords Raven stage reservoir
 #' @examples
 #' # create a nice reservoir stage plot
-#' rvn_res_plot(sim,obs,zero_axis=FALSE)
+#' rvn_res_plot(sim,obs,zero_axis=F)
 #'
 #' # create a reservoir stage plot with precip as well
 #' rvn_res_plot(sim,obs,precip=precip)
@@ -48,11 +48,9 @@
 #' rvn_res_plot(sim,obs,precip=precip,prd=prd)
 #'
 #' @export rvn_res_plot
-#' @importFrom ggplot2 fortify ggplot geom_line scale_x_date xlab ylab theme aes scale_colour_brewer geom_bar
-#' @importFrom cowplot plot_grid
 rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
-              winter_shading=TRUE)
-{
+              winter_shading=T) {
+  require(cowplot)
   # select series to use as base in time determination
   if (!(is.null(sim))) {
     base <- sim
@@ -64,9 +62,31 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     stop("Must supply at least one Stage series to plot.")
   }
 
-  Date <- Stage <- ID <- y.start <- y.end <- NULL
+  # determine period ----
+  # determine the period to use
+  if (!(is.null(prd))) {
 
-  prd <- rvn_get_prd(sim,prd)
+    # period is supplied; check that it makes sense
+    firstsplit <- unlist(strsplit(prd,"/"))
+    if (length(firstsplit) != 2) {
+      stop("Check the format of supplied period; should be two dates separated by '/'.")
+    }
+    if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
+        || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
+      stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
+    }
+    # add conversion to date with xts format check ?
+
+  } else {
+    # period is not supplied
+
+    # define entire range as period
+    N <- nrow(base)
+    prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(base[1,1]),month(base[1,1]),day(base[1,1]),
+                   year(base[N,1]),month(base[N,1]),day(base[N,1]) )
+  }
+
+  ##### ------
 
   #Set X axis Limits based on period
   x.min <- as.Date(unlist(strsplit(prd,"/"))[1])
@@ -102,7 +122,7 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     scale_x_date(limits = c(x.min,x.max))+
     xlab("Date")+
     ylab("Stage (m)")+
-    rvn_theme_RavenR()+
+    theme_RavenR()+
     theme(legend.position = "bottom") +
     scale_colour_brewer(type = "qual", palette = 3)
 
@@ -119,8 +139,8 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     shade$y.end <- Inf
 
     p1 <- p1 +
-      geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),
-                color="grey50",alpha=0.1, linetype=0)
+      geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey50",alpha=0.1, linetype=0)
+
   }
 
   #Add precipitation
@@ -135,13 +155,17 @@ rvn_res_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     p2 <- ggplot()+
       geom_bar(data=df.precip.plot, aes(x=Date,y=precip), stat="identity", color = "blue")+
       scale_x_date(limits = c(x.min,x.max))+
+      theme_bw()+
       ylab("Precip (mm)")+
-      xlab("")+
-      rvn_theme_RavenR()
+      xlab("")
 
-    p1 <- plot_grid(p2,p1,nrow=2)
+
+    p1 <- cowplot::plot_grid(p2,p1,nrow=2)
+
   }
 
+  #Plot and return
+  plot(p1)
   return(p1)
 }
 

@@ -1,4 +1,4 @@
-#' @title Plot Raven reservoir/lake stage time series using dygraph
+#' Plot Raven reservoir/lake stage time series using dygraph
 #'
 #' rvn_res_dygraph plots modeled vs observed stage plots when supplied with reservoir stage data
 #' structure read using hyd.read()
@@ -18,29 +18,30 @@
 #' resdata <- rvn_res_read(ff)
 #'
 #' # view contents for all subbasins as dyGraph
-#' dyplots <- rvn_res_dygraph(resdata)
-#' dyplots[[1]]
-#' dyplots[[2]]
-#'
+#' res<-rvn_res_dygraph(resdata,basins="sub11")
+#' res[0]
+#' res[1]
 #'
 #' @export rvn_res_dygraph
-#' @importFrom purrr map
-#' @importFrom dygraphs dygraph dyRangeSelector
 rvn_res_dygraph <- function(resdata, timezone="UTC",basins="", figheight=400)
 {
   if (basins==""){ # plots all reservoirs
     basins<-sub('_obs', "", colnames(resdata$res)) #replace _obs
     basins<-unique(basins) #gets rid of repeats with
-    basins<-basins[-grep("precip",basins)] # no precip ts
+    basins<-basins[-1] # no precip ts
   }
 
   plotfunc <- function(basin){
-    stagets <- rvn_res_extract(subs = basin, res = resdata)
+    stagets <- res.extract(subs = basin, res = resdata)
     stage <- merge(stagets$sim, stagets$obs) #not inflow
-    # print (basin)
-    return(dygraph(stage, group = 'stages', main = basin, height=figheight) %>%
-             dyRangeSelector())
+    print (basin)
+    return(
+      dygraph(stage, group = 'stages', main = basin, height=figheight) %>%
+             dyRangeSelector()
+    )
   }
-  dyplots <- purrr::map(basins, plotfunc) # calls plotfunc for each basin in list basins
-  return(dyplots)
+  res <- map(basins, plotfunc) # calls plotfunc for each basin in list basins
+  return(res)
 }
+
+

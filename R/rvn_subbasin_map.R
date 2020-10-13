@@ -1,6 +1,5 @@
-#' @title Plot Continuous Data Using Subbasin Shapefile
+#' Plot Continuous Data Using Subbasin Shapefile
 #'
-#' @description
 #' Plots Raven custom output into a subbasin map
 #'
 #' @param shpfilename filename of shapefile containing HRU polygons, with one column inidicating Raven HRU ID
@@ -18,10 +17,11 @@
 #' @author Robert Chlumsky
 #' @author Genevieve Brown
 #'
-#' @return \item{p1}{ggplot object of subbasin map}
+#' @return \item{TRUE}{return TRUE if the function is executed properly}
 #'
+#' @importFrom sf read_sf st_centroid st_coordinates
 #'
-#' @seealso \code{\link{rvn_subbasin_network_plot}} to create network plots
+#' @seealso \code{\link{subbasinNetwork.plot}} to create network plots
 #'
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
@@ -30,32 +30,28 @@
 #' @keywords subbasin map plot
 #' @examples
 #'
-#' # Raw shapefile sample data
+#' # Raw sample data
 #' shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR")
 #'
 #' # Custom Output data from Raven for Nith basin
 #' cust_file <- system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv",
 #'                          package="RavenR")
-#' cust_data <- rvn_custom_read(cust_file)
+#' cust_data <- custom.read(cust_file)
 #'
 #' subIDcol <- 'subID'        # attribute in shapefile with subbasin IDs
 #' plot_date <- "2003-03-30"  # date for which to plot custom data
 #'
-#' # Generate plot object
-#' p1 <- rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data, normalize=TRUE)
-#' p1
+#' # function call
+#' rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data, normalize=T)
 #'
+#' p1 <- rvn_subbasin_map(shpfilename,subIDcol,plot_date,cust_data)
+#' p1 + scale_fill_continuous(name="Daily Precip (mm/d)")
 #'
 #' @export rvn_subbasin_map
-#' @importFrom sf read_sf st_centroid st_coordinates
-#' @importFrom ggplot2 ggplot aes geom_sf theme geom_text
-rvn_subbasin_map <- function(shpfilename, subIDcol, plot_date, cust_data=NULL, normalize_data=FALSE,
-                       invalid_stop=TRUE, basins_label='subID', plot_invalid=FALSE)
-{
+rvn_subbasin_map <- function(shpfilename, subIDcol, plot_date, cust_data, normalize_data=FALSE,
+                       invalid_stop=TRUE, basins_label='subID', plot_invalid=F) {
 
-  X <- Y <- Value <- text <- NULL
-
-  basinshp <- read_sf(shpfilename)
+  basinshp <- sf::read_sf(shpfilename)
 
   if ( !(subIDcol %in% colnames(basinshp)) ) {
     stop(sprintf("Provided argument subIDcol value '%s' must be a column attribute in shapefile.",subIDcol))
@@ -66,11 +62,6 @@ rvn_subbasin_map <- function(shpfilename, subIDcol, plot_date, cust_data=NULL, n
   if (is.null(shp.subs)){
     print("Invalid Subbasin ID column identifier")
   }
-
-  if (is.null(cust_data)) {
-    stop("cust_data must be provided")
-  }
-
   data.subs <- as.numeric(colnames(cust_data))
 
   # check if any invalid data columns in data
@@ -118,7 +109,7 @@ rvn_subbasin_map <- function(shpfilename, subIDcol, plot_date, cust_data=NULL, n
   #create plot
   p1 <- ggplot()+
     geom_sf(data=validbasins, aes(fill=Value))+
-    rvn_theme_RavenR()+
+    theme_bw()+
     theme(panel.grid = element_blank(),
           axis.ticks = element_blank(),
           axis.text = element_blank())
