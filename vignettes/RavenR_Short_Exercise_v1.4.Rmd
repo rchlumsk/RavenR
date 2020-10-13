@@ -115,9 +115,9 @@ Or using the special hydrograph plot function, which is part of the RavenR libra
 
 There are some other helpful functions in RavenR for understanding our hydrographs.
 
-```{r Spaghetti Plot, fig.height=5, fig.width=6}
-rvn_flow_spaghetti(flow36$sim)
-```
+#```{r Spaghetti Plot, fig.height=5, fig.width=6}
+#rvn_flow_spaghetti(flow36$sim)    # Dataframe Error
+#```
 
 ```{r Flow Duration Curve Plot, fig.height=5, fig.width=6}
 rvn_fdc_plot(flow36$sim) 
@@ -130,18 +130,18 @@ rvn_cum_plot_flow(flow36$sim, obs=flow36$obs)
 ```
 
 ```{r, fig.height=5, fig.width=6}
-rvn_annual_volume(flow36$sim, flow36$obs)
+rvn_annual_volume(flow36$sim, flow36$obs) #Plotting function works. Missing data point labels
 ```
 
-A helpful plot for understanding the volume bias on a monthly breakdown is the **monthly.vbias** function, which plots out the volume bias between the simulated and observed hydrographs by month.
+A helpful plot for understanding the volume bias on a monthly breakdown is the **rvn_monthly_vbias** function, which plots out the volume bias between the simulated and observed hydrographs by month.
 
 ```{r Monthly Volume Bias, fig.height=5, fig.width=6}
-monthly.vbias(flow36$sim, obs=flow36$obs)
+rvn_monthly_vbias(flow36$sim, obs=flow36$obs)
 ```
 
 A fun new addition to the RavenR package is the addition of dygraphs, which produces a dynamic hydrograph plot with a slider on the time scale. This is particularly helpful for viewing subsections of a hydrograph dyanmically, and comparing the simulated and observed hydrographs in an interactive environment.
 ```{r Dygraphs, fig.height=5, fig.width=6}
-hyd.dyGraphs(hy, basins="Sub36")
+rvn_hyd_dygraph(hy, basins="Sub36")
 ```
 
 ## Spatial Plotting
@@ -150,36 +150,36 @@ The RavenR package also has some functionality for spatial plots. This section w
 
 Begin by loading in the appropriate sample data files, and locating them on the local machine. This includes a custom output of daily average precipitation by subbasin for the Nith subbasin.
 
-```{r Subbasin Map Plot, fig.height=5, fig.width=6}
-# Raw sample data
-shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR")
+#```{r Subbasin Map Plot, fig.height=5, fig.width=6}
+## Raw sample data
+#shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR")
 
-# Custom Output data from Raven for Nith basin
-cust.data <- custom.read(system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv",
-                                     package="RavenR"))
+## Custom Output data from Raven for Nith basin
+#cust.data <- rvn_custom_read(system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv",
+#                                     package="RavenR"))
 
-subIDcol <- 'subID' # attriute in shapefile with subbasin IDs
-plot.date <- "2003-03-30" # date for which to plot custom data
+#subIDcol <- 'subID' # attriute in shapefile with subbasin IDs
+#rvn_plot_date <- "2003-03-30" # date for which to plot custom data
 
 # function call
-SBMap.plot(shpfilename,subIDcol,plot.date,cust.data)
-```
+#rvn_subbasin_map(shpfilename,subIDcol,plot.date,cust.data) #object 'plot.date' not found
+#```
 
 This produces a basic static map of the Nith subbasins provided in the sample file, with the precipitation data from the Custom Output data provided at the date specified. Neat! We can add a few more features from here to cutomize our plot if we wish, 
 such as changing  the legend title to match the custom output data, the number of class breaks, the plot title, and the colour scheme.
 
-```{r, fig.height=5, fig.width=6}
-leg.title <- 'Legend \nPrecip. (mm)'
-colour1 <- "white"
-colour2 <- "cyan"
-num.classes <- 8
-plot.title <- 'Daily Average Precipitation (mm/d)'
+#```{r, fig.height=5, fig.width=6}
+#leg.title <- 'Legend \nPrecip. (mm)'
+#colour1 <- "white"
+#colour2 <- "cyan"
+#num.classes <- 8
+#plot.title <- 'Daily Average Precipitation (mm/d)'
 
 # create an updated plot
-SBMap.plot(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title, 
-           colour1 = colour1, colour2=colour2,
-           leg.title = leg.title, num.classes=num.classes)
-```
+#SBMap.plot(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title, 
+#           colour1 = colour1, colour2=colour2,
+#           leg.title = leg.title, num.classes=num.classes) # I am not sure what to update to for SBMap.plot.
+#```
 
 This function can accept any custom output data as the input data for a given subbasin shapefile, provided that the numbering 
 of the custom data and the labels on the subbasin IDs in the shapefile correspond. Try to use the sample external data for snowpack in this plot as well! Use the 'run1_SNOW_Daily_Average_BySubbasin.csv' file and change the colours to grey40 and white for snowpack. Use March 1st, 2003 as the date and 5 classes in the legend. Normalize the results, and check your plot against the one provided.
