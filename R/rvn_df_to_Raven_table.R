@@ -3,6 +3,8 @@
 #' @param attributes array of strings containing attribute/parameter names
 #' @param units array of strings with the corresponding units
 #' @param df Dataframe of values corresponding to attributes/parameters
+#' @param id_col True/False of whether an numeric id column is the first column in the table
+#' and, in common Raven fashion, does not have a corresponding attribute (default: True)
 #' @param parameters bool, when adding attribues/parameter tag, should ':Parameters' be used instead of ':Attributes'?
 #'
 #' @return outdf data.frame object
@@ -20,7 +22,7 @@
 #' print(soil_classes)
 #'
 #' @export rvn_df_to_Raven_table
-rvn_df_to_Raven_table <- function(attributes, units, df, parameters=FALSE)
+rvn_df_to_Raven_table <- function(attributes, units, df, id_col=TRUE, parameters=FALSE)
 {
 
   # Get new column names
@@ -50,6 +52,18 @@ rvn_df_to_Raven_table <- function(attributes, units, df, parameters=FALSE)
     units <-  c("  :Units     ", units)
   }else{
     units[1] <- "  :Units     "
+  }
+
+  # Correction for no ID col (doesn't add an extra comma)
+  if (!id_col) {
+    attributes <- c(paste(attributes[1], attributes[2], sep=', '),
+                    attributes[3:length(attributes)])
+    #-- spacing gets messed up if attribute[2] is longer than units[2]
+    #   ...opposite could be true but is not currently corrected
+    coldiff <- max(0, nchar(attributes[2]) - nchar(units[2]))
+    unit2_spaced <- paste0(rep(' ',coldiff), units[2])
+    units <- c(paste(units[1], unit2_spaced, sep=', '),
+               units[3:length(units)])
   }
 
   # Break if we're not going to have the right number of things

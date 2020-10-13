@@ -1,7 +1,7 @@
 #' Read in Raven WatershedStorage file
 #'
 #' rvn_watershed_read is used to read in the WatershedStorage.csv file produced by
-#' the modelling Framework Raven.
+#' Raven.
 #'
 #' This function expects a full file path to the WatershedStorage.csv file,
 #' then reads in the file using read.csv. The main advantage of this functon is
