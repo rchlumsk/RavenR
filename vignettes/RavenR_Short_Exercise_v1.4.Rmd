@@ -24,8 +24,7 @@ Start a new RStudio session by opening RStudio. If you don't have RavenR yet ins
 ```{r Installation of RavenR, eval=FALSE}
 # install.packages("devtools")
 library(devtools)
-devtools::install_github("rchlumsk/RavenR")
-# package igraph new version is having some issue, updating the package doesn't work. Use to install.packages("igraph", type = "binary") to install old version.
+devtools::install_github("rchlumsk/RavenR") # package igraph new version is having some issue, updating the package doesn't work. Use to install.packages("igraph", type = "binary") to install older version.
 ```
 
 Load the RavenR library from the console and view its contents with the following commands:
@@ -83,9 +82,9 @@ head(ff_data$forcings[,1:6])
 
 Now we can plot the forcing data using the rvn_forcings_plot function. This creates an output of the five main forcings from the data set.
 
-#```{r, fig.height=10, fig.width=7}
-#rvn_forcings_plot(ff_data$forcings) #Error in theme_Raven() : could not find function "theme_Raven" 
-#```
+```{r, fig.height=10, fig.width=7}
+rvn_forcings_plot(ff_data$forcings)
+```
 
 This is typically a reasonable reality check on the model forcings. 
 
@@ -109,15 +108,15 @@ lines(lubridate::date(flow36$obs),flow36$obs,col='black')
 
 Or using the special hydrograph plot function, which is part of the RavenR library. This function save some of the trouble of plotting the precipitation on the secondary axis.
 
-#```{r, fig.height=5, fig.width=6}
-#rvn_hyd_plot(sim=flow36$sim, obs=flow36$obs, precip=precip)
-#```
+```{r, fig.height=5, fig.width=6}
+rvn_hyd_plot(sim=flow36$sim, obs=flow36$obs, precip=precip)
+```
 
 There are some other helpful functions in RavenR for understanding our hydrographs.
 
-#```{r Spaghetti Plot, fig.height=5, fig.width=6}
-#rvn_flow_spaghetti(flow36$sim)    # Dataframe Error
-#```
+```{r Spaghetti Plot, fig.height=5, fig.width=6}
+rvn_flow_spaghetti(flow36$sim) # ERROR
+```
 
 ```{r Flow Duration Curve Plot, fig.height=5, fig.width=6}
 rvn_fdc_plot(flow36$sim) 
@@ -150,36 +149,36 @@ The RavenR package also has some functionality for spatial plots. This section w
 
 Begin by loading in the appropriate sample data files, and locating them on the local machine. This includes a custom output of daily average precipitation by subbasin for the Nith subbasin.
 
-#```{r Subbasin Map Plot, fig.height=5, fig.width=6}
-## Raw sample data
-#shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR")
+```{r Subbasin Map Plot, fig.height=5, fig.width=6}
+# Raw sample data
+shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR")
 
-## Custom Output data from Raven for Nith basin
-#cust.data <- rvn_custom_read(system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv",
-#                                     package="RavenR"))
+# Custom Output data from Raven for Nith basin
+cust.data <- rvn_custom_read(system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv",
+                                     package="RavenR"))
 
-#subIDcol <- 'subID' # attriute in shapefile with subbasin IDs
-#rvn_plot_date <- "2003-03-30" # date for which to plot custom data
+subIDcol <- 'subID' # attriute in shapefile with subbasin IDs
+plot.date <- "2003-03-30" # date for which to plot custom data
 
 # function call
-#rvn_subbasin_map(shpfilename,subIDcol,plot.date,cust.data) #object 'plot.date' not found
-#```
+rvn_subbasin_map(shpfilename,subIDcol,plot.date,cust.data)
+```
 
 This produces a basic static map of the Nith subbasins provided in the sample file, with the precipitation data from the Custom Output data provided at the date specified. Neat! We can add a few more features from here to cutomize our plot if we wish, 
 such as changing  the legend title to match the custom output data, the number of class breaks, the plot title, and the colour scheme.
 
-#```{r, fig.height=5, fig.width=6}
-#leg.title <- 'Legend \nPrecip. (mm)'
-#colour1 <- "white"
-#colour2 <- "cyan"
-#num.classes <- 8
-#plot.title <- 'Daily Average Precipitation (mm/d)'
+```{r, fig.height=5, fig.width=6}
+leg.title <- 'Legend \nPrecip. (mm)'
+colour1 <- "white"
+colour2 <- "cyan"
+num.classes <- 8
+plot.title <- 'Daily Average Precipitation (mm/d)'
 
 # create an updated plot
-#SBMap.plot(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title, 
-#           colour1 = colour1, colour2=colour2,
-#           leg.title = leg.title, num.classes=num.classes) # I am not sure what to update to for SBMap.plot.
-#```
+rvn_subbasin_map(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title, 
+           colour1 = colour1, colour2=colour2,
+           leg.title = leg.title, num.classes=num.classes)   # ERROR
+```
 
 This function can accept any custom output data as the input data for a given subbasin shapefile, provided that the numbering 
 of the custom data and the labels on the subbasin IDs in the shapefile correspond. Try to use the sample external data for snowpack in this plot as well! Use the 'run1_SNOW_Daily_Average_BySubbasin.csv' file and change the colours to grey40 and white for snowpack. Use March 1st, 2003 as the date and 5 classes in the legend. Normalize the results, and check your plot against the one provided.
@@ -195,63 +194,63 @@ plot.title <- 'Daily Average Snowpack (mm)'
 plot.date <- "2003-03-01" # date for which to plot custom data
 
 # create an updated plot
-SBMap.plot(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title, colour1 = colour1, colour2=colour2,
-           leg.title = leg.title, normalize=T, num.classes=num.classes)
+rvn_subbasin_map(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title, colour1 = colour1, colour2=colour2,
+           leg.title = leg.title, normalize=T, num.classes=num.classes) # ERROR
 
 ```
 
-We can also use the animated version of this function, built on the **magick** package, to produce a gif of results. This is likely
-much more useful than a static plot provided for a single date. Follow the example below to create an animated .gif file from the snowpack data.
+#We can also use the animated version of this function, built on the **magick** package, to produce a gif of results. This is likely
+#much more useful than a static plot provided for a single date. Follow the example below to create an animated .gif file from the snowpack data.
 
-```{r echo=TRUE, eval=FALSE, fig.height=5, fig.width=6}
-cust.data <- custom.read(system.file("extdata","run1_SNOW_Daily_Average_BySubbasin.csv",
-                                     package="RavenR"))
-leg.title <- 'Legend \nSnowpack (mm)'
-colour1 <- "grey40"
-colour2 <- "white"               
-num.classes <- 5
-plot.title <- 'Daily Average Snowpack (mm)'
+#```{r echo=TRUE, eval=FALSE, fig.height=5, fig.width=6}
+#cust.data <- custom.read(system.file("extdata","run1_SNOW_Daily_Average_BySubbasin.csv",
+#                                     package="RavenR"))
+#leg.title <- 'Legend \nSnowpack (mm)'
+#colour1 <- "grey40"
+#colour2 <- "white"               
+#num.classes <- 5
+#plot.title <- 'Daily Average Snowpack (mm)'
 # Feel free to adjust the date range here, although many dates make this slow to run!
-plot.daterange <- '2003-02-01/2003-03-30'
+#plot.daterange <- '2003-02-01/2003-03-30'
 
-gif.filename='Nith_snowpack_Feb2003_March2003.gif'
-gif.speed <- 0.5
-cleanup <- FALSE # see the individual plots in the scratch directory created
+#gif.filename='Nith_snowpack_Feb2003_March2003.gif'
+#gif.speed <- 0.5
+#cleanup <- FALSE # see the individual plots in the scratch directory created
 
-SBMap.animate(shpfilename,subIDcol,plot.daterange,cust.data,plot.title=plot.title, 
-              colour1 = colour1, colour2=colour2,
-              leg.title = leg.title, normalize=T, num.classes=num.classes,
-              gif.filename=gif.filename,
-              gif.speed=gif.speed, cleanup=cleanup
-           )
+#SBMap.animate(shpfilename,subIDcol,plot.daterange,cust.data,plot.title=plot.title, 
+#             colour1 = colour1, colour2=colour2,
+#              leg.title = leg.title, normalize=T, num.classes=num.classes,
+#              gif.filename=gif.filename,
+#              gif.speed=gif.speed, cleanup=cleanup
+#           )
+#
+#```
 
-```
-
-This works well, although the overall precipitation is much more exciting to watch in a gif.
+#This works well, although the overall precipitation is much more exciting to watch in a gif.
 
 
-```{r echo=TRUE, eval=FALSE, fig.height=5, fig.width=6}
-cust.data <- custom.read(system.file("extdata","run1_PRECIP_Daily_Maximum_BySubbasin.csv",
-                                     package="RavenR"))
-leg.title <- 'Legend \nDaily Max Precip (mm)'
-colour1 <- "white"
-colour2 <- "blue"
-num.classes <- 5
-plot.title <- 'Daily Max Precip. (mm)'
-plot.daterange <- '2003-05-01/2003-06-30'
+#```{r echo=TRUE, eval=FALSE, fig.height=5, fig.width=6}
+#cust.data <- custom.read(system.file("extdata","run1_PRECIP_Daily_Maximum_BySubbasin.csv",
+#                                     package="RavenR"))
+#leg.title <- 'Legend \nDaily Max Precip (mm)'
+#colour1 <- "white"
+#colour2 <- "blue"
+#num.classes <- 5
+#plot.title <- 'Daily Max Precip. (mm)'
+#plot.daterange <- '2003-05-01/2003-06-30'
 
-gif.filename='Nith_precip_May2003_June2003.gif'
-gif.speed <- 0.5
-cleanup <- FALSE
+#gif.filename='Nith_precip_May2003_June2003.gif'
+#gif.speed <- 0.5
+#cleanup <- FALSE
 
-SBMap.animate(shpfilename,subIDcol,plot.daterange,cust.data,plot.title=plot.title, 
-              colour1 = colour1, colour2=colour2,
-              leg.title = leg.title, normalize=T, num.classes=num.classes,
-              gif.filename=gif.filename,
-              gif.speed=gif.speed, cleanup=cleanup
-           )
+#SBMap.animate(shpfilename,subIDcol,plot.daterange,cust.data,plot.title=plot.title, 
+#              colour1 = colour1, colour2=colour2,
+#              leg.title = leg.title, normalize=T, num.classes=num.classes,
+#              gif.filename=gif.filename,
+#              gif.speed=gif.speed, cleanup=cleanup
+#           )
 
-```
+#```
 
 
 ## More Exploring and Getting Help
@@ -303,11 +302,11 @@ Once the model is run, we can read in the output (or use the package data) and s
 
 # ff_data <- forcings.read("ForcingFunctions.csv")
 pdf("forcings.pdf") # create a pdf file to direct plot to
-forcings.plot(ff_data$forcings)
+rvn_forcings_plot(ff_data$forcings)
 dev.off() #finishes writing plot to .pdf file
 
-data(watershed.data)
-mywshd <- watershed.data$watershed.storage
+data(rvn_watershed_data)
+mywshd <- rvn_watershed_data$watershed.storage
 #mywshd <- RavenR::watershed.read("WatershedStorage.csv")$watershed.storage
 png("snowpack.png") # create a png file to direct plot to
 plot(mywshd$snow)
@@ -316,7 +315,7 @@ dev.off() #finishes writing plot to .png file
 
 ## Modify the script
 
-Modify the above script to generate png image plots of monthly subbasin-averaged PET in Subbasin 43 using the :CustomOutput option (you will have to add a :CustomOutput command to the Raven input rvi file). You will also want to use the RavenR `custom.read()` and `customoutput.plot()` commands.
+Modify the above script to generate png image plots of monthly subbasin-averaged PET in Subbasin 43 using the :CustomOutput option (you will have to add a :CustomOutput command to the Raven input rvi file). You will also want to use the RavenR `rvn_custom_read()` and `rvn_custom_output_plot()` commands.
 
 ## More exercises
 
