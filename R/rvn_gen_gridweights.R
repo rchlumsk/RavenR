@@ -1,5 +1,9 @@
-#' @title Generates a Raven grid weights file given an HRU shapefile and a grid shapefile
+#' @title Generate Raven grid weights from shapefile
 #'
+#' @description
+#' Generates a Raven grid weights file given an HRU shapefile and a grid shapefile.
+#'
+#' @details
 #' Generate grid weights file GaugeWeights.rvi given an HRU shapefile with HRU ID column
 #' HRUIDcol (default 'HRU_ID') and a grid shapefile with ID column gridIDcol (default: 'cellID')
 #' weights are determined by the areal overlap of grid cell g and HRU k, i.e.,

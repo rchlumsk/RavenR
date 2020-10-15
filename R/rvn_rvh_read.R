@@ -6,6 +6,13 @@
 #' network object which describes stream network connectivity and adds additional HRU-derived
 #' subbasin characteristics such as total upstream area and dominant land/vegetation classes.
 #'
+#'
+#' @note depends upon igraph library; does not like tabs in the .rvh file - it should be untabified first.
+#' The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :SubBasins-:EndSubBasins
+#' command blocks.
+#'
+#' @details does not like comma-delimited tables with a trailing comma
+#'
 #' @param filename the name of the .rvh file (with .rvh extension included ), either relative to the working directory or absolute.
 #'
 #' @return
@@ -28,11 +35,6 @@
 #'
 #' @author James R. Craig, University of Waterloo
 #'
-#' @note depends upon igraph library; does not like tabs in the .rvh file - it should be untabified first.
-#' The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :SubBasins-:EndSubBasins
-#' command blocks.
-#'
-#' @details does not like comma-delimited tables with a trailing comma
 #'
 #' @seealso
 #' \code{\link{rvn_rvh_write}} to write contents of the generated (and usually modified HRU and SubBasin tables)

@@ -20,9 +20,11 @@ rvn_stringpad(string, width, just = "r")
 Pad string with spaces, justified on either the left or right
 }
 \examples{
-# Returns '   To the right'
+# Returns "   To the right"
 rvn_stringpad('To the right', 15, just='r')
 
+# Returns "Padded    "
+rvn_stringpad('Padded', 10, just='l')
 }
 \author{
 Leland Scantlebury, \email{leland@scantle.com}

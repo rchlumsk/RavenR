@@ -2,10 +2,7 @@
 % Please edit documentation in R/rvn_utilities.R
 \name{rvn_num_days_month}
 \alias{rvn_num_days_month}
-\title{Number of Days in Month
-
-rvn_num_days_month is used to calculate the number of days in the month; handles
-leap years}
+\title{Number of Days in Month}
 \usage{
 rvn_num_days_month(date)
 }
@@ -16,8 +13,6 @@ rvn_num_days_month(date)
 \item{int}{number of days in the month}
 }
 \description{
-Number of Days in Month
-
 rvn_num_days_month is used to calculate the number of days in the month; handles
 leap years
 }

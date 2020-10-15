@@ -1,5 +1,6 @@
 #' @title Clean HRU data table.
 #'
+#' @description
 #' Takes \code{\link{rvn_rvh_read}}-generated HRUtable and SBTable and returns cleaned HRUtable
 #' with (hopefully) fewer HRUs
 #'

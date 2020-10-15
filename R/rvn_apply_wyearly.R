@@ -1,13 +1,15 @@
-#' Apply function for water year
+#' @title Apply function for water year
 #'
+#' @description
 #' rvn_apply_wyearly calculates a function FUN for the periods defined by the water
 #' year, similar to other functions of the form apply.<time period>, for
-#' example apply.daily, apply.monthly, etc. This is a function especially
-#' helpful to hydrology data or results. The default water year start is
+#' example apply.daily, apply.monthly, etc.
+#'
+#' @details
+#' This is a function especially helpful to hydrology data or results. The default water year start is
 #' October 1st, but may be adjusted with the mm and dd arguments. The values for
 #' mm and dd indicate the end of the water year period (i.e. mm=9 and dd=30 indicates
 #' a new water year on Oct 1).
-#'
 #'
 #' @param x xts vector to calculate FUN for
 #' @param FUN the function to be applied

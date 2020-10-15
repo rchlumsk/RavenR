@@ -2,10 +2,7 @@
 % Please edit documentation in R/rvn_utilities.R
 \name{rvn_apply_wyearly_which_max_xts}
 \alias{rvn_apply_wyearly_which_max_xts}
-\title{which.max over water year periods
-
-rvn_apply_wyearly_which_max_xts applies the which.max function within each
-water year period, and returns the corresponding max values and dates in an xts format.}
+\title{which.max over water year periods}
 \usage{
 rvn_apply_wyearly_which_max_xts(x, mm = 9, dd = 30)
 }
@@ -20,13 +17,10 @@ rvn_apply_wyearly_which_max_xts(x, mm = 9, dd = 30)
 {xts object with max values and corresponding dates}
 }
 \description{
-which.max over water year periods
-
 rvn_apply_wyearly_which_max_xts applies the which.max function within each
 water year period, and returns the corresponding max values and dates in an xts format.
 }
 \examples{
-
 data(rvn_hydrograph_data)
 
 # obtain peak observed flows in each water year period

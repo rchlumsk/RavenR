@@ -10,7 +10,7 @@ rvn_ts_infill(ts)
 \item{ts}{valid xts time series}
 }
 \value{
-{ts}{continuous xts time series}
+{ts}{ continuous xts time series}
 }
 \description{
 Infills missing time series values.
@@ -25,7 +25,7 @@ Only handles data with minimum time interval of 1 day; 1,2,3,4,6,8, or 12 hrs.
 \examples{
 dates <-seq(as.POSIXct("2012-05-01 00:00:00"), length=731, by="day")
 mydata<-xts(rnorm(731),order.by=dates)
-mydata<-mydata[wday(index(mydata))!=4] # remove wednesdays
+mydata<-mydata[weekdays(index(mydata))!="Wednesday"] # remove wednesdays
 out<-rvn_ts_infill(mydata)
 
 }

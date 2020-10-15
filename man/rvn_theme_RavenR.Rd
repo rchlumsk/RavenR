@@ -7,7 +7,7 @@
 rvn_theme_RavenR()
 }
 \value{
-returns a theme for usage in ggplot2 figures
+returns a theme for use in ggplot2 figures
 }
 \description{
 rvn_theme_RavenR makes the general Raven R Theme for all ggplots

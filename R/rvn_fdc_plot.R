@@ -1,7 +1,9 @@
-#' Plots summary of watershed forcing functions
+#' @title Plots summary of watershed forcing functions
 #'
+#' @description
 #' rvn_fdc_plot generation a flow duration curve plot.
 #'
+#' @details
 #' This function creates a flow duration curve using the rvn_hyd_extract obejct for
 #' a given basin. The hydrograph object passed should be the output from the
 #' rvn_hyd_extract function, which has attributes for sim and obs; if the obs is

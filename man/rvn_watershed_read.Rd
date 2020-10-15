@@ -4,10 +4,12 @@
 \alias{rvn_watershed_read}
 \title{Read in Raven WatershedStorage file}
 \usage{
-rvn_watershed_read(ff = NA)
+rvn_watershed_read(ff = NA, tzone = NULL)
 }
 \arguments{
 \item{ff}{full file path to the WatershedStorage.csv file}
+
+\item{tzone}{string indicating the timezone of the data in ff}
 }
 \value{
 \item{watershed_storage}{data frame from the file with standardized
@@ -15,7 +17,7 @@ names} \item{units}{vector corresponding to units of each column}
 }
 \description{
 rvn_watershed_read is used to read in the WatershedStorage.csv file produced by
-the modelling Framework Raven.
+Raven.
 }
 \details{
 This function expects a full file path to the WatershedStorage.csv file,

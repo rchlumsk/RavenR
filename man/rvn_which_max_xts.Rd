@@ -2,18 +2,7 @@
 % Please edit documentation in R/rvn_utilities.R
 \name{rvn_which_max_xts}
 \alias{rvn_which_max_xts}
-\title{which.max for xts objects
-
-rvn_which_max_xts applies the which.max function and returns an xts object
-with the maximum value and associated date.
-
-This function is intended to act as the which.max function, applicable
-to xts objects and returning values in an xts format.
-
-Note that when deploying the rvn_apply_wyearly function, the dates are overwritten
-and the dates of the water year ending periods are displayed rather than the event dates.
-In order to obtain the corresponding dates when using the rvn_apply_wyearly function, please use
-\code{\link{rvn_apply_wyearly_which_max_xts}}.}
+\title{which.max for xts objects}
 \usage{
 rvn_which_max_xts(x)
 }
@@ -24,11 +13,10 @@ rvn_which_max_xts(x)
 {xts object with max value and corresponding date}
 }
 \description{
-which.max for xts objects
-
 rvn_which_max_xts applies the which.max function and returns an xts object
 with the maximum value and associated date.
-
+}
+\details{
 This function is intended to act as the which.max function, applicable
 to xts objects and returning values in an xts format.
 

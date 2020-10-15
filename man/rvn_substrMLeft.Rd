@@ -2,10 +2,7 @@
 % Please edit documentation in R/rvn_utilities.R
 \name{rvn_substrMLeft}
 \alias{rvn_substrMLeft}
-\title{substring minus characters from the Left
-
-rvn_substrMLeft returns a string x with n characters removed from the left side
-of the string.}
+\title{substring minus characters from the Left}
 \usage{
 rvn_substrMLeft(x, n)
 }
@@ -15,8 +12,6 @@ rvn_substrMLeft(x, n)
 \item{n}{number of characters to remove from the left side of the string}
 }
 \description{
-substring minus characters from the Left
-
 rvn_substrMLeft returns a string x with n characters removed from the left side
 of the string.
 }

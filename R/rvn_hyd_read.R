@@ -68,12 +68,12 @@ rvn_hyd_read <- function(ff=NA,tzone=NULL) {
   if (is.null(tzone)) {
     date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S")
   } else {
-    date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S",tzone=tzone)
+    date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S",tz=tzone)
   }
 
   if (length(which(is.na(date.time)))>0){
     print("rvn_hyd_read: Error in mapping day/time to POSIXct. Must be timezone without daylight savings")
-    return()
+    return(FALSE)
   }
   cols <- colnames(hydrographs)
 

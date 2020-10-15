@@ -4,10 +4,12 @@
 \alias{rvn_forcings_read}
 \title{Read in Raven ForcingFunctions file}
 \usage{
-rvn_forcings_read(ff = NA)
+rvn_forcings_read(ff = NA, tzone = NULL)
 }
 \arguments{
 \item{ff}{full file path to the ForcingFunctions.csv file}
+
+\item{tzone}{string indicating the timezone of the data in ff}
 }
 \value{
 \item{forcings}{data frame from the file with standardized names}

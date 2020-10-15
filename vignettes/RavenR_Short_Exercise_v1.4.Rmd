@@ -47,13 +47,12 @@ The RavenR package contains a number of sample data files, which are useful for 
 ```{r R Sample Data, message=FALSE, warning=FALSE, results='hide'}
 data("rvn_forcing_data")
 ?rvn_forcing_data
-```
 
-```{r R Sample Data, message=FALSE, warning=FALSE, results='hide'}
 data("rvn_hydrograph_data")
 ?rvn_hydrograph_data
 ```
-Notice as well that the sample data set in R format also has a built in help file to describe the data.
+
+Notice as well that these sample data sets are in R format also has a built in help file to describe the data.
 
 To pull out the raw data from the RavenR package, we will use a syntax to find the data by file name in the RavenR package directory, which ends up looking more similar to a raw file call. This raw data file comes from the **extdata** folder in the RavenR package, **not the data folder**. Note that this is done so that the sample data in raw format can be used and tested with functions, and the syntax to locate the data file is more portable across various computer operating systems.
 
@@ -112,6 +111,21 @@ Or using the special hydrograph plot function, which is part of the RavenR libra
 rvn_hyd_plot(sim=flow36$sim, obs=flow36$obs, precip=precip)
 ```
 
+Similar functions exist to handle the reading and plotting of reservoir data.
+
+```{r Reservoir plotting}
+
+
+rvn_res_read()
+
+rvn_res_extract()
+
+rvn_res_plot()
+
+```
+
+
+
 There are some other helpful functions in RavenR for understanding our hydrographs.
 
 ```{r Spaghetti Plot, fig.height=5, fig.width=6}
@@ -138,10 +152,52 @@ A helpful plot for understanding the volume bias on a monthly breakdown is the *
 rvn_monthly_vbias(flow36$sim, obs=flow36$obs)
 ```
 
+For the comparison of flood peaks specifically, a number of functions exist to examine the difference in annual peaks, as well as functions to explore the errors due to teh timing of the peaks.
+
+```{r}
+# go through rvn_annual_peak, rvn_annual_peak_timing_error, rvn_annual_peak_event, etc
+```
+
+
+
 A fun new addition to the RavenR package is the addition of dygraphs, which produces a dynamic hydrograph plot with a slider on the time scale. This is particularly helpful for viewing subsections of a hydrograph dyanmically, and comparing the simulated and observed hydrographs in an interactive environment.
 ```{r Dygraphs, fig.height=5, fig.width=6}
 rvn_hyd_dygraph(hy, basins="Sub36")
 ```
+
+## Time Series Analysis
+
+
+Look at testing functions such as:
+
+rvn_apply_wyearly, rvn_ts_infill, rvn_which_max_xts and cmax (why use cmax instead of just base::max)
+
+
+
+## Raven Specific File Handling
+
+### RVI files
+
+Network plotting, such as rvn_rvi_read and rvn_rvi_process_plot
+
+## RVH files
+
+reading rvh file, calcualting areas, etc
+
+
+### RVT files
+
+Examples for reading/writing data to rvt files
+
+Include rvn_rvt_write, rvt_rvt_ECmet examples
+
+
+## Generic Raven file writing utilities
+
+rvn_write_Raven_table, etc
+
+
+
 
 ## Spatial Plotting
 
@@ -162,6 +218,10 @@ plot.date <- "2003-03-30" # date for which to plot custom data
 
 # function call
 rvn_subbasin_map(shpfilename,subIDcol,plot.date,cust.data)
+
+# change these to use underscores (i.e. the input arguments have changed from plot.date to plot_date,
+# this is also what is causing the error below)
+
 ```
 
 This produces a basic static map of the Nith subbasins provided in the sample file, with the precipitation data from the Custom Output data provided at the date specified. Neat! We can add a few more features from here to cutomize our plot if we wish, 
@@ -253,6 +313,17 @@ rvn_subbasin_map(shpfilename,subIDcol,plot.date,cust.data,plot.title=plot.title,
 #```
 
 
+## Raven Utility Functions
+
+
+Some generic functions in the package that may be worth highlighting (or maybe not)
+
+rvn_mos_names
+
+rvn_num_days
+
+rvn_substr_XXX
+
 ## More Exploring and Getting Help
 
 The RavenR library can be explored to see what other functions are available in the package.
@@ -267,6 +338,8 @@ Using the ?help option (where help is the name of a RavenR command), figure out 
 2. the mean and median annual observed flow using the barplot() function (hint: use the rvn_apply_wyearly function to calculate annual mean and median)
   
 ## Building a model workflow script
+
+** RC note - not sure I want to have this section, just because it requires external files to run, and I don;t want to distribute Raven executables with the RavenR package
 
 Now we will build a simple script which will provide a bunch of visualizations that we can use to look at the Nith river model each time we run it. This can be made as complex as you want.
 

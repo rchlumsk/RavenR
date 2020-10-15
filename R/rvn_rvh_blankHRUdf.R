@@ -1,5 +1,6 @@
-#' Generate Blank Raven HRU DataFrame
+#' @title Generate Blank Raven HRU DataFrame
 #'
+#' @description
 #' Used to generate a blank HRU table that can be filled in by the user. Compatible
 #' with \code{\link{rvn_rvh_write}}.
 #'

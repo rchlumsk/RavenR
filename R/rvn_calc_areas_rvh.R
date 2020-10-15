@@ -1,8 +1,10 @@
-#' Calculate areas from Raven .rvh file
+#' @title Calculate areas from Raven .rvh file
 #'
+#' @description
 #' calc_areas_rvh is used to calculate the total area and drainage area for
 #' each subbasin, from a Raven-formatted .rvh file
 #'
+#' @details
 #' This function reads in the .rvh file in Raven format, and firstly calculates
 #' the total area of each subbasin by linking the IDs to the HRU section.
 #'

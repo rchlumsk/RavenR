@@ -14,8 +14,7 @@ rvn_custom_data
 A dataset formatted to the xts package, read in by the custom.read function.
 The dataset contains average SNOW for each HRU in the Nith river model, available
 for download in the Raven Tutorials (linked below).
-}
-\details{
+
 The Nith River model can be downloaded from the Raven Tutorials (tutorial #2)
 \url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}
 }

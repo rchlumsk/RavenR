@@ -62,6 +62,7 @@ Note that a plot title is purposely omitted in order to allow the automatic
 generation of plot titles.
 }
 \examples{
+
 system.file("extdata","run1_Hydrographs.csv", package="RavenR") \%>\%
 rvn_hyd_read(.) \%>\%
 rvn_hyd_extract(subs="Sub36",.) ->

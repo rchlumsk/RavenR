@@ -3,12 +3,7 @@
 \docType{data}
 \name{rvn_watershed_data}
 \alias{rvn_watershed_data}
-\title{Watershed Storage Data from Raven
-
-A dataset formatted to the xts package, read in by the watershed.read function.
-The dataset contains the typical columns from the Raven outputted
-WatershedStorage.csv file, available for download in the Raven
-Tutorials (linked below).}
+\title{Watershed Storage Data from Raven}
 \format{
 rvn_watershed_data is a data frame with two object
 \describe{
@@ -49,8 +44,6 @@ The Nith River model can be downloaded from the Raven Tutorials (tutorial #2)
 rvn_watershed_data
 }
 \description{
-Watershed Storage Data from Raven
-
 A dataset formatted to the xts package, read in by the watershed.read function.
 The dataset contains the typical columns from the Raven outputted
 WatershedStorage.csv file, available for download in the Raven

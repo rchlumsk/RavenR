@@ -9,6 +9,7 @@ rvn_write_Raven_table(
   units,
   df,
   filename,
+  id_col = TRUE,
   justify = "right",
   sep = ", ",
   ...
@@ -22,6 +23,9 @@ rvn_write_Raven_table(
 \item{df}{Dataframe of values corresponding to attributes/parameters}
 
 \item{filename}{Name of the file, with extension, to append the table to}
+
+\item{id_col}{True/False of whether an numeric id column is the first column in the table
+and, in common Raven fashion, does not have a corresponding attribute (default: True)}
 
 \item{justify}{alignment of character columns (default 'right'). See \code{\link{format}}}
 

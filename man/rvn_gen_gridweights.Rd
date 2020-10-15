@@ -2,17 +2,7 @@
 % Please edit documentation in R/rvn_gen_gridweights.R
 \name{rvn_gen_gridweights}
 \alias{rvn_gen_gridweights}
-\title{Generates a Raven grid weights file given an HRU shapefile and a grid shapefile
-
-Generate grid weights file GaugeWeights.rvi given an HRU shapefile with HRU ID column
-HRUIDcol (default 'HRU_ID') and a grid shapefile with ID column gridIDcol (default: 'cellID')
-weights are determined by the areal overlap of grid cell g and HRU k, i.e.,
- wt[k][g]=area[k][g]/area[k]
-where wt[k][g] is the weight of cell g in HRU k, area[k] is the total area of HRU k,
-and area[k][g] is the area of HRU k that is within cell g.
-
-By definition, the grid domain has to completely cover the HRU domain such that the sum of
-wt[k][g] for any k, over all g, is 1.0}
+\title{Generate Raven grid weights from shapefile}
 \usage{
 rvn_gen_gridweights(
   HRUshpfile,
@@ -40,8 +30,9 @@ rvn_gen_gridweights(
 \item{TRUE}{returns TRUE if executed properly. Also output GaugeWeights.rvi file}
 }
 \description{
-Generates a Raven grid weights file given an HRU shapefile and a grid shapefile
-
+Generates a Raven grid weights file given an HRU shapefile and a grid shapefile.
+}
+\details{
 Generate grid weights file GaugeWeights.rvi given an HRU shapefile with HRU ID column
 HRUIDcol (default 'HRU_ID') and a grid shapefile with ID column gridIDcol (default: 'cellID')
 weights are determined by the areal overlap of grid cell g and HRU k, i.e.,
@@ -51,8 +42,7 @@ and area[k][g] is the area of HRU k that is within cell g.
 
 By definition, the grid domain has to completely cover the HRU domain such that the sum of
 wt[k][g] for any k, over all g, is 1.0
-}
-\details{
+
 not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UTM zone;
  uses rgdal and rgeos libraries. *Both shapefiles should be in same projection!* Unfortunately, the
  accuracy of the gIntersection() routine leaves a bit to be desired...
