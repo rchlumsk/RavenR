@@ -37,6 +37,9 @@
 #'    startdate="2003-03-01")
 #'  wts2 <- wts2*wts # product merges weights
 #'
+#'  # show weights over time
+#'  plot(wts2)
+#'
 #'  # write observation weights to rvt file
 #'  rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2,
 #'    36, typestr="HYDROGRAPH")

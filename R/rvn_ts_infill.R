@@ -12,7 +12,7 @@
 #'
 #' @param ts valid xts time series
 #'
-#' @return {ts}{continuous xts time series}
+#' @return {ts}{ continuous xts time series}
 #'
 #' @author James R. Craig, University of Waterloo
 #'
