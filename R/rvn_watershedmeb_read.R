@@ -32,12 +32,17 @@
 #' @keywords Raven read.csv watershed mass energy balance
 #'
 #' @examples
-#'
 #' # locate RavenR Watershed Mass Energy Balance storage file
 #' ff <- system.file("extdata","run1_WatershedMassEnergyBalance.csv", package="RavenR")
 #'
 #' # read in file
 #' mywshdmeb <- rvn_watershedmeb_read(ff)
+#'
+#' # view mass energy balance time series
+#' head(mywshdmeb$watershedmeb)
+#'
+#' # view 'from' dataframe
+#' mywshdmeb$from
 #'
 #' @export rvn_watershedmeb_read
 #' @importFrom xts xts

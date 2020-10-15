@@ -7,7 +7,7 @@
 #' This function sets up the default theme for all ggplots generated using a
 #' built in Raven R function. Made by adjusting the built in theme_bw().
 #'
-#' @return returns a theme for usage in ggplot2 figures
+#' @return returns a theme for use in ggplot2 figures
 #'
 #' @seealso \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 #' volumes.
