@@ -60,6 +60,7 @@ Note that a plot title is purposely omitted in order to allow the automatic
 generation of plot titles.
 }
 \examples{
+
 # load sample hydrograph data, two years worth of sim/obs
 data(rvn_hydrograph_data)
 sim <- rvn_hydrograph_data$hyd$Sub36

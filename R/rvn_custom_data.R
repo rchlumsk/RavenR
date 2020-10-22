@@ -1,5 +1,6 @@
-#' Custom Output Data from Raven
+#' @title Custom Output Data from Raven
 #'
+#' @description
 #' A dataset formatted to the xts package, read in by the custom.read function.
 #' The dataset contains average SNOW for each HRU in the Nith river model, available
 #' for download in the Raven Tutorials (linked below).

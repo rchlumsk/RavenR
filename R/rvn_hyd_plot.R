@@ -1,4 +1,4 @@
-#' @title Plot Hydrograph
+#' @title Create Hydrograph Plot
 #'
 #' @description
 #' rvn_hyd_plot creates a hydrograph plot object for the supplied flow series, or

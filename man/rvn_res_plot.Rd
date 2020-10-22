@@ -2,27 +2,7 @@
 % Please edit documentation in R/rvn_res_plot.R
 \name{rvn_res_plot}
 \alias{rvn_res_plot}
-\title{Plot Reservoir Stage
-
-rvn_res_plot creates a reservoir stage plot for the supplied flow series, or
-equivalently a stage plot for reservoir stages.
-
-This function creates a reservoir stage plot using the supplied time series;
-any series not supplied will not be plotted. If the precip time series is
-supplied, the secondary y axis will be used to plot the precip time series.
-
-The function assumes that the supplied time series have the same length and
-duration in time. If this is not true, then the defined period or period
-calculated from the first available flow series will be used to determine
-the plotting limits in time. If the data is used directly from Raven output,
-this is not a concern. The supplied time series should be in xts format,
-which again can be obtained directly by using the rvn_res_extract function.
-
-The winter_shading argument will add a transparent cyan shading for the
-December 1st to March 31st period in each year that is plotted.
-
-Note that a plot title is purposely omitted in order to allow the automatic
-generation of plot titles.}
+\title{Plot Reservoir Stage}
 \usage{
 rvn_res_plot(
   sim = NULL,
@@ -51,11 +31,10 @@ TRUE)}
 \item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
-Plot Reservoir Stage
-
 rvn_res_plot creates a reservoir stage plot for the supplied flow series, or
 equivalently a stage plot for reservoir stages.
-
+}
+\details{
 This function creates a reservoir stage plot using the supplied time series;
 any series not supplied will not be plotted. If the precip time series is
 supplied, the secondary y axis will be used to plot the precip time series.

@@ -1,5 +1,6 @@
 #' @title Generate Blank Raven SubBasin DataFrame
 #'
+#' @description
 #' Generates a blank data frame for Raven subbasin properties.
 #'
 #' @param nSubBasins Number of SubBasins in model, used to determine number of rows in table (default = 1)

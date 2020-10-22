@@ -4,7 +4,13 @@
 \alias{rvn_write_Raven_label}
 \title{Writes common Raven labeled line to file, with optional value (appends)}
 \usage{
-rvn_write_Raven_label(label, filename, value = NULL, digits = NULL)
+rvn_write_Raven_label(
+  label,
+  filename,
+  value = NULL,
+  digits = NULL,
+  indent_level = 0
+)
 }
 \arguments{
 \item{label}{character, (e.g. "SoilClasses")}
@@ -14,6 +20,8 @@ rvn_write_Raven_label(label, filename, value = NULL, digits = NULL)
 \item{value}{numeric or character, corresponding value written after label (optional)}
 
 \item{digits}{Number of digits to round value to (optional)}
+
+\item{indent_level}{Adds two spaces before label for every one level (default = 0)}
 }
 \value{
 TRUE returns TRUE if executed successfully
@@ -22,7 +30,21 @@ TRUE returns TRUE if executed successfully
 Writes common Raven labeled line to file, with optional value (appends)
 }
 \examples{
+
+# Numeric example
 rvn_write_Raven_label('Duration', 'Hogwarts.rvi', value=365)
+
+# Hydrologic Processes
+rvn_write_Raven_label('HydrologicProcesses', 'Hogwarts.rvi')
+
+# String example, with indent
+rvn_write_Raven_label('SnowBalance', filename = 'Hogwarts.rvi',
+                      value = paste('SNOBAL_HMETS', 'MULTIPLE', 'MULTIPLE'),
+                      indent_level = 1)
+# etc...
+
+# Preview
+readLines("Hogwarts.rvi")
 
 # cleanup temporary file
 unlink("Hogwarts.rvi")

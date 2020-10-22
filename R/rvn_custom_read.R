@@ -15,6 +15,7 @@
 #' @param ff full file path to the custom output file
 #' @param no_runname boolean for whether a runName is supplied, important for
 #' parsing the filename
+#' @param tzone string indicating the timezone of the data in ff
 #' @return \item{custom_out}{data frame with the custom output data stored as xts
 #' object}
 #' @seealso \code{\link{rvn_custom_output_plot}} for plotting custom output
@@ -35,7 +36,7 @@
 #' @export rvn_custom_read
 #' @importFrom xts xts
 #' @importFrom utils read.csv
-rvn_custom_read <- function(ff=NA, no_runname=FALSE) {
+rvn_custom_read <- function(ff=NA, no_runname=FALSE, tzone=NULL) {
 
   if (missing(ff)) {
     stop("Requires the full file path to the Raven custom output file")
@@ -78,19 +79,33 @@ rvn_custom_read <- function(ff=NA, no_runname=FALSE) {
   # obtain time object, trim columns
   # need to update to handle hourly and yearly data *********
   if (time.type == "Continuous" | time.type == "Daily") {
-    tt <- as.POSIXct(paste(cust.data[,2]), format="%Y-%m-%d")
+
+    if (is.null(tzone)) {
+      tt <- as.POSIXct(paste(cust.data[,2]), format="%Y-%m-%d")
+    } else {
+      tt <- as.POSIXct(paste(cust.data[,2]), format="%Y-%m-%d", tz=tzone)
+    }
+
     # date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S")
     cust.data <- cust.data[,-(1:2)]
     cust.headers <- cust.headers[1,-(1:2)]
 
   } else if (time.type == "Monthly") {
-    tt <- as.POSIXct(paste0(cust.data[,2],rep("-1",nrow(cust.data)) ), format="%Y-%m-%d")
+    if (is.null(tzone)) {
+      tt <- as.POSIXct(paste0(cust.data[,2],rep("-1",nrow(cust.data)) ), format="%Y-%m-%d")
+    } else {
+      tt <- as.POSIXct(paste0(cust.data[,2],rep("-1",nrow(cust.data)) ), format="%Y-%m-%d", tz=tzone)
+    }
     # tt <- as.yearmon(as.character(cust.data[,2]), "%Y-%m")
     cust.data <- cust.data[,-(1:2)]
     cust.headers <- cust.headers[1,-(1:2)]
 
   } else if (time.type == "Yearly") {
-    tt <- as.POSIXct(paste0(cust.data[,2],rep("-12",nrow(cust.data)),rep("-1",nrow(cust.data))), format="%Y-%m-%d")
+    if (is.null(tzone)) {
+      tt <- as.POSIXct(paste0(cust.data[,2],rep("-12",nrow(cust.data)),rep("-1",nrow(cust.data))), format="%Y-%m-%d")
+    } else {
+      tt <- as.POSIXct(paste0(cust.data[,2],rep("-12",nrow(cust.data)),rep("-1",nrow(cust.data))), format="%Y-%m-%d")
+    }
     cust.data <- cust.data[,-(1:2)]
     cust.headers <- cust.headers[1,-(1:2)]
 
@@ -100,9 +115,13 @@ rvn_custom_read <- function(ff=NA, no_runname=FALSE) {
     # can adjust to the second year or any month/day desired
     # to change the year in the split, change the [[1]] to [[2]] in the line below
     yrs <- t(sapply(cust.data[,2],FUN=function(x) strsplit(x,"-")[[1]],USE.NAMES=F)) # split into matrix
-   tt <- as.POSIXct(paste0(yrs[,1],rep("-12",nrow(cust.data)),rep("-1",nrow(cust.data))), format="%Y-%m-%d")
-   cust.data <- cust.data[,-(1:2)]
-   cust.headers <- cust.headers[1,-(1:2)]
+    if (is.null(tzone)) {
+      tt <- as.POSIXct(paste0(yrs[,1],rep("-12",nrow(cust.data)),rep("-1",nrow(cust.data))), format="%Y-%m-%d")
+    } else {
+      tt <- as.POSIXct(paste0(yrs[,1],rep("-12",nrow(cust.data)),rep("-1",nrow(cust.data))), format="%Y-%m-%d", tz=tzone)
+    }
+     cust.data <- cust.data[,-(1:2)]
+     cust.headers <- cust.headers[1,-(1:2)]
   }
 
   if (NCOL(cust.data) != 1) {

@@ -4,6 +4,8 @@
 #' @param units array of strings with the corresponding units
 #' @param df Dataframe of values corresponding to attributes/parameters
 #' @param filename Name of the file, with extension, to append the table to
+#' @param id_col True/False of whether an numeric id column is the first column in the table
+#' and, in common Raven fashion, does not have a corresponding attribute (default: True)
 #' @param justify alignment of character columns (default 'right'). See \code{\link{format}}
 #' @param sep character(s) used to seperate columns (default ', ')
 #' @param ... Extra arguments for \code{\link{write.fwf}}
@@ -31,12 +33,12 @@
 #'
 #' @export rvn_write_Raven_table
 #' @importFrom gdata write.fwf
-rvn_write_Raven_table <- function(attributes, units, df, filename,
+rvn_write_Raven_table <- function(attributes, units, df, filename, id_col=TRUE,
                              justify = 'right', sep = ', ', ...)
 {
 
   # Setup
-  towrite <- rvn_df_to_Raven_table(attributes, units, df)
+  towrite <- rvn_df_to_Raven_table(attributes, units, df, id_col)
 
   # Write using write.fwf from gdata
   write.fwf(x = towrite,

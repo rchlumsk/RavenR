@@ -59,7 +59,6 @@ alphabeticized order is not dependent on the station name, and the observed
 files will be in one set.
 }
 \examples{
-
 # load sample hydrograph data, two years worth of sim/obs
 data(rvn_hydrograph_data)
 obs <- rvn_hydrograph_data$hyd$Sub36_obs

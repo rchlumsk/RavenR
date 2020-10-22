@@ -2,31 +2,7 @@
 % Please edit documentation in R/rvn_hyd_extract.R
 \name{rvn_hyd_extract}
 \alias{rvn_hyd_extract}
-\title{Extract function for Raven Hydrograph object
-
-rvn_hyd_extract is used for extracting data from the Raven hydrograph object.
-Works for objects from rvn_hyd_extract function (from the Hydrographs.csv file).
-
-rvn_hyd_extract is used to extract the modelled and observed data from a Raven
-hydrograph object by name reference. It is also easy to create plots of
-modelled and observed data using this function. The simulated and observed
-files are outputted regardless of whether a plot is created, for the
-specified period.
-
-The subs input is the name of the column desired for use; the most common
-use of this will be for subbasin outflows, where the names will be of the
-form "subXX", for example "sub24".
-
-The hyd object is the full hydrograph object (hyd and units in one data
-frame) created by the hyd.read function. Both the hyd and units are
-required, since the units are placed onto the plots if one is created. This
-is useful to at least see the units of the plotted variable, even if the
-plot is later modified.
-
-The prd input is used to specify a period for the plot and/or the data
-output. The period should be specified as a string start and end date, of
-the format "YYYY-MM-DD/YYYY-MM-DD", for example, "2006-10-01/2010-10-01". If
-no period is supplied, the entire time series will be used.}
+\title{Extract function for Raven Hydrograph object}
 \usage{
 rvn_hyd_extract(subs = NA, hyd = NA, prd = NULL)
 }
@@ -44,11 +20,10 @@ returns a list with sim, obs, and inflow time series
  \item{inflow}{inflow simulation for specified column and period}
 }
 \description{
-Extract function for Raven Hydrograph object
-
 rvn_hyd_extract is used for extracting data from the Raven hydrograph object.
 Works for objects from rvn_hyd_extract function (from the Hydrographs.csv file).
-
+}
+\details{
 rvn_hyd_extract is used to extract the modelled and observed data from a Raven
 hydrograph object by name reference. It is also easy to create plots of
 modelled and observed data using this function. The simulated and observed

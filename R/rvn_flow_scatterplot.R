@@ -1,8 +1,10 @@
-#' Scatterplot of model flows
+#' @title Scatterplot of model flows
 #'
+#' @description
 #' rvn_flow_scatterplot creates a scatterplot of the simulated and observed flows.
 #' Useful in diagnotic analysis of model outputs.
 #'
+#' @details
 #' This function creates a scatterplot of flows.
 #'
 #' The sim and obs should be of time series (xts) format. The flow series are

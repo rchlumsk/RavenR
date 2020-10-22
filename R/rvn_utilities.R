@@ -1,6 +1,6 @@
 #' @title substring from the Left
 #'
-#' rvn_substrLeft returns n characters from the left side of the supplied string x.
+#' @description rvn_substrLeft returns n characters from the left side of the supplied string x.
 #'
 #' @param x a string to manipulate
 #' @param n number of characters to remove from the left side of the string
@@ -23,9 +23,9 @@ rvn_substrLeft <- function(x, n)
 
 #' @title substring minus characters from the Left
 #'
+#' @description
 #' rvn_substrMLeft returns a string x with n characters removed from the left side
 #' of the string.
-#'
 #'
 #' @param x a string to manipulate
 #' @param n number of characters to remove from the left side of the string
@@ -52,9 +52,9 @@ rvn_substrMLeft <- function(x, n)
 
 #' @title substring minus characters from the Right
 #'
+#' @description
 #' rvn_substrMRight returns a string x with n characters removed from the right
 #' side of the string.
-#'
 #'
 #' @param x a string to manipulate
 #' @param n number of characters to remove from the right side of the string
@@ -69,7 +69,7 @@ rvn_substrMLeft <- function(x, n)
 #' @keywords string right minus
 #' @examples
 #'
-#' rvn_substrRLeft("hello world",3)
+#' rvn_substrMRight("hello world",3)
 #' # returns "hello wo"
 #'
 #' @export rvn_substrMRight
@@ -81,9 +81,9 @@ rvn_substrMRight <- function(x, n)
 
 #' @title substring from the Right
 #'
+#' @description
 #' rvn_substrRight returns n characters from the right side of the supplied string
 #' x.
-#'
 #'
 #' @param x a string to manipulate
 #' @param n number of characters to use from the right side of the string
@@ -110,8 +110,10 @@ rvn_substrRight <- function(x, n)
 
 #' @title Add Transparency to Colours
 #'
+#' @description
 #' rvn_col_transparent is used to adjust colour codes to introduce transparency
 #'
+#' @details
 #' Note that this function is not required for ggplot objects, as transparency can be
 #' added with the `alpha` parameter.
 #'
@@ -164,9 +166,9 @@ rvn_col_transparent <- function(colour,trans)
 
 #' @title Check Validity of Colour Representation
 #'
+#' @description
 #' rvn_iscolour checks whether a string or string vector contains valid colour representations
-#' (in text or hexadecimal form). Useful in error checking colour arguments for functions,
-#'  such as SBMap.plot.
+#' (in text or hexadecimal form). Useful in error checking colour arguments for functions.
 #'
 #' @param x string or string vector of colour representations to test
 #' @return \item{y}{vector of TRUE or FALSE indicating whether the colour is valid}
@@ -193,22 +195,22 @@ rvn_iscolour <- function(x)
 
 #' @title Months in the Year vector
 #'
-#' rvn_mos_names is used to return a string vector of months in the year
+#' @description
+#' rvn_month_names is used to return a character vector of months in the year
 #'
 #' @param short boolean to return shortened form of months
-#' @return \item{int}{number of days between the two days}
+#' @return {character array of month names}
 #' @seealso \code{\link{rvn_num_days}} for calculating the number of days in a
 #' month
 #' @keywords months year
 #' @examples
-#'
-#' months_of_the_year <- rvn_mos_names
+#' months_of_the_year <- rvn_month_names()
 #' months_of_the_year
 #'
-#' rvn_mos_names(FALSE)
+#' rvn_month_names(FALSE)
 #'
-#' @export rvn_mos_names
-rvn_mos_names <- function(short=TRUE)
+#' @export rvn_month_names
+rvn_month_names <- function(short=TRUE)
 {
   if (short) {
     return(c('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'))
@@ -221,6 +223,7 @@ rvn_mos_names <- function(short=TRUE)
 
 #' @title Number of Days between two dates
 #'
+#' @description
 #' rvn_num_days is used to calculate the number of days in the month; handles leap
 #' years
 #'
@@ -231,7 +234,6 @@ rvn_mos_names <- function(short=TRUE)
 #' month
 #' @keywords days number
 #' @examples
-#'
 #' rvn_num_days(as.Date("2017-02-05"),as.Date("2017-02-12"))
 #' # 7
 #'
@@ -248,6 +250,7 @@ rvn_num_days <- function(date1,date2)
 
 #' @title Number of Days in Month
 #'
+#' @description
 #' rvn_num_days_month is used to calculate the number of days in the month; handles
 #' leap years
 #'
@@ -319,9 +322,11 @@ cmax <- function(x, na.rm = FALSE)
 
 #' @title which.max for xts objects
 #'
+#' @description
 #' rvn_which_max_xts applies the which.max function and returns an xts object
 #' with the maximum value and associated date.
 #'
+#' @details
 #' This function is intended to act as the which.max function, applicable
 #' to xts objects and returning values in an xts format.
 #'
@@ -370,6 +375,7 @@ rvn_which_max_xts <- function(x)
 
 #' @title which.max over water year periods
 #'
+#' @description
 #' rvn_apply_wyearly_which_max_xts applies the which.max function within each
 #' water year period, and returns the corresponding max values and dates in an xts format.
 #'
@@ -382,7 +388,6 @@ rvn_which_max_xts <- function(x)
 #' @keywords which max xts
 #'
 #' @examples
-#'
 #' data(rvn_hydrograph_data)
 #'
 #' # obtain peak observed flows in each water year period
@@ -417,15 +422,19 @@ rvn_apply_wyearly_which_max_xts <- function(x, mm=9, dd=30)
   }
 }
 
-
-
-#' @title Determine period of data
+#' @title Check period input
 #'
-#' rvn_get_prd either obtains the full period of a given xts object,
-#' or checks the provided prd against an xts object for consistency and issues
-#' a warning of an issue is found.
+#' @description
+#' rvn_get_prd is a robust function used to check a period argument either as
+#' a character or against an xts object.
 #'
-#' XXX to update error checking
+#' @details
+#' The function may take some combination of an xts object, a character string or both.
+#'
+#' If a character is provided, the consistency of the character string against the YYYY-MM-DD/YYYY-MM-DD format
+#' is checked. If an xts object is provided, the period for that xts object is returned. If both
+#' are provided to the function, both checks are made and the consistency of the character period
+#' against the xts object is performed. In any case, a period character string is returned.
 #'
 #' @param x xts object
 #' @param prd period argument in format YYYY-MM-DD/YYYY-MM-DD as a character
@@ -540,9 +549,11 @@ rvn_get_prd <- function(x=NULL, prd=NULL)
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
 #'
 #' @examples
-#' # Returns '   To the right'
+#' # Returns "   To the right"
 #' rvn_stringpad('To the right', 15, just='r')
 #'
+#' # Returns "Padded    "
+#' rvn_stringpad('Padded', 10, just='l')
 #' @export rvn_stringpad
 rvn_stringpad <- function(string, width, just='r')
 {
@@ -554,10 +565,9 @@ rvn_stringpad <- function(string, width, just='r')
   }
   #-- return a padded string
   if (just == 'r') {
-    return(paste0(strrep(' ', padlength),
-                  string))
+    return(paste0(strrep(' ', padlength), string))
   }
   else if (just == 'l') {
-    return(paste0(string), strrep(' ', padlength))
+    return(paste0(string, strrep(' ', padlength)))
   }
 }

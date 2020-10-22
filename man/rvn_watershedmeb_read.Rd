@@ -4,10 +4,12 @@
 \alias{rvn_watershedmeb_read}
 \title{Read in Raven WatershedMassEnergyBalance file}
 \usage{
-rvn_watershedmeb_read(ff = NA)
+rvn_watershedmeb_read(ff = NA, tzone = NULL)
 }
 \arguments{
 \item{ff}{full file path to the WatershedMassEnergyBalance.csv file}
+
+\item{tzone}{string indicating the timezone of the data in ff}
 }
 \value{
 \item{watershedmeb}{data frame from the file with standardized names}
@@ -31,12 +33,17 @@ file is located in the current working directory, then simply the name of
 the file is sufficient.
 }
 \examples{
-
 # locate RavenR Watershed Mass Energy Balance storage file
 ff <- system.file("extdata","run1_WatershedMassEnergyBalance.csv", package="RavenR")
 
 # read in file
 mywshdmeb <- rvn_watershedmeb_read(ff)
+
+# view mass energy balance time series
+head(mywshdmeb$watershedmeb)
+
+# view 'from' dataframe
+mywshdmeb$from
 
 }
 \seealso{

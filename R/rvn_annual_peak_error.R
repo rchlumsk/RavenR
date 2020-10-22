@@ -1,8 +1,10 @@
-#' Annual Peak Errors
+#' @title Annual Peak Errors
 #'
+#' @description
 #' rvn_annual_peak_error creates a plot of the annual observed and simulated peak
 #' percent errors, based on the water year.
 #'
+#' @details
 #' This function creates a plot of the percent errors in simulated peaks for
 #' each water year. The peaks are calculated as the magnitude of the largest
 #' event in each water year. Note that the rvn_annual_peak_error function is first
@@ -47,6 +49,7 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #'
 #' @examples
+#'
 #' system.file("extdata","run1_Hydrographs.csv", package="RavenR") %>%
 #' rvn_hyd_read(.) %>%
 #' rvn_hyd_extract(subs="Sub36",.) ->

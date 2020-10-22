@@ -1,8 +1,10 @@
-#' Scatterplot of model flows
+#' @title Scatterplot of model flows
 #'
+#' @description
 #' rvn_flow_residuals creates a residuals time series for flow values. Useful in
 #' diagnotic analysis of model outputs.
 #'
+#' @details
 #' This function creates a residuals time series plot for flow values, with the
 #' option to smooth out the values using the rollmean function in zoo. The
 #' winter months are optionally shaded in the time series; winter period is

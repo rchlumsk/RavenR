@@ -1,9 +1,11 @@
-#' Cumulative Plot of model flows
+#' @title Cumulative Plot of model flows
 #'
+#' @description
 #' rvn_cum_plot_flow creates a cumulative flow plot of the simulated flows;
 #' optionally includes an observed and/or inflow series as well. Useful in
 #' diagnotic analysis of model outputs.
 #'
+#' @details
 #' This function will plot the simulated series in all cases, and will include
 #' the observed and inflow plots if they are supplied.
 #'

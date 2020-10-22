@@ -1,8 +1,10 @@
-#' Read in Raven WatershedStorage file
+#' @title Read in Raven WatershedStorage file
 #'
+#' @description
 #' rvn_watershed_read is used to read in the WatershedStorage.csv file produced by
-#' the modelling Framework Raven.
+#' Raven.
 #'
+#' @details
 #' This function expects a full file path to the WatershedStorage.csv file,
 #' then reads in the file using read.csv. The main advantage of this functon is
 #' renaming the columns to nicer names and extracting the units into something
@@ -17,6 +19,7 @@
 #' is sufficient.
 #'
 #' @param ff full file path to the WatershedStorage.csv file
+#' @param tzone string indicating the timezone of the data in ff
 #' @return \item{watershed_storage}{data frame from the file with standardized
 #' names} \item{units}{vector corresponding to units of each column}
 #' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
@@ -40,7 +43,7 @@
 #'
 #' @export rvn_watershed_read
 #' @importFrom utils read.csv
-rvn_watershed_read <- function(ff=NA) {
+rvn_watershed_read <- function(ff=NA, tzone=NULL) {
 
   if (missing(ff)) {
     stop("Requires the full file path to the WatershedStorage.csv file")
@@ -53,9 +56,12 @@ rvn_watershed_read <- function(ff=NA) {
   # re-read with specified colClasses
   watersheds <- read.csv(ff,header=TRUE,colClasses = classes,na.strings=c("---",'NA','1.#INF'))
 
-  # careful in date-time formats; excel can screw it up if csv is saved over. This works for
-  # un untouched Raven output file
-  date.time <- as.POSIXct(paste(watersheds$date,watersheds$hour), format="%Y-%m-%d %H:%M:%S")
+  if (is.null(tzone)) {
+    date.time <- as.POSIXct(paste(watersheds$date,watersheds$hour), format="%Y-%m-%d %H:%M:%S")
+  } else {
+    date.time <- as.POSIXct(paste(watersheds$date,watersheds$hour), format="%Y-%m-%d %H:%M:%S", tz=tzone)
+  }
+
   # head(date.time)
   cols <- colnames(watersheds)
 

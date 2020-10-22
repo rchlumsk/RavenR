@@ -1,5 +1,6 @@
-#' Hydrograph Data from Raven
+#' @title Hydrograph Data from Raven
 #'
+#' @description
 #' A dataset formatted to the xts package, read in by the hyd.read function.
 #' The dataset contains the typical columns from the Raven outputted
 #' Hydrographs.csv file, available for download in the Raven Tutorials

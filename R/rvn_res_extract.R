@@ -1,9 +1,11 @@
-#' Extract function for Raven Reservoir object
+#' @title Extract function for Raven Reservoir object
 #'
+#' @description
 #' rvn_res_extract is used for extracting data from the Raven reservoir object.
 #' Works for objects from rvn_res_extract function (from the ReservoirStages.csv
 #' file).
 #'
+#' @details
 #' rvn_res_extract is used to extract the modelled and observed data from a Raven
 #' reservoir object by name reference. It is also easy to create plots of
 #' modelled and observed data using this function. The simulated and observed

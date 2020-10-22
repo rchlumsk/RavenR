@@ -1,5 +1,9 @@
-#' Generate runoff coefficients upstream of gauges
+#' @title Generate runoff coefficients upstream of gauges
 #'
+#' @description
+#' Uses the rvh, custom precipitation, and hydrograph information to determine runoff coefficients.
+#'
+#' @details
 #' Reads model.rvh file and daily avg subbasin precip file (usually PRECIP_Daily_Average_BySubbasin.csv)
 #' and generates data frame describing runoff coefficients of gauged basins and observation data coverage.
 #' Uses precipitation from entire model run history.

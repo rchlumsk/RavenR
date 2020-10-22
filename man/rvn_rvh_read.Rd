@@ -2,12 +2,7 @@
 % Please edit documentation in R/rvn_rvh_read.R
 \name{rvn_rvh_read}
 \alias{rvn_rvh_read}
-\title{Read Raven .rvh (watershed discretization) file
-
-This routine reads in a valid Raven watershed discretization (.rvh) file and returns the
-information about HRUs and Subbasins as data tables. It also returns a subbasin igraph
-network object which describes stream network connectivity and adds additional HRU-derived
-subbasin characteristics such as total upstream area and dominant land/vegetation classes.}
+\title{Read Raven .rvh (watershed discretization) file}
 \usage{
 rvn_rvh_read(filename)
 }
@@ -33,8 +28,6 @@ and Aspect.}
 with nodes indexed by SBID.}
 }
 \description{
-Read Raven .rvh (watershed discretization) file
-
 This routine reads in a valid Raven watershed discretization (.rvh) file and returns the
 information about HRUs and Subbasins as data tables. It also returns a subbasin igraph
 network object which describes stream network connectivity and adds additional HRU-derived

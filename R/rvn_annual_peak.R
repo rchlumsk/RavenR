@@ -1,7 +1,9 @@
-#' Annual Peak Comparison
+#' @title Annual Peak Comparison
 #'
+#' @description
 #' rvn_annual_peak creates a plot of the annual observed and simulated peaks, based on the water year.
 #'
+#' @details
 #' This function creates a scatterplot of the annual observed and simulated
 #' peaks, calculated for each available water year of data (Oct 1st hardcoded)
 #' within the two series provided. Note that the calculation uses the peak
@@ -38,6 +40,7 @@
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #'
 #' @examples
+#'
 #' # load sample hydrograph data, two years worth of sim/obs
 #' data(rvn_hydrograph_data)
 #' sim <- rvn_hydrograph_data$hyd$Sub36

@@ -1,8 +1,10 @@
 #' @title Extract function for Raven Hydrograph object
 #'
+#' @description
 #' rvn_hyd_extract is used for extracting data from the Raven hydrograph object.
 #' Works for objects from rvn_hyd_extract function (from the Hydrographs.csv file).
 #'
+#' @details
 #' rvn_hyd_extract is used to extract the modelled and observed data from a Raven
 #' hydrograph object by name reference. It is also easy to create plots of
 #' modelled and observed data using this function. The simulated and observed

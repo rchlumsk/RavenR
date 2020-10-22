@@ -1,8 +1,10 @@
 #' @title Plot Reservoir Stage
 #'
+#' @description
 #' rvn_res_plot creates a reservoir stage plot for the supplied flow series, or
 #' equivalently a stage plot for reservoir stages.
 #'
+#' @details
 #' This function creates a reservoir stage plot using the supplied time series;
 #' any series not supplied will not be plotted. If the precip time series is
 #' supplied, the secondary y axis will be used to plot the precip time series.

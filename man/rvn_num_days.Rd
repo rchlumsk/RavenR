@@ -2,10 +2,7 @@
 % Please edit documentation in R/rvn_utilities.R
 \name{rvn_num_days}
 \alias{rvn_num_days}
-\title{Number of Days between two dates
-
-rvn_num_days is used to calculate the number of days in the month; handles leap
-years}
+\title{Number of Days between two dates}
 \usage{
 rvn_num_days(date1, date2)
 }
@@ -18,13 +15,10 @@ rvn_num_days(date1, date2)
 \item{int}{number of days between the two days}
 }
 \description{
-Number of Days between two dates
-
 rvn_num_days is used to calculate the number of days in the month; handles leap
 years
 }
 \examples{
-
 rvn_num_days(as.Date("2017-02-05"),as.Date("2017-02-12"))
 # 7
 

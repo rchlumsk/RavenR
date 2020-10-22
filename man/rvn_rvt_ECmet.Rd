@@ -84,14 +84,14 @@ perform.qc is currently under construction and is not yet available; setting
 to TRUE will result in an warning.
 
 The function has several built-in data quality checks. These include:
-- checking that all supplied files are for the same climate station
-- ensuring
+
+* checking that all supplied files are for the same climate station
+* ensuring;
 the timestep (data resolution) is the same in each file
-- automatically
+* automatically;
 combining time series and ensuring there are no gaps in the data supplied
-(i.e. time gaps, not missing values)
-- check for missing data and issuing a
-warning that post-processing will be required
+(i.e. time gaps, not missing values);  and
+* check for missing data and issuing a warning that post-processing will be required
 
 Note: Data quality is not assessed in this package, such as consistency between
 minimum and maximum temperatures. Subdaily data is not currenty supported.

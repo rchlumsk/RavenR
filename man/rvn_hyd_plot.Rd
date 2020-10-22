@@ -2,7 +2,7 @@
 % Please edit documentation in R/rvn_hyd_plot.R
 \name{rvn_hyd_plot}
 \alias{rvn_hyd_plot}
-\title{Plot Hydrograph}
+\title{Create Hydrograph Plot}
 \usage{
 rvn_hyd_plot(
   sim = NULL,

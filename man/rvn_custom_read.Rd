@@ -4,13 +4,15 @@
 \alias{rvn_custom_read}
 \title{Read Raven Custom Output files}
 \usage{
-rvn_custom_read(ff = NA, no_runname = FALSE)
+rvn_custom_read(ff = NA, no_runname = FALSE, tzone = NULL)
 }
 \arguments{
 \item{ff}{full file path to the custom output file}
 
 \item{no_runname}{boolean for whether a runName is supplied, important for
 parsing the filename}
+
+\item{tzone}{string indicating the timezone of the data in ff}
 }
 \value{
 \item{custom_out}{data frame with the custom output data stored as xts

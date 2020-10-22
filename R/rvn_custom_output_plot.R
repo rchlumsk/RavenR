@@ -1,9 +1,10 @@
-#' Plot Raven Custom Output
+#' @title Plot Raven Custom Output
 #'
+#' @description
 #' rvn_custom_output_plot is used to plot the custom output from Raven
 #'
-#' rvn_custom_output_plot plots the custom output from a Raven model. The custom
-#' output should be first read in using the custom.read function.
+#' @details
+#' The custom output should be first read in using the rvn_custom_read function.
 #'
 #' @param cust custom output object from custom.read
 #' @param IDs (optional) array of HRU IDs, subbasin IDs, HRU Group names/IDs to

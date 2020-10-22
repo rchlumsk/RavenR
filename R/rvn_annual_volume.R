@@ -1,7 +1,9 @@
-#' Annual Volume Comparison
+#' @title Annual Volume Comparison
 #'
+#' @description
 #' rvn_annual_volume creates a plot of the annual observed and simulated volumes.
 #'
+#' @details
 #' This function creates a scatterplot of the annual observed and simulated
 #' volumes, calculated for each available water year of data within the two series provided.
 #' The sim and obs should be of time

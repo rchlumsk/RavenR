@@ -2,10 +2,7 @@
 % Please edit documentation in R/rvn_utilities.R
 \name{rvn_substrMRight}
 \alias{rvn_substrMRight}
-\title{substring minus characters from the Right
-
-rvn_substrMRight returns a string x with n characters removed from the right
-side of the string.}
+\title{substring minus characters from the Right}
 \usage{
 rvn_substrMRight(x, n)
 }
@@ -15,14 +12,12 @@ rvn_substrMRight(x, n)
 \item{n}{number of characters to remove from the right side of the string}
 }
 \description{
-substring minus characters from the Right
-
 rvn_substrMRight returns a string x with n characters removed from the right
 side of the string.
 }
 \examples{
 
-rvn_substrRLeft("hello world",3)
+rvn_substrMRight("hello world",3)
 # returns "hello wo"
 
 }
