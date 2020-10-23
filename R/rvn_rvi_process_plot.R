@@ -26,7 +26,6 @@
 #'
 #' rvn_rvi_process_plot(conn)
 #'
-#' @keywords Raven  rvi  Hydrologic Processes
 #' @export rvn_rvi_process_plot
 #' @importFrom igraph get.data.frame graph_from_data_frame vertex.attributes
 #' @importFrom ggplot2 ggplot geom_segment geom_label xlim theme aes arrow unit ggsave

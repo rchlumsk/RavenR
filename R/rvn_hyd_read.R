@@ -31,7 +31,7 @@
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #'
 #' @examples
@@ -45,7 +45,6 @@
 #' head(myhyd$hyd)
 #' myhyd$units
 #'
-#' @keywords Raven read.csv hydrograph
 #' @export rvn_hyd_read
 #' @importFrom xts xts
 #' @importFrom utils read.csv
