@@ -5,11 +5,11 @@
 #' generates an estimate of the grid polygons associated with each netCDF cell and exports this to a shapefile (outshp)
 #'
 #' @details
-#' Note that the function can fail due to bad netCDF file or inappropriate UTM zone;
+#' Note that the function can fail due to bad netCDF file or inappropriate UTM zone.
 #'
 #' @param ncfile netCDF file with latitude and longitude variables
 #' @param UTMzone UTM zone for exported shapefile (integer)
-#' @param outshp name of output shapefile prefix (i.e., no .shp extension)
+#' @param outshp name of output shapefile prefix (i.e., no .shp extension, DEFAULT 'rvn_output_shapefile')
 #'
 #' @return \item{TRUE}{returns TRUE if executed properly. Also generates shapefile in folder}
 #'
@@ -24,12 +24,10 @@
 #'
 #' @examples
 #'
-#' \dontrun{
-#' ncfile <- system.file("extdata/GlenAllan.nc", package="RavenR")
+#' ncfile <- system.file("extdata/Nith_era5_sample.nc", package="RavenR")
 #' UTMzone <- 17
-#' outshp <- "maps/RDPS_Grid"
+#' outshp <- 'Nith_output_shapefile'
 #' rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
-#' }
 #'
 #'
 #' @export rvn_netcdf_to_gridshp
@@ -38,25 +36,15 @@
 #' @importFrom deldir deldir tile.list
 #' @importFrom methods slot
 #' @importFrom ncdf4 nc_open ncvar_get
-rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp)
+rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp='rvn_output_shapefile')
 {
-  # require(ncdf.tools)
-  # @importFrom ncdf.tools readNcdf
-
-  # require(sp)
-  # require(rgdal)
-  # require(deldir)
-  # require(sna)
 
   # extract lat-long from netCDF file
   #-----------------------------------------------------------------------
   nc_data <- nc_open(ncfile)
-  lat <- ncdf4::ncvar_get(nc_data, "lat")
-  long <- ncdf4::ncvar_get(nc_data, "lon")
-
-  # mydata<- readNcdf(ncfile,var.name=c("lat"))
-  lat<-as.vector(t(mydata))
-  # mydata<- readNcdf(ncfile,var.name=c("lon"))
+  mydata <- ncvar_get(nc_data, "lat")
+  lat <- as.vector(t(mydata))
+  mydata <- ncvar_get(nc_data, "lon")
   long<-as.vector(t(mydata))
 
   ncols=length(mydata[1,])
@@ -67,10 +55,10 @@ rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp)
   IDs<-(c-1)*nrows+(r-1)
   #print(c)
 
-
   # transform lat-long to UTM zone
   #-----------------------------------------------------------------------
-  latlong <- data.frame(ID = 1:2, X = long, Y = lat)
+  # latlong <- data.frame(ID = 1:2, X = long, Y = lat)
+  latlong <- data.frame(ID = IDs, X = long, Y = lat)
   sp::coordinates(latlong) <- c("X", "Y")
   sp::proj4string(latlong) <- CRS("+proj=longlat +datum=WGS84")  ## for example
   res <- spTransform(latlong, CRS(paste0("+proj=utm +zone=",UTMzone," ellps=WGS84")))
