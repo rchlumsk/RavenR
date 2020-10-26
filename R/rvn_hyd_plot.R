@@ -16,7 +16,7 @@
 #' this is not a concern. The supplied time series should be in xts format,
 #' which again can be obtained directly by using the hyd.extract function.
 #'
-#' The winter_shading argument will add a transparent cyan shading for the
+#' The winter_shading argument will add a transparent grey shading for the
 #' specified period by wsdates in each year that is plotted.
 #'
 #' wsdates is formatted as c(winter start month, winter start day, winter end month, winter end day).
@@ -39,8 +39,7 @@
 #'
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven flow hydrograph
+#' \href{http://raven.uwaterloo.ca/}{Raven page}
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs

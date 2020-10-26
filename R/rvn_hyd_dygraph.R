@@ -9,10 +9,9 @@
 #' @param basins list of subbasin names from hydrograph file. Each subbasin creates separate dygraph plots
 #' @param figheight height of figure, in pixels
 #'
-#' @return {res}{a list of plot handles to dygraph plots}
+#' @return {res}{ a list of plot handles to dygraph plots}
 #'
 #' @seealso \href{http://raven.uwaterloo.ca/}{Raven page}
-#' @keywords Raven hydrograph plotting
 #' @examples
 #'
 #' # read in RavenR sample hydrographs data
