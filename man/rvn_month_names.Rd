@@ -16,9 +16,7 @@ rvn_month_names(short = TRUE)
 rvn_month_names is used to return a character vector of months in the year
 }
 \examples{
-months_of_the_year <- rvn_month_names()
-months_of_the_year
-
+rvn_month_names()
 rvn_month_names(FALSE)
 
 }
@@ -26,5 +24,3 @@ rvn_month_names(FALSE)
 \code{\link{rvn_num_days}} for calculating the number of days in a
 month
 }
-\keyword{months}
-\keyword{year}

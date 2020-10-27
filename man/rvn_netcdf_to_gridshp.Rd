@@ -4,14 +4,14 @@
 \alias{rvn_netcdf_to_gridshp}
 \title{Generate grid overlay from netCDF file}
 \usage{
-rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
+rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp = "rvn_output_shapefile")
 }
 \arguments{
 \item{ncfile}{netCDF file with latitude and longitude variables}
 
 \item{UTMzone}{UTM zone for exported shapefile (integer)}
 
-\item{outshp}{name of output shapefile prefix (i.e., no .shp extension)}
+\item{outshp}{name of output shapefile prefix (i.e., no .shp extension, DEFAULT 'rvn_output_shapefile')}
 }
 \value{
 \item{TRUE}{returns TRUE if executed properly. Also generates shapefile in folder}
@@ -21,16 +21,14 @@ Takes the latitude-longitude cell coordinates from a netCDF file (assumed to be 
 generates an estimate of the grid polygons associated with each netCDF cell and exports this to a shapefile (outshp)
 }
 \details{
-Note that the function can fail due to bad netCDF file or inappropriate UTM zone;
+Note that the function can fail due to bad netCDF file or inappropriate UTM zone.
 }
 \examples{
 
-\dontrun{
-ncfile <- system.file("extdata/GlenAllan.nc", package="RavenR")
+ncfile <- system.file("extdata/Nith_era5_sample.nc", package="RavenR")
 UTMzone <- 17
-outshp <- "maps/RDPS_Grid"
+outshp <- 'Nith_output_shapefile'
 rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
-}
 
 
 }

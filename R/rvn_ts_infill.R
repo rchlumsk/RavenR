@@ -49,6 +49,7 @@ rvn_ts_infill <- function(ts)
     else if (abs(min_interval-1/2 )<0.001){byflag="12 hour"}
     else{
       print("Only able to handle hourly, daily, 2/4/6/8/12 hr xts time series")
+      print(c('Minimum time step (hours) found in time series: ', min_interval))
       return (NA)
     }
 

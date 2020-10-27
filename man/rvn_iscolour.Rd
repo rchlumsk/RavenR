@@ -30,6 +30,3 @@ Check if character string is a valid color representation}
 
 \code{\link{rvn_col_transparent}} for creating transparent colour codes
 }
-\keyword{check}
-\keyword{colour}
-\keyword{valid}

@@ -55,18 +55,18 @@
 #'
 #' Download EC streamgauge data from
 #' \href{https://wateroffice.ec.gc.ca/search/historical_e.html}{WSC Historical
-#' Data}
+#' Data}.\cr
 #' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @keywords Raven streamgauge flow rvt conversion
 #'
 #' @examples
-#' system.file("extdata",'Daily__Oct-1-2020_08_20_52PM.csv', package="RavenR")
+#' ff = system.file("extdata",'Daily__Oct-1-2020_08_20_52PM.csv', package="RavenR")
 #' rvn_rvt_wsc(ff,subIDs=c(6))
 #'
 #' # add custom station names, put subID number first in file
-#' rvn_rvt_wsc(ff,subIDs=c(6),stnNames <- c('Grand River'),flip_number=TRUE)
+#' rvn_rvt_wsc(ff,subIDs=c(6),stnNames=c('Grand River'), flip_number=TRUE)
 #'
 #' @export rvn_rvt_wsc
 #' @importFrom xts xts

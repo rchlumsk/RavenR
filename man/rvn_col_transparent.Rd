@@ -29,9 +29,9 @@ added with the `alpha` parameter.
 plot(rnorm(20),col='black')
 
 # create a transparent blue colour for plotting
-mycol <- rvn_col_transparent('blue',100)
+mycol <- rvn_col_transparent('red',100)
 
-# plot more random points in transparent blue colour
+# plot more random points in transparent red colour
 points(rnorm(20),col=mycol)
 
 }
@@ -42,5 +42,3 @@ plot points transparent in R}
 
 \code{\link{rvn_iscolour}} for checking validity of colour codes
 }
-\keyword{colour}
-\keyword{transparency}

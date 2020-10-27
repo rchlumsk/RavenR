@@ -16,7 +16,7 @@ rvn_hyd_dygraph(hy, timezone = "UTC", basins = "", figheight = 400)
 \item{figheight}{height of figure, in pixels}
 }
 \value{
-{res}{a list of plot handles to dygraph plots}
+{res}{ a list of plot handles to dygraph plots}
 }
 \description{
 rvn_hyd_dygraph plots modeled vs observed hydrographs when supplied with hydrograph data
@@ -38,6 +38,3 @@ rvn_hyd_dygraph(hy)
 \seealso{
 \href{http://raven.uwaterloo.ca/}{Raven page}
 }
-\keyword{Raven}
-\keyword{hydrograph}
-\keyword{plotting}
