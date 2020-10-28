@@ -26,10 +26,6 @@
 #' \code{\link{rvn_watershedmeb_read}} for reading in the
 #' WatershedMassEnergyBalance.csv file
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven read.csv watershed storage
 #' @examples
 #'
 #' # locate in RavenR Watershed storage file

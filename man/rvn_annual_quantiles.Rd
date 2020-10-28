@@ -49,8 +49,3 @@ head(qdat)
 \author{
 Leland Scantlebury, \email{leland@scantle.com}
 }
-\keyword{diagnostic}
-\keyword{flow}
-\keyword{hydrograph}
-\keyword{quantile}
-\keyword{statistics}

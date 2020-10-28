@@ -74,14 +74,7 @@ gridIDcol = 'GridIDs', HRUIDcol = "HRU_ID", outfile = "Nith_GridWeights.rvi")
 }
 \seealso{
 \code{\link{rvn_netcdf_to_gridshp}} for converting netcdf files to grid shapefile format
-
-\href{http://www.civil.uwaterloo.ca/jrcraig/}{James R. Craig's research page} for software downloads,
-including the \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
 \author{
 James R. Craig, University of Waterloo, 2019
 }
-\keyword{conversion}
-\keyword{grid}
-\keyword{netcdf}
-\keyword{shapefile}

@@ -35,6 +35,3 @@ dyplots
 rvn_hyd_dygraph(hy)
 
 }
-\seealso{
-\href{http://raven.uwaterloo.ca/}{Raven page}
-}

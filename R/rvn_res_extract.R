@@ -37,13 +37,8 @@
 #' creating the object required in this function. \code{\link{rvn_res_plot}} for
 #' plotting the extracted stage time series
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven plot extract reservoir
 #' @examples
 #'
-#' \dontrun{
 #' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
 #'
 #' # Read in Raven Reservoirs file, store into myres
@@ -54,8 +49,6 @@
 #'
 #' # Example for precipitation
 #' precip <- rvn_res_extract(subs="precip",res=myres)
-#'
-#' }
 #'
 #' @export rvn_res_extract
 rvn_res_extract <- function(subs=NA, res=NA, prd=NULL) {

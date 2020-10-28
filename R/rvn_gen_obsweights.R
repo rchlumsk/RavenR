@@ -61,8 +61,6 @@
 #'  # cleanup example files
 #'  unlink(x=c("run1_Hydrographs.rvt","run1_Hydrographs_wts.rvt"))
 #'
-#' @keywords Raven observations weights generate
-#'
 #' @seealso \code{\link{rvn_rvt_obsweights}} to write the weights to an rvt file
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven website}
 #'

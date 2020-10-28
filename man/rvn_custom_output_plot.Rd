@@ -35,12 +35,4 @@ rvn_custom_output_plot(mycustomdata, IDs=seq(1,10), prd="2002-10-01/2003-09-01")
 }
 \seealso{
 \code{\link{rvn_custom_output_plot}} for plotting custom output
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{custom}
-\keyword{output}
-\keyword{plot}

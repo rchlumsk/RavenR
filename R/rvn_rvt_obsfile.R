@@ -28,10 +28,8 @@
 #' # cleanup example files
 #' unlink('run1_Hydrographs.rvt')
 #'
-#' @keywords Raven observations
-#'
 #' @seealso \code{\link{rvn_ts_infill}} for infilling time series, and  \code{\link{rvn_rvt_obsweights}} to write an rvt observation weights file.
-#' See also the \href{http://raven.uwaterloo.ca/}{Raven website}
+#'
 #' @export rvn_rvt_obsfile
 #' @importFrom zoo index
 rvn_rvt_obsfile <- function(filename,ts,SBID,typestr="HYDROGRAPH", units="m3/s")

@@ -68,11 +68,4 @@ rvn_res_plot(sim,obs,precip=precip,prd=prd)
 \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
 
 \code{\link{rvn_res_extract}} to extract time series from Raven objects
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{reservoir}
-\keyword{stage}

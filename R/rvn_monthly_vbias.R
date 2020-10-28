@@ -36,10 +36,6 @@
 #' @seealso \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 #' volumes
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven monthly volume bias diagnostics
 #' @examples
 #' # load sample hydrograph data, two years worth of sim/obs
 #' data(rvn_hydrograph_data)

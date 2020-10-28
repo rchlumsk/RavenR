@@ -31,8 +31,6 @@ rvn_rvt_tidyhydat(
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
-
-See also the \href{http://www.raven.uwaterloo.ca/}{Raven page}
 }
 \description{
 rvn_rvt_tidyhydat converts Environment Canada historical streamgauge data,
@@ -84,9 +82,3 @@ rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
   stnNames=station_info$STATION_NAME, flip_number=TRUE)
 
 }
-\keyword{Raven}
-\keyword{conversion}
-\keyword{flow}
-\keyword{rvt}
-\keyword{streamgauge}
-\keyword{tidyhydat}

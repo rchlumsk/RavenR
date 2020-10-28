@@ -36,10 +36,7 @@
 #'
 #' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file and
 #' creating the object required in this function.
-#' \code{\link{rvn_hyd_plot}} for conveniently plotting the output object contents onto the same figure. \cr
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://raven.uwaterloo.ca/}{Raven page}.
+#' \code{\link{rvn_hyd_plot}} for conveniently plotting the output object contents onto the same figure.
 #'
 #' @examples
 #' # read in hydrograph sample csv data from RavenR package

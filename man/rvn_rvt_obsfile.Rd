@@ -41,10 +41,7 @@ unlink('run1_Hydrographs.rvt')
 }
 \seealso{
 \code{\link{rvn_ts_infill}} for infilling time series, and  \code{\link{rvn_rvt_obsweights}} to write an rvt observation weights file.
-See also the \href{http://raven.uwaterloo.ca/}{Raven website}
 }
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{Raven}
-\keyword{observations}

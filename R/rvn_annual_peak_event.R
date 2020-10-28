@@ -39,10 +39,6 @@
 #' @seealso \code{\link{rvn_annual_peak}} to create a scatterplot of annual peaks
 #' (consider the magnitude of peaks only)
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#'
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs
@@ -59,7 +55,6 @@
 #' rvn_annual_peak_event(sim, obs, add_r2=TRUE)
 #'
 #'
-#' @keywords Raven annual peak event diagnostics
 #' @export rvn_annual_peak_event
 #' @importFrom stats lm
 #' @importFrom lubridate year date

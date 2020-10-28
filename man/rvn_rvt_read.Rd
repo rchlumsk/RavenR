@@ -29,13 +29,6 @@ rvn_rvt_read(.) -> rvt
 plot(rvt$TEMP_DAILY_MIN)
 
 }
-\seealso{
-See also the \href{http://raven.uwaterloo.ca/}{Raven page}
-}
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{Raven}
-\keyword{rvt}
-\keyword{series}
-\keyword{time}

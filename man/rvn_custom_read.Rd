@@ -42,12 +42,4 @@ plot(mycustomdata[,5],main='Daily Average SNOW - HRU 5')
 }
 \seealso{
 \code{\link{rvn_custom_output_plot}} for plotting custom output
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{custom}
-\keyword{output}
-\keyword{read}

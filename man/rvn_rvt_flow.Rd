@@ -73,12 +73,4 @@ rvn_rvt_flow(obs,subID=36,stnName="Nith_Obs1",write_redirect=TRUE,flip_number=1)
 }
 \seealso{
 \code{\link{rvn_rvt_wsc}} to create an rvt file from Water Survey Canada (WSC) data
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/Default.html}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{file}
-\keyword{flow}
-\keyword{rvt}

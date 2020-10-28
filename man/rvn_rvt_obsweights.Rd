@@ -64,14 +64,7 @@ Any NA values in the weights are converted to the flag -1.2345, used in Raven as
 }
 \seealso{
 \code{\link{rvn_rvt_obsfile}} \code{\link{rvn_gen_obsweights}}
-See also the \href{http://raven.uwaterloo.ca/}{Raven website}
 }
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{Raven}
-\keyword{file}
-\keyword{observations}
-\keyword{rvt}
-\keyword{weights}
-\keyword{write}

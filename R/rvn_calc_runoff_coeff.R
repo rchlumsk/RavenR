@@ -16,7 +16,6 @@
 #' @return {data frame with runoff coefficients of gauged basins}
 #'
 #' @author James R. Craig, University of Waterloo
-#' @seealso See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 #'
 #' @examples
 #'  myrvh <- system.file("extdata","Nith.rvh", package="RavenR")
@@ -34,7 +33,6 @@
 #'   ylab = "Runoff coeff", ylim=c(0,3),beside=TRUE,
 #'   col=c("blue","deepskyblue"),legend.text=c("sim","obs"),las=2)
 #'
-#' @keywords Raven  rvh  runoff coefficient
 #' @export rvn_calc_runoff_coeff
 #' @importFrom igraph ego ego_size V
 rvn_calc_runoff_coeff <- function(rvhfile,

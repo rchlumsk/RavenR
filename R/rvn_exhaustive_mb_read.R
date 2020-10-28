@@ -24,10 +24,6 @@
 #' \code{\link{rvn_exhaustive_mb_read}} for reading in the
 #' WatershedMassEnergyBalance.csv file
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven read.csv exhaustive mass balance
 #' @examples
 #' # Read in exhaustive MB file, create plot
 #' ff <- system.file("extdata","run1_ExhaustiveMassBalance.csv", package="RavenR")

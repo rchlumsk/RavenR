@@ -79,13 +79,4 @@ rvn_annual_peak_event(sim, obs, add_r2=TRUE)
 \seealso{
 \code{\link{rvn_annual_peak}} to create a scatterplot of annual peaks
 (consider the magnitude of peaks only)
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{annual}
-\keyword{diagnostics}
-\keyword{event}
-\keyword{peak}

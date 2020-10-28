@@ -82,7 +82,3 @@ See also the \href{http://raven.uwaterloo.ca/}{Raven website}
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{Raven}
-\keyword{generate}
-\keyword{observations}
-\keyword{weights}

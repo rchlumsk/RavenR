@@ -21,10 +21,6 @@
 #' @seealso \code{\link{rvn_apply_wyearly}} to apply functions over the water year
 #' \code{\link{endpoints}} workhorse function for generating endpoints in xts for other periods
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven water year indices
 #' @examples
 #'
 #' # read in sample forcings data

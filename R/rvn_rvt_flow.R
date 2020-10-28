@@ -36,10 +36,6 @@
 #' @return \item{TRUE}{returns TRUE if the function executed successfully}
 #' @seealso \code{\link{rvn_rvt_wsc}} to create an rvt file from Water Survey Canada (WSC) data
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/Default.html}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven rvt flow file
 #' @examples
 #' # load sample hydrograph data, two years worth of sim/obs
 #' data(rvn_hydrograph_data)

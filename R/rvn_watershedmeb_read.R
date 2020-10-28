@@ -26,12 +26,6 @@
 #' @seealso \code{\link{rvn_watershed_read}} for reading in the
 #' WatershedStorage.csv file
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#'
-#' @keywords Raven read.csv watershed mass energy balance
-#'
 #' @examples
 #' # locate RavenR Watershed Mass Energy Balance storage file
 #' ff <- system.file("extdata","run1_WatershedMassEnergyBalance.csv", package="RavenR")

@@ -34,10 +34,6 @@
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{rvn_res_read}} for reading in the ReservoirStages.csv file
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven reservoir stage relationship initial conditions
 #' @examples
 #' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
 #'

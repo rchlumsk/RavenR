@@ -31,10 +31,6 @@
 #' @seealso \code{\link{rvn_flow_scatterplot}} for creating flow scatterplots
 #' @seealso \code{\link{rvn_cum_plot_flow}} for creating generic cumulative function plotting
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven flow cumulative diagnostics
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs

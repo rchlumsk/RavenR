@@ -69,13 +69,4 @@ rvn_monthly_vbias(sim,obs,normalize = FALSE)
 \seealso{
 \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 volumes
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{bias}
-\keyword{diagnostics}
-\keyword{monthly}
-\keyword{volume}

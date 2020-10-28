@@ -66,12 +66,7 @@ command blocks.
 \seealso{
 \code{\link{rvn_rvh_write}} to write contents of the generated (and usually modified HRU and SubBasin tables)
 \code{\link{rvn_subbasin_network_plot}} to plot the subbasin network
-See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 }
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{HRUs}
-\keyword{Raven}
-\keyword{SubBasins}
-\keyword{rvh}

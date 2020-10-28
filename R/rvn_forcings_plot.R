@@ -14,10 +14,6 @@
 #' @seealso \code{\link{rvn_forcings_read}} for the function used to read in the
 #' forcings function data
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven forcing plot diagnostics
 #' @examples
 #'
 #' # read in sample forcings data

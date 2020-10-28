@@ -31,10 +31,6 @@
 #' @seealso \code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow
 #' values
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven annual volume diagnostics
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs

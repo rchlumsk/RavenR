@@ -39,7 +39,6 @@
 #' @seealso
 #' \code{\link{rvn_rvh_write}} to write contents of the generated (and usually modified HRU and SubBasin tables)
 #' \code{\link{rvn_subbasin_network_plot}} to plot the subbasin network
-#' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
 #'   # load example rvh file
@@ -62,7 +61,6 @@
 #'   upstr <- cumsum(rvh$SBtable$Area)
 #'   upstr[rvh$SBtable$Downstream_ID == -1]
 #'
-#' @keywords Raven  rvh  HRUs  SubBasins
 #' @export rvn_rvh_read
 #' @importFrom igraph graph_from_data_frame ego ego_size V
 #' @importFrom utils read.table

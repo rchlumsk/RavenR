@@ -128,13 +128,4 @@ Historical Data}
 
 Download multiple years of climate data, see
 \href{ftp://ftp.tor.ec.gc.ca/Pub/Get_More_Data_Plus_de_donnees/Readme.txt}{instructions}
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{conversion}
-\keyword{meteorological}
-\keyword{rvt}
-\keyword{station}

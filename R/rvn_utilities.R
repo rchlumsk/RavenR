@@ -419,9 +419,6 @@ rvn_apply_wyearly_which_max_xts <- function(x, mm=9, dd=30)
 #' @return {prd argument with warnings provided if needed}
 #' @seealso \code{\link{rvn_theme_RavenR}} provides a theme for the RavenR package
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #' @examples
 #' data(rvn_hydrograph_data)
 #'

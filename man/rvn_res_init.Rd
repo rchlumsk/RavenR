@@ -63,14 +63,4 @@ unlink(temprvc)
 }
 \seealso{
 \code{\link{rvn_res_read}} for reading in the ReservoirStages.csv file
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{conditions}
-\keyword{initial}
-\keyword{relationship}
-\keyword{reservoir}
-\keyword{stage}

@@ -19,9 +19,6 @@
 #' The .rvi file can have arbitrary contents outside of the :HydrologicProcesses-
 #' :EndHydrologicProcesses block and :SubBasins-:EndSubBasins command blocks.
 #'
-#' @seealso  rvi.connections
-#' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
-#'
 #' @examples
 #' # sample workflow of rvn_rvi_read
 #' rvi <- system.file("extdata","Nith.rvi", package="RavenR") %>%

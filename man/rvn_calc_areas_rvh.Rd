@@ -64,12 +64,4 @@ myareas <- rvn_calc_areas_rvh(ff,write_file=TRUE)
 \seealso{
 \code{\link{rvn_forcings_read}} for analysis tools related to the
 forcing functions
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{area}
-\keyword{drainage}
-\keyword{rvh}

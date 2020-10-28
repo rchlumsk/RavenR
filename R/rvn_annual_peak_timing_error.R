@@ -43,10 +43,6 @@
 #' events \code{\link{rvn_annual_peak_event_error}} to calculate errors in peak
 #' events
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#'
 #' @examples
 #' # load sample hydrograph data, two years worth of sim/obs
 #' data(rvn_hydrograph_data)
@@ -62,7 +58,6 @@
 #' rvn_annual_peak_timing_error(sim, obs, add_line=T, add_labels=FALSE)
 #'
 #'
-#' @keywords Raven annual peak timing error diagnostics
 #' @export rvn_annual_peak_timing_error
 #' @importFrom stats lm
 #' @importFrom lubridate year date

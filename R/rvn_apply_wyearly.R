@@ -18,9 +18,6 @@
 #' @param dd day of water year ending (default 30)
 #' @seealso \code{\link{rvn_wyear_indices}} for obtaining endpoints in the water year
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/software.html}{James R.
-#' Craig's research page} for software downloads
-#' @keywords water year apply
 #' @examples
 #' # use sample forcing data (or use forcings_read to read in ForcingFunctions.csv)
 #' data(rvn_forcing_data)

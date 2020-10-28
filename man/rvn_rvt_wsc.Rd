@@ -86,13 +86,5 @@ events
 
 Download EC streamgauge data from
 \href{https://wateroffice.ec.gc.ca/search/historical_e.html}{WSC Historical
-Data}.\cr
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+Data}.
 }
-\keyword{Raven}
-\keyword{conversion}
-\keyword{flow}
-\keyword{rvt}
-\keyword{streamgauge}

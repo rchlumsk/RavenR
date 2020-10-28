@@ -11,7 +11,6 @@
 #' @seealso \code{\link{rvn_custom_read}} for reading in custom output files
 #' @seealso \code{\link{rvn_custom_output_plot}} for plotting custom output
 #'
-#'
 #' @format A data frame with 730 rows, containg data for 32 HRUs from 2002-10-01 to 2004-09-29
 #'
 #' @examples

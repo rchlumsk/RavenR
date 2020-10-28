@@ -79,19 +79,9 @@ peak1$p1
 # plot directly and without labels
 rvn_annual_peak_error(sim, obs, add_line=TRUE, add_labels=FALSE)
 
-
 }
 \seealso{
 \code{\link{rvn_annual_peak_event}} to consider the timing of peak
 events \code{\link{rvn_annual_peak_event_error}} to calculate errors in peak
 events.
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{annual}
-\keyword{diagnostics}
-\keyword{error}
-\keyword{peak}

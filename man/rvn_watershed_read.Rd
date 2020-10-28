@@ -49,12 +49,4 @@ head(mywshd$watershed_storage)
 \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
 \code{\link{rvn_watershedmeb_read}} for reading in the
 WatershedMassEnergyBalance.csv file
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{read.csv}
-\keyword{storage}
-\keyword{watershed}

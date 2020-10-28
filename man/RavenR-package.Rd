@@ -21,5 +21,5 @@ This package provides a number of types of useful functions, including:
 The package \href{https://github.com/rchlumsk/RavenR}{GitHub page} and
 \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+\href{http://raven.uwaterloo.ca/}{Raven web site}
 }

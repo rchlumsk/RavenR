@@ -87,8 +87,4 @@ rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=TRUE, wsdates=c(11,1,
 flow series
 
 \code{\link{rvn_hyd_extract}} to extract time series from Raven objects
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://raven.uwaterloo.ca/}{Raven page}
 }

@@ -44,8 +44,6 @@
 #' @param flip_number (optional) put the subID first in the .rvt filename
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #'
-#' See also the \href{http://www.raven.uwaterloo.ca/}{Raven page}
-#' @keywords Raven streamgauge flow rvt conversion tidyhydat
 #' @examples
 #' library(tidyhydat)
 #' stations <- c("05CB004","05CA002")

@@ -44,10 +44,6 @@
 #' @seealso \code{\link{rvn_annual_peak}} to consider just the magnitude of each
 #' year's peak \code{\link{rvn_annual_peak_error}} to calculate errors in peaks
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#'
 #' @examples
 #' # load sample hydrograph data, two years worth of sim/obs
 #' data(rvn_hydrograph_data)
@@ -67,7 +63,6 @@
 #' rvn_annual_peak_event_error(sim, obs, mm=6, add_line=TRUE,add_labels=FALSE)$p1
 #'
 #'
-#' @keywords Raven annual peak event error diagnostics
 #' @export rvn_annual_peak_event_error
 #' @importFrom stats lm
 #' @importFrom lubridate year date

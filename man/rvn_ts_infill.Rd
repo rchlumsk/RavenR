@@ -32,5 +32,3 @@ out<-rvn_ts_infill(mydata)
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{infill}
-\keyword{timeseries}

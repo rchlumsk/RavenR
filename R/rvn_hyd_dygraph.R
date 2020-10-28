@@ -11,7 +11,6 @@
 #'
 #' @return {res}{ a list of plot handles to dygraph plots}
 #'
-#' @seealso \href{http://raven.uwaterloo.ca/}{Raven page}
 #' @examples
 #'
 #' # read in RavenR sample hydrographs data

@@ -22,8 +22,6 @@
 #' mydata<-mydata[weekdays(index(mydata))!="Wednesday"] # remove wednesdays
 #' out<-rvn_ts_infill(mydata)
 #'
-#' @keywords timeseries infill
-#'
 #' @export rvn_ts_infill
 #' @importFrom zoo index
 #' @importFrom xts xts

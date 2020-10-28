@@ -33,10 +33,6 @@ rvn_rvi_read(.)
 nrow(rvi$HydProcTable)
 
 }
-\seealso{
-rvi.connections
-See also the \href{http://raven.uwaterloo.ca/}{Raven page}
-}
 \author{
 James R. Craig, University of Waterloo
 }

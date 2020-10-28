@@ -20,10 +20,6 @@
 #' object}
 #' @seealso \code{\link{rvn_custom_output_plot}} for plotting custom output
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven read custom output
 #' @examples
 #'
 #' # find sample rvh file for Nith subwatershed
