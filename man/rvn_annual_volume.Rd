@@ -11,7 +11,8 @@ rvn_annual_volume(
   dd = 30,
   add_line = TRUE,
   add_r2 = FALSE,
-  add_eqn = FALSE
+  add_eqn = FALSE,
+  add_labels = FALSE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ rvn_annual_volume(
 \item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
 
 \item{add_eqn}{optionally adds the equation for a linear regression line through the origin (default FALSE)}
+
+\item{add_labels}{optionally adds year-ending labels to each point on plot using geom_text (default FALSE)}
 }
 \value{
 returns a list with annual volume data in a data frame, and a ggplot object
@@ -64,6 +67,9 @@ rvn_annual_volume(sim,obs)
 
 # create a plot of the annual volumes with r2
 rvn_annual_volume(sim,obs,add_r2=TRUE, add_eqn=TRUE)
+
+# create a plot of the annual volumes with year-ending labels
+rvn_annual_volume(sim,obs, add_labels=TRUE)
 
 # calculate annual volumes for different water years (e.g. ending Oct 31)
 vv <- rvn_annual_volume(sim, obs, mm=10, dd=31)

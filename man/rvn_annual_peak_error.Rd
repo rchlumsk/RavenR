@@ -51,9 +51,6 @@ The sim and obs should be of time series (xts) format and are assumed to be
 of the same length and time period. The flow series are assumed to be daily
 flows with units of m3/s.
 
-The R2 diagnostic is calculated for a fit with no intercept (in a perfect
-fit the points are identical, and intercept is automatically zero).
-
 The add_labels will add the labels of 'overprediction' and 'underprediction'
 to the right hand side axis if set to TRUE. This is useful in interpreting
 the plots.

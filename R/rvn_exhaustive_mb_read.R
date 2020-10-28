@@ -14,9 +14,15 @@
 #' located in the current working directory, then simply the name of the file
 #' is sufficient.
 #'
+#' tzone is a string indicating the timezone of the supplied file. The
+#' timezone provided is coded into the resulting data frame using the as.POSIXct
+#' function. If no timezone is provided, this is left as an empty string, and is
+#' determined by the function as the current time zone.
+#'
 #' @param ff full file path to the ExhaustiveMassBalance.csv file
 #' @param join_categories boolean whether add to the category tag as a column
 #' name prefix in exhaustivemb output (default TRUE)
+#' @param tzone string indicating the timezone of the data in ff
 #' @return \item{exhaustivemb}{data frame from the file with standardized
 #' names} \item{units}{vector corresponding to units of each column}
 #' \item{categories}{vector corresponding to the storage category of each column}
@@ -37,7 +43,7 @@
 #'      main="Cumulative Surface Water Infiltration")
 #' @export rvn_exhaustive_mb_read
 #' @importFrom xts xts
-rvn_exhaustive_mb_read <- function(ff=NA,join_categories=TRUE) {
+rvn_exhaustive_mb_read <- function(ff=NA, join_categories=TRUE, tzone=NULL) {
 
   if (missing(ff)) {
     stop("Requires the full file path to the ExhaustiveMassBalance.csv file")
@@ -59,10 +65,12 @@ rvn_exhaustive_mb_read <- function(ff=NA,join_categories=TRUE) {
   # re-read with specified colClasses
   emb <- read.csv(ff,header=TRUE,skip=1,colClasses = classes,na.strings=c("---",'NA','1.#INF'))
 
-  # careful in date-time formats; excel can screw it up if csv is saved over. This works for
-  # un untouched Raven output file
-  # date.time <- as.POSIXct(paste(emb$date,emb$hour), format="%Y-%m-%d %H:%M:%S")
-  date.time <- as.POSIXct(paste(emb[,2],emb[,3]), format="%Y-%m-%d %H:%M:%S") # assuming order of dt columns
+  if (is.null(tzone)) {
+    # date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S")
+    date.time <- as.POSIXct(paste(emb[,2],emb[,3]), format="%Y-%m-%d %H:%M:%S")
+  } else {
+    date.time <- as.POSIXct(paste(emb[,2],emb[,3]), format="%Y-%m-%d %H:%M:%S", tz=tzone)
+  }
 
   # head(date.time)
   cols <- colnames(emb)

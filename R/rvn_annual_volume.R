@@ -25,6 +25,7 @@
 #' @param add_line optionally adds a 1:1 line to the plot for reference (default TRUE)
 #' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
 #' @param add_eqn optionally adds the equation for a linear regression line through the origin (default FALSE)
+#' @param add_labels optionally adds year-ending labels to each point on plot using geom_text (default FALSE)
 #' @return returns a list with annual volume data in a data frame, and a ggplot object
 #'  \item{df_volume}{data frame of the calculated annual volumes}
 #'  \item{p1}{ggplot object with plotted annual volumes}
@@ -44,13 +45,19 @@
 #' # create a plot of the annual volumes with r2
 #' rvn_annual_volume(sim,obs,add_r2=TRUE, add_eqn=TRUE)
 #'
+#' # create a plot of the annual volumes with year-ending labels
+#' rvn_annual_volume(sim,obs, add_labels=TRUE)
+#'
 #' # calculate annual volumes for different water years (e.g. ending Oct 31)
 #' vv <- rvn_annual_volume(sim, obs, mm=10, dd=31)
 #' vv$df.volume
 #' vv$p1
 #'
 #' @export rvn_annual_volume
-rvn_annual_volume <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r2 = FALSE, add_eqn=FALSE)
+#' @importFrom stats lm
+#' @importFrom lubridate year date
+#' @importFrom ggplot2 ggplot aes geom_point geom_abline geom_text scale_x_continuous scale_y_continuous
+rvn_annual_volume <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r2 = FALSE, add_eqn=FALSE, add_labels=FALSE)
 {
   sec.per.day <- 86400
 
@@ -64,13 +71,6 @@ rvn_annual_volume <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r2 = 
   sum.sim <- sum.sim * sec.per.day
   sum.obs <- sum.obs * sec.per.day
   df <- data.frame(date.end = dates, sim.vol = sum.sim, obs.vol = sum.obs)
-
-  if (add_r2) {
-    sum.obs.mean <- mean(sum.obs)
-    ss.err <- sum((sum.sim - sum.obs)^2)
-    ss.tot <- sum((sum.obs - sum.obs.mean)^2)
-    r2 <- 1 - ss.err/ss.tot
-  }
 
   x.lab <- expression("Observed Volume ("*m^3*")")
   y.lab <- expression("Simulated Volume ("*m^3*")")
@@ -93,8 +93,12 @@ rvn_annual_volume <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r2 = 
       geom_abline(linetype=2)
   }
 
+  if (add_r2 | add_eqn) {
+    m <- lm(sum.sim ~ 0 + sum.obs)
+  }
+
   if (add_r2){
-    r2.label <- paste("R^2 == ", round(r2,2))
+    r2.label <- paste("R^2 == ", round(summary(m)$r.squared,3))
     p1 <- p1 +
       geom_text(x= x.lim[2]*0.85,
                 y= y.lim[1]*1.1,
@@ -105,8 +109,7 @@ rvn_annual_volume <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r2 = 
                 size = 3.5)
   }
 
-  if (add_eqn){
-    m <- lm(sum.sim ~ 0 + sum.obs)
+  if (add_eqn) {
     coeff <- round(as.numeric(m$coefficients[1]), 3)
     equation <- paste0( "y = ", coeff, "x")
     p1 <- p1 +
@@ -116,6 +119,10 @@ rvn_annual_volume <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r2 = 
                 hjust=0,
                 label = equation,
                 size = 3.5)
+  }
+
+  if (add_labels) {
+    p1 <- p1 + geom_text(data=df, aes(label=lubridate::year(date.end)), nudge_y=max(df[,-1])/25, fontface='bold')
   }
 
   return(list(df.volume=df,p1=p1))

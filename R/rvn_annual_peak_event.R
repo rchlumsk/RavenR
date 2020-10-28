@@ -70,13 +70,6 @@ rvn_annual_peak_event <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r
                    "sim.peak.event" = as.numeric(max.sim),
                    "obs.peak.event" = as.numeric(max.obs))
 
-  if (add_r2) {
-    max.obs.mean <- mean(max.obs)
-    ss.err <- sum((max.sim - max.obs)^2)
-    ss.tot <- sum((max.obs - max.obs.mean)^2)
-    r2 <- 1 - ss.err/ss.tot
-  }
-
   x.lab <- expression("Observed Peak Discharge ("*m^3*"/s)")
   y.lab <- expression("Simulated Peak Discharge ("*m^3*"/s)")
   #title.lab <- ""
@@ -102,8 +95,12 @@ rvn_annual_peak_event <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r
       geom_abline(linetype=2)
   }
 
+  if (add_r2 | add_eqn) {
+    m <- lm(max.sim ~ max.obs + 0)
+  }
+
   if (add_r2){
-    r2.label <- paste("R^2 == ", round(r2,2))
+    r2.label <- paste("R^2 == ", round(summary(m)$r.squared,3))
     p1 <- p1 +
       geom_text(x= x.lim[2],
                 y= y.lim[1]*1.9,
@@ -114,8 +111,7 @@ rvn_annual_peak_event <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r
                 size = 3.5)
   }
 
-  if (add_eqn){
-    m <- lm(max.sim ~ 0 + max.obs)
+  if (add_eqn) {
     coeff <- round(as.numeric(m$coefficients[1]), 3)
     equation <- paste0( "y = ", coeff, "x")
     p1 <- p1 +

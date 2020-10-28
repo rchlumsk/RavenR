@@ -43,7 +43,7 @@
 #' @export rvn_hyd_read
 #' @importFrom xts xts
 #' @importFrom utils read.csv
-rvn_hyd_read <- function(ff=NA,tzone=NULL) {
+rvn_hyd_read <- function(ff=NA, tzone=NULL) {
 
   if (missing(ff)) {
     stop("Requires the full file path to the Hydrographs.csv file.")

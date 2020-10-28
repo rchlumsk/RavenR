@@ -90,7 +90,7 @@ rvn_annual_peak <- function(sim, obs, mm=9, dd=30, add_line = TRUE,
   }
 
   if (add_r2){
-    r2.label <- paste("R^2 == ", round(summary(m)$r.squared,2))
+    r2.label <- paste("R^2 == ", round(summary(m)$r.squared,3))
     p1 <- p1 +
       geom_text(x= max(max.obs, max.sim),
                 y= min(max.sim, max.obs),
