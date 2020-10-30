@@ -16,38 +16,35 @@
 #'
 #' @details
 #'   rvh.clean removes HRUs in two ways:
-#'     (1) it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
+#'
+#'    1. it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
 #'     subbasin are expanded by the lost area to keep the same relative coverage.
-#'     (2) it consolidates similar HRUs within the same subbasin (those with same land cover,
+#'    2. it consolidates similar HRUs within the same subbasin (those with same land cover,
 #'     vegetation, soil profile and similar slope, aspect, and elevation)
 #'
-#' @return {hru_table}{revised HRU table as a dataframe}
+#' @return {hru_table}{cleaned HRU table as a dataframe}
 #'
 #' @author James R. Craig, University of Waterloo
 #'
 #' @seealso
-#' \code{\link{rvn_rvh_read}} for the function used to read in the HRU and SubBasin data
-#' See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
+#' \code{\link{rvn_rvh_read}} for the function used to read in the HRU and Subbasin data, and
+#' \code{\link{rvn_rvh_write}} to write rvh information to file.
 #'
 #' @examples
 #'   # read in example rvh file
 #'   nith <- system.file("extdata","Nith.rvh",package = "RavenR")
 #'   rvh <- rvn_rvh_read(nith)
 #'
+#'   # number of HRUs in existing configuration
+#'   nrow(rvh$HRUtable)
+#'
 #'   # clean contents (in this case, remove all HRUs covering less than 5% of the total area)
-#'   rvh <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merg=TRUE)
+#'   rvh$HRUtable <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
 #'
-#'   # write to new file, while preserving all unedited information using rvn_rvh_overwrite:
-#'   rvn_rvh_overwrite(nith,"Nith_cleaned.rvh",
-#'                     SBtable = rvh$SBtable,
-#'                     HRUtable = rvh$HRUtable)
+#'   rvh$HRUtable
 #'
-#'   # write just the Subbasin and HRU tables to new file using rvn_rvh_write:
-#'   rvn_rvh_write("Nith_cleaned_write.rvh", SBtable = rvh$SBtable, HRUtable = rvh$HRUtable)
-#'
-#' @keywords Raven  rvh  HRUs merge clean
 #' @export rvn_rvh_cleanhrus
-#'
+#' @importFrom stats aggregate
 rvn_rvh_cleanhrus<-function(HRUtab,SBtab,area_tol=0.001,merge=FALSE,
                             elev_tol=50,slope_tol=4,aspect_tol=20,ProtectedHRUList=c())
 {
@@ -144,7 +141,7 @@ rvn_rvh_cleanhrus<-function(HRUtab,SBtab,area_tol=0.001,merge=FALSE,
   # delete removed HRUs
   HRUtab<-HRUtab[ HRUtab$remove==FALSE, ]
   # remove temporary columns
-  HRUtab<-HRUtab[ , !(names(HRUtab) %in% c("areafrac","newarea","remove","similar"))]
+  HRUtab<-HRUtab[ , !(names(HRUtab) %in% c("areafrac","newarea","remove","similar","AreaSB"))]
   # return to order by HRUID
   HRUtab<-HRUtab[with(HRUtab, order(ID)),]
 

@@ -80,7 +80,7 @@ rvn_annual_volume <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r2 = 
   y.lim = c(min(sum.obs, sum.sim, na.rm = TRUE) * 0.9,
             max(sum.obs, sum.sim, na.rm = TRUE) * 1.1)
 
-  obs.vol <- sim.vol <- NULL
+  obs.vol <- sim.vol <- date.end <- NULL
 
   p1 <- ggplot(data=df,aes(x=obs.vol,y=sim.vol))+
     geom_point()+

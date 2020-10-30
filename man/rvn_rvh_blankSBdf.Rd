@@ -16,7 +16,12 @@ data.frame of blank SubBasin properties to be filled in by user
 Generates a blank data frame for Raven subbasin properties.
 }
 \examples{
-SBtable <- rvn_rvh_blankSBdf(nSubBasins = 1)
+SBtable <- rvn_rvh_blankSBdf(nSubBasins = 3)
+SBtable
+
+}
+\seealso{
+\code{\link{rvn_rvh_blankHRUdf}} to generate blank HRU data frame
 }
 \author{
 Leland Scantlebury

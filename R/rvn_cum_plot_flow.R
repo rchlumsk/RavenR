@@ -34,9 +34,9 @@
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs
-#' data(hydrograph_data)
-#' sim <- hydrograph_data$hyd$Sub36
-#' obs <- hydrograph_data$hyd$Sub36_obs
+#' data(rvn_hydrograph_data)
+#' sim <- rvn_hydrograph_data$hyd$Sub36
+#' obs <- rvn_hydrograph_data$hyd$Sub36_obs
 #'
 #' # plot cumulative flow for sim and obs
 #' rvn_cum_plot_flow(sim,obs)

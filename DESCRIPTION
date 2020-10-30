@@ -29,6 +29,7 @@ Imports:
     lubridate,
     magrittr,
     methods,
+    ncdf4,
     purrr,
     reshape2,
     rgdal,

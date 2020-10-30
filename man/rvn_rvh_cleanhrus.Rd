@@ -34,7 +34,7 @@ rvn_rvh_cleanhrus(
 \item{ProtectedHRUList}{list of HRU IDs that are sacrosanct (not to be removed)}
 }
 \value{
-{hru_table}{revised HRU table as a dataframe}
+{hru_table}{cleaned HRU table as a dataframe}
 }
 \description{
 Takes \code{\link{rvn_rvh_read}}-generated HRUtable and SBTable and returns cleaned HRUtable
@@ -42,9 +42,10 @@ with (hopefully) fewer HRUs
 }
 \details{
 rvh.clean removes HRUs in two ways:
-    (1) it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
+
+   1. it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
     subbasin are expanded by the lost area to keep the same relative coverage.
-    (2) it consolidates similar HRUs within the same subbasin (those with same land cover,
+   2. it consolidates similar HRUs within the same subbasin (those with same land cover,
     vegetation, soil profile and similar slope, aspect, and elevation)
 }
 \examples{
@@ -52,27 +53,19 @@ rvh.clean removes HRUs in two ways:
   nith <- system.file("extdata","Nith.rvh",package = "RavenR")
   rvh <- rvn_rvh_read(nith)
 
+  # number of HRUs in existing configuration
+  nrow(rvh$HRUtable)
+
   # clean contents (in this case, remove all HRUs covering less than 5\% of the total area)
-  rvh <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merg=TRUE)
+  rvh$HRUtable <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
 
-  # write to new file, while preserving all unedited information using rvn_rvh_overwrite:
-  rvn_rvh_overwrite(nith,"Nith_cleaned.rvh",
-                    SBtable = rvh$SBtable,
-                    HRUtable = rvh$HRUtable)
-
-  # write just the Subbasin and HRU tables to new file using rvn_rvh_write:
-  rvn_rvh_write("Nith_cleaned_write.rvh", SBtable = rvh$SBtable, HRUtable = rvh$HRUtable)
+  rvh$HRUtable
 
 }
 \seealso{
-\code{\link{rvn_rvh_read}} for the function used to read in the HRU and SubBasin data
-See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
+\code{\link{rvn_rvh_read}} for the function used to read in the HRU and Subbasin data, and
+\code{\link{rvn_rvh_write}} to write rvh information to file.
 }
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{HRUs}
-\keyword{Raven}
-\keyword{clean}
-\keyword{merge}
-\keyword{rvh}

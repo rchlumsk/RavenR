@@ -55,7 +55,7 @@
 #' peak1$p1
 #'
 #' # plot directly and without labels
-#' rvn_annual_peak_timing_error(sim, obs, add_line=T, add_labels=FALSE)
+#' rvn_annual_peak_timing_error(sim, obs, add_line=TRUE, add_labels=FALSE)
 #'
 #'
 #' @export rvn_annual_peak_timing_error

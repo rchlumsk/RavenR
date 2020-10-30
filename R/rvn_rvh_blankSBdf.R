@@ -7,10 +7,14 @@
 #'
 #' @return data.frame of blank SubBasin properties to be filled in by user
 #' @author Leland Scantlebury
-#' @export rvn_rvh_blankSBdf
+#'
+#' @seealso \code{\link{rvn_rvh_blankHRUdf}} to generate blank HRU data frame
 #'
 #' @examples
-#' SBtable <- rvn_rvh_blankSBdf(nSubBasins = 1)
+#' SBtable <- rvn_rvh_blankSBdf(nSubBasins = 3)
+#' SBtable
+#'
+#' @export rvn_rvh_blankSBdf
 rvn_rvh_blankSBdf <- function(nSubBasins = 1) {
   df <- data.frame('SBID'          = 1:nSubBasins,
                    'Name'          = NA,
