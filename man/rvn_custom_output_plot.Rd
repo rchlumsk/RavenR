@@ -21,7 +21,9 @@ include in plots}
 rvn_custom_output_plot is used to plot the custom output from Raven
 }
 \details{
-The custom output should be first read in using the rvn_custom_read function.
+The custom output should be first read in using the rvn_custom_read function. Note that in this case the
+plot title is included, generated from the information in the filename. This plot title may be changed with
+ggplot2 commands.
 }
 \examples{
 

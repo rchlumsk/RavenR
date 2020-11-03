@@ -7,6 +7,10 @@
 #' @details
 #' Note that the function can fail due to bad netCDF file or inappropriate UTM zone.
 #'
+#' @note
+#' Sample netcdf file in RavenR package obtained from [GWF Cuizinart](https://tuna.cs.uwaterloo.ca/), metadata for the ERA5 downloaded sample data may
+#'  be found at \url{https://gwf-uwaterloo.github.io/wamedex/#13079_iso.xml}.
+#'
 #' @param ncfile netCDF file with latitude and longitude variables
 #' @param UTMzone UTM zone for exported shapefile (integer)
 #' @param outshp name of output shapefile prefix (i.e., no .shp extension, DEFAULT 'rvn_output_shapefile')

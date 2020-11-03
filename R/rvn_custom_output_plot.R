@@ -4,7 +4,9 @@
 #' rvn_custom_output_plot is used to plot the custom output from Raven
 #'
 #' @details
-#' The custom output should be first read in using the rvn_custom_read function.
+#' The custom output should be first read in using the rvn_custom_read function. Note that in this case the
+#' plot title is included, generated from the information in the filename. This plot title may be changed with
+#' ggplot2 commands.
 #'
 #' @param cust custom output object from custom.read
 #' @param IDs (optional) array of HRU IDs, subbasin IDs, HRU Group names/IDs to
@@ -41,11 +43,13 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL)
   df.plot <- reshape2::melt(df.plot, id.vars = "Index")
 
   # Break down xts attributes to get title
-  rav.dt   <-xtsAttributes(cust)$ datatype;# odd space involved
-  stat.agg <-xtsAttributes(cust)$ stat.agg;
-  time.agg <-xtsAttributes(cust)$ time.agg
-  space.agg<-unlist(strsplit(xtsAttributes(cust)$ space.agg, split = "By"))[2]
-  runname  <-xtsAttributes(cust)$ runname
+  xtsAttributes(cust) %>% data.frame() -> xdf
+  rav.dt <- xdf$datatype
+  stat.agg <-xdf$stat_agg
+  time.agg <- xdf$time_agg
+  # space.agg<-unlist(strsplit(xtsAttributes(cust)$ space.agg, split = "By"))[2]
+  space.agg <-  strsplit(xdf$space_agg, split="By")[[1]][2]
+  runname  <- xdf$runname
 
   plot.title=toupper(paste(time.agg,' ',stat.agg,' ',rav.dt,' by ', space.agg))
 
@@ -70,8 +74,9 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL)
       rvn_theme_RavenR()+
       ylab(yaxis.title)+
       xlab("")+
-      #ggtitle(plot.title) +
-      scale_colour_brewer(type = "qual", palette = 3)
+      ggtitle(plot.title) +
+      scale_colour_brewer(type = "qual", palette = 3)+
+      rvn_theme_RavenR()
 
   } else { #line plot is default for state variables
 
@@ -80,8 +85,9 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL)
       rvn_theme_RavenR()+
       ylab(yaxis.title)+
       xlab("")+
-      #ggtitle(plot.title)+
-      scale_colour_brewer(type = "qual", palette = 3)
+      ggtitle(plot.title)+
+      scale_colour_brewer(type = "qual", palette = 3)+
+      rvn_theme_RavenR()
   }
 
   # # Change plot limits to period
