@@ -4,35 +4,46 @@
 \alias{rvn_netcdf_to_gridshp}
 \title{Generate grid overlay from netCDF file}
 \usage{
-rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp = "rvn_output_shapefile")
+rvn_netcdf_to_gridshp(ncfile, projID = NULL, outshp = NULL)
 }
 \arguments{
 \item{ncfile}{netCDF file with latitude and longitude variables}
 
-\item{UTMzone}{UTM zone for exported shapefile (integer)}
+\item{projID}{projected coordinate system ID (EPSG numeric code) to project shapefile to (default NULL, optional)}
 
-\item{outshp}{name of output shapefile prefix (i.e., no .shp extension, DEFAULT 'rvn_output_shapefile')}
+\item{outshp}{name of output shapefile prefix (DEFAULT NULL, optional)}
 }
 \value{
-\item{TRUE}{returns TRUE if executed properly. Also generates shapefile in folder}
+\item{shapefile}{returns a shapefile object; will also write a shapefile to the outshp if provided}
 }
 \description{
 Takes the latitude-longitude cell coordinates from a netCDF file (assumed to be named 'lat' and 'long')
 generates an estimate of the grid polygons associated with each netCDF cell and exports this to a shapefile (outshp)
 }
 \details{
-Note that the function can fail due to bad netCDF file or inappropriate UTM zone.
-}
-\note{
-Sample netcdf file in RavenR package obtained from [GWF Cuizinart](https://tuna.cs.uwaterloo.ca/), metadata for the ERA5 downloaded sample data may
- be found at \url{https://gwf-uwaterloo.github.io/wamedex/#13079_iso.xml}.
+projID should be provided as an integer value referring to a valid EPSG coordinate system. If projID is left NULL, the
+output shapefile will be left in lat/long coordinates and WGS84 projection. Note that the function can fail due to bad
+netCDF file or inappropriate coordinate system ID. A list of IDs for
+projected coordinate system may be found on the \href{https://spatialreference.org/ref/epsg/}{Spatial Reference webpage}
+or on the \href{http://resources.esri.com/help/9.3/arcgisserver/apis/rest/pcs.html}{ESRI webpage}.
+
+If the outshp is NULL, the shapefile object is returned by the function and nothing is written to file. If outshp is provided,
+the shapefile is also written to file. The outshp should be supplied as the file name without the extension (i.e. no .shp
+included in the argument).
 }
 \examples{
 
+# get location for sample netcdf file
 ncfile <- system.file("extdata/Nith_era5_sample.nc", package="RavenR")
-UTMzone <- 17
+
+# produce shapefile in lat/long
+myshp <- rvn_netcdf_to_gridshp(ncfile)
+plot(myshp$geometry)
+
+# write shapefile to file in UTM coordinates
+projID <- 26917 # NAD83 UTM Zone 17N, appropriate UTM zone for Nith watershed
 outshp <- 'Nith_output_shapefile'
-rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
+rvn_netcdf_to_gridshp2(ncfile, projID, outshp)
 
 
 }
