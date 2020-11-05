@@ -21,6 +21,7 @@
 #'
 #' @param flow time series object of simulated flows
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
+#'
 #' @seealso \code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow
 #' values
 #'
@@ -28,15 +29,16 @@
 #'
 #' # load sample hydrograph data, two years worth of sim/obs
 #' data(rvn_hydrograph_data)
-#' sim <- rvn_hydrograph_data$hyd$Sub36
-#' sim2 <- rvn_hydrograph_data$hyd$Sub43
 #'
 #' # create spaghetti plot of simulated flows
-#' rvn_flow_spaghetti(sim)
+#' rvn_flow_spaghetti(rvn_hydrograph_data$hyd$Sub36)
+#'
+#' # create spaghetti plot of observed flows
+#' rvn_flow_spaghetti(rvn_hydrograph_data$hyd$Sub36_obs)
 #'
 #' @export rvn_flow_spaghetti
 #' @importFrom lubridate yday
-#' @importFrom ggplot2 ggplot geom_line scale_y_continuous scale_x_continuous aes
+#' @importFrom ggplot2 ggplot geom_line scale_y_continuous scale_x_continuous aes fortify
 rvn_flow_spaghetti <- function(flow)
 {
 
@@ -45,8 +47,7 @@ rvn_flow_spaghetti <- function(flow)
   ticks.at <- seq(1, 366, 1)
   ticks.seq <- c(seq(274, 366, 1), seq(1, 273, 1))
 
-  # plot.df <- fortify(flow)
-  plot.df <- data.frame(flow)
+  plot.df <- fortify(flow)
 
   plot.df$doy <- lubridate::yday(plot.df$Index)
   plot.df$Year <- as.factor(year(plot.df$Index))

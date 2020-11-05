@@ -2,14 +2,15 @@
 % Please edit documentation in R/rvn_flow_residuals.R
 \name{rvn_flow_residuals}
 \alias{rvn_flow_residuals}
-\title{Scatterplot of model flows}
+\title{Residuals of model flows}
 \usage{
 rvn_flow_residuals(
-  sim,
-  obs,
+  sim = NULL,
+  obs = NULL,
   ma_smooth = 3,
-  add.line = TRUE,
-  winter_shading = TRUE
+  add_line = FALSE,
+  winter_shading = FALSE,
+  wsdates = c(12, 1, 3, 31)
 )
 }
 \arguments{
@@ -20,11 +21,13 @@ rvn_flow_residuals(
 \item{ma_smooth}{optional length of rolling average to smooth residuals with
 (default 3)}
 
-\item{add.line}{optionally adds a horizontal line to the plot for reference
-(default TRUE)}
+\item{add_line}{optionally adds a horizontal line to the plot for reference
+(default FALSE)}
 
 \item{winter_shading}{optionally adds a light blue shading to winter months
-(default TRUE)}
+(default FALSE)}
+
+\item{wsdates}{integer vector of winter shading period dates (see details)}
 }
 \value{
 \item{resids}{residual time series}
@@ -46,22 +49,32 @@ assumed to be daily flows with units of m3/s.
 
 Note that a plot title is purposely omitted in order to allow the automatic
 generation of plot titles.
+
+The winter_shading argument will add a transparent grey shading for the
+specified period by wsdates in each year that is plotted.
+
+wsdates is formatted as c(winter start month, winter start day, winter end month, winter end day).
 }
 \examples{
 
 # load sample hydrograph data, two years worth of sim/obs
-data(rvn_hydrograph_data)
-sim <- rvn_hydrograph_data$hyd$Sub36
-obs <- rvn_hydrograph_data$hyd$Sub36_ob
+ff <- system.file("extdata/run1_Hydrographs.csv", package="RavenR")
+run1 <- rvn_hyd_read(ff)
+sim <- run1$hyd$Sub36
+obs <- run1$hyd$Sub36_obs
 
 # default with moving average smoothing shading of winter months
-rvn_flow_residuals(sim,obs)
+rvn_flow_residuals(sim,obs)$plot
 
 # plot with more smoothing than the default 3
-rvn_flow_residuals(sim, obs, ma_smooth=10)
+rvn_flow_residuals(sim, obs, ma_smooth=10)$plot
 
-# turn off the smoothing and winter shading
-rvn_flow_residuals(sim,obs,ma_smooth = 0, winter_shading = FALSE)
+# with zero line and winter shading
+rvn_flow_residuals(sim,obs, add_line=TRUE, winter_shading = TRUE)$plot
+
+# change winter shading to Nov 1 - April 30
+rvn_flow_residuals(sim,obs, add_line=TRUE,
+  winter_shading = TRUE, wsdates=c(11,1,4,30))$plot
 
 }
 \seealso{

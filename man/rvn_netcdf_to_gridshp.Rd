@@ -11,10 +11,10 @@ rvn_netcdf_to_gridshp(ncfile, projID = NULL, outshp = NULL)
 
 \item{projID}{projected coordinate system ID (EPSG numeric code) to project shapefile to (default NULL, optional)}
 
-\item{outshp}{name of output shapefile prefix (DEFAULT NULL, optional)}
+\item{outshp}{name of output shapefile (DEFAULT NULL, optional)}
 }
 \value{
-\item{shapefile}{returns a shapefile object; will also write a shapefile to the outshp if provided}
+\item{shapefile}{returns sf shapefile object; will also write a shapefile to the outshp if provided}
 }
 \description{
 Takes the latitude-longitude cell coordinates from a netCDF file (assumed to be named 'lat' and 'long')
@@ -28,22 +28,29 @@ projected coordinate system may be found on the \href{https://spatialreference.o
 or on the \href{http://resources.esri.com/help/9.3/arcgisserver/apis/rest/pcs.html}{ESRI webpage}.
 
 If the outshp is NULL, the shapefile object is returned by the function and nothing is written to file. If outshp is provided,
-the shapefile is also written to file. The outshp should be supplied as the file name without the extension (i.e. no .shp
-included in the argument).
+the shapefile is also written to file. The outshp should be supplied as the file name (with or without .shp extension).
+
+This function uses the sf::st_write function to write the shapefile, if outshp is provided.
+
+Additional metadata on the sample netcdf file may be found with `?Nith_era5_sample`.
 }
 \examples{
 
 # get location for sample netcdf file
+?Nith_era5_sample
 ncfile <- system.file("extdata/Nith_era5_sample.nc", package="RavenR")
 
 # produce shapefile in lat/long
 myshp <- rvn_netcdf_to_gridshp(ncfile)
+class(myshp)
+sf::st_crs(myshp)$input
 plot(myshp$geometry)
 
 # write shapefile to file in UTM coordinates
 projID <- 26917 # NAD83 UTM Zone 17N, appropriate UTM zone for Nith watershed
-outshp <- 'Nith_output_shapefile'
-rvn_netcdf_to_gridshp2(ncfile, projID, outshp)
+outshp <- file.path(tempdir(), "Nith_gridcells.shp")
+myshp <- rvn_netcdf_to_gridshp(ncfile, projID, outshp)
+sf::st_crs(myshp)$input
 
 
 }

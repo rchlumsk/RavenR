@@ -51,7 +51,7 @@ plot(embd$exhaustive_mb$SURFACE_WATER.Infiltration,
      main="Cumulative Surface Water Infiltration")
 }
 \seealso{
-\code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
+\code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file, and
 \code{\link{rvn_exhaustive_mb_read}} for reading in the
 WatershedMassEnergyBalance.csv file
 }

@@ -6,6 +6,7 @@
 \usage{
 rvn_rvt_ECmet(
   metdata,
+  filename = NULL,
   prd = NULL,
   stnName = NULL,
   forcing_set = 1,
@@ -18,6 +19,8 @@ rvn_rvt_ECmet(
 }
 \arguments{
 \item{metdata}{EC meteorological data from one or more stations (e.g., from weathercan::weather_dl())}
+
+\item{filename}{specified name of file to write to (optional)}
 
 \item{prd}{(optional) data period to use in .rvt file}
 
@@ -47,6 +50,10 @@ given station into the .rvt format usable in Raven.
 The function prints in the :MultiData format; the particular set of forcings to
 print can be set with the forcing_set command. The data should be downloaded
 with missing days included. The download website is linked below.
+
+The function will write to name generated from the station name, otherwise
+the .rvt filename may be specified with the filename argument (full path to
+the filename, including .rvt extension).
 
 prd is used by the xts formatted-data to restrict the data reported in .rvt
 files, for each station, to this period. The prd should be defined in
@@ -106,17 +113,15 @@ library(weathercan)
 kam <- weather_dl(station_ids = 51423,
                   start = "2016-10-01", end = "2019-09-30", interval="day")
 
-# basic use, includes "met_" prefix
+# basic use, override filename to temporary file
 # default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
-rvn_rvt_ECmet(metdata = kam, forcing_set = 1)
+rvn_rvt_ECmet(metdata = kam, forcing_set = 1,
+  filename = file.path(tempdir(), "rvn_rvt_ECmetfile1.rvt"))
 
-# set without prefix, station data and redirect files created
-# forcing_set 2 includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
+# use the second forcing set instead
+# default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
 rvn_rvt_ECmet(metdata = kam, forcing_set = 2,
-  prefix = NULL, write_stndata = TRUE, write_redirect = TRUE)
-
-# cleanup demo files
-unlink("met_KAMLOOPS_A.rvt.rvt")
+  filename = file.path(tempdir(), "rvn_rvt_ECmetfile2.rvt"))
 
 }
 \seealso{

@@ -7,7 +7,7 @@
 rvn_rvh_cleanhrus(
   HRUtab,
   SBtab,
-  area_tol = 0.001,
+  area_tol = 0.01,
   merge = FALSE,
   elev_tol = 50,
   slope_tol = 4,
@@ -21,7 +21,7 @@ rvn_rvh_cleanhrus(
 \item{SBtab}{table of Subbasins generated (typically) by \code{\link{rvn_rvh_read}}}
 
 \item{area_tol}{percentage of watershed area beneath which HRUs should be removed (e.g.,
-0.01 would indicate anything smaller than 1 percent of watershed extent should be removed)}
+default value of 0.01 would indicate anything smaller than 1 percent of watershed extent should be removed)}
 
 \item{merge}{TRUE if similar HRUs are to be merged (this can be slow for large models)}
 
@@ -43,23 +43,22 @@ with (hopefully) fewer HRUs
 \details{
 rvh.clean removes HRUs in two ways:
 
-   1. it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
-    subbasin are expanded by the lost area to keep the same relative coverage.
-   2. it consolidates similar HRUs within the same subbasin (those with same land cover,
+  1. it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
+subbasin are expanded by the lost area to keep the same relative coverage.
+
+  2. it consolidates similar HRUs within the same subbasin (those with same land cover,
     vegetation, soil profile and similar slope, aspect, and elevation)
 }
 \examples{
-  # read in example rvh file
-  nith <- system.file("extdata","Nith.rvh",package = "RavenR")
-  rvh <- rvn_rvh_read(nith)
+# read in example rvh file
+nith <- system.file("extdata","Nith.rvh",package = "RavenR")
+rvh <- rvn_rvh_read(nith)
 
-  # number of HRUs in existing configuration
-  nrow(rvh$HRUtable)
+# number of HRUs in existing configuration
+nrow(rvh$HRUtable)
 
-  # clean contents (in this case, remove all HRUs covering less than 5\% of the total area)
-  rvh$HRUtable <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
-
-  rvh$HRUtable
+# clean contents (in this case, remove all HRUs covering less than 5\% of the total area)
+rvh$HRUtable <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
 
 }
 \seealso{

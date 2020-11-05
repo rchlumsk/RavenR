@@ -27,13 +27,13 @@ rvn_gen_gridweights(
 \item{outfile}{optional name of output Raven gaugeweights file}
 }
 \value{
-\item{TRUE}{returns TRUE if executed properly. Also output GaugeWeights.rvi file}
+\item{TRUE}{returns TRUE if executed properly. Also output GaugeWeights.rvt file}
 }
 \description{
 Generates a Raven grid weights file given an HRU shapefile and a grid shapefile.
 }
 \details{
-Generate grid weights file GaugeWeights.rvi given an HRU shapefile with HRU ID column
+Generate grid weights file GaugeWeights.rvt given an HRU shapefile with HRU ID column
 HRUIDcol (default 'HRU_ID') and a grid shapefile with ID column gridIDcol (default: 'cellID')
 weights are determined by the areal overlap of grid cell g and HRU k, i.e.,
  wt[k][g]=area[k][g]/area[k]
@@ -43,33 +43,35 @@ and area[k][g] is the area of HRU k that is within cell g.
 By definition, the grid domain has to completely cover the HRU domain such that the sum of
 wt[k][g] for any k, over all g, is 1.0
 
-not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UTM zone;
- uses rgdal and rgeos libraries. *Both shapefiles should be in same projection!* Unfortunately, the
- accuracy of the gIntersection() routine leaves a bit to be desired...
+Not a tonne of QA/QC is currently included - can fail due to bad netCDF file or inappropriate UTM zone;
+uses rgdal and rgeos libraries, and the accuracy of the gIntersection() routine
+leaves something to be desired. The shapefiles should be in the same projection, which is
+checked for in this function.
 }
 \examples{
-
-\dontrun{
 
 # load example rvh file
 nith <- system.file("extdata",'Nith.rvh', package = "RavenR")
 rvh <- rvn_rvh_read(nith)
 
-# define HRU shapefiles (needs to be added to library)
-HRUshpfile <- system.file("extdata","Nith_HRU.shp",package = "RavenR")
+# adjust HRU shapefile to one per subbasin for demonstration
+rvh$HRUtable <- rvh$HRUtable[c(1,6,15,25),]
+rvh$HRUtable$Area <- rvh$SBtable$Area
+rvh$HRUtable$ID <- rvh$HRUtable$SBID
+
+# define HRU shapefile (use subbasin shapefile for example)
+HRUshpfile <- system.file("extdata","Nith_shapefile_sample.shp",package = "RavenR")
 
 # write grid shapefile from netcdf file
-nithnc <- system.file("extdata","Nith.nc",package = "RavenR")
-GridCells <- "Nith_GridCells.shp"
-UTMzone <- 17
-GRDshpfile <- rvn_netcdf_to_gridshp(nithnc,UTMzone,GridCells)
+nithnc <- system.file("extdata/Nith_era5_sample.nc", package="RavenR")
+Gridshpfile <- file.path(tempdir(), "Nith_gridcells.shp")
+myshp <- rvn_netcdf_to_gridshp(ncfile=nithnc, projID=26917, outshp=Gridshpfile)
 
-# generate .rvi file of grid weights
-validHRUIDs <- rvh$HRUtable$ID
-tmp <- rvn_gen_gridweights(HRUshpfile, GRDshpfile, validHRUIDs,
-gridIDcol = 'GridIDs', HRUIDcol = "HRU_ID", outfile = "Nith_GridWeights.rvi")
-
-}
+# generate .rvt file of grid weights
+ValidHRUIDs <- rvh$HRUtable$ID
+tfout <- file.path(tempdir(), "Nith_GridWeights.rvt")
+rvn_gen_gridweights(HRUshpfile, Gridshpfile, ValidHRUIDs,
+gridIDcol = 'GridIDs', HRUIDcol = "subID", outfile = tfout)
 
 }
 \seealso{

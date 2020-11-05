@@ -10,7 +10,8 @@ rvn_rvt_wsc(
   prd = NULL,
   stnNames = NULL,
   write_redirect = FALSE,
-  flip_number = FALSE
+  flip_number = FALSE,
+  filename = NULL
 )
 }
 \arguments{
@@ -27,6 +28,8 @@ use}
 separate .rvt file}
 
 \item{flip_number}{(optional) put the subID first in the .rvt filename}
+
+\item{filename}{specified name of file to write to (optional)}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
@@ -71,6 +74,10 @@ flip_number is a useful option to place the subID first in the filename.
 This is often cleaner for organizing files in a folder, since the
 alphabeticized order is not dependent on the station name, and the observed
 files will be in one set.
+
+The function will write to name generated from the station name, otherwise
+the .rvt filename may be specified with the filename argument (full path to
+the filename, including .rvt extension).
 }
 \examples{
 ff = system.file("extdata",'Daily__Oct-1-2020_08_20_52PM.csv', package="RavenR")

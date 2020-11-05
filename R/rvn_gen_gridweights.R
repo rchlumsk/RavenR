@@ -4,7 +4,7 @@
 #' Generates a Raven grid weights file given an HRU shapefile and a grid shapefile.
 #'
 #' @details
-#' Generate grid weights file GaugeWeights.rvi given an HRU shapefile with HRU ID column
+#' Generate grid weights file GaugeWeights.rvt given an HRU shapefile with HRU ID column
 #' HRUIDcol (default 'HRU_ID') and a grid shapefile with ID column gridIDcol (default: 'cellID')
 #' weights are determined by the areal overlap of grid cell g and HRU k, i.e.,
 #'  wt[k][g]=area[k][g]/area[k]
@@ -14,9 +14,11 @@
 #' By definition, the grid domain has to completely cover the HRU domain such that the sum of
 #' wt[k][g] for any k, over all g, is 1.0
 #'
-#' @details not alot of QA/Qc included - can fail due to bad netCDF file or inappropriate UTM zone;
-#'  uses rgdal and rgeos libraries. *Both shapefiles should be in same projection!* Unfortunately, the
-#'  accuracy of the gIntersection() routine leaves a bit to be desired...
+#' @details
+#' Not a tonne of QA/QC is currently included - can fail due to bad netCDF file or inappropriate UTM zone;
+#' uses rgdal and rgeos libraries, and the accuracy of the gIntersection() routine
+#' leaves something to be desired. The shapefiles should be in the same projection, which is
+#' checked for in this function.
 #'
 #' @param HRUshpfile polygon shapefile of HRUs with data column containing HRU IDs (.shp extension expected)
 #' @param Gridshpfile polygon shapefile of grid cells with data column containing cell IDs (.shp extension expected)
@@ -25,7 +27,7 @@
 #' @param gridIDcol the name of the Gridshpfile polygon which contains the cell IDs
 #' @param outfile optional name of output Raven gaugeweights file
 #'
-#' @return \item{TRUE}{returns TRUE if executed properly. Also output GaugeWeights.rvi file}
+#' @return \item{TRUE}{returns TRUE if executed properly. Also output GaugeWeights.rvt file}
 #'
 #' @author James R. Craig, University of Waterloo, 2019
 #'
@@ -33,43 +35,44 @@
 #'
 #' @examples
 #'
-#' \dontrun{
-#'
 #' # load example rvh file
 #' nith <- system.file("extdata",'Nith.rvh', package = "RavenR")
 #' rvh <- rvn_rvh_read(nith)
 #'
-#' # define HRU shapefiles (needs to be added to library)
-#' HRUshpfile <- system.file("extdata","Nith_HRU.shp",package = "RavenR")
+#' # adjust HRU shapefile to one per subbasin for demonstration
+#' rvh$HRUtable <- rvh$HRUtable[c(1,6,15,25),]
+#' rvh$HRUtable$Area <- rvh$SBtable$Area
+#' rvh$HRUtable$ID <- rvh$HRUtable$SBID
+#'
+#' # define HRU shapefile (use subbasin shapefile for example)
+#' HRUshpfile <- system.file("extdata","Nith_shapefile_sample.shp",package = "RavenR")
 #'
 #' # write grid shapefile from netcdf file
-#' nithnc <- system.file("extdata","Nith.nc",package = "RavenR")
-#' GridCells <- "Nith_GridCells.shp"
-#' UTMzone <- 17
-#' GRDshpfile <- rvn_netcdf_to_gridshp(nithnc,UTMzone,GridCells)
+#' nithnc <- system.file("extdata/Nith_era5_sample.nc", package="RavenR")
+#' Gridshpfile <- file.path(tempdir(), "Nith_gridcells.shp")
+#' myshp <- rvn_netcdf_to_gridshp(ncfile=nithnc, projID=26917, outshp=Gridshpfile)
 #'
-#' # generate .rvi file of grid weights
-#' validHRUIDs <- rvh$HRUtable$ID
-#' tmp <- rvn_gen_gridweights(HRUshpfile, GRDshpfile, validHRUIDs,
-#' gridIDcol = 'GridIDs', HRUIDcol = "HRU_ID", outfile = "Nith_GridWeights.rvi")
-#'
-#' }
+#' # generate .rvt file of grid weights
+#' ValidHRUIDs <- rvh$HRUtable$ID
+#' tfout <- file.path(tempdir(), "Nith_GridWeights.rvt")
+#' rvn_gen_gridweights(HRUshpfile, Gridshpfile, ValidHRUIDs,
+#' gridIDcol = 'GridIDs', HRUIDcol = "subID", outfile = tfout)
 #'
 #' @export rvn_gen_gridweights
 #' @importFrom rgdal readOGR
 #' @importFrom rgeos gBuffer gIntersection
 #' @importFrom methods slot
+#' @importFrom sf st_crs
 rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs, HRUIDcol="HRU_ID",
                                 gridIDcol="cellID", outfile="GridWeights.rvt")
 {
-
-  validHRUIDs <- NULL
 
   # read in HRU file
   #----------------------------------------------------------
   dsn=normalizePath(dirname(HRUshpfile))
   lay=substr(basename(HRUshpfile),1,nchar(basename(HRUshpfile))-4)
   HRUshp<-readOGR(dsn = dsn,layer = lay) # returns SpatialPolygonsDataFrame
+  # HRUshp <- read_sf(HRUshpfile)
   if (!(HRUIDcol %in% colnames(HRUshp@data))){
     print(paste0("HRU ID column name ",HRUIDcol,"is not in shapefile ",HRUshpfile))
     return()
@@ -80,9 +83,16 @@ rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs, HRUIDcol="
   dsn=normalizePath(dirname(Gridshpfile))
   lay=substr(basename(Gridshpfile),1,nchar(basename(Gridshpfile))-4)
   GRDshp<-readOGR(dsn = dsn,layer = lay) # returns SpatialPolygonsDataFrame
+  # GRDshp <- read_sf(Gridshpfile)
   if (!(gridIDcol %in% colnames(GRDshp@data))){
     print(paste0("Grid cell column name ",gridIDcol,"is not in shapefile ",Gridshpfile))
     return()
+  }
+
+  # check projections of both shapefiles
+  #----------------------------------------------------------
+  if (st_crs(GRDshp)$input != st_crs(HRUshp)$input) {
+    stop("The projections of the HRU and grid shapefiles need to be the same, please reproject the shapefiles accordingly.")
   }
 
   # calculate areas of shapes (presumes non-geographic coordinates)
@@ -149,12 +159,9 @@ rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs, HRUIDcol="
         wt<-isect$iarea[i] / HRUshp$HRUarea[k]
       }
       if (wt>0){
-        HRUID<-HRUshp$HRU_ID[k] #!! HARDCODED: only works because we know name of HRU ID column
-        # must get field from name HRUIDcol
-        GridID<-GRDshp$GridIDs[g] #!! only works because we know name of Grid ID column
-        # must get field from name gridIDcol
-
-        if (HRUID %in% validHRUIDs){
+        HRUID<-HRUshp[[HRUIDcol]][k]
+        GridID<-GRDshp[[gridIDcol]][g]
+        if (HRUID %in% ValidHRUIDs){
           write(paste("  ",HRUID," ",GridID ," ",wt),append=TRUE,file=outfile)
         }
         wtsum[k]<-wtsum[k]+wt
@@ -164,5 +171,7 @@ rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs, HRUIDcol="
   write(":EndGridWeights",append=TRUE,file=outfile)
 
   #for debugging only:
-  return (list(area=isect$area,id=isect$id,id1=isect$hindex,id2=isect$gindex,HRU=HRUshp, weightsum=wtsum))
+  # return (list(area=isect$area,id=isect$id,id1=isect$hindex,id2=isect$gindex,HRU=HRUshp, weightsum=wtsum))
+
+  return(TRUE)
 }

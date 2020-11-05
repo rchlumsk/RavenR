@@ -41,6 +41,10 @@
 #' alphabeticized order is not dependent on the station name, and the observed
 #' files will be in one set.
 #'
+#' The function will write to name generated from the station name, otherwise
+#' the .rvt filename may be specified with the filename argument (full path to
+#' the filename, including .rvt extension).
+#'
 #' @param ff WSC flow file in csv format
 #' @param subIDs vector of subbasin IDs to correspond to the stations in ff
 #' @param prd (optional) data period to use in .rvt file
@@ -49,6 +53,8 @@
 #' @param write_redirect (optional) write the :RedirectToFile commands in a
 #' separate .rvt file
 #' @param flip_number (optional) put the subID first in the .rvt filename
+#' @param filename specified name of file to write to (optional)
+#'
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{rvn_annual_peak_event}} to consider the timing of peak
 #' events
@@ -67,7 +73,7 @@
 #' @export rvn_rvt_wsc
 #' @importFrom xts xts
 #' @importFrom lubridate date
-rvn_rvt_wsc <- function(ff,subIDs,prd=NULL,stnNames=NULL,write_redirect=FALSE,flip_number=FALSE)
+rvn_rvt_wsc <- function(ff,subIDs,prd=NULL,stnNames=NULL,write_redirect=FALSE,flip_number=FALSE, filename=NULL)
 {
 
   # data checks
@@ -130,18 +136,21 @@ rvn_rvt_wsc <- function(ff,subIDs,prd=NULL,stnNames=NULL,write_redirect=FALSE,fl
       stop(sprintf("Empty time series for station %s, check the supplied period and/or the availability of flow data in the supplied file.",stns[i]))
     }
 
-    # write .rvt file
-    if (flip_number) {
-      if (!(is.null(stnNames))) {
-        rvt.name <- sprintf('%i_%s.rvt',subIDs[i],stnNames[i])
-      } else {
-        rvt.name <- sprintf('%i_%s.rvt',subIDs[i],stns[i])
-      }
+    if (!is.null(filename)) {
+      rvt.name <- filename
     } else {
-      if (!(is.null(stnNames))) {
-        rvt.name <- sprintf('%s_%i.rvt',stnNames[i],subIDs[i])
+      if (flip_number) {
+        if (!(is.null(stnNames))) {
+          rvt.name <- sprintf('%i_%s.rvt',subIDs[i],stnNames[i])
+        } else {
+          rvt.name <- sprintf('%i_%s.rvt',subIDs[i],stns[i])
+        }
       } else {
-        rvt.name <- sprintf('%s_%i.rvt',stns[i],subIDs[i])
+        if (!(is.null(stnNames))) {
+          rvt.name <- sprintf('%s_%i.rvt',stnNames[i],subIDs[i])
+        } else {
+          rvt.name <- sprintf('%s_%i.rvt',stns[i],subIDs[i])
+        }
       }
     }
 

@@ -33,6 +33,7 @@
 #' @param add_labels optionally adds labels for early peak/late peaks on right
 #' side axis (default TRUE)
 #' @return \item{mvbias}{monthly volume biases}
+#'
 #' @seealso \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 #' volumes
 #'

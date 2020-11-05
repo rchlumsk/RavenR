@@ -2,7 +2,7 @@
 #'
 #' @description
 #' rvn_res_extract is used for extracting data from the Raven reservoir object.
-#' Works for objects from rvn_res_extract function (from the ReservoirStages.csv
+#' Works for objects from \code{\link{rvn_res_read}} function (for reading in the ReservoirStages.csv
 #' file).
 #'
 #' @details
@@ -33,6 +33,7 @@
 #' @return \item{sim}{model simulation for specified column and period}
 #' \item{obs}{observed data for specified column and period}
 #' \item{inflow}{inflow simulation for specified column and period}
+#'
 #' @seealso \code{\link{rvn_res_read}} for reading in the Reservoirs.csv file and
 #' creating the object required in this function. \code{\link{rvn_res_plot}} for
 #' plotting the extracted stage time series
@@ -46,6 +47,8 @@
 #'
 #' # Extract stage using this function
 #' stage36 <- rvn_res_extract(subs="sub36",res=myres,prd="2002-10-01/2003-10-01")
+#' summary(stage36)
+#' summary(stage36$sim)
 #'
 #' # Example for precipitation
 #' precip <- rvn_res_extract(subs="precip",res=myres)

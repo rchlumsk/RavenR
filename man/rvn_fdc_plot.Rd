@@ -43,7 +43,7 @@ rvn_fdc_plot(sim,obs,seasonal=TRUE)
 
 }
 \seealso{
-\code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
+\code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file, and
 \code{\link{rvn_hyd_extract}} for extracting basin flow information from a
 rvn_hyd_read object
 }

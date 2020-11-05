@@ -11,25 +11,22 @@
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
 #'
 #' @examples
-#-- Example RVI file usage
+#'
+#' tf <- file.path(tempdir(), "Hogwarts.rvi")
 #'
 #' # Numeric example
-#' rvn_write_Raven_label('Duration', 'Hogwarts.rvi', value=365)
+#' rvn_write_Raven_label('Duration', filename=tf, value=365)
 #'
 #' # Hydrologic Processes
-#' rvn_write_Raven_label('HydrologicProcesses', 'Hogwarts.rvi')
+#' rvn_write_Raven_label('HydrologicProcesses', tf)
 #'
 #' # String example, with indent
-#' rvn_write_Raven_label('SnowBalance', filename = 'Hogwarts.rvi',
+#' rvn_write_Raven_label('SnowBalance', filename = tf,
 #'                       value = paste('SNOBAL_HMETS', 'MULTIPLE', 'MULTIPLE'),
 #'                       indent_level = 1)
-#' # etc...
 #'
-#' # Preview
-#' readLines("Hogwarts.rvi")
-#'
-#' # cleanup temporary file
-#' unlink("Hogwarts.rvi")
+#' # Preview file
+#' readLines(tf)
 #'
 #' @export rvn_write_Raven_label
 rvn_write_Raven_label <- function(label, filename, value=NULL, digits=NULL, indent_level=0)

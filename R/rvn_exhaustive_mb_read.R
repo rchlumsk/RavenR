@@ -26,7 +26,8 @@
 #' @return \item{exhaustivemb}{data frame from the file with standardized
 #' names} \item{units}{vector corresponding to units of each column}
 #' \item{categories}{vector corresponding to the storage category of each column}
-#' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
+#'
+#' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file, and
 #' \code{\link{rvn_exhaustive_mb_read}} for reading in the
 #' WatershedMassEnergyBalance.csv file
 #'
@@ -43,7 +44,8 @@
 #'      main="Cumulative Surface Water Infiltration")
 #' @export rvn_exhaustive_mb_read
 #' @importFrom xts xts
-rvn_exhaustive_mb_read <- function(ff=NA, join_categories=TRUE, tzone=NULL) {
+rvn_exhaustive_mb_read <- function(ff=NA, join_categories=TRUE, tzone=NULL)
+{
 
   if (missing(ff)) {
     stop("Requires the full file path to the ExhaustiveMassBalance.csv file")

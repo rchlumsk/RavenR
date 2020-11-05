@@ -37,6 +37,7 @@ ff <- system.file("extdata","run1_SNOW_Daily_Average_ByHRU.csv", package="RavenR
 
 # extract and plot custom data
 mycustomdata <- rvn_custom_read(ff)
+summary(mycustomdata[,1:5])
 plot(mycustomdata[,5],main='Daily Average SNOW - HRU 5')
 
 }

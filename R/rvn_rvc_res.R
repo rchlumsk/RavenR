@@ -1,7 +1,7 @@
 #' @title Create initial conditions file for Reservoirs
 #'
 #' @description
-#' rvn_res_init is used to write an initial conditions (rvc) format file for Raven,
+#' rvn_rvc_res is used to write an initial conditions (rvc) format file for Raven,
 #' with the calculated reservoir stages written in.
 #'
 #' @details
@@ -11,50 +11,34 @@
 #' separate rvc file for use (i.e. if there is other information to be included
 #' in the model rvc file).
 #'
-#' The supplied file in ff should be a csv file with the format headers of:
-#' SUBID,STAGE,FLOW,VOL,AREA. The header text is not important as the function
-#' assumes the order only, however some header must exist. The SUBID will be
-#' the integer of the subbasin where the reservoir is located, and will repeat
-#' the value for each point in the stage relationship provided. This is the
-#' only required variable. This format is the same as is requried for the
-#' res.fit function (thus the extra columns that are not used by this
-#' function).
+#' The supplied file in ff should be a csv file consistent with the format from the
+#' Raven-generated ReservoirStages.csv file. External observations of reservoirs may be used
+#' given that the csv file follows the same format.
 #'
-#' Each point in the stage relationship table is used, so if there exist
-#' multiple dry inflow points, the minimum stage of these points will be used
-#' as the 'minimum' stage.
-#'
-#' Also note that the initial stage must be between 0 and 1, so that the
+#' The initial_percent must be between 0 and 1, so that the
 #' initial stage is not less than the dry stage or greater than the maximum.
 #'
 #' @param ff full file path to the reservoir information file
-#' @param initial_stage an optional double for percentage of maximum stage to
+#' @param initial_percent an optional double for percentage of maximum stage to
 #' use as initial condition; default 0.0
 #' @param output file rvc lines are written to (default: initial_res_conditions.rvc)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
+#'
 #' @seealso \code{\link{rvn_res_read}} for reading in the ReservoirStages.csv file
 #'
 #' @examples
 #' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
 #'
-#' #-- Output file name
-#' temprvc <- tempfile(pattern = "file", tmpdir = tempdir(), fileext = ".rvc")
+#' # set initial conditions at 40% capacity, view file
+#' tf <- file.path(tempdir(), "modelname.rvc")
+#' rvn_rvc_res(ff, initial_percent=0.4, output=tf)
+#' readLines(tf)
 #'
-#' # Run function
-#' rvn_res_init(ff, initial_stage=0.4, output=temprvc)
-#'
-#' # view file
-#' readLines(temprvc)
-#'
-#' # cleanup temporary file
-#' unlink(temprvc)
-#'
-#'
-#' @export rvn_res_init
-rvn_res_init <- function(ff, initial_stage=0.0, output="initial_res_conditions.rvc")
+#' @export rvn_rvc_res
+rvn_rvc_res <- function(ff, initial_percent=0.0, output="initial_res_conditions.rvc")
 {
 
-  if (initial_stage < 0 || initial_stage > 1) {
+  if (initial_percent < 0 || initial_percent > 1) {
     stop("Initial stage must be between 0 and 1.")
   }
 
@@ -74,7 +58,7 @@ rvn_res_init <- function(ff, initial_stage=0.0, output="initial_res_conditions.r
 
   for (i in 1:length(sb_cols)) {
     stage <- as.numeric(resdf[,sb_cols[i]])
-    value <- min(stage) + initial_stage * (max(stage) - min(stage))
+    value <- min(stage) + initial_percent * (max(stage) - min(stage))
     writeLines(sprintf(':InitialReservoirStage  %i  %.2f',sb_id[i], value), fc2)
   }
   close(fc2)

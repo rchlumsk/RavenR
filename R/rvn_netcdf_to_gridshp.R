@@ -12,12 +12,15 @@
 #' or on the \href{http://resources.esri.com/help/9.3/arcgisserver/apis/rest/pcs.html}{ESRI webpage}.
 #'
 #' If the outshp is NULL, the shapefile object is returned by the function and nothing is written to file. If outshp is provided,
-#' the shapefile is also written to file. The outshp should be supplied as the file name without the extension (i.e. no .shp
-#' included in the argument).
+#' the shapefile is also written to file. The outshp should be supplied as the file name (with or without .shp extension).
+#'
+#' This function uses the sf::st_write function to write the shapefile, if outshp is provided.
+#'
+#' Additional metadata on the sample netcdf file may be found with `?Nith_era5_sample`.
 #'
 #' @param ncfile netCDF file with latitude and longitude variables
 #' @param projID projected coordinate system ID (EPSG numeric code) to project shapefile to (default NULL, optional)
-#' @param outshp name of output shapefile prefix (DEFAULT NULL, optional)
+#' @param outshp name of output shapefile (DEFAULT NULL, optional)
 #'
 #' @return \item{shapefile}{returns sf shapefile object; will also write a shapefile to the outshp if provided}
 #'
@@ -28,6 +31,7 @@
 #' @examples
 #'
 #' # get location for sample netcdf file
+#' ?Nith_era5_sample
 #' ncfile <- system.file("extdata/Nith_era5_sample.nc", package="RavenR")
 #'
 #' # produce shapefile in lat/long
@@ -38,14 +42,14 @@
 #'
 #' # write shapefile to file in UTM coordinates
 #' projID <- 26917 # NAD83 UTM Zone 17N, appropriate UTM zone for Nith watershed
-#' outshp <- 'Nith_output_shapefile'
+#' outshp <- file.path(tempdir(), "Nith_gridcells.shp")
 #' myshp <- rvn_netcdf_to_gridshp(ncfile, projID, outshp)
 #' sf::st_crs(myshp)$input
 #'
 #'
 #' @export rvn_netcdf_to_gridshp
 #' @importFrom sp coordinates proj4string spTransform Polygons Polygon SpatialPolygonsDataFrame SpatialPolygons CRS
-#' @importFrom rgdal writeOGR
+#' @importFrom sf st_write
 #' @importFrom deldir deldir tile.list
 #' @importFrom methods slot
 #' @importFrom ncdf4 nc_open ncvar_get
@@ -106,16 +110,27 @@ rvn_netcdf_to_gridshp <- function(ncfile,projID=NULL,outshp=NULL)
 
   voronoishp = SpatialPolygonsDataFrame(SP, data=data.frame(x=xx,y=yy, row.names=rnames,GridIDs=IDs,Latit=lat,Longit=long))
   sp::proj4string(voronoishp) <- myprojstring # assign projection to new shapefile accordingly
+  voronoishp <- sf::st_as_sf(voronoishp)
 
-  # write to file
+  # write to file (if path given)
   #-----------------------------------------------------------------------
   if (!is.null(outshp)) {
-    unlink(paste0(outshp,".*")) # deletes old file if it exists
-    writeOGR(voronoishp,dsn=getwd(),layer=outshp, driver="ESRI Shapefile")
+
+    # # remove .shp if exists
+    # if (rvn_substrRight(outshp,4) == ".shp") {
+    #   outshp <- rvn_substrMRight(outshp,4)
+    # }
+
+    if (!endsWith(outshp, ".shp")) {
+      outshp <- paste0(outshp, ".shp")
+    }
+
+    # unlink(paste0(outshp,".*")) # deletes old file if it exists
+    # writeOGR(voronoishp,dsn=getwd(),layer=outshp, driver="ESRI Shapefile")
+    # writeOGR(voronoishp, dsn=outshp, )
+    st_write(voronoishp, dsn=outshp, driver="ESRI Shapefile", delete_dsn=TRUE)
     print(sprintf("%s written to file", outshp))
   }
-
-  voronoishp <- sf::st_as_sf(voronoishp)
 
   return(voronoishp)
 }

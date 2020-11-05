@@ -40,7 +40,7 @@
 #' hru_data <- rvn_rvh_blankHRUdf(nHRUs = 3)
 #'
 #' # write to rvh file
-#' rvn_rvh_write("Blank.rvh",
+#' rvn_rvh_write(file.path(tempdir(), "Blank.rvh"),
 #'               SBtable = sbs_data,
 #'               HRUtable = hru_data,
 #'               description = "Example output - Blank Watershed Discretization File",
@@ -55,12 +55,12 @@
 #'
 #'
 #' # write the Subbasin and HRU tables to new file using rvn_rvh_write:
-#' rvn_rvh_write("Nith_cleaned_write.rvh",
-#'                   SBtable = rvh$SBtable,
-#'                   HRUtable = rvh$HRUtable)
+#' rvn_rvh_write(filename=file.path(tempdir(), "Nith_cleaned_write.rvh"),
+#'              SBtable = rvh$SBtable,
+#'              HRUtable = rvh$HRUtable)
 #'
 #' # write to new file, while preserving all unedited information using rvn_rvh_overwrite:
-#' rvn_rvh_overwrite("Nith_cleaned_overwrite.rvh",
+#' rvn_rvh_overwrite(filename=file.path(tempdir(), "Nith_cleaned_overwrite.rvh"),
 #'                   basefile=nith,
 #'                   SBtable = rvh$SBtable,
 #'                   HRUtable = rvh$HRUtable)

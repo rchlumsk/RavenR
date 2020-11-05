@@ -14,6 +14,7 @@
 #'
 #' @examples
 #' # generate a basic ggplot and apply the RavenR theme
+#' library(ggplot2)
 #' ggplot(data=cars, aes(x=speed, y=dist))+
 #' geom_point()+
 #' rvn_theme_RavenR()

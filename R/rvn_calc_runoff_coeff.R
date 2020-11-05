@@ -9,11 +9,13 @@
 #' Uses precipitation from entire model run history.
 #' Only determines runoff coefficient from available data - prone to overestimation with poor observation coverage.
 #'
-#' @param rvhfile rvh filename (absolute or relative to working directory, with .rvh extension)
+#' @param rvhfile file path to Raven rvh file
 #' @param custfile file path to Raven-generated custom output precip-by-subbasin file
 #' @param hydfile file path to Raven-generated hydrographs file
 #' @param correct (optional) if TRUE, tries to correct runoff coefficient for missing data (assumes missing~0 flow)
 #' @return {data frame with runoff coefficients of gauged basins}
+#'
+#' @seealso \code{\link{rvn_rvh_read}} for reading and processing Raven rvh file
 #'
 #' @author James R. Craig, University of Waterloo
 #'
@@ -30,7 +32,7 @@
 #'
 #'  bp <- barplot(t(as.matrix(runcoefs)),
 #'   main="Runoff Coefficient Comparison (w/ rough data coverage correction)",
-#'   ylab = "Runoff coeff", ylim=c(0,3),beside=TRUE,
+#'   ylab = "Runoff coeff", ylim=c(0,1),beside=TRUE,
 #'   col=c("blue","deepskyblue"),legend.text=c("sim","obs"),las=2)
 #'
 #' @export rvn_calc_runoff_coeff

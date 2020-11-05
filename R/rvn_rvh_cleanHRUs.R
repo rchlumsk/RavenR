@@ -7,7 +7,7 @@
 #' @param HRUtab table of HRUs generated (typically) by \code{\link{rvn_rvh_read}}
 #' @param SBtab table of Subbasins generated (typically) by \code{\link{rvn_rvh_read}}
 #' @param area_tol percentage of watershed area beneath which HRUs should be removed (e.g.,
-#' 0.01 would indicate anything smaller than 1 percent of watershed extent should be removed)
+#' default value of 0.01 would indicate anything smaller than 1 percent of watershed extent should be removed)
 #' @param merge TRUE if similar HRUs are to be merged (this can be slow for large models)
 #' @param elev_tol elevation difference (in metres) considered similar. only used if merge=TRUE.
 #' @param slope_tol slope difference (in degrees) considered similar. only used if merge=TRUE.
@@ -15,11 +15,12 @@
 #' @param ProtectedHRUList list of HRU IDs that are sacrosanct (not to be removed)
 #'
 #' @details
-#'   rvh.clean removes HRUs in two ways:
+#' rvh.clean removes HRUs in two ways:
 #'
-#'    1. it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
-#'     subbasin are expanded by the lost area to keep the same relative coverage.
-#'    2. it consolidates similar HRUs within the same subbasin (those with same land cover,
+#'   1. it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
+#' subbasin are expanded by the lost area to keep the same relative coverage.
+#'
+#'   2. it consolidates similar HRUs within the same subbasin (those with same land cover,
 #'     vegetation, soil profile and similar slope, aspect, and elevation)
 #'
 #' @return {hru_table}{cleaned HRU table as a dataframe}
@@ -31,22 +32,20 @@
 #' \code{\link{rvn_rvh_write}} to write rvh information to file.
 #'
 #' @examples
-#'   # read in example rvh file
-#'   nith <- system.file("extdata","Nith.rvh",package = "RavenR")
-#'   rvh <- rvn_rvh_read(nith)
+#' # read in example rvh file
+#' nith <- system.file("extdata","Nith.rvh",package = "RavenR")
+#' rvh <- rvn_rvh_read(nith)
 #'
-#'   # number of HRUs in existing configuration
-#'   nrow(rvh$HRUtable)
+#' # number of HRUs in existing configuration
+#' nrow(rvh$HRUtable)
 #'
-#'   # clean contents (in this case, remove all HRUs covering less than 5% of the total area)
-#'   rvh$HRUtable <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
-#'
-#'   rvh$HRUtable
+#' # clean contents (in this case, remove all HRUs covering less than 5% of the total area)
+#' rvh$HRUtable <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
 #'
 #' @export rvn_rvh_cleanhrus
 #' @importFrom stats aggregate
-rvn_rvh_cleanhrus<-function(HRUtab,SBtab,area_tol=0.001,merge=FALSE,
-                            elev_tol=50,slope_tol=4,aspect_tol=20,ProtectedHRUList=c())
+rvn_rvh_cleanhrus <- function(HRUtab, SBtab, area_tol=0.01, merge=FALSE,
+                            elev_tol=50, slope_tol=4, aspect_tol=20, ProtectedHRUList=c())
 {
   #routine:
   init_nHRUs<-nrow(HRUtab)
@@ -90,10 +89,11 @@ rvn_rvh_cleanhrus<-function(HRUtab,SBtab,area_tol=0.001,merge=FALSE,
 
     HRUtab$similar <- NA
 
-    for (i in 1:nrow(HRUtab))
+    # for (i in 1:nrow(HRUtab))# old line
+    for (i in 1:(nrow(HRUtab)-1))
     {
       if (i %% 100==0){print(i)}
-      for (k in 1:max(i-1,1)){
+      for (k in (i+1):nrow(HRUtab)) {  # change to check current row against all upcoming rows, and ensure that k != i for all i
         if (HRUtab$SBID[i]==HRUtab$SBID[k]){ # kept separate for speed
           if (HRUtab$LandUse[i]==HRUtab$LandUse[k])  {
             if ((HRUtab$remove[i]!=TRUE) & (HRUtab$remove[k]!=TRUE)){
@@ -154,6 +154,6 @@ rvn_rvh_cleanhrus<-function(HRUtab,SBtab,area_tol=0.001,merge=FALSE,
   }
   print(paste0("Initial area: ",toString(init_Area)," km2;  final area: ",toString(sum(HRUtab$Area)) ," km2"))
 
-#  return (list(HRUtable=HRUtab)) # should also return re-classification information (e.g., similarity list for plotting results)
+  #  return (list(HRUtable=HRUtab)) # should also return re-classification information (e.g., similarity list for plotting results)
   return(data.frame(HRUtab))
 }

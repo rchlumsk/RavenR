@@ -29,8 +29,9 @@
 #' ff <- system.file("extdata","run1_ForcingFunctions.csv", package="RavenR")
 #' myforcings <- rvn_forcings_read(ff)
 #'
-#' # check data
-#' head(myforcings$forcings)
+#' # check data (first 5 columns for brevity)
+#' head(myforcings$forcings[,1:5])
+#' summary(myforcings$forcings[,1:5])
 #'
 #' @export rvn_forcings_read
 #' @importFrom xts xts

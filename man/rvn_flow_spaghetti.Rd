@@ -35,11 +35,12 @@ generation of plot titles.
 
 # load sample hydrograph data, two years worth of sim/obs
 data(rvn_hydrograph_data)
-sim <- rvn_hydrograph_data$hyd$Sub36
-sim2 <- rvn_hydrograph_data$hyd$Sub43
 
 # create spaghetti plot of simulated flows
-rvn_flow_spaghetti(sim)
+rvn_flow_spaghetti(rvn_hydrograph_data$hyd$Sub36)
+
+# create spaghetti plot of observed flows
+rvn_flow_spaghetti(rvn_hydrograph_data$hyd$Sub36_obs)
 
 }
 \seealso{

@@ -32,6 +32,7 @@
 #' @param winter_shading optionally adds shading for winter months (default FALSE)
 #' @param wsdates integer vector of winter shading period dates (see details)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
+#'
 #' @seealso \code{\link{rvn_flow_spaghetti}} to create a spaghetti plot of annual
 #' flow series
 #'
@@ -150,8 +151,6 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
                           origin = "1970-01-01")
 
     shade <- data.frame(winter.start,winter.end)
-    # shade$winter.start <- as.Date(shade$winter.start
-    # shade$winter.end <- as.Date(shade$winter.end)
     shade$y.start <- -Inf
     shade$y.end <- Inf
 

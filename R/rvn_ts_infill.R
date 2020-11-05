@@ -1,7 +1,7 @@
 #' @title Infill discontinuous time series with blank values
 #'
 #' @description
-#' Infills missing time series values.
+#' Infills missing time values from a time series based on a regular interval.
 #'
 #' @details
 #' Takes xts dataset, finds minimum interval between time stamps and
@@ -10,6 +10,12 @@
 #'
 #' Only handles data with minimum time interval of 1 day; 1,2,3,4,6,8, or 12 hrs.
 #'
+#' Note that in default reading in of date/time data, the daylight savings timezones may be assigned
+#' to the date/time when reading in a data file with Raven using functions such as \code{\link{rvn_hyd_read}}. This
+#' function will then detect differences in the intervals and throw an error. To avoid this, the
+#' timezone may be assigned explicitly to all values with the read function and all daylight savings/endings
+#' will be ignored.
+#'
 #' @param ts valid xts time series
 #'
 #' @return {ts}{ continuous xts time series}
@@ -17,10 +23,15 @@
 #' @author James R. Craig, University of Waterloo
 #'
 #' @examples
-#' dates <-seq(as.POSIXct("2012-05-01 00:00:00"), length=731, by="day")
-#' mydata<-xts(rnorm(731),order.by=dates)
-#' mydata<-mydata[weekdays(index(mydata))!="Wednesday"] # remove wednesdays
-#' out<-rvn_ts_infill(mydata)
+#' system.file("extdata","run1_Hydrographs.csv", package="RavenR") %>%
+#' rvn_hyd_read(., tzone="EST") -> mydata
+#' mydata <- mydata$hyd$precip
+#' mydata<-mydata[-seq(2,nrow(mydata),3),] # remove every 3rd day
+#' head(mydata)
+#'
+#' # fill back with rvn_ts_infill using NA values
+#' rvn_ts_infill(mydata$precip) %>%
+#' head()
 #'
 #' @export rvn_ts_infill
 #' @importFrom zoo index

@@ -1,8 +1,8 @@
 Package: RavenR
 Type: Package
 Title: Raven Hydrological Modelling Framework R Support and Analysis
-Version: 1.3.3
-Date: 2020-06-30
+Version: 2.0.0
+Date: 2020-11-05
 Authors@R: c(
     person("Chlumsky", "Robert", email = "rchlumsk@uwaterloo.ca", role = c("cre","aut")),
     person("Craig", "James", email = "jrcraig@uwaterloo.ca", role = "aut"),
@@ -12,7 +12,7 @@ Authors@R: c(
     person("Lin", "Simon", email = "simon.lin@uwaterloo.ca", role = "ctb"))
 Maintainer: Robert Chlumsky <rchlumsk@uwaterloo.ca>    
 Description: Provides useful functions for pre- and post-processing Raven output.
-Note: Package is active development; please report errors and suggestions for development to rchlumsk@uwaterloo.ca.
+Note: Package is in active development; please report errors and suggestions to rchlumsk@uwaterloo.ca.
 Depends:
     R (>= 4.0.0)
 Imports:
