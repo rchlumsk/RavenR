@@ -29,7 +29,7 @@ separate .rvt file}
 
 \item{flip_number}{(optional) put the subID first in the .rvt filename}
 
-\item{filename}{specified name of file to write to (optional)}
+\item{filename}{specified name of file(s) to write to (optional)}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
@@ -75,16 +75,14 @@ This is often cleaner for organizing files in a folder, since the
 alphabeticized order is not dependent on the station name, and the observed
 files will be in one set.
 
-The function will write to name generated from the station name, otherwise
+The function will write to name generated from the station name(s), otherwise
 the .rvt filename may be specified with the filename argument (full path to
-the filename, including .rvt extension).
+the filename, including .rvt extension). If multiple stations are provided,
+the filename argument may be a vector of filenames.
 }
 \examples{
 ff = system.file("extdata",'Daily__Oct-1-2020_08_20_52PM.csv', package="RavenR")
-rvn_rvt_wsc(ff,subIDs=c(6))
-
-# add custom station names, put subID number first in file
-rvn_rvt_wsc(ff,subIDs=c(6),stnNames=c('Grand River'), flip_number=TRUE)
+rvn_rvt_wsc(ff,subIDs=c(6), filename=file.path(tempdir(), "stn_02GB001.rvt"))
 
 }
 \seealso{

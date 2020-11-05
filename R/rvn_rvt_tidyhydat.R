@@ -35,9 +35,10 @@
 #' alphabeticized order is not dependent on the station name, and the observed
 #' files will be in one set.
 #'
-#' The function will write to name generated from the station name, otherwise
+#' The function will write to name generated from the station name(s), otherwise
 #' the .rvt filename may be specified with the filename argument (full path to
-#' the filename, including .rvt extension).
+#' the filename, including .rvt extension). If multiple stations are provided,
+#' the filename argument may be a vector of filenames.
 #'
 #' @param indata tibble of WSC flow data from tidyhydat's hy_daily_flows() function
 #' @param subIDs vector of subbasin IDs to correspond to the stations in indata
@@ -46,7 +47,7 @@
 #' @param write_redirect (optional) write the :RedirectToFile commands in a separate .rvt file
 #' @param rd_file (optional) name of the redirect file created (if write_redirect = TRUE)
 #' @param flip_number (optional) put the subID first in the .rvt filename
-#' @param filename specified name of file to write to (optional)
+#' @param filename specified name of file(s) to write to (optional)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #'
 #' @examples
@@ -59,9 +60,12 @@
 #'
 #' station_info <- hy_stations(stations)
 #'
+#' tf1 <- file.path(tempdir(), "station1.rvt")
+#' tf2 <- file.path(tempdir(), "station2.rvt")
+#'
 #' # Create RVT files
 #' rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
-#'   stnNames=station_info$STATION_NAME, flip_number=TRUE)
+#'   filename=c(tf1,tf2))
 #'
 #' @export rvn_rvt_tidyhydat
 #' @importFrom dplyr distinct pull select
@@ -110,7 +114,7 @@ rvn_rvt_tidyhydat <- function(indata, subIDs, prd=NULL, stnNames=NULL,
 
     # determine file name
     if (!is.null(filename)) {
-      rvt.name <- filename
+      rvt.name <- filename[i]
     } else {
       if (flip_number) {
         if (!(is.null(stnNames))) {

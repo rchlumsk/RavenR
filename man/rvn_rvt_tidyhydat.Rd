@@ -30,7 +30,7 @@ rvn_rvt_tidyhydat(
 
 \item{rd_file}{(optional) name of the redirect file created (if write_redirect = TRUE)}
 
-\item{filename}{specified name of file to write to (optional)}
+\item{filename}{specified name of file(s) to write to (optional)}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
@@ -70,9 +70,10 @@ This is often cleaner for organizing files in a folder, since the
 alphabeticized order is not dependent on the station name, and the observed
 files will be in one set.
 
-The function will write to name generated from the station name, otherwise
+The function will write to name generated from the station name(s), otherwise
 the .rvt filename may be specified with the filename argument (full path to
-the filename, including .rvt extension).
+the filename, including .rvt extension). If multiple stations are provided,
+the filename argument may be a vector of filenames.
 }
 \examples{
 library(tidyhydat)
@@ -84,8 +85,11 @@ hd <- tidyhydat::hy_daily_flows(station_number = stations,
 
 station_info <- hy_stations(stations)
 
+tf1 <- file.path(tempdir(), "station1.rvt")
+tf2 <- file.path(tempdir(), "station2.rvt")
+
 # Create RVT files
 rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
-  stnNames=station_info$STATION_NAME, flip_number=TRUE)
+  filename=c(tf1,tf2))
 
 }
