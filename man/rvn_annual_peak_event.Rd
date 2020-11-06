@@ -71,10 +71,6 @@ peak1 <- rvn_annual_peak_event(sim, obs)
 peak1$df_peak_event
 peak1$p1
 
-# add the r2 regression line and plot directly
-# rvn_annual_peak_event(sim, obs, add_r2=TRUE)
-
-
 }
 \seealso{
 \code{\link{rvn_annual_peak}} to create a scatterplot of annual peaks
