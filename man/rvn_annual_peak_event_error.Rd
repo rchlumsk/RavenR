@@ -70,11 +70,11 @@ peak1$df_peak_event_error
 peak1$p1
 
 # plot directly and without labels
-rvn_annual_peak_event_error(sim, obs, add_line=TRUE,add_labels=FALSE)$p1
+# rvn_annual_peak_event_error(sim, obs, add_line=TRUE,add_labels=FALSE)$p1
 
 # plot for a water year of July 1
 ## note that partial period creates two points ending in 2004
-rvn_annual_peak_event_error(sim, obs, mm=6, add_line=TRUE,add_labels=FALSE)$p1
+# rvn_annual_peak_event_error(sim, obs, mm=6, add_line=TRUE,add_labels=FALSE)$p1
 
 
 }

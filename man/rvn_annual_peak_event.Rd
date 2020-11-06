@@ -72,7 +72,7 @@ peak1$df_peak_event
 peak1$p1
 
 # add the r2 regression line and plot directly
-rvn_annual_peak_event(sim, obs, add_r2=TRUE)
+# rvn_annual_peak_event(sim, obs, add_r2=TRUE)
 
 
 }

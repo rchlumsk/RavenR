@@ -1,7 +1,7 @@
 Package: RavenR
 Type: Package
 Title: Raven Hydrological Modelling Framework R Support and Analysis
-Version: 2.0.0
+Version: 2.0.1
 Date: 2020-11-05
 Authors@R: c(
     person("Chlumsky", "Robert", email = "rchlumsk@uwaterloo.ca", role = c("cre","aut")),

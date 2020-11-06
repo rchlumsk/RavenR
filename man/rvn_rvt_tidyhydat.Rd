@@ -76,14 +76,19 @@ the filename, including .rvt extension). If multiple stations are provided,
 the filename argument may be a vector of filenames.
 }
 \examples{
-library(tidyhydat)
+
+# note: example modified to avoid using tidyhydat directly, uses saved
+## tidyhydat data from RavenR package sample data
+# library(tidyhydat)
 stations <- c("05CB004","05CA002")
 
 # Gather station data/info using tidyhydat functions
-hd <- tidyhydat::hy_daily_flows(station_number = stations,
-  start_date = "1996-01-01", end_date = "2000-01-01")
+# hd <- tidyhydat::hy_daily_flows(station_number = stations,
+#  start_date = "1996-01-01", end_date = "1997-01-01")
+data(rvn_tidyhydat_sample)
+hd <- rvn_tidyhydat_sample
 
-station_info <- hy_stations(stations)
+# station_info <- hy_stations(stations)
 
 tf1 <- file.path(tempdir(), "station1.rvt")
 tf2 <- file.path(tempdir(), "station2.rvt")

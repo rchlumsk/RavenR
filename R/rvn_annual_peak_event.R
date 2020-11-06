@@ -51,10 +51,6 @@
 #' peak1$df_peak_event
 #' peak1$p1
 #'
-#' # add the r2 regression line and plot directly
-#' rvn_annual_peak_event(sim, obs, add_r2=TRUE)
-#'
-#'
 #' @export rvn_annual_peak_event
 #' @importFrom stats lm
 #' @importFrom lubridate year date
@@ -66,9 +62,18 @@ rvn_annual_peak_event <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r
   max.dates <- lubridate::date(max.obs)
   max.sim <- sim[max.dates]
 
-  df <- data.frame("obs.dates" = max.dates,
-                   "sim.peak.event" = as.numeric(max.sim),
-                   "obs.peak.event" = as.numeric(max.obs))
+  max.sim <- as.numeric(max.sim)
+  max.obs <- as.numeric(max.obs)
+
+  df <- data.frame(matrix(NA, nrow=length(max.dates), ncol=3))
+  df[,1] <- max.dates
+  df[,2] <- max.sim
+  df[,3] <- max.obs
+  colnames(df) <- c("obs.dates","sim.peak.event","obs.peak.event")
+
+  # df <- data.frame("obs.dates" = max.dates,
+  #                  "sim.peak.event" = as.numeric(max.sim),
+  #                  "obs.peak.event" = as.numeric(max.obs))
 
   x.lab <- expression("Observed Peak Discharge ("*m^3*"/s)")
   y.lab <- expression("Simulated Peak Discharge ("*m^3*"/s)")
