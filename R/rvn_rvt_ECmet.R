@@ -85,9 +85,6 @@
 #' \href{http://climate.weather.gc.ca/historical_data/search_historic_data_e.html}{EC
 #' Historical Data}
 #'
-#' Download multiple years of climate data, see
-#' \href{ftp://ftp.tor.ec.gc.ca/Pub/Get_More_Data_Plus_de_donnees/Readme.txt}{instructions}
-#'
 #' @examples
 #' # Download data using weathercan weather_dl
 #' library(weathercan)
