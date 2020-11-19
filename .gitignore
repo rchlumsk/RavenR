@@ -2,7 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-
 *.pdf
 *.html
-
+snowpack.png
