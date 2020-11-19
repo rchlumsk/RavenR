@@ -4,13 +4,15 @@
 \alias{rvn_custom_read}
 \title{Read Raven Custom Output files}
 \usage{
-rvn_custom_read(ff = NA, no_runname = FALSE)
+rvn_custom_read(ff = NA, no_runname = FALSE, tzone = NULL)
 }
 \arguments{
 \item{ff}{full file path to the custom output file}
 
 \item{no_runname}{boolean for whether a runName is supplied, important for
 parsing the filename}
+
+\item{tzone}{string indicating the timezone of the data in ff}
 }
 \value{
 \item{custom_out}{data frame with the custom output data stored as xts
@@ -35,17 +37,10 @@ ff <- system.file("extdata","run1_SNOW_Daily_Average_ByHRU.csv", package="RavenR
 
 # extract and plot custom data
 mycustomdata <- rvn_custom_read(ff)
+summary(mycustomdata[,1:5])
 plot(mycustomdata[,5],main='Daily Average SNOW - HRU 5')
 
 }
 \seealso{
 \code{\link{rvn_custom_output_plot}} for plotting custom output
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{custom}
-\keyword{output}
-\keyword{read}

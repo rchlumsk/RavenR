@@ -2,55 +2,61 @@
 % Please edit documentation in R/rvn_netcdf_to_gridshp.R
 \name{rvn_netcdf_to_gridshp}
 \alias{rvn_netcdf_to_gridshp}
-\title{Generate grid overlay from netCDF file
-
-Takes the latitude-longitude cell coordinates from a netCDF file (assumed to be named 'lat' and 'long')
-generates an estimate of the grid polygons associated with each netCDF cell and exports this to a shapefile (outshp)
-
-Note that the function can fail due to bad netCDF file or inappropriate UTM zone;}
+\title{Generate grid overlay from netCDF file}
 \usage{
-rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
+rvn_netcdf_to_gridshp(ncfile, projID = NULL, outshp = NULL)
 }
 \arguments{
 \item{ncfile}{netCDF file with latitude and longitude variables}
 
-\item{UTMzone}{UTM zone for exported shapefile (integer)}
+\item{projID}{projected coordinate system ID (EPSG numeric code) to project shapefile to (default NULL, optional)}
 
-\item{outshp}{name of output shapefile prefix (i.e., no .shp extension)}
+\item{outshp}{name of output shapefile (DEFAULT NULL, optional)}
 }
 \value{
-\item{TRUE}{returns TRUE if executed properly. Also generates shapefile in folder}
+\item{shapefile}{returns sf shapefile object; will also write a shapefile to the outshp if provided}
 }
 \description{
-Generate grid overlay from netCDF file
-
 Takes the latitude-longitude cell coordinates from a netCDF file (assumed to be named 'lat' and 'long')
 generates an estimate of the grid polygons associated with each netCDF cell and exports this to a shapefile (outshp)
+}
+\details{
+projID should be provided as an integer value referring to a valid EPSG coordinate system. If projID is left NULL, the
+output shapefile will be left in lat/long coordinates and WGS84 projection. Note that the function can fail due to bad
+netCDF file or inappropriate coordinate system ID. A list of IDs for
+projected coordinate system may be found on the \href{https://spatialreference.org/ref/epsg/}{Spatial Reference webpage}
+or on the \href{http://resources.esri.com/help/9.3/arcgisserver/apis/rest/pcs.html}{ESRI webpage}.
 
-Note that the function can fail due to bad netCDF file or inappropriate UTM zone;
+If the outshp is NULL, the shapefile object is returned by the function and nothing is written to file. If outshp is provided,
+the shapefile is also written to file. The outshp should be supplied as the file name (with or without .shp extension).
+
+This function uses the sf::st_write function to write the shapefile, if outshp is provided.
+
+Additional metadata on the sample netcdf file may be found with `?Nith_era5_sample`.
 }
 \examples{
 
-\dontrun{
-ncfile <- system.file("extdata/GlenAllan.nc", package="RavenR")
-UTMzone <- 17
-outshp <- "maps/RDPS_Grid"
-rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
-}
+# get location for sample netcdf file
+?Nith_era5_sample
+ncfile <- system.file("extdata/Nith_era5_sample.nc", package="RavenR")
+
+# produce shapefile in lat/long
+myshp <- rvn_netcdf_to_gridshp(ncfile)
+class(myshp)
+sf::st_crs(myshp)$input
+plot(myshp$geometry)
+
+# write shapefile to file in UTM coordinates
+projID <- 26917 # NAD83 UTM Zone 17N, appropriate UTM zone for Nith watershed
+outshp <- file.path(tempdir(), "Nith_gridcells.shp")
+myshp <- rvn_netcdf_to_gridshp(ncfile, projID, outshp)
+sf::st_crs(myshp)$input
 
 
 }
 \seealso{
 \code{\link{rvn_gen_gridweights}} for generating a shapefile of gridweights
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
 \author{
 James R. Craig, University of Waterloo, 2019
 }
-\keyword{conversion}
-\keyword{grid}
-\keyword{netcdf}
-\keyword{shapefile}

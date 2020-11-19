@@ -47,8 +47,3 @@ See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{Hydrologic}
-\keyword{Processes}
-\keyword{Raven}
-\keyword{connections}
-\keyword{rvi}

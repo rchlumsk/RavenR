@@ -36,11 +36,12 @@ Any NA values in the weights are converted to the flag -1.2345, used in Raven as
  ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 
  # read in Raven Hydrographs file, store into mydata
- mydata <- rvn_hyd_read(ff)
+ mydata <- rvn_hyd_read(ff, tzone="EST")
 
  # generate rvt file using just observations from Subbasin ID 36
  flows <- rvn_ts_infill(mydata$hyd$Sub36_obs)
- rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36, typestr = "HYDROGRAPH")
+ rvn_rvt_obsfile(filename=file.path(tempdir(),"run1_Hydrographs.rvt"),
+   flows, 36, typestr = "HYDROGRAPH")
 
  # weight March-October flows:
  wts <- rvn_gen_obsweights(flows,criterion = "BETWEEN_CYCLIC",
@@ -51,24 +52,18 @@ Any NA values in the weights are converted to the flag -1.2345, used in Raven as
    startdate="2003-03-01")
  wts2 <- wts2*wts # product merges weights
 
- # write observation weights to rvt file
- rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2,
-   36, typestr="HYDROGRAPH")
+ # show weights over time
+ plot(wts2)
 
- # cleanup example files
- unlink(x=c("run1_Hydrographs.rvt","run1_Hydrographs_wts.rvt"))
+ # write observation weights to rvt file
+ rvn_rvt_obsweights(filename=file.path(tempdir(), "run1_Hydrographs_obsweights.rvt"),
+   wts2, 36, typestr="HYDROGRAPH")
+
 
 }
 \seealso{
 \code{\link{rvn_rvt_obsfile}} \code{\link{rvn_gen_obsweights}}
-See also the \href{http://raven.uwaterloo.ca/}{Raven website}
 }
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{Raven}
-\keyword{file}
-\keyword{observations}
-\keyword{rvt}
-\keyword{weights}
-\keyword{write}

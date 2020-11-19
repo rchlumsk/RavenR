@@ -1,8 +1,10 @@
-#' Read in Raven ForcingFunctions file
+#' @title Read in Raven ForcingFunctions file
 #'
+#' @description
 #' rvn_forcings_read is used to read in the ForcingFunctions.csv file produced by
 #' the modelling Framework Raven.
 #'
+#' @details
 #' This function expects a full file path to the ForcingFunctions.csv file,
 #' then reads in the file using read.csv. The main advantage of this functon is
 #' renaming the columns to nicer names and extracting the units into something
@@ -13,6 +15,7 @@
 #' is sufficient.
 #'
 #' @param ff full file path to the ForcingFunctions.csv file
+#' @param tzone string indicating the timezone of the data in ff
 #' @return
 #'  \item{forcings}{data frame from the file with standardized names}
 #'  \item{units}{vector corresponding to units of each column}
@@ -20,23 +23,21 @@
 #'
 #' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven read.csv forcing functions
 #' @examples
 #'
 #' # read in sample forcings data
 #' ff <- system.file("extdata","run1_ForcingFunctions.csv", package="RavenR")
 #' myforcings <- rvn_forcings_read(ff)
 #'
-#' # check data
-#' head(myforcings$forcings)
+#' # check data (first 5 columns for brevity)
+#' head(myforcings$forcings[,1:5])
+#' summary(myforcings$forcings[,1:5])
 #'
 #' @export rvn_forcings_read
 #' @importFrom xts xts
 #' @importFrom utils read.csv
-rvn_forcings_read <- function(ff=NA) {
+rvn_forcings_read <- function(ff=NA, tzone=NULL)
+{
 
   if (missing(ff)) {
     stop("Requires the full file path to the ForcingFunctions.csv file")
@@ -49,9 +50,11 @@ rvn_forcings_read <- function(ff=NA) {
   # re-read with specified colClasses
   watersheds <- read.csv(ff,header=TRUE,colClasses = classes,na.strings=c("---",'NA','1.#INF'))
 
-  # careful in date-time formats; excel can screw it up if csv is saved over. This works for
-  # un untouched Raven output file
-  date.time <- as.POSIXct(paste(watersheds$date,watersheds$hour), format="%Y-%m-%d %H:%M:%S")
+  if (is.null(tzone)) {
+    date.time <- as.POSIXct(paste(watersheds$date,watersheds$hour), format="%Y-%m-%d %H:%M:%S")
+  } else {
+    date.time <- as.POSIXct(paste(watersheds$date,watersheds$hour), format="%Y-%m-%d %H:%M:%S", tz=tzone)
+  }
   # head(date.time)
   cols <- colnames(watersheds)
 

@@ -18,8 +18,21 @@ data.frame of blank HRU properties to be filled in by user
 Used to generate a blank HRU table that can be filled in by the user. Compatible
 with \code{\link{rvn_rvh_write}}.
 }
+\details{
+Note that if the length of the subbasinIDs vector is greater than the number of HRUs (nHRUs)
+specified, this will create a table with HRUs belonging to multiple subbasins, which is not feasible.
+A warning will be issued that the table will need to be modified for hydrologic consistency.
+}
 \examples{
 HRUtable <- rvn_rvh_blankHRUdf(nHRUs = 3, subbasinIDs=c(1,1,2))
+HRUtable
+
+# fewer nHRUs than subbasinIDs specified
+rvn_rvh_blankHRUdf(nHRUs = 1, subbasinIDs=c(1,2))
+
+}
+\seealso{
+\code{\link{rvn_rvh_blankSBdf}} to generate blank subbasin data frame
 }
 \author{
 Leland Scantlebury

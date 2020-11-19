@@ -2,12 +2,7 @@
 % Please edit documentation in R/rvn_utilities.R
 \name{rvn_col_transparent}
 \alias{rvn_col_transparent}
-\title{Add Transparency to Colours
-
-rvn_col_transparent is used to adjust colour codes to introduce transparency
-
-Note that this function is not required for ggplot objects, as transparency can be
-added with the `alpha` parameter.}
+\title{Add Transparency to Colours}
 \usage{
 rvn_col_transparent(colour, trans)
 }
@@ -22,10 +17,9 @@ object}
 \item{res}{returned updated colour code with transparency}
 }
 \description{
-Add Transparency to Colours
-
 rvn_col_transparent is used to adjust colour codes to introduce transparency
-
+}
+\details{
 Note that this function is not required for ggplot objects, as transparency can be
 added with the `alpha` parameter.
 }
@@ -35,9 +29,9 @@ added with the `alpha` parameter.
 plot(rnorm(20),col='black')
 
 # create a transparent blue colour for plotting
-mycol <- rvn_col_transparent('blue',100)
+mycol <- rvn_col_transparent('red',100)
 
-# plot more random points in transparent blue colour
+# plot more random points in transparent red colour
 points(rnorm(20),col=mycol)
 
 }
@@ -48,5 +42,3 @@ plot points transparent in R}
 
 \code{\link{rvn_iscolour}} for checking validity of colour codes
 }
-\keyword{colour}
-\keyword{transparency}

@@ -34,11 +34,11 @@ an xts time series and criterion given by the user
 }
 \details{
 for criterion ='BEFORE', all timestamps prior to the enddate have a
-weight of 1, 0 otherwise
+weight of 1, 0 otherwise \cr
 for criterion ='AFTER', all timestamps after the startdate have a
-weight of 1, 0 otherwise
+weight of 1, 0 otherwise \cr
 for criterion ='BETWEEN', all timestamps after the startdate and before
-the enddate have a weight of 1, 0 otherwise
+the enddate have a weight of 1, 0 otherwise \cr
 for criterion ='BETWEEN_CYCLIC', all julian days after the startdate and before
 the enddate have a weight of 1, 0 otherwise; if startdate is more than enddate,
 then the opposite is true, e.g, for startdate="2002-11-01" and enddate "2002-01-31",
@@ -49,11 +49,12 @@ only November, December and January timestamps have a weight of 1
  ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 
  # read in Raven Hydrographs file, store into mydata
- mydata <- rvn_hyd_read(ff)
+ mydata <- rvn_hyd_read(ff, tzone="EST")
 
  # generate rvt file using just observations from Subbasin ID 36
  flows <- rvn_ts_infill(mydata$hyd$Sub36_obs)
- rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36,
+ tf1 <- file.path(tempdir(), "myobservations.rvt")
+ rvn_rvt_obsfile(tf1, flows, 36,
    typestr = "HYDROGRAPH")
 
  # weight March-October flows:
@@ -69,17 +70,13 @@ only November, December and January timestamps have a weight of 1
  plot(wts2)
 
  # write observation weights to rvt file
- rvn_rvt_obsweights("run1_Hydrographs_wts.rvt", wts2, 36, typestr="HYDROGRAPH")
+ tf2 <- file.path(tempdir(), "myobservations_wts.rvt")
+ rvn_rvt_obsweights(tf2, wts2, 36, typestr="HYDROGRAPH")
 
 }
 \seealso{
 \code{\link{rvn_rvt_obsweights}} to write the weights to an rvt file
-See also the \href{http://raven.uwaterloo.ca/}{Raven website}
 }
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{Raven}
-\keyword{generate}
-\keyword{observations}
-\keyword{weights}

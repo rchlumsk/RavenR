@@ -1,9 +1,12 @@
-#' Plot Raven Custom Output
+#' @title Plot Raven Custom Output
 #'
+#' @description
 #' rvn_custom_output_plot is used to plot the custom output from Raven
 #'
-#' rvn_custom_output_plot plots the custom output from a Raven model. The custom
-#' output should be first read in using the custom.read function.
+#' @details
+#' The custom output should be first read in using the rvn_custom_read function. Note that in this case the
+#' plot title is included, generated from the information in the filename. This plot title may be changed with
+#' ggplot2 commands.
 #'
 #' @param cust custom output object from custom.read
 #' @param IDs (optional) array of HRU IDs, subbasin IDs, HRU Group names/IDs to
@@ -12,10 +15,6 @@
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{rvn_custom_output_plot}} for plotting custom output
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven plot custom output
 #' @examples
 #'
 #' # read in custom output from sample data
@@ -23,10 +22,10 @@
 #' mycustomdata <- rvn_custom_read(ff)
 #'
 #' # plot custom data (first 10 HRUs)
-#' rvn_custom_output_plot(mycustomdata, IDs=seq(1,10), prd="2002-10-01/2003-09-01")
+#' rvn_custom_output_plot(mycustomdata, IDs=seq(1,10), prd="2002-10-01/2003-06-01")
 #'
 #' @export rvn_custom_output_plot
-#' @importFrom ggplot2 fortify ggplot aes geom_line ylab xlab scale_colour_brewer scale_x_datetime geom_step
+#' @importFrom ggplot2 fortify ggplot aes geom_line ylab xlab scale_colour_brewer scale_x_datetime geom_step ggtitle
 #' @importFrom reshape2 melt
 #' @importFrom xts xtsAttributes
 rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL)
@@ -44,11 +43,13 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL)
   df.plot <- reshape2::melt(df.plot, id.vars = "Index")
 
   # Break down xts attributes to get title
-  rav.dt   <-xtsAttributes(cust)$ datatype;# odd space involved
-  stat.agg <-xtsAttributes(cust)$ stat.agg;
-  time.agg <-xtsAttributes(cust)$ time.agg
-  space.agg<-unlist(strsplit(xtsAttributes(cust)$ space.agg, split = "By"))[2]
-  runname  <-xtsAttributes(cust)$ runname
+  xtsAttributes(cust) %>% data.frame() -> xdf
+  rav.dt <- xdf$datatype
+  stat.agg <-xdf$stat_agg
+  time.agg <- xdf$time_agg
+  # space.agg<-unlist(strsplit(xtsAttributes(cust)$ space.agg, split = "By"))[2]
+  space.agg <-  strsplit(xdf$space_agg, split="By")[[1]][2]
+  runname  <- xdf$runname
 
   plot.title=toupper(paste(time.agg,' ',stat.agg,' ',rav.dt,' by ', space.agg))
 
@@ -66,47 +67,32 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL)
           'PET,OW_PET',  'PET_MONTH_AVE',
           'SUBDAILY_CORR', 'POTENTIAL_MELT')
 
-  if (rav.dt  %in% flist){
-    #Use step plot instead of lineplot
-    p1 <- ggplot()+
-      geom_step(data = df.plot, aes(x=Index,y=value,color=variable))+
-      rvn_theme_RavenR()+
-      ylab(yaxis.title)+
-      xlab("")+
-      #ggtitle(plot.title) +
-      scale_colour_brewer(type = "qual", palette = 3)
-
-  } else { #line plot is default for state variables
-
-    p1 <- ggplot()+
-      geom_line(data = df.plot, aes(x=Index,y=value,color=variable))+
-      rvn_theme_RavenR()+
-      ylab(yaxis.title)+
-      xlab("")+
-      #ggtitle(plot.title)+
-      scale_colour_brewer(type = "qual", palette = 3)
-  }
-
-  # # Change plot limits to period
-  # # determine the period to use
-  # if (!(is.null(prd))) {
-  #   # period is supplied; check that it makes sense
-  #   firstsplit <- unlist(strsplit(prd,"/"))
-  #   if (length(firstsplit) != 2) {
-  #     stop("Check the format of supplied period; should be two dates separated by '/'.")
-  #   }
-  #   if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
-  #       || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
-  #     stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
-  #   }
-  #   # add conversion to date with xts format check ?
-
+  # check and adjust the time period argument prd
   prd <- rvn_get_prd(cust, prd)
   firstsplit <- unlist(strsplit(prd,"/"))
 
-    #Limit plot to period
-    p1 <- p1 +
-      scale_x_datetime(limits=c(as.POSIXct(firstsplit[1]),as.POSIXct(firstsplit[2])))
+  if (rav.dt  %in% flist){
+    #Use step plot instead of lineplot
+    p1 <- ggplot(data=   subset(df.plot, Index >= as.POSIXct(firstsplit[1]) & Index <= as.POSIXct(firstsplit[2])))+
+      geom_step(aes(x=Index,y=value,color=variable))+
+      rvn_theme_RavenR()+
+      ylab(yaxis.title)+
+      xlab("")+
+      ggtitle(plot.title) +
+      scale_colour_brewer(type = "qual", palette = 3)+
+      rvn_theme_RavenR()
+
+  } else { #line plot is default for state variables
+
+    p1 <- ggplot(data= subset(df.plot, Index >= as.POSIXct(firstsplit[1]) & Index <= as.POSIXct(firstsplit[2])))+
+      geom_line(aes(x=Index,y=value,color=variable))+
+      rvn_theme_RavenR()+
+      ylab(yaxis.title)+
+      xlab("")+
+      ggtitle(plot.title)+
+      scale_colour_brewer(type = "qual", palette = 3)+
+      rvn_theme_RavenR()
+  }
 
  return(p1)
 }

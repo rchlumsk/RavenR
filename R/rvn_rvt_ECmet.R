@@ -9,6 +9,10 @@
 #' print can be set with the forcing_set command. The data should be downloaded
 #' with missing days included. The download website is linked below.
 #'
+#' The function will write to name generated from the station name, otherwise
+#' the .rvt filename may be specified with the filename argument (full path to
+#' the filename, including .rvt extension).
+#'
 #' prd is used by the xts formatted-data to restrict the data reported in .rvt
 #' files, for each station, to this period. The prd should be defined in
 #' "YYYY-MM-DD/YYYY-MM-DD" string format. If the period supplied results in an
@@ -45,14 +49,14 @@
 #' to TRUE will result in an warning.
 #'
 #' The function has several built-in data quality checks. These include:
-#' - checking that all supplied files are for the same climate station
-#' - ensuring
+#'
+#' * checking that all supplied files are for the same climate station
+#' * ensuring;
 #' the timestep (data resolution) is the same in each file
-#' - automatically
+#' * automatically;
 #' combining time series and ensuring there are no gaps in the data supplied
-#' (i.e. time gaps, not missing values)
-#' - check for missing data and issuing a
-#' warning that post-processing will be required
+#' (i.e. time gaps, not missing values);  and
+#' * check for missing data and issuing a warning that post-processing will be required
 #'
 #' Note: Data quality is not assessed in this package, such as consistency between
 #' minimum and maximum temperatures. Subdaily data is not currenty supported.
@@ -63,6 +67,7 @@
 #'
 #'
 #' @param metdata EC meteorological data from one or more stations (e.g., from weathercan::weather_dl())
+#' @param filename specified name of file to write to (optional)
 #' @param prd (optional) data period to use in .rvt file
 #' @param stnName (optional) station name to use (instead of name in file)
 #' @param forcing_set (optional) specifies the set of forcings to print to file
@@ -73,42 +78,34 @@
 #' @param rd_file (optional) name of the redirect file created (if write_redirect = TRUE)
 #' @param stndata_file (optional) name of the station data file created (if write_stndata = TRUE)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
+#'
 #' @seealso \code{\link{rvn_rvt_wsc}} to convert WSC flow gauge data to Raven format
 #'
 #' Download EC climate data from
 #' \href{http://climate.weather.gc.ca/historical_data/search_historic_data_e.html}{EC
 #' Historical Data}
 #'
-#' Download multiple years of climate data, see
-#' \href{ftp://ftp.tor.ec.gc.ca/Pub/Get_More_Data_Plus_de_donnees/Readme.txt}{instructions}
-#'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven meteorological station rvt conversion
 #' @examples
 #' # Download data using weathercan weather_dl
 #' library(weathercan)
 #' kam <- weather_dl(station_ids = 51423,
 #'                   start = "2016-10-01", end = "2019-09-30", interval="day")
 #'
-#' # basic use, includes "met_" prefix
+#' # basic use, override filename to temporary file
 #' # default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
-#' rvn_rvt_ECmet(metdata = kam, forcing_set = 1)
+#' rvn_rvt_ECmet(metdata = kam, forcing_set = 1,
+#'   filename = file.path(tempdir(), "rvn_rvt_ECmetfile1.rvt"))
 #'
-#' # set without prefix, station data and redirect files created
-#' # forcing_set 2 includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
+#' # use the second forcing set instead
+#' # default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
 #' rvn_rvt_ECmet(metdata = kam, forcing_set = 2,
-#'   prefix = NULL, write_stndata = TRUE, write_redirect = TRUE)
-#'
-#' # cleanup demo files
-#' unlink("met_KAMLOOPS_A.rvt.rvt")
+#'   filename = file.path(tempdir(), "rvn_rvt_ECmetfile2.rvt"))
 #'
 #' @export rvn_rvt_ECmet
 #' @importFrom xts xts
 #' @importFrom dplyr filter
 #' @importFrom ggplot2 autoplot theme element_blank
-rvn_rvt_ECmet <-  function(metdata, prd = NULL, stnName = NULL, forcing_set = 1, prefix = 'met_',
+rvn_rvt_ECmet <-  function(metdata, filename=NULL, prd = NULL, stnName = NULL, forcing_set = 1, prefix = 'met_',
                            write_redirect = FALSE, write_stndata = FALSE, rd_file = "met_redirects.rvt",
                            stndata_file = "met_stndata.rvt") {
 
@@ -211,6 +208,10 @@ rvn_rvt_ECmet <-  function(metdata, prd = NULL, stnName = NULL, forcing_set = 1,
       rvt.name <- sprintf("%s%s", prefix, rvt.name)
     }
     ws$rvt.name[ws$station==sid] <- rvt.name
+
+    if (!is.null(filename)) {
+      rvt.name <- filename
+    }
 
     # -- Modified to use rvn_rvt_write
     #-- Data sets are subset & converted to dataframe prior to writing (rvn_rvt_write currently doens't handle tibbles)

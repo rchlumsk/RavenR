@@ -1,4 +1,4 @@
-#' @title Plot Hydrograph
+#' @title Create Hydrograph Plot
 #'
 #' @description
 #' rvn_hyd_plot creates a hydrograph plot object for the supplied flow series, or
@@ -16,7 +16,7 @@
 #' this is not a concern. The supplied time series should be in xts format,
 #' which again can be obtained directly by using the hyd.extract function.
 #'
-#' The winter_shading argument will add a transparent cyan shading for the
+#' The winter_shading argument will add a transparent grey shading for the
 #' specified period by wsdates in each year that is plotted.
 #'
 #' wsdates is formatted as c(winter start month, winter start day, winter end month, winter end day).
@@ -32,15 +32,12 @@
 #' @param winter_shading optionally adds shading for winter months (default FALSE)
 #' @param wsdates integer vector of winter shading period dates (see details)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
+#'
 #' @seealso \code{\link{rvn_flow_spaghetti}} to create a spaghetti plot of annual
 #' flow series
 #'
 #' \code{\link{rvn_hyd_extract}} to extract time series from Raven objects
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven flow hydrograph
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs
@@ -154,8 +151,6 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
                           origin = "1970-01-01")
 
     shade <- data.frame(winter.start,winter.end)
-    # shade$winter.start <- as.Date(shade$winter.start
-    # shade$winter.end <- as.Date(shade$winter.end)
     shade$y.start <- -Inf
     shade$y.end <- Inf
 

@@ -14,14 +14,10 @@
 #'
 #' @author James R. Craig, University of Waterloo
 #'
-#' @details does not like tabs in the .rvi file - it should be untabified first.
+#' @details
+#' This function does not like tabs in the .rvi file - it should be untabified first. Comma-delimited tables with a trailing comma are also problematic.
 #' The .rvi file can have arbitrary contents outside of the :HydrologicProcesses-
 #' :EndHydrologicProcesses block and :SubBasins-:EndSubBasins command blocks.
-#'
-#' does not like comma-delimited tables with a trailing comma
-#'
-#' @seealso  rvi.connections
-#' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
 #' # sample workflow of rvn_rvi_read
@@ -31,7 +27,6 @@
 #' # get number of Hydrologic processes
 #' nrow(rvi$HydProcTable)
 #'
-#' @keywords Raven  rvi  Hydrologic Processes read
 #' @export rvn_rvi_read
 #' @importFrom utils read.table
 rvn_rvi_read<-function(filename)

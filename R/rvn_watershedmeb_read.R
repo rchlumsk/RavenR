@@ -16,6 +16,7 @@
 #' the file is sufficient.
 #'
 #' @param ff full file path to the WatershedMassEnergyBalance.csv file
+#' @param tzone string indicating the timezone of the data in ff
 #' @return
 #'  \item{watershedmeb}{data frame from the file with standardized names}
 #'  \item{units}{vector corresponding to units of each column}
@@ -25,24 +26,23 @@
 #' @seealso \code{\link{rvn_watershed_read}} for reading in the
 #' WatershedStorage.csv file
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#'
-#' @keywords Raven read.csv watershed mass energy balance
-#'
 #' @examples
-#'
 #' # locate RavenR Watershed Mass Energy Balance storage file
 #' ff <- system.file("extdata","run1_WatershedMassEnergyBalance.csv", package="RavenR")
 #'
 #' # read in file
 #' mywshdmeb <- rvn_watershedmeb_read(ff)
 #'
+#' # view mass energy balance time series
+#' head(mywshdmeb$watershedmeb)
+#'
+#' # view 'from' dataframe
+#' mywshdmeb$from
+#'
 #' @export rvn_watershedmeb_read
 #' @importFrom xts xts
 #' @importFrom utils read.csv
-rvn_watershedmeb_read <- function(ff=NA)
+rvn_watershedmeb_read <- function(ff=NA, tzone=NULL)
 {
   if (missing(ff)) {
     stop("Requires the full file path to the WatershedMassEnergyBalance.csv file")
@@ -63,9 +63,11 @@ rvn_watershedmeb_read <- function(ff=NA)
   watersheds <- read.csv(ff,header=FALSE,skip=3,colClasses = classes,na.strings=c("---",'NA','1.#INF'))
   colnames(watersheds) <- cols # assigning headers back
 
-  # careful in date-time formats; excel can screw it up if csv is saved over. This works for
-  # un untouched Raven output file
-  date.time <- as.POSIXct(paste(watersheds$date,watersheds$hour), format="%Y-%m-%d %H:%M:%S")
+  if (is.null(tzone)) {
+    date.time <- as.POSIXct(paste(watersheds$date,watersheds$hour), format="%Y-%m-%d %H:%M:%S")
+  } else {
+    date.time <- as.POSIXct(paste(watersheds$date,watersheds$hour), format="%Y-%m-%d %H:%M:%S", tz=tzone)
+  }
   # head(date.time)
   # cols <- colnames(watersheds)
 

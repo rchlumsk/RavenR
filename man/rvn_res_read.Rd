@@ -4,10 +4,12 @@
 \alias{rvn_res_read}
 \title{Read in Raven ReservoirStages file}
 \usage{
-rvn_res_read(ff = NA)
+rvn_res_read(ff = NA, tzone = NULL)
 }
 \arguments{
 \item{ff}{full file path to the ReservoirStages.csv file}
+
+\item{tzone}{string indicating the timezone of the data in ff}
 }
 \value{
 \item{res}{data frame from the file with standardized names}
@@ -39,17 +41,10 @@ myres <- rvn_res_read(ff)
 
 # view contents
 head(myres$res)
-res$units
+myres$units
 
 }
 \seealso{
 \code{\link{rvn_res_extract}} for extraction tools related to the
 rvn_res_read output file
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{read.csv}
-\keyword{reservoir}

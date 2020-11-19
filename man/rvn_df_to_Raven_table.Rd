@@ -4,7 +4,7 @@
 \alias{rvn_df_to_Raven_table}
 \title{Sets up tables for writing to Raven input files}
 \usage{
-rvn_df_to_Raven_table(attributes, units, df, parameters = FALSE)
+rvn_df_to_Raven_table(attributes, units, df, id_col = TRUE, parameters = FALSE)
 }
 \arguments{
 \item{attributes}{array of strings containing attribute/parameter names}
@@ -12,6 +12,9 @@ rvn_df_to_Raven_table(attributes, units, df, parameters = FALSE)
 \item{units}{array of strings with the corresponding units}
 
 \item{df}{Dataframe of values corresponding to attributes/parameters}
+
+\item{id_col}{True/False of whether an numeric id column is the first column in the table
+and, in common Raven fashion, does not have a corresponding attribute (default: True)}
 
 \item{parameters}{bool, when adding attribues/parameter tag, should ':Parameters' be used instead of ':Attributes'?}
 }

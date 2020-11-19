@@ -2,10 +2,7 @@
 % Please edit documentation in R/rvn_utilities.R
 \name{rvn_substrRight}
 \alias{rvn_substrRight}
-\title{substring from the Right
-
-rvn_substrRight returns n characters from the right side of the supplied string
-x.}
+\title{substring from the Right}
 \usage{
 rvn_substrRight(x, n)
 }
@@ -15,8 +12,6 @@ rvn_substrRight(x, n)
 \item{n}{number of characters to use from the right side of the string}
 }
 \description{
-substring from the Right
-
 rvn_substrRight returns n characters from the right side of the supplied string
 x.
 }
@@ -28,13 +23,11 @@ rvn_substrRight("hello world",3)
 }
 \seealso{
 \code{\link{rvn_substrLeft}} for using n characters from the left side
-of string,
+of string
 
 \code{\link{rvn_substrMRight}} for removing n characters from the right side of
-a string,
+a string
 
 \code{\link{rvn_substrMLeft}} for removing n characters from the left side of a
 string
 }
-\keyword{right}
-\keyword{string}

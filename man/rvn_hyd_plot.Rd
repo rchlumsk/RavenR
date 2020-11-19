@@ -2,7 +2,7 @@
 % Please edit documentation in R/rvn_hyd_plot.R
 \name{rvn_hyd_plot}
 \alias{rvn_hyd_plot}
-\title{Plot Hydrograph}
+\title{Create Hydrograph Plot}
 \usage{
 rvn_hyd_plot(
   sim = NULL,
@@ -48,7 +48,7 @@ the plotting limits in time. If the data is used directly from Raven output,
 this is not a concern. The supplied time series should be in xts format,
 which again can be obtained directly by using the hyd.extract function.
 
-The winter_shading argument will add a transparent cyan shading for the
+The winter_shading argument will add a transparent grey shading for the
 specified period by wsdates in each year that is plotted.
 
 wsdates is formatted as c(winter start month, winter start day, winter end month, winter end day).
@@ -87,11 +87,4 @@ rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=TRUE, wsdates=c(11,1,
 flow series
 
 \code{\link{rvn_hyd_extract}} to extract time series from Raven objects
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{flow}
-\keyword{hydrograph}

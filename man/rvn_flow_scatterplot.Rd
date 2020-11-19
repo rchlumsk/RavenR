@@ -60,12 +60,4 @@ rvn_flow_scatterplot(sim,obs,add_r2=TRUE,add_eqn=TRUE)
 \seealso{
 \code{\link{rvn_forcings_read}} for reading in the ForcingFunctions
 file
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{diagnostics}
-\keyword{flow}
-\keyword{scatterplot}

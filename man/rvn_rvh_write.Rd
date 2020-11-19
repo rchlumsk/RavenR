@@ -3,9 +3,9 @@
 \name{rvn_rvh_overwrite}
 \alias{rvn_rvh_overwrite}
 \alias{rvn_rvh_write}
-\title{Write/Overwrite Raven .rvh (watershed discretization) file}
+\title{Write/Overwrite Raven rvh file}
 \usage{
-rvn_rvh_overwrite(orig_file, filename, SBtable, HRUtable)
+rvn_rvh_overwrite(filename, SBtable, HRUtable, basefile)
 
 rvn_rvh_write(
   filename,
@@ -16,15 +16,15 @@ rvn_rvh_write(
 )
 }
 \arguments{
-\item{orig_file}{original .rvh file, if overwriting. Must be different from  that specified by filename.}
-
-\item{filename}{Name of .rvh file, with extension}
+\item{filename}{filepath of rvh file to write to (with .rvh extension)}
 
 \item{SBtable}{Valid subbasin dataframe with required columns "SBID", "Name", "Downstream_ID", "Profile",
 "ReachLength", and "Gauged". Can have additional columns.}
 
 \item{HRUtable}{Valid HRU dataframe with required columns 'ID', 'Area', 'Elevation', 'Latitude', 'Longitude',
 'SBID', 'LandUse', 'Vegetation', 'SoilProfile', 'Terrain', 'Aquifer', 'Slope', and 'Aspect'. Can have additional columns.}
+
+\item{basefile}{original rvh file to overwrite (only used with rvn_rvh_overwrite)}
 
 \item{description}{(optional) Description added after file header}
 
@@ -34,12 +34,19 @@ rvn_rvh_write(
 TRUE returns TRUE if function runs properly
 }
 \description{
-Given an HRU and SubBasin dataframe, writes to the specified .rvh file or, in the case of rvn_rvh_overwrite,
-just overwrites the :SubBasins-:EndSubBasins and :HRUs-:EndHRUs blocks, retaining all other content.
+Given an HRU and SubBasin dataframe, writes to the specified .rvh file. In the case of rvn_rvh_overwrite,
+just the :SubBasins-:EndSubBasins and :HRUs-:EndHRUs blocks are re-written, retaining all other content.
 }
 \details{
-rvn_rvh_write is typically used to create a 'clean' .rvh file. rvn_rvh_overwrite is usually used
-after reading an original .rvh file and processing the HRU and SubBasin tables, using (e.g., rvh.clean)
+rvn_rvh_write is typically used to create a 'clean' .rvh file.
+
+rvn_rvh_overwrite is usually used after reading an original .rvh file and
+  processing the HRU and SubBasin tables, using (e.g., \code{\link{rvn_rvh_cleanhrus}}). This may also be used
+  to preserve commands in the rvh file such as reservoir information, comments outside of the
+  subbasin and HRU blocks, RedirectToFile commands, etc.
+
+Note that if using the rvn_rvh_overwrite function and the filename and basefile arguments are the same, the
+original file will be overwritten while preserving lines outside of the subbasin and HRU blocks.
 }
 \section{Functions}{
 \itemize{
@@ -53,7 +60,7 @@ sbs_data <- rvn_rvh_blankSBdf(nSubBasins = 1)
 hru_data <- rvn_rvh_blankHRUdf(nHRUs = 3)
 
 # write to rvh file
-rvn_rvh_write("Blank.rvh",
+rvn_rvh_write(file.path(tempdir(), "Blank.rvh"),
               SBtable = sbs_data,
               HRUtable = hru_data,
               description = "Example output - Blank Watershed Discretization File",
@@ -66,13 +73,15 @@ rvh <- rvn_rvh_read(nith)
 # remove HRUs covering less than 5\% of the total area
 rvh$HRUtable <- rvn_rvh_cleanhrus(rvh$HRUtable, rvh$SBtable, area_tol = 0.05)
 
-# write to new file, while preserving all unedited information using rvn_rvh_overwrite:
-rvn_rvh_overwrite(nith,"Nith_cleaned.rvh",
-                  SBtable = rvh$SBtable,
-                  HRUtable = rvh$HRUtable)
 
-# write just the Subbasin and HRU tables to new file using rvn_rvh_write:
-rvn_rvh_write("Nith_cleaned_write.rvh",
+# write the Subbasin and HRU tables to new file using rvn_rvh_write:
+rvn_rvh_write(filename=file.path(tempdir(), "Nith_cleaned_write.rvh"),
+             SBtable = rvh$SBtable,
+             HRUtable = rvh$HRUtable)
+
+# write to new file, while preserving all unedited information using rvn_rvh_overwrite:
+rvn_rvh_overwrite(filename=file.path(tempdir(), "Nith_cleaned_overwrite.rvh"),
+                  basefile=nith,
                   SBtable = rvh$SBtable,
                   HRUtable = rvh$HRUtable)
 
@@ -81,14 +90,9 @@ rvn_rvh_write("Nith_cleaned_write.rvh",
 \code{\link{rvn_rvh_read}} for the function used to read in the HRU and SubBasin data
 \code{\link{rvn_rvh_cleanhrus}} for the function used to process HRU dataframe\cr
 For generating blank SubBasin and HRU tables, see: \code{\link{rvn_rvh_blankSBdf}} and \code{\link{rvn_rvh_blankHRUdf}}
-See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 }
 \author{
 James R. Craig, University of Waterloo
 
 Leland Scantlebury
 }
-\keyword{HRUs}
-\keyword{Raven}
-\keyword{rvh}
-\keyword{write}
