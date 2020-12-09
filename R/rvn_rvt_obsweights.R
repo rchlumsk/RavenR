@@ -59,7 +59,7 @@ rvn_rvt_obsweights <- function(filename="_obsweights.rvt",wts,SBID=1,typestr="HY
   wts[wts<0]<-0.0
   wts[is.na(wts)]<-(-1.2345)
 
-  line1 <- sprintf(":ObservationDataWeights %s %s",typestr,SBID)
+  line1 <- sprintf(":ObservationWeights %s %s",typestr,SBID)
   line2 <- sprintf("%s %s %i",strftime(start(wts), "%Y-%m-%d %H:%M:%S"),intvl,length(wts))
   # line1<-paste0(":ObservationDataWeights ",typestr," ",SBID, " ",units)
   # line2<-paste0(strftime(start(wts), "%Y-%m-%d %H:%M:%S")," ", intvl," ",length(wts))
@@ -67,6 +67,6 @@ rvn_rvt_obsweights <- function(filename="_obsweights.rvt",wts,SBID=1,typestr="HY
   write(line1,append=FALSE,file=filename)
   write(line2,append=TRUE,file=filename)
   write(wts, file = filename, ncolumns=1,append = TRUE, sep = " ")
-  write(":EndObservationDataWeights",append=TRUE,file=filename)
+  write(":EndObservationWeights",append=TRUE,file=filename)
   return(TRUE)
 }
