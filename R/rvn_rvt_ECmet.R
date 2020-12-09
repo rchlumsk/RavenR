@@ -82,7 +82,7 @@
 #' @seealso \code{\link{rvn_rvt_wsc}} to convert WSC flow gauge data to Raven format
 #'
 #' Download EC climate data from
-#' \href{http://climate.weather.gc.ca/historical_data/search_historic_data_e.html}{EC
+#' \href{https://climate.weather.gc.ca/historical_data/search_historic_data_e.html}{EC
 #' Historical Data}
 #'
 #' @examples
