@@ -1,11 +1,24 @@
 #' @title Read Raven .rvh (watershed discretization) file
 #'
+#' @description
 #' This routine reads in a valid Raven watershed discretization (.rvh) file and returns the
 #' information about HRUs and Subbasins as data tables. It also returns a subbasin igraph
 #' network object which describes stream network connectivity and adds additional HRU-derived
 #' subbasin characteristics such as total upstream area and dominant land/vegetation classes.
 #'
-#' @param filename the name of the .rvh file (with .rvh extension included ), either relative to the working directory or absolute.
+#' @details
+#' This function does not like comma-delimited tables with a trailing comma. The function also
+#' does not like tabs in the rvh file, the file should be untabified first.
+#' This function uses the igraph library t0o build the networks and compute the total upstream area.
+#' The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :SubBasins-:EndSubBasins
+#' command blocks.
+#'
+#' The ff argument can be a relative path name or absolute one.
+#'
+#' The TotalUpstreamArea is the total drainage area upstream of the given subbasin outlet. With this calculation,
+#' headerwater subbasins will have a total upstream area equal to their own subbasin area.
+#'
+#' @param ff the filepath of the .rvh file (with .rvh extension included).
 #'
 #' @return
 #' Returns a list including:
@@ -27,16 +40,10 @@
 #'
 #' @author James R. Craig, University of Waterloo
 #'
-#' @note depends upon igraph library; does not like tabs in the .rvh file - it should be untabified first.
-#' The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :SubBasins-:EndSubBasins
-#' command blocks.
-#'
-#' @details does not like comma-delimited tables with a trailing comma
 #'
 #' @seealso
 #' \code{\link{rvn_rvh_write}} to write contents of the generated (and usually modified HRU and SubBasin tables)
 #' \code{\link{rvn_subbasin_network_plot}} to plot the subbasin network
-#' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
 #'   # load example rvh file
@@ -44,45 +51,50 @@
 #'   rvh <- rvn_rvh_read(nith)
 #'
 #'   # number of HRUs
-#'   numHRUs <- nrow(rvh$HRUtable)
+#'   nrow(rvh$HRUtable)
 #'
 #'   # total watershed area
-#'   watershed.area <- sum(rvh$HRUtable$Area)
+#'   sum(rvh$HRUtable$Area)
 #'
-#'   # sub-table of headwater basins
-#'   headwaterBasins <- subset(rvh$SBtable, TotalUpstreamArea == 0)
+#'   # sub-table of headwater basins (upstream area = subbasin area)
+#'   rvh$SBtable$SBID[rvh$SBtable$Area == rvh$SBtable$TotalUpstreamArea]
 #'
 #'   # sub-table of Urban HRUs
-#'   urbanHRUs <- subset(rvh$HRUtable, LandUse == "URBAN")
+#'   subset(rvh$HRUtable, LandUse == "URBAN")
 #'
 #'   # get total area upstream of subbasin containing outlet
 #'   upstr <- cumsum(rvh$SBtable$Area)
 #'   upstr[rvh$SBtable$Downstream_ID == -1]
 #'
-#' @keywords Raven  rvh  HRUs  SubBasins
+#'   # show upstream areas for each subbasin
+#'   rvh$SBtable[,c("SBID","TotalUpstreamArea")]
+#'
+#'   # plot network diagram using igraph library
+#'   igraph::plot.igraph(rvh$SBnetwork)
+#'
 #' @export rvn_rvh_read
-#' @importFrom igraph graph_from_data_frame ego ego_size V
+#' @importFrom igraph graph_from_data_frame ego ego_size V as_ids
 #' @importFrom utils read.table
-rvn_rvh_read<-function(filename)
+rvn_rvh_read<-function(ff)
 {
-  stopifnot(file.exists(filename))
+  stopifnot(file.exists(ff))
 
   downID <- NULL
 
   # read subbasins table--------------------------------
-  lineno<-grep(":SubBasins", readLines(filename), value = FALSE)
-  lineend<-grep(":EndSubBasins", readLines(filename), value = FALSE)
+  lineno<-grep(":SubBasins", readLines(ff), value = FALSE)
+  lineend<-grep(":EndSubBasins", readLines(ff), value = FALSE)
 
   if ((length(lineno)==0) || (length(lineend)==0)){
-    print('warning: filename not a valid .rvh file (no :SubBasins block)')
+    print('warning: ff not a valid .rvh file (no :SubBasins block)')
   }
   delim=""
-  if (length(grep(",", readLines(filename)[(lineno+3):(lineend-1)], value = FALSE))>0){
+  if (length(grep(",", readLines(ff)[(lineno+3):(lineend-1)], value = FALSE))>0){
     delim=","
   }
   cnames<-c("SBID","Name","Downstream_ID","Profile","ReachLength","Gauged")
   #print(paste0("read sbs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
-  SubBasinTab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,
+  SubBasinTab<-read.table(ff, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,
                           col.names=cnames,header=FALSE,blank.lines.skip=TRUE, strip.white=TRUE,
                           stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
   SubBasinTab$Name<-trimws(SubBasinTab$Name)
@@ -92,19 +104,19 @@ rvn_rvh_read<-function(filename)
 
 
   # read HRUs table ------------------------------------
-  lineno<-grep(":HRUs", readLines(filename), value = FALSE)
-  lineend<-grep(":EndHRUs", readLines(filename), value = FALSE)
+  lineno<-grep(":HRUs", readLines(ff), value = FALSE)
+  lineend<-grep(":EndHRUs", readLines(ff), value = FALSE)
   if ((length(lineno)==0) || (length(lineend)==0)){
-    print('warning: filename not a valid .rvh file (no :HRUs block)')
+    print('warning: ff not a valid .rvh file (no :HRUs block)')
   }
   delim=""
-  if (length(grep(",", readLines(filename)[(lineno+3):(lineend-1)], value = FALSE))>0){
+  if (length(grep(",", readLines(ff)[(lineno+3):(lineend-1)], value = FALSE))>0){
     delim=","
   }
   cnames<-c("ID","Area","Elevation","Latitude","Longitude","SBID","LandUse","Vegetation","SoilProfile","Terrain","Aquifer","Slope","Aspect")
 
   #print(paste0("read HRUs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
-  HRUtab<-read.table(filename, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,
+  HRUtab<-read.table(ff, skip=lineno+2, nrows=lineend-lineno-3, sep=delim,col.names=cnames,
                      header=FALSE,blank.lines.skip=TRUE,strip.white=TRUE,stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
   #print('done reading HRUs')
   #untabify
@@ -170,7 +182,6 @@ rvn_rvh_read<-function(filename)
   row.names(out)<-out$SBID
 
   #calculate total upstream area
-  #library('igraph')
   links<-data.frame(SBID=out$SBID,downID=out$Downstream_ID)
   links<-subset.data.frame(links,downID>=0) # get rid of -1
 
@@ -181,7 +192,7 @@ rvn_rvh_read<-function(filename)
   count=1
   for (i in 1:nrow(out)){
     SBID=out$SBID[i]
-    up<-subset.data.frame(out,SBID %in% egon[[i]])
+    up<-subset.data.frame(out, SBID %in% as_ids(egon[[i]]))
     out$TotalUpstreamArea[i]<-sum(up$Area)
     count=count+1
   }

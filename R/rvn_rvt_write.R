@@ -20,21 +20,15 @@
 #'
 #' @seealso \code{\link{rvn_rvt_wsc}} to create an rvt file from Water Survey Canada (WSC) data
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/Default.html}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven rvt flow file
 #' @examples
 #'
 #' # load sample flow data
 #' system.file('extdata','run1_Hydrographs.csv', package = "RavenR") %>%
-#' read.csv(.) -> mydata
+#' rvn_hyd_read() -> mydata
 #'
-#' # generate time-series object from Sub basin 36 observations
-#' flows <- xts(mydata$Sub36..observed...m3.s.,order.by = as.Date(paste0(mydata$date,mydata$time)))
-#'
-#' # write time series to rvt file
-#' rvn_rvt_write(flows,params = "HYDROGRAPH", units = "m3/s", ff = 'raven_rvt_write')
+#' # write time series to rvt file using data from subbasin 36
+#' rvn_rvt_write(mydata$hyd$Sub36, params = "HYDROGRAPH", units = "m3/s",
+#'   ff = file.path(tempdir(), 'raven_rvt_write'))
 #'
 #' @export rvn_rvt_write
 #' @importFrom stats start

@@ -2,13 +2,7 @@
 % Please edit documentation in R/rvn_utilities.R
 \name{rvn_get_prd}
 \alias{rvn_get_prd}
-\title{Determine period of data
-
-rvn_get_prd either obtains the full period of a given xts object,
-or checks the provided prd against an xts object for consistency and issues
-a warning of an issue is found.
-
-XXX to update error checking}
+\title{Check period input}
 \usage{
 rvn_get_prd(x = NULL, prd = NULL)
 }
@@ -21,13 +15,16 @@ rvn_get_prd(x = NULL, prd = NULL)
 {prd argument with warnings provided if needed}
 }
 \description{
-Determine period of data
+rvn_get_prd is a robust function used to check a period argument either as
+a character or against an xts object.
+}
+\details{
+The function may take some combination of an xts object, a character string or both.
 
-rvn_get_prd either obtains the full period of a given xts object,
-or checks the provided prd against an xts object for consistency and issues
-a warning of an issue is found.
-
-XXX to update error checking
+If a character is provided, the consistency of the character string against the YYYY-MM-DD/YYYY-MM-DD format
+is checked. If an xts object is provided, the period for that xts object is returned. If both
+are provided to the function, both checks are made and the consistency of the character period
+against the xts object is performed. In any case, a period character string is returned.
 }
 \examples{
 data(rvn_hydrograph_data)
@@ -48,11 +45,4 @@ rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "2020-01-01/2020-02-01")
 }
 \seealso{
 \code{\link{rvn_theme_RavenR}} provides a theme for the RavenR package
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{get}
-\keyword{prd}
-\keyword{xts}

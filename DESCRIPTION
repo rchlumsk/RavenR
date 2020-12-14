@@ -1,18 +1,17 @@
 Package: RavenR
 Type: Package
 Title: Raven Hydrological Modelling Framework R Support and Analysis
-Version: 1.3.3
-Date: 2020-06-30
+Version: 2.0.2
+Date: 2020-12-09
 Authors@R: c(
-    person("Chlumsky", "Robert", email = "rchlumsk@uwaterloo.ca", role = c("cre","aut")),
-    person("Craig", "James", email = "jrcraig@uwaterloo.ca", role = "aut"),
-    person("Brown", "Genevieve", email = "genevieve.wbrown@gmail.com", role = "ctb"),
-    person("Scantlebury", "Leland", email = "lscantlebury@uwaterloo.ca", role = "ctb"),
-    person("Grass", "Sarah", email = "sgrass@nhcweb.com", role = "ctb"),
-    person("Lin", "Simon", email = "simon.lin@uwaterloo.ca", role = "ctb"))
-Maintainer: Robert Chlumsky <rchlumsk@uwaterloo.ca>    
-Description: Provides useful functions for pre- and post-processing Raven output.
-Note: Package is active development; please report errors and suggestions for development to rchlumsk@uwaterloo.ca.
+    person("Robert", "Chlumsky", email = "rchlumsk@uwaterloo.ca", role = c("cre","aut")),
+    person("James", "Craig", email = "jrcraig@uwaterloo.ca", role = "ctb"),
+    person("Genevieve", "Brown", email = "genevieve.wbrown@gmail.com", role = "ctb"),
+    person("Leland", "Scantlebury", email = "lscantlebury@uwaterloo.ca", role = "ctb"),
+    person("Sarah", "Grass", email = "sgrass@nhcweb.com", role = "ctb"),
+    person("Simon", "Lin", email = "simon.lin@uwaterloo.ca", role = "ctb"))
+Description: Utilities for processing input and output files associated with the Raven Hydrological Modelling Framework. Includes various plotting functions, model diagnostics, reading output files into xts format, and support for writing Raven input files (rvt, rvh, rvc, etc.).
+Note: Package is in active development; please report errors and suggestions to rchlumsk@uwaterloo.ca.
 Depends:
     R (>= 4.0.0)
 Imports:
@@ -29,6 +28,7 @@ Imports:
     lubridate,
     magrittr,
     methods,
+    ncdf4,
     purrr,
     reshape2,
     rgdal,
@@ -47,8 +47,7 @@ Suggests:
     weathercan,
     tidyhydat
 URL: https://github.com/rchlumsk/RavenR
-License: GPL-3 + file LICENSE
+License: GPL-3
 Encoding: UTF-8
 LazyData: TRUE
 RoxygenNote: 7.1.1
-VignetteBuilder: knitr

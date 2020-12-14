@@ -2,7 +2,7 @@
 % Please edit documentation in R/rvn_annual_quantiles_plot.R
 \name{rvn_annual_quantiles_plot}
 \alias{rvn_annual_quantiles_plot}
-\title{Plot of Yearly Median, Upper and Lower Quantiles of Flow}
+\title{Plot of Annual Median, Upper and Lower Quantiles of Flow}
 \usage{
 rvn_annual_quantiles_plot(
   qdat,
@@ -27,7 +27,7 @@ rvn_annual_quantiles_plot(
 p1 ggplot object of quantiles plot
 }
 \description{
-Plot of Yearly Median, Upper and Lower Quantiles of Flow
+Creates a plot of the annual flow quantiles provided by the \code{\link{rvn_annual_quantiles}} function.
 }
 \examples{
 system.file("extdata","run1_Hydrographs.csv", package="RavenR") \%>\%

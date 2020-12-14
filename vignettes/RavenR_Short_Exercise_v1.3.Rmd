@@ -36,7 +36,7 @@ ls("package:RavenR") # view all functions in RavenR
 
 You can look at what any one of these functions does by typing out the name of the function beginning with a question mark, which will show the help information at the right of the RStudio environment.
 
-```{r}(
+```{r}
 ?flow.scatterplot
 ```
 

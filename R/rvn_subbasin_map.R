@@ -20,14 +20,8 @@
 #'
 #' @return \item{p1}{ggplot object of subbasin map}
 #'
-#'
 #' @seealso \code{\link{rvn_subbasin_network_plot}} to create network plots
 #'
-#' See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords subbasin map plot
 #' @examples
 #'
 #' # Raw shapefile sample data

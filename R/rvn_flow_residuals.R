@@ -1,8 +1,10 @@
-#' Scatterplot of model flows
+#' @title Residuals of model flows
 #'
+#' @description
 #' rvn_flow_residuals creates a residuals time series for flow values. Useful in
 #' diagnotic analysis of model outputs.
 #'
+#' @details
 #' This function creates a residuals time series plot for flow values, with the
 #' option to smooth out the values using the rollmean function in zoo. The
 #' winter months are optionally shaded in the time series; winter period is
@@ -16,45 +18,58 @@
 #' Note that a plot title is purposely omitted in order to allow the automatic
 #' generation of plot titles.
 #'
+#' The winter_shading argument will add a transparent grey shading for the
+#' specified period by wsdates in each year that is plotted.
+#'
+#' wsdates is formatted as c(winter start month, winter start day, winter end month, winter end day).
+#'
 #' @param sim time series object of simulated flows
 #' @param obs time series object of observed flows
 #' @param ma_smooth optional length of rolling average to smooth residuals with
 #' (default 3)
-#' @param add.line optionally adds a horizontal line to the plot for reference
-#' (default TRUE)
+#' @param add_line optionally adds a horizontal line to the plot for reference
+#' (default FALSE)
 #' @param winter_shading optionally adds a light blue shading to winter months
-#' (default TRUE)
+#' (default FALSE)
+#' @param wsdates integer vector of winter shading period dates (see details)
 #' @return \item{resids}{residual time series}
+#'
 #' @seealso \code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow
 #' values
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven flow residual diagnostics
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs
-#' data(rvn_hydrograph_data)
-#' sim <- rvn_hydrograph_data$hyd$Sub36
-#' obs <- rvn_hydrograph_data$hyd$Sub36_ob
+#' ff <- system.file("extdata/run1_Hydrographs.csv", package="RavenR")
+#' run1 <- rvn_hyd_read(ff)
+#' sim <- run1$hyd$Sub36
+#' obs <- run1$hyd$Sub36_obs
 #'
 #' # default with moving average smoothing shading of winter months
-#' rvn_flow_residuals(sim,obs)
+#' rvn_flow_residuals(sim,obs)$plot
 #'
 #' # plot with more smoothing than the default 3
-#' rvn_flow_residuals(sim, obs, ma_smooth=10)
+#' rvn_flow_residuals(sim, obs, ma_smooth=10)$plot
 #'
-#' # turn off the smoothing and winter shading
-#' rvn_flow_residuals(sim,obs,ma_smooth = 0, winter_shading = FALSE)
+#' # with zero line and winter shading
+#' rvn_flow_residuals(sim,obs, add_line=TRUE, winter_shading = TRUE)$plot
+#'
+#' # change winter shading to Nov 1 - April 30
+#' rvn_flow_residuals(sim,obs, add_line=TRUE,
+#'   winter_shading = TRUE, wsdates=c(11,1,4,30))$plot
 #'
 #' @export rvn_flow_residuals
 #' @importFrom zoo rollapply
 #' @importFrom ggplot2 fortify ggplot geom_line ylab geom_hline geom_rect aes
-rvn_flow_residuals <- function(sim,obs,ma_smooth=3,add.line=TRUE,winter_shading=TRUE) {
+rvn_flow_residuals <- function(sim=NULL,obs=NULL, ma_smooth=3, add_line=FALSE, winter_shading=FALSE, wsdates=c(12,1,3,31))
+{
 
   if ( ma_smooth < 0) {
     stop("Requires a non-negative integer for ma_smooth ")
+  }
+
+  if (is.null(sim) | is.null(obs)) {
+    stop("Requires non-null sim and obs series.")
   }
 
   if  (ma_smooth == 0 ) {
@@ -74,23 +89,24 @@ rvn_flow_residuals <- function(sim,obs,ma_smooth=3,add.line=TRUE,winter_shading=
     ylab("Smoothed Residual")+
     rvn_theme_RavenR()
 
-  if (add.line){
+  if (add_line){
     p1 <- p1 +
       geom_hline(yintercept=0,linetype="dashed")
   }
 
-  if (winter_shading){
-    winter.start <- as.Date(df.plot$Date[month(df.plot$Date) == 12 & day(df.plot$Date) == 1])
-    winter.end <- as.Date(df.plot$Date[month(df.plot$Date) == 3 & day(df.plot$Date) == 31])
+  if (winter_shading) {
 
-    shade <- data.frame(cbind(winter.start,winter.end))
-    shade$winter.start <- as.Date(shade$winter.start)
-    shade$winter.end <- as.Date(shade$winter.end)
+    winter.start <- as.Date(df.plot$Date[month(df.plot$Date) == wsdates[1] & day(df.plot$Date) == wsdates[2]],
+                            origin = "1970-01-01")
+    winter.end <- as.Date(df.plot$Date[month(df.plot$Date) == wsdates[3] & day(df.plot$Date) == wsdates[4]],
+                          origin = "1970-01-01")
+
+    shade <- data.frame(winter.start,winter.end)
     shade$y.start <- -Inf
     shade$y.end <- Inf
 
     p1 <- p1 +
-      geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey",alpha=0.3)
+      geom_rect(data = shade, aes(xmin=winter.start,xmax=winter.end,ymin=y.start,ymax=y.end),color="grey50",alpha=0.1, linetype=0)
   }
 
   resids <- list(resids = resids, plot = p1)

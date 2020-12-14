@@ -45,9 +45,9 @@ of missing values may be appropriate.
 \examples{
 
 # load sample hydrograph data, two years worth of sim/obs
-data(hydrograph_data)
-sim <- hydrograph_data$hyd$Sub36
-obs <- hydrograph_data$hyd$Sub36_obs
+data(rvn_hydrograph_data)
+sim <- rvn_hydrograph_data$hyd$Sub36
+obs <- rvn_hydrograph_data$hyd$Sub36_obs
 
 # plot cumulative flow for sim and obs
 rvn_cum_plot_flow(sim,obs)
@@ -61,12 +61,4 @@ rvn_cum_plot_flow(sim[prd],obs[prd])
 \code{\link{rvn_flow_scatterplot}} for creating flow scatterplots
 
 \code{\link{rvn_cum_plot_flow}} for creating generic cumulative function plotting
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{cumulative}
-\keyword{diagnostics}
-\keyword{flow}

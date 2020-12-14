@@ -2,9 +2,7 @@
 % Please edit documentation in R/rvn_rvh_blankSBdf.R
 \name{rvn_rvh_blankSBdf}
 \alias{rvn_rvh_blankSBdf}
-\title{Generate Blank Raven SubBasin DataFrame
-
-Generates a blank data frame for Raven subbasin properties.}
+\title{Generate Blank Raven SubBasin DataFrame}
 \usage{
 rvn_rvh_blankSBdf(nSubBasins = 1)
 }
@@ -15,12 +13,15 @@ rvn_rvh_blankSBdf(nSubBasins = 1)
 data.frame of blank SubBasin properties to be filled in by user
 }
 \description{
-Generate Blank Raven SubBasin DataFrame
-
 Generates a blank data frame for Raven subbasin properties.
 }
 \examples{
-SBtable <- rvn_rvh_blankSBdf(nSubBasins = 1)
+SBtable <- rvn_rvh_blankSBdf(nSubBasins = 3)
+SBtable
+
+}
+\seealso{
+\code{\link{rvn_rvh_blankHRUdf}} to generate blank HRU data frame
 }
 \author{
 Leland Scantlebury

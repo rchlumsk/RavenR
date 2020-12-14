@@ -7,7 +7,7 @@
 rvn_theme_RavenR()
 }
 \value{
-returns a theme for usage in ggplot2 figures
+returns a theme for use in ggplot2 figures
 }
 \description{
 rvn_theme_RavenR makes the general Raven R Theme for all ggplots
@@ -18,6 +18,7 @@ built in Raven R function. Made by adjusting the built in theme_bw().
 }
 \examples{
 # generate a basic ggplot and apply the RavenR theme
+library(ggplot2)
 ggplot(data=cars, aes(x=speed, y=dist))+
 geom_point()+
 rvn_theme_RavenR()
@@ -26,14 +27,4 @@ rvn_theme_RavenR()
 \seealso{
 \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 volumes.
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{RavenR}
-\keyword{aesthetics}
-\keyword{figure}
-\keyword{ggplot}
-\keyword{plot}
-\keyword{theme}

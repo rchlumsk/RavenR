@@ -17,16 +17,12 @@
 #'
 #' @author James R. Craig, University of Waterloo
 #'
-#' @seealso
-#' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
-#'
 #' @examples
 #' # read in rvt file
 #' system.file('extdata','GlenAllan.rvt',package="RavenR")%>%
 #' rvn_rvt_read(.) -> rvt
 #' plot(rvt$TEMP_DAILY_MIN)
 #'
-#' @keywords Raven  rvt  time series
 #' @export rvn_rvt_read
 #' @importFrom xts xts
 #' @importFrom lubridate interval

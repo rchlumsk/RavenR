@@ -1,8 +1,10 @@
 #' @title Monthly Volume Bias
 #'
+#' @description
 #' rvn_monthly_vbias creates a plot of the monthly volume biases in the simulated
 #' flow series.
 #'
+#' @details
 #' This function calculates the monthly volume biases and optionally creates a
 #' plot of them. The monthly volume biases are averaged across all years of
 #' data. If normalized, the biases are calculated as:
@@ -31,15 +33,11 @@
 #' @param add_labels optionally adds labels for early peak/late peaks on right
 #' side axis (default TRUE)
 #' @return \item{mvbias}{monthly volume biases}
+#'
 #' @seealso \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 #' volumes
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven monthly volume bias diagnostics
 #' @examples
-#'
 #' # load sample hydrograph data, two years worth of sim/obs
 #' data(rvn_hydrograph_data)
 #' sim <- rvn_hydrograph_data$hyd$Sub36
@@ -63,7 +61,7 @@ rvn_monthly_vbias <- function (sim, obs, add_line = TRUE, normalize = TRUE, add_
   sim.monthly <- apply.monthly(sim, sum, na.rm = TRUE)
   mvbias <- matrix(NA, nrow = 12, ncol = 1)
   colnames(mvbias) <- c("mvbias")
-  rownames(mvbias) <- RavenR::rvn_mos_names(TRUE)
+  rownames(mvbias) <- rvn_month_names(TRUE)
   if (normalize) {
     diff <- (sim.monthly - obs.monthly)/obs.monthly * 100
     y.lab <- "% Flow Volume Bias"

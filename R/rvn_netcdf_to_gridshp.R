@@ -1,60 +1,67 @@
 #' @title Generate grid overlay from netCDF file
 #'
+#' @description
 #' Takes the latitude-longitude cell coordinates from a netCDF file (assumed to be named 'lat' and 'long')
 #' generates an estimate of the grid polygons associated with each netCDF cell and exports this to a shapefile (outshp)
 #'
-#' Note that the function can fail due to bad netCDF file or inappropriate UTM zone;
+#' @details
+#' projID should be provided as an integer value referring to a valid EPSG coordinate system. If projID is left NULL, the
+#' output shapefile will be left in lat/long coordinates and WGS84 projection. Note that the function can fail due to bad
+#' netCDF file or inappropriate coordinate system ID. A list of IDs for
+#' projected coordinate system may be found on the \href{https://spatialreference.org/ref/epsg/}{Spatial Reference webpage}
+#' or on the \href{http://resources.esri.com/help/9.3/arcgisserver/apis/rest/pcs.html}{ESRI webpage}.
+#'
+#' If the outshp is NULL, the shapefile object is returned by the function and nothing is written to file. If outshp is provided,
+#' the shapefile is also written to file. The outshp should be supplied as the file name (with or without .shp extension).
+#'
+#' This function uses the sf::st_write function to write the shapefile, if outshp is provided.
+#'
+#' Additional metadata on the sample netcdf file may be found with `?Nith_era5_sample`.
 #'
 #' @param ncfile netCDF file with latitude and longitude variables
-#' @param UTMzone UTM zone for exported shapefile (integer)
-#' @param outshp name of output shapefile prefix (i.e., no .shp extension)
+#' @param projID projected coordinate system ID (EPSG numeric code) to project shapefile to (default NULL, optional)
+#' @param outshp name of output shapefile (DEFAULT NULL, optional)
 #'
-#' @return \item{TRUE}{returns TRUE if executed properly. Also generates shapefile in folder}
+#' @return \item{shapefile}{returns sf shapefile object; will also write a shapefile to the outshp if provided}
 #'
 #' @seealso \code{\link{rvn_gen_gridweights}} for generating a shapefile of gridweights
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#'
 #' @author James R. Craig, University of Waterloo, 2019
-#' @keywords netcdf grid shapefile conversion
 #'
 #' @examples
 #'
-#' \dontrun{
-#' ncfile <- system.file("extdata/GlenAllan.nc", package="RavenR")
-#' UTMzone <- 17
-#' outshp <- "maps/RDPS_Grid"
-#' rvn_netcdf_to_gridshp(ncfile, UTMzone, outshp)
-#' }
+#' # get location for sample netcdf file
+#' ?Nith_era5_sample
+#' ncfile <- system.file("extdata/Nith_era5_sample.nc", package="RavenR")
+#'
+#' # produce shapefile in lat/long
+#' myshp <- rvn_netcdf_to_gridshp(ncfile)
+#' class(myshp)
+#' sf::st_crs(myshp)$input
+#' plot(myshp$geometry)
+#'
+#' # write shapefile to file in UTM coordinates
+#' projID <- 26917 # NAD83 UTM Zone 17N, appropriate UTM zone for Nith watershed
+#' outshp <- file.path(tempdir(), "Nith_gridcells.shp")
+#' myshp <- rvn_netcdf_to_gridshp(ncfile, projID, outshp)
+#' sf::st_crs(myshp)$input
 #'
 #'
 #' @export rvn_netcdf_to_gridshp
 #' @importFrom sp coordinates proj4string spTransform Polygons Polygon SpatialPolygonsDataFrame SpatialPolygons CRS
-#' @importFrom rgdal writeOGR
+#' @importFrom sf st_write
 #' @importFrom deldir deldir tile.list
 #' @importFrom methods slot
 #' @importFrom ncdf4 nc_open ncvar_get
-rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp)
+rvn_netcdf_to_gridshp <- function(ncfile,projID=NULL,outshp=NULL)
 {
-  # require(ncdf.tools)
-  # @importFrom ncdf.tools readNcdf
-
-  # require(sp)
-  # require(rgdal)
-  # require(deldir)
-  # require(sna)
 
   # extract lat-long from netCDF file
   #-----------------------------------------------------------------------
   nc_data <- nc_open(ncfile)
-  lat <- ncdf4::ncvar_get(nc_data, "lat")
-  long <- ncdf4::ncvar_get(nc_data, "lon")
-
-  # mydata<- readNcdf(ncfile,var.name=c("lat"))
-  lat<-as.vector(t(mydata))
-  # mydata<- readNcdf(ncfile,var.name=c("lon"))
+  mydata <- ncvar_get(nc_data, "lat")
+  lat <- as.vector(t(mydata))
+  mydata <- ncvar_get(nc_data, "lon")
   long<-as.vector(t(mydata))
 
   ncols=length(mydata[1,])
@@ -65,13 +72,19 @@ rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp)
   IDs<-(c-1)*nrows+(r-1)
   #print(c)
 
-
-  # transform lat-long to UTM zone
+  # build SpatialPointsDataFrame, transform lat-long to UTM zone (if warranted)
   #-----------------------------------------------------------------------
-  latlong <- data.frame(ID = 1:2, X = long, Y = lat)
-  sp::coordinates(latlong) <- c("X", "Y")
-  sp::proj4string(latlong) <- CRS("+proj=longlat +datum=WGS84")  ## for example
-  res <- spTransform(latlong, CRS(paste0("+proj=utm +zone=",UTMzone," ellps=WGS84")))
+  # latlong <- data.frame(ID = 1:2, X = long, Y = lat)
+  res <- data.frame(ID = IDs, X = long, Y = lat)
+  sp::coordinates(res) <- c("X", "Y")
+  sp::proj4string(res) <- sp::CRS("+proj=longlat +datum=WGS84")
+  if (!is.null(projID)) {
+    # res <- spTransform(latlong, sp::CRS(paste0("+proj=utm +zone=",UTMzone," ellps=WGS84")))
+    res <- spTransform(res, sp::CRS(sprintf("+init=epsg:%i",projID)))
+    myprojstring = sp::CRS(sprintf("+init=epsg:%i",projID))
+  } else {
+    myprojstring = sp::CRS("+proj=longlat +datum=WGS84")
+  }
   xx<-res@coords[1:length(long)]
   yy<-res@coords[length(long)+(1:length(long))]
 
@@ -96,14 +109,29 @@ rvn_netcdf_to_gridshp <- function(ncfile,UTMzone,outshp)
   rnames<-sapply(slot(SP, 'polygons'), function(x) slot(x, 'ID'))
 
   voronoishp = SpatialPolygonsDataFrame(SP, data=data.frame(x=xx,y=yy, row.names=rnames,GridIDs=IDs,Latit=lat,Longit=long))
+  sp::proj4string(voronoishp) <- myprojstring # assign projection to new shapefile accordingly
+  voronoishp <- sf::st_as_sf(voronoishp)
 
-  # write to file
+  # write to file (if path given)
   #-----------------------------------------------------------------------
-  unlink(paste0(outshp,".*")) # deletes old file if it exists
-  writeOGR(voronoishp,dsn=getwd(),layer=outshp, driver="ESRI Shapefile")
+  if (!is.null(outshp)) {
 
-  #plot(voronoishp,col="blue")
+    # # remove .shp if exists
+    # if (rvn_substrRight(outshp,4) == ".shp") {
+    #   outshp <- rvn_substrMRight(outshp,4)
+    # }
 
-  return(TRUE)
+    if (!endsWith(outshp, ".shp")) {
+      outshp <- paste0(outshp, ".shp")
+    }
+
+    # unlink(paste0(outshp,".*")) # deletes old file if it exists
+    # writeOGR(voronoishp,dsn=getwd(),layer=outshp, driver="ESRI Shapefile")
+    # writeOGR(voronoishp, dsn=outshp, )
+    st_write(voronoishp, dsn=outshp, driver="ESRI Shapefile", delete_dsn=TRUE)
+    print(sprintf("%s written to file", outshp))
+  }
+
+  return(voronoishp)
 }
 

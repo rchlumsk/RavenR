@@ -32,7 +32,6 @@
 #' conn <- rvn_rvi_connections(rvi)
 #' head(conn)
 #'
-#' @keywords Raven  rvi  Hydrologic Processes connections
 #' @export rvn_rvi_connections
 rvn_rvi_connections<-function(rvi,
                               ProcConDataFile=system.file("extdata","RavenProcessConnections.dat", package="RavenR") ) {

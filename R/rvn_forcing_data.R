@@ -1,5 +1,6 @@
-#' Forcings Data from Raven
+#' @title Forcings Data from Raven
 #'
+#' @description
 #' A dataset formatted to the xts package, read in by the forcings.read function.
 #' The dataset contains the typical columns from the Raven outputted
 #' ForcingFunctions.csv file, available for download in the Raven

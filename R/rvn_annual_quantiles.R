@@ -26,7 +26,6 @@
 #' qdat <- rvn_annual_quantiles(hgdata)
 #' head(qdat)
 #'
-#' @keywords quantile hydrograph flow statistics diagnostic
 #' @export rvn_annual_quantiles
 #' @importFrom stats end aggregate quantile
 #' @importFrom lubridate month day year date years

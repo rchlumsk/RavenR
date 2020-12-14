@@ -4,10 +4,12 @@
 \alias{rvn_forcings_read}
 \title{Read in Raven ForcingFunctions file}
 \usage{
-rvn_forcings_read(ff = NA)
+rvn_forcings_read(ff = NA, tzone = NULL)
 }
 \arguments{
 \item{ff}{full file path to the ForcingFunctions.csv file}
+
+\item{tzone}{string indicating the timezone of the data in ff}
 }
 \value{
 \item{forcings}{data frame from the file with standardized names}
@@ -33,18 +35,11 @@ is sufficient.
 ff <- system.file("extdata","run1_ForcingFunctions.csv", package="RavenR")
 myforcings <- rvn_forcings_read(ff)
 
-# check data
-head(myforcings$forcings)
+# check data (first 5 columns for brevity)
+head(myforcings$forcings[,1:5])
+summary(myforcings$forcings[,1:5])
 
 }
 \seealso{
 \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{forcing}
-\keyword{functions}
-\keyword{read.csv}

@@ -1,8 +1,10 @@
-#' Read in Raven ReservoirStages file
+#' @title Read in Raven ReservoirStages file
 #'
+#' @description
 #' rvn_res_read is used to read in the ReservoirStages.csv file produced by the
 #' modelling Framework Raven.
 #'
+#' @details
 #' This function expects a full file path to the ReservoirStages.csv file, then
 #' reads in the file using read.csv. The main advantage of this function is
 #' renaming the columns to nicer names and extracting the units into something
@@ -17,14 +19,11 @@
 #' is sufficient.
 #'
 #' @param ff full file path to the ReservoirStages.csv file
+#' @param tzone string indicating the timezone of the data in ff
 #' @return \item{res}{data frame from the file with standardized names}
 #' @seealso \code{\link{rvn_res_extract}} for extraction tools related to the
 #' rvn_res_read output file
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven read.csv reservoir
 #' @examples
 #' # create full file path
 #' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
@@ -34,12 +33,12 @@
 #'
 #' # view contents
 #' head(myres$res)
-#' res$units
+#' myres$units
 #'
 #' @export rvn_res_read
 #' @importFrom xts xts
 #' @importFrom utils read.csv
-rvn_res_read <- function(ff=NA)
+rvn_res_read <- function(ff=NA, tzone=NULL)
 {
 
   if (missing(ff)) {
@@ -57,9 +56,12 @@ rvn_res_read <- function(ff=NA)
   # re-read with specified colClasses
   reservoirs <- read.csv(ff,header=TRUE,colClasses = classes,na.strings=c("---",'NA'))
 
-
   # need to fix the hourly model
-  date.time <- as.POSIXct(paste(reservoirs$date,reservoirs$hour), format="%Y-%m-%d %H:%M:%S")
+  if (is.null(tzone)) {
+    date.time <- as.POSIXct(paste(reservoirs$date,reservoirs$hour), format="%Y-%m-%d %H:%M:%S")
+  } else {
+    date.time <- as.POSIXct(paste(reservoirs$date,reservoirs$hour), format="%Y-%m-%d %H:%M:%S", tz=tzone)
+  }
   # head(date.time)
   cols <- colnames(reservoirs)
 

@@ -1,8 +1,10 @@
-#' Annual Peak Timing Errors
+#' @title Annual Peak Timing Errors
 #'
+#' @description
 #' rvn_annual_peak_timing_error creates a plot of the annual observed and simulated
 #' peak timing errors, based on the water year.
 #'
+#' @details
 #' This function creates a plot of the peak timing errors in simulated peaks
 #' for each water year. The difference in days between the simulated peak and
 #' observed peak are plotted (and/or returned in the data frame) for the water
@@ -33,8 +35,6 @@
 #' @param add_labels optionally adds labels for early peak/late peaks on right
 #' side axis (default TRUE)
 #'
-#'
-#'
 #' @return returns a list with peak timing errors in a data frame, and a ggplot object
 #'  \item{df_peak_timing_error}{data frame of the calculated peak timing errors}
 #'  \item{p1}{ggplot object with plotted annual peak errors}
@@ -42,10 +42,6 @@
 #' @seealso \code{\link{rvn_annual_peak_event}} to consider the timing of peak
 #' events \code{\link{rvn_annual_peak_event_error}} to calculate errors in peak
 #' events
-#'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #'
 #' @examples
 #' # load sample hydrograph data, two years worth of sim/obs
@@ -59,10 +55,9 @@
 #' peak1$p1
 #'
 #' # plot directly and without labels
-#' rvn_annual_peak_timing_error(sim, obs, add_line=T, add_labels=FALSE)
+#' rvn_annual_peak_timing_error(sim, obs, add_line=TRUE, add_labels=FALSE)
 #'
 #'
-#' @keywords Raven annual peak timing error diagnostics
 #' @export rvn_annual_peak_timing_error
 #' @importFrom stats lm
 #' @importFrom lubridate year date

@@ -1,5 +1,6 @@
-#' Hydrograph Data from Raven
+#' @title Hydrograph Data from Raven
 #'
+#' @description
 #' A dataset formatted to the xts package, read in by the hyd.read function.
 #' The dataset contains the typical columns from the Raven outputted
 #' Hydrographs.csv file, available for download in the Raven Tutorials
@@ -24,7 +25,7 @@
 #' }
 #'
 #' The Nith River model can be downloaded from the Raven Tutorials (tutorial #2)
-#' \url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}
+#' \url{http://raven.uwaterloo.ca/Downloads.html}
 #'
 #' @seealso \code{\link{rvn_custom_read}} for reading in custom output files
 #' @seealso \code{\link{rvn_custom_output_plot}} for plotting custom output

@@ -2,9 +2,7 @@
 % Please edit documentation in R/rvn_utilities.R
 \name{rvn_substrLeft}
 \alias{rvn_substrLeft}
-\title{substring from the Left
-
-rvn_substrLeft returns n characters from the left side of the supplied string x.}
+\title{substring from the Left}
 \usage{
 rvn_substrLeft(x, n)
 }
@@ -14,8 +12,6 @@ rvn_substrLeft(x, n)
 \item{n}{number of characters to remove from the left side of the string}
 }
 \description{
-substring from the Left
-
 rvn_substrLeft returns n characters from the left side of the supplied string x.
 }
 \examples{
@@ -29,5 +25,3 @@ rvn_substrLeft("hello world",3)
 
 \code{\link{rvn_substrMRight}} for removing n characters from the right side of a string
 }
-\keyword{left}
-\keyword{string}
