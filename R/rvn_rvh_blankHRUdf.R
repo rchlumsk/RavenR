@@ -45,7 +45,7 @@ rvn_rvh_blankHRUdf <- function(nHRUs = 1, subbasinIDs=NULL) {
                    'Vegetation' = NA,
                    'SoilProfile'= NA,
                    'Terrain'    = "[NONE]",
-                   'Aquifer'    = NA,
+                   'Aquifer'    = "[NONE]",
                    'Slope'      = 0.0,
                    'Aspect'     = 0.0)
   return(df)
