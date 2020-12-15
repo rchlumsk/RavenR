@@ -184,7 +184,7 @@ rvn_rvt_ECmet <-  function(metdata, filename=NULL, prd = NULL, stnName = NULL, f
       # verify snow measurements exist
       if("total_snow" %in% colnames(metdata)){
       rr.ts <-  xts(x=rr[,c("total_rain","total_snow","max_temp","min_temp")], order.by = dd)
-      rr.ts$total_snow <-  rr.ts$total_snow*10 # conversion from cm to mm (Raven convention)
+      #rr.ts$total_snow <-  rr.ts$total_snow*10 # conversion from cm to mm (Raven convention) # Incompatible with data density assumption
       } else {
         stop(paste0("Station does not have snowfall observations on record.\nLook for 'total_snow' as a parameter in the inputs. (Station id: ", sid,")"))
       }
