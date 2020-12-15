@@ -80,7 +80,7 @@ rvn_rvt_write <- function(ts, params, units, dates=NULL, prd=NULL,
   ts[is.na(ts)] = -1.2345
 
   #-- Correct file extension if not included
-  if (rvn_substrRight(ff,4) != ".rvt") {
+  if (rvn_substrRight(filenoom,4) != ".rvt") {
     ff <- paste0(ff,".rvt")
   }
   fc <- file(ff, open='wt')
