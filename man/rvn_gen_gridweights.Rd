@@ -9,7 +9,7 @@ rvn_gen_gridweights(
   Gridshpfile,
   ValidHRUIDs,
   HRUIDcol = "HRU_ID",
-  gridIDcol = "cellID",
+  gridIDcol = "GridIDs",
   outfile = "GridWeights.rvt"
 )
 }
