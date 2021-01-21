@@ -60,12 +60,28 @@ rvn_netcdf_to_gridshp <- function(ncfile,projID=NULL,outshp=NULL)
   #-----------------------------------------------------------------------
   nc_data <- nc_open(ncfile)
   mydata <- ncvar_get(nc_data, "lat")
-  lat <- as.vector(t(mydata))
-  mydata <- ncvar_get(nc_data, "lon")
-  long<-as.vector(t(mydata))
 
-  ncols=length(mydata[1,])
-  nrows<-length(mydata[,1])
+  # if lat and lon is flat, transform to 2D
+  if (length(dim(mydata)) == 1) {
+
+    lat_base <- ncvar_get(nc_data, "lat")
+    ncols <- length(lat_base)
+    long_base <- ncvar_get(nc_data, "lon")
+    nrows <- length(long_base)
+    lat <- rep(lat_base, each=nrows)
+    long <- rep(long_base, ncols)
+
+  } else if (length(dim(mydata)) == 2) {
+    mydata <- ncvar_get(nc_data, "lat")
+    lat <- as.vector(t(mydata))
+    mydata <- ncvar_get(nc_data, "lon")
+    long<-as.vector(t(mydata))
+    ncols=length(mydata[1,])
+    nrows<-length(mydata[,1])
+  } else {
+    stop("Error in dimensionality of ncdf lat long, should be 1 or 2.")
+  }
+
   c<-rep(1:ncols,nrows)
   r<-rep(1:nrows,each=ncols)
   #IDs<-(r-1)*ncols+(c-1)
@@ -92,9 +108,9 @@ rvn_netcdf_to_gridshp <- function(ncfile,projID=NULL,outshp=NULL)
   #-----------------------------------------------------------------------
   voronoi <- deldir(xx,yy)
 
-  #plot(xx, yy, type="n", asp=1)
-  #points(xx,yy,  pch=20, col="red", cex=0.5)
-  #plot(voronoi, wlines="tess", wpoints="none", number=FALSE, add=TRUE, lty=1)
+  # plot(xx, yy, type="n", asp=1)
+  # points(xx,yy,  pch=20, col="red", cex=0.5)
+  # plot(voronoi, wlines="tess", wpoints="none", number=FALSE, add=TRUE, lty=1)
 
   polys = vector(mode='list', length=length(tile.list(voronoi)))
   w<-tile.list(voronoi)
@@ -106,7 +122,8 @@ rvn_netcdf_to_gridshp <- function(ncfile,projID=NULL,outshp=NULL)
 
   SP = SpatialPolygons(polys)
 
-  rnames<-sapply(slot(SP, 'polygons'), function(x) slot(x, 'ID'))
+  # rnames<-sapply(slot(SP, 'polygons'), function(x) slot(x, 'ID'))
+  rnames <- as.character(seq(1,nrows*ncols))
 
   voronoishp = SpatialPolygonsDataFrame(SP, data=data.frame(x=xx,y=yy, row.names=rnames,GridIDs=IDs,Latit=lat,Longit=long))
   sp::proj4string(voronoishp) <- myprojstring # assign projection to new shapefile accordingly

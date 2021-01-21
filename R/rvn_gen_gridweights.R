@@ -64,7 +64,7 @@
 #' @importFrom methods slot
 #' @importFrom sf st_crs
 rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs, HRUIDcol="HRU_ID",
-                                gridIDcol="cellID", outfile="GridWeights.rvt")
+                                gridIDcol="GridIDs", outfile="GridWeights.rvt")
 {
 
   # read in HRU file
