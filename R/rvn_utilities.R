@@ -545,3 +545,15 @@ rvn_stringpad <- function(string, width, just='r')
     return(paste0(string, strrep(' ', padlength)))
   }
 }
+
+#' @title \%notin\% operator
+#'
+#' @description
+#' Syntax for the opposite of \%in\%
+#'
+#' @usage lhs \%notin\% rhs
+#' @examples
+#' seq(1,5,1) %notin% seq(3,7,1)
+#'
+#' @export
+"%notin%" <- function(x, table) match(x, table, nomatch = 0) == 0

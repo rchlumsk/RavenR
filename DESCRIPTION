@@ -1,8 +1,8 @@
 Package: RavenR
 Type: Package
 Title: Raven Hydrological Modelling Framework R Support and Analysis
-Version: 2.0.2
-Date: 2020-12-09
+Version: 2.0.3
+Date: 2020-12-22
 Authors@R: c(
     person("Robert", "Chlumsky", email = "rchlumsk@uwaterloo.ca", role = c("cre","aut")),
     person("James", "Craig", email = "jrcraig@uwaterloo.ca", role = "ctb"),
@@ -30,6 +30,7 @@ Imports:
     methods,
     ncdf4,
     purrr,
+    raster,
     reshape2,
     rgdal,
     rgeos,

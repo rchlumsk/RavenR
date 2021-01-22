@@ -7,10 +7,10 @@
 rvn_gen_gridweights(
   HRUshpfile,
   Gridshpfile,
-  ValidHRUIDs,
+  ValidHRUIDs = NULL,
   HRUIDcol = "HRU_ID",
   gridIDcol = "GridIDs",
-  outfile = "GridWeights.rvt"
+  outfile = NULL
 )
 }
 \arguments{
@@ -27,7 +27,8 @@ rvn_gen_gridweights(
 \item{outfile}{optional name of output Raven gaugeweights file}
 }
 \value{
-\item{TRUE}{returns TRUE if executed properly. Also output GaugeWeights.rvt file}
+\item{gridweights}{list with the number of HRUs, number of grid cells, and gridweights data frame.
+Also writes the grid weights rvt file if outfile is supplied.}
 }
 \description{
 Generates a Raven grid weights file given an HRU shapefile and a grid shapefile.
@@ -47,6 +48,11 @@ Not a tonne of QA/QC is currently included - can fail due to bad netCDF file or 
 uses rgdal and rgeos libraries, and the accuracy of the gIntersection() routine
 leaves something to be desired. The shapefiles should be in the same projection, which is
 checked for in this function.
+
+Note that the grid weights file (e.g. GridWeights.txt) is only written if outfile is not NULL. If
+this is left as NULL, just the gridweights list object is returned. This object may be used to to
+write the grid weights file using the \code{\link{rvn_gridweights_write}} function. If outfile is provided,
+the \code{\link{rvn_gridweights_write}} function is called internally to write the gridweights file.
 }
 \examples{
 
@@ -72,6 +78,7 @@ ValidHRUIDs <- rvh$HRUtable$ID
 tfout <- file.path(tempdir(), "Nith_GridWeights.rvt")
 rvn_gen_gridweights(HRUshpfile, Gridshpfile, ValidHRUIDs,
 gridIDcol = 'GridIDs', HRUIDcol = "subID", outfile = tfout)
+
 
 }
 \seealso{

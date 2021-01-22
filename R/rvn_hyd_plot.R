@@ -109,22 +109,26 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
   x.min <- as.Date(unlist(strsplit(prd,"/"))[1])
   x.max <- as.Date(unlist(strsplit(prd,"/"))[2])
 
+
   #Create data frame for plotting
   df.plot <- data.frame()
 
   if (!(is.null(sim))) {
+    sim <- sim[prd]
     sim_temp <- fortify(sim)
     sim_temp$ID <- "Sim"
     colnames(sim_temp) <- c("Date","Flow","ID")
     df.plot <- rbind(df.plot,sim_temp)
   }
   if (!(is.null(obs))) {
+    obs <- obs[prd]
     obs_temp <- fortify(obs)
     obs_temp$ID <- "Obs"
     colnames(obs_temp) <- c("Date","Flow","ID")
     df.plot <- rbind(df.plot,obs_temp)
   }
   if (!(is.null(inflow))) {
+    inflow <- inflow[prd]
     inflow_temp <- fortify(inflow)
     inflow_temp$ID <- "Inflow"
     colnames(inflow_temp) <- c("Date","Flow","ID")
@@ -160,7 +164,7 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
 
   #Add precipitation
   if (!(is.null(precip))){
-
+    precip <- precip[prd]
     df.precip.plot <- fortify(precip)
     colnames(df.precip.plot)[1] <- "Date"
     df.precip.plot$ID <- "Precip"

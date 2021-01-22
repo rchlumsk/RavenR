@@ -65,9 +65,9 @@ rvn_netcdf_to_gridshp <- function(ncfile,projID=NULL,outshp=NULL)
   if (length(dim(mydata)) == 1) {
 
     lat_base <- ncvar_get(nc_data, "lat")
-    ncols <- length(lat_base)
+    nrows <- length(lat_base)
     long_base <- ncvar_get(nc_data, "lon")
-    nrows <- length(long_base)
+    ncols <- length(long_base)
     lat <- rep(lat_base, each=nrows)
     long <- rep(long_base, ncols)
 

@@ -12,7 +12,8 @@ rvn_rvh_cleanhrus(
   elev_tol = 50,
   slope_tol = 4,
   aspect_tol = 20,
-  ProtectedHRUList = c()
+  ProtectedHRUList = c(),
+  gridweights = NULL
 )
 }
 \arguments{
@@ -32,9 +33,13 @@ default value of 0.01 would indicate anything smaller than 1 percent of watershe
 \item{aspect_tol}{slope difference (in degrees) considered similar. only used if merge=TRUE.}
 
 \item{ProtectedHRUList}{list of HRU IDs that are sacrosanct (not to be removed)}
+
+\item{gridweights}{a list for gridweights, as returned from \code{\link{rvn_gridweights_read}}
+or \code{\link{rvn_gen_gridweights}}, to modify as HRUs are simplified}
 }
 \value{
-{hru_table}{cleaned HRU table as a dataframe}
+\item{hru_table}{cleaned HRU table as a dataframe}
+\item{list}{xxx}
 }
 \description{
 Takes \code{\link{rvn_rvh_read}}-generated HRUtable and SBTable and returns cleaned HRUtable
@@ -48,8 +53,14 @@ subbasin are expanded by the lost area to keep the same relative coverage.
 
   2. it consolidates similar HRUs within the same subbasin (those with same land cover,
     vegetation, soil profile and similar slope, aspect, and elevation)
+
+
+If a gridweights list is passed, a gridweights list is also returned, based on the modifications
+made to the hru table.
 }
 \examples{
+
+\dontrun{
 # read in example rvh file
 nith <- system.file("extdata","Nith.rvh",package = "RavenR")
 rvh <- rvn_rvh_read(nith)
@@ -59,6 +70,7 @@ nrow(rvh$HRUtable)
 
 # clean contents (in this case, remove all HRUs covering less than 5\% of the total area)
 rvh$HRUtable <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
+}
 
 }
 \seealso{
