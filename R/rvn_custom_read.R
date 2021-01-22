@@ -75,7 +75,19 @@ rvn_custom_read <- function(ff=NA, no_runname=FALSE, tzone=NULL) {
   ## time property handling
   # obtain time object, trim columns
   # need to update to handle hourly and yearly data *********
-  if (time.type == "Continuous" | time.type == "Daily") {
+  if (time.type == "Continuous") {
+    if (is.null(tzone)) {
+      #LS - Continuous has an hours column
+      tt <- as.POSIXct(paste(cust.data[,2], cust.data[,3]), format="%Y-%m-%d %H:%M:%S")
+    } else {
+      tt <- as.POSIXct(paste(cust.data[,2], cust.data[,3]), format="%Y-%m-%d %H:%M:%S", tz=tzone)
+    }
+
+    # date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S")
+    cust.data <- cust.data[,-(1:3)]
+    cust.headers <- cust.headers[1,-(1:3)]
+
+  } else if (time.type == "Daily") {
 
     if (is.null(tzone)) {
       tt <- as.POSIXct(paste(cust.data[,2]), format="%Y-%m-%d")
@@ -135,6 +147,13 @@ rvn_custom_read <- function(ff=NA, no_runname=FALSE, tzone=NULL) {
   attr(dd,'time_agg')<-time.type
   attr(dd,'stat_agg')<-stat.type
   attr(dd,'space_agg')<-space.type
+
+  # Used by rvn_rvc_from_custom_output
+  if(space.type == 'ByHRU') {
+    attr(dd,'HRUs') <- ncol(cust.data)
+  } else if (space.type == 'BySubbasin') {
+    attr(dd, 'SBs') <- ncol(cust.data)
+  } #TODO HRUGroup, EntireWatershed
 
   return("custom_out"=dd)
 }
