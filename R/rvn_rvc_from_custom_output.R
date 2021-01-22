@@ -11,6 +11,13 @@
 #' @export rvn_rvc_from_custom_output
 #'
 #' @examples
+#' # Create array of custom output file(s)
+#' custout <- c(system.file("extdata","run1_SNOW_Daily_Average_ByHRU.csv",package = "RavenR"))
+#'
+#' # Create rvc file of mean snow for each HRU
+#' rvn_rvc_from_custom_output(filename = file.path(tempdir(), "Blank.rvc"),
+#'                            custfiles = custout,
+#'                            FUN = mean)
 #' @importFrom zoo index
 rvn_rvc_from_custom_output <- function(filename, custfiles, FUN, init_date=NULL,...){
 
@@ -28,6 +35,12 @@ rvn_rvc_from_custom_output <- function(filename, custfiles, FUN, init_date=NULL,
   for (outfile in custfiles) {
     cust <- rvn_custom_read(outfile)
     svname <- attr(cust, 'datatype')
+
+    #-- Ensure ByHRU Custom Output
+    #TODO Support other outputs
+    if (attr(cust, 'space_agg') != 'ByHRU') {
+      stop('Only ByHRU Custom Output files are supported at this time.')
+    }
 
     #-- Make df if doesn't exist yet
     if (is.null(initHRU)) {

@@ -147,7 +147,13 @@ rvn_custom_read <- function(ff=NA, no_runname=FALSE, tzone=NULL) {
   attr(dd,'time_agg')<-time.type
   attr(dd,'stat_agg')<-stat.type
   attr(dd,'space_agg')<-space.type
-  attr(dd,'HRUs') <- ncol(cust.data)
+
+  # Used by rvn_rvc_from_custom_output
+  if(space.type == 'ByHRU') {
+    attr(dd,'HRUs') <- ncol(cust.data)
+  } else if (space.type == 'BySubbasin') {
+    attr(dd, 'SBs') <- ncol(cust.data)
+  } #TODO HRUGroup, EntireWatershed
 
   return("custom_out"=dd)
 }
