@@ -100,6 +100,10 @@ rvn_hyd_read <- function(ff=NA, tzone=NULL) {
         units[i] = mysplit[3]
         obs_flag[i] = TRUE
         newcols[i] = sprintf("%s_obs",mysplit[1])
+      } else if (mysplit[2] == "obs" & mysplit[3] == "res") {
+        units[i] = mysplit[length(mysplit)]
+        obs_flag[i] = TRUE
+        newcols[i] = sprintf("%s_obs_resinflow",mysplit[1])
       } else if (mysplit[2] == "inflow") {
         units[i] = mysplit[3]
         obs_flag[i] = FALSE
