@@ -67,9 +67,9 @@ rvn_custom_read <- function(ff=NA, no_runname=FALSE, tzone=NULL) {
     space.type <- namelist[4]
   }
 
-  cust.data    <- read.csv(ff,header=F,skip=2,stringsAsFactors=F);
+  cust.data    <- read.csv(ff,header=F,skip=2,stringsAsFactors=F)
   cust.data    <- cust.data[,1:(ncol(cust.data)-1)] # remove NA column
-  cust.headers <- read.csv(ff,header=F,nrows=2,skip=0,stringsAsFactors = F);
+  cust.headers <- read.csv(ff,header=F,nrows=2,skip=0,stringsAsFactors = F)
   cust.headers <- cust.headers[,1:(ncol(cust.headers)-1)]
 
   ## time property handling
