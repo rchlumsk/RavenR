@@ -12,6 +12,9 @@
 #' to easily plot the time series data. The otpions of the custom output are
 #' included in the rav.obj attributes.
 #'
+#' The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
+#' the user to the local time zone as needed, based on the model run.
+#'
 #' @param ff full file path to the custom output file
 #' @param no_runname boolean for whether a runName is supplied, important for
 #' parsing the filename
@@ -33,7 +36,7 @@
 #' @export rvn_custom_read
 #' @importFrom xts xts
 #' @importFrom utils read.csv
-rvn_custom_read <- function(ff=NA, no_runname=FALSE, tzone=NULL) {
+rvn_custom_read <- function(ff=NA, no_runname=FALSE, tzone="UTC") {
 
   if (missing(ff)) {
     stop("Requires the full file path to the Raven custom output file")

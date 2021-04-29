@@ -4,7 +4,7 @@
 \alias{rvn_custom_read}
 \title{Read Raven Custom Output files}
 \usage{
-rvn_custom_read(ff = NA, no_runname = FALSE, tzone = NULL)
+rvn_custom_read(ff = NA, no_runname = FALSE, tzone = "UTC")
 }
 \arguments{
 \item{ff}{full file path to the custom output file}
@@ -29,6 +29,9 @@ it is important to use the unmodified file names for this function. The use
 The returned object is a time series object (xts format), which can be used
 to easily plot the time series data. The otpions of the custom output are
 included in the rav.obj attributes.
+
+The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
+the user to the local time zone as needed, based on the model run.
 }
 \examples{
 

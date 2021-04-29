@@ -75,7 +75,10 @@ ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 ff
 
 # read in sample rvi file from the RavenR package
-rvi <- system.file("extdata", "Nith.rvi", package="RavenR")
+rvi_file <- system.file("extdata", "Nith.rvi", package="RavenR")
+
+# show first 6 lines of the file
+readLines(rvi_file) %>% head()
 ```
 
 The `system.file` command will simply build a file path for where this data file is located on your machine with the RavenR package installation, which can then be passed to any function as required to provide a file location. This command will be used throughout this tutorial in place of local files for portability, however, your own data files may be swapped in place of the system.file locations. For example, you may wish to pass files from other Raven Tutorial files by changing the file paths throughout this tutorial.
@@ -118,7 +121,7 @@ ff <- system.file("extdata","run1_Hydrographs.csv",package="RavenR")
 hy <- rvn_hyd_read(ff)
 head(hy$hyd)
 flow36 <- rvn_hyd_extract("Sub36",hy)
-precip <- rvn_hyd_extract("precip",hy)$sim
+precip <- hy$hyd$precip
 ```
 
 The hydrograph object flow36 now stores the simulated hydrograph (`flow36$sim`) and the observed hydrograph (`flow36$obs`), and the null subobject (`flow36$inflow`). The precip object stores the entire time series of watershed-averaged precip (`precip$sim`). We can plot the simulated and observed hydrograph with the following commands in base R, extracting the date:
@@ -162,7 +165,7 @@ rvn_monthly_vbias(flow36$sim, obs=flow36$obs)
 
 ### Flow DyGraphs
 
-A fun feautre in the RavenR package is the addition of dygraphs, which produces a dynamic hydrograph plot with a slider on the time scale. This is particularly helpful for viewing subsections of a hydrograph dynamically, and comparing the simulated and observed hydrographs in an interactive environment. Only the output object from the `rvn_hyd_read` function and the name of headings to extract is required. Note that this interactive plot does not work well in a PDF file, so try this out in R/RStudio.
+A fun feature in the RavenR package is the addition of dygraphs, which produces a dynamic hydrograph plot with a slider on the time scale. This is particularly helpful for viewing subsections of a hydrograph dynamically, and comparing the simulated and observed hydrographs in an interactive environment. Only the output object from the `rvn_hyd_read` function and the name of headings to extract is required. Note that this interactive plot does not work well in a PDF file, so try this out in R/RStudio.
 ```{r Flow dygraphs, fig.height=5, fig.width=6, eval=FALSE, message=FALSE, warning=FALSE}
 rvn_hyd_dygraph(hy, basins="Sub36")
 ```
@@ -276,21 +279,31 @@ Try the example in the help file - `?rvn_rvh_cleanhrus`.
 
 ## RVT File Utilities
 
-The types of rvt files in Raven are plentiful, as rvt files are used in Raven for time series observations, forcing data, gauge data, etc. A handful of highly useful rvt utilities exist in the RavenR package for building these input files. For example, gauge forcing data can be written to rvt format from the `weathercan` package for scraping Environment Canada data. The weathercan package is not required to be used with this function, but is a more convenient way than downloading and stitching meteorological data files together manually.
+The types of rvt files in Raven are plentiful, as rvt files are used in Raven for time series observations, forcing data, gauge data, etc. A handful of highly useful rvt utilities exist in the RavenR package for building these input files. For example, gauge observation data can be written to rvt format from the `tidyhydat` package for scraping Water Survey of Canada data.
 
-The `rvn_rvt_ECmet` function currently has two options for writing sets of forcing data. Here we use the first option to write the total precipitation, maximum daily temperature, and minimum daily temperature from the 'Kamloops A' station to a Raven-compliant rvt format. The station metadata, also required for Raven gauge forcing data, is written to file when `write_stndata` is TRUE.
-```{r Write rvt file for meteorological data, message=FALSE, warning=FALSE, eval=FALSE}
-library(weathercan)
-kam <- weather_dl(station_ids = 51423,
-                  start = "2016-10-01", end = "2019-09-30", interval="day")
+Here, we use sample data from the `tidyhydat` function, and write this to an rvt file for use within a Raven model. The commands that would be used to extract data with the `tidyhydat` function is also provided below (but commented out). The sample data is used here to help meet compliance, but you are encouraged to try using the `tidyhydat` commands to try this functionality for yourself.
 
-# basic use, override filename to temporary file
-# default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
-result <- rvn_rvt_ECmet(metdata = kam, forcing_set = 1,
-                        write_stndata = TRUE)
+```{r Write rvt file for flow observation data, message=FALSE, warning=FALSE, eval=FALSE}
+stations <- c("05CB004","05CA002")
+
+# Gather station data/info using tidyhydat functions
+# library(tidyhydat)
+# hd <- tidyhydat::hy_daily_flows(station_number = stations,
+#  start_date = "1996-01-01", end_date = "1997-01-01")
+
+# load RavenR package sample data
+data(rvn_tidyhydat_sample)
+hd <- rvn_tidyhydat_sample
+
+tf1 <- file.path(tempdir(), "station1.rvt")
+tf2 <- file.path(tempdir(), "station2.rvt")
+
+# Create RVT files
+rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
+  filename=c(tf1,tf2))
 ```
 
-A similar functionality exists to work with WSC gauge data from the `tidyhydat` package - see the `rvn_rvt_tidyhydat` function.
+Similar support for the `weathercan` package to write gauge forcing data exists within the `RavenR` package through the `rvn_rvt_ECmet` function. 
 
 \newpage  
 

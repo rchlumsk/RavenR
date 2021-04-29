@@ -20,8 +20,8 @@
 #'
 #' tzone is a string indicating the timezone of the supplied Hydrographs file. The
 #' timezone provided is coded into the resulting hyd data frame using the as.POSIXct
-#' function. If no timezone is provided, this is left as an empty string, and is
-#' determined by the function as the current time zone.
+#' function. The timezone is provided as "UTC" by default, and should be adjusted by
+#' the user to the local time zone as needed, based on the model run.
 #'
 #' @param ff full file path to the Hydrographs.csv file
 #' @param tzone string indicating the timezone of the data in ff
@@ -43,7 +43,7 @@
 #' @export rvn_hyd_read
 #' @importFrom xts xts
 #' @importFrom utils read.csv
-rvn_hyd_read <- function(ff=NA, tzone=NULL) {
+rvn_hyd_read <- function(ff=NA, tzone="UTC") {
 
   if (missing(ff)) {
     stop("Requires the full file path to the Hydrographs.csv file.")

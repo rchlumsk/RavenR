@@ -7,7 +7,6 @@
 rvn_res_plot(
   sim = NULL,
   obs = NULL,
-  inflow = NULL,
   precip = NULL,
   prd = NULL,
   winter_shading = FALSE,
@@ -19,8 +18,6 @@ rvn_res_plot(
 
 \item{obs}{time series object of observed stage}
 
-\item{inflow}{time series object of inflow to subbasin}
-
 \item{precip}{time series object of precipitation}
 
 \item{prd}{period to use in plotting}
@@ -30,11 +27,10 @@ rvn_res_plot(
 \item{wsdates}{integer vector of winter shading period dates (see details)}
 }
 \value{
-\item{TRUE}{return TRUE if the function is executed properly}
+\item{p1}{returns ggplot plot object}
 }
 \description{
-rvn_res_plot creates a reservoir stage plot for the supplied flow series, or
-equivalently a stage plot for reservoir stages.
+rvn_res_plot creates a reservoir stage plot for the supplied stage series.
 }
 \details{
 This function creates a reservoir stage plot using the supplied time series;
@@ -43,12 +39,12 @@ supplied, the secondary y axis will be used to plot the precip time series.
 
 The function assumes that the supplied time series have the same length and
 duration in time. If this is not true, then the defined period or period
-calculated from the first available flow series will be used to determine
+calculated from the first available stage series will be used to determine
 the plotting limits in time. If the data is used directly from Raven output,
 this is not a concern. The supplied time series should be in xts format,
 which again can be obtained directly by using the rvn_res_extract function.
 
-The winter_shading argument will add a transparent cyan shading for the
+The winter_shading argument will add a transparent grey shading for the
 December 1st to March 31st period in each year that is plotted (or other
 period specified by wsdates).
 

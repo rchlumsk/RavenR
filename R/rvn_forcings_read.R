@@ -14,6 +14,9 @@
 #' located in the current working directory, then simply the name of the file
 #' is sufficient.
 #'
+#' The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
+#' the user to the local time zone as needed, based on the model run.
+#'
 #' @param ff full file path to the ForcingFunctions.csv file
 #' @param tzone string indicating the timezone of the data in ff
 #' @return
@@ -36,7 +39,7 @@
 #' @export rvn_forcings_read
 #' @importFrom xts xts
 #' @importFrom utils read.csv
-rvn_forcings_read <- function(ff=NA, tzone=NULL)
+rvn_forcings_read <- function(ff=NA, tzone="UTC")
 {
 
   if (missing(ff)) {

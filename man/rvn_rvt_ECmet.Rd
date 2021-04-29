@@ -104,10 +104,14 @@ Note: Data quality is not assessed in this package, such as consistency between
 minimum and maximum temperatures. Subdaily data is not currenty supported.
 
 Note: this function is designated to use data from the weathercan package. The
-weathercan package is external to RavenR and is not an explicit dependent package
+weathercan package is external to RavenR and is not an explicit dependency
 of RavenR.
 }
 \examples{
+
+# note: Environment Canada is currently experiencing issues in supporting data downloads
+
+\dontrun{
 # Download data using weathercan weather_dl
 library(weathercan)
 kam <- weather_dl(station_ids = 51423,
@@ -122,6 +126,7 @@ rvn_rvt_ECmet(metdata = kam, forcing_set = 1,
 # default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
 rvn_rvt_ECmet(metdata = kam, forcing_set = 2,
   filename = file.path(tempdir(), "rvn_rvt_ECmetfile2.rvt"))
+ }
 
 }
 \seealso{

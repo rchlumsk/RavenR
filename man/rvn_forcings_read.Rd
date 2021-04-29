@@ -4,7 +4,7 @@
 \alias{rvn_forcings_read}
 \title{Read in Raven ForcingFunctions file}
 \usage{
-rvn_forcings_read(ff = NA, tzone = NULL)
+rvn_forcings_read(ff = NA, tzone = "UTC")
 }
 \arguments{
 \item{ff}{full file path to the ForcingFunctions.csv file}
@@ -28,6 +28,9 @@ much easier to read.
 ff is the full file path of the ForcingFunctions.csv file. If the file is
 located in the current working directory, then simply the name of the file
 is sufficient.
+
+The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
+the user to the local time zone as needed, based on the model run.
 }
 \examples{
 

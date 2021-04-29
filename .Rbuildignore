@@ -6,6 +6,6 @@
 ^CONTRIBUTING\.md$
 ^pdf$
 ^tarballs$
-^vignettes$
-^_vignettes$
 ^LICENSE$
+^doc$
+^Meta$

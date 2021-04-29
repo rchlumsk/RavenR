@@ -18,6 +18,9 @@
 #' located in the current working directory, then simply the name of the file
 #' is sufficient.
 #'
+#' The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
+#' the user to the local time zone as needed, based on the model run.
+#'
 #' @param ff full file path to the WatershedStorage.csv file
 #' @param tzone string indicating the timezone of the data in ff
 #' @return \item{watershed_storage}{data frame from the file with standardized
@@ -39,7 +42,7 @@
 #'
 #' @export rvn_watershed_read
 #' @importFrom utils read.csv
-rvn_watershed_read <- function(ff=NA, tzone=NULL) {
+rvn_watershed_read <- function(ff=NA, tzone="UTC") {
 
   if (missing(ff)) {
     stop("Requires the full file path to the WatershedStorage.csv file")

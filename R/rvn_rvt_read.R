@@ -9,6 +9,9 @@
 #' :BasinInflowHydrograph, and most of the other :Data-like time series commands. It does
 #' NOT support the master .rvt file with :Gauge or :GriddedForcing commands
 #'
+#' The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
+#' the user to the local time zone as needed, based on the model run.
+#'
 #' @param filename the name of the .rvt file (with .rvt extension included ), either relative
 #' to the working directory or absolute.
 #'
@@ -19,14 +22,14 @@
 #'
 #' @examples
 #' # read in rvt file
-#' system.file('extdata','GlenAllan.rvt',package="RavenR")%>%
+#' system.file('extdata','GlenAllan.rvt',package="RavenR") %>%
 #' rvn_rvt_read(.) -> rvt
 #' plot(rvt$TEMP_DAILY_MIN)
 #'
 #' @export rvn_rvt_read
 #' @importFrom xts xts
 #' @importFrom lubridate interval
-rvn_rvt_read<-function(filename) {
+rvn_rvt_read<-function(filename, tzone="UTC") {
   stopifnot(file.exists(filename))
 
   if (length(grep(":Gauge", readLines(filename))!=0)){
@@ -89,7 +92,7 @@ rvn_rvt_read<-function(filename) {
   startdate<-as.Date(paste0(line1[1]," ",line1[2])  )
 
   # handles HH:mm:ss format *or* time in days
-  interval<-as.double(as.POSIXct(line1[3],format = "%H:%M:%S")-as.POSIXct("00:00:00",format = "%H:%M:%S"))*60
+  interval<-as.double(as.POSIXct(line1[3],format = "%H:%M:%S",tz=tzone)-as.POSIXct("00:00:00",format = "%H:%M:%S",tz=tzone))*60
   if (is.na(interval)){ #not in hh:mm:ss format
     interval<-as.integer(as.double(line1[3])*60*24) #rounds to nearest minute
   }
