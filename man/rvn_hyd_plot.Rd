@@ -30,7 +30,7 @@ rvn_hyd_plot(
 \item{wsdates}{integer vector of winter shading period dates (see details)}
 }
 \value{
-\item{TRUE}{return TRUE if the function is executed properly}
+\item{p1}{returns ggplot plot object}
 }
 \description{
 rvn_hyd_plot creates a hydrograph plot object for the supplied flow series, or
@@ -78,7 +78,7 @@ rvn_hyd_plot(sim,obs,precip=precip,prd=prd)
 # add the winter shading
 rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=TRUE)
 
-# change winter shading dates
+# change winter shading dates (Nov 1st to April 15th)
 rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=TRUE, wsdates=c(11,1,4,15))
 
 }
