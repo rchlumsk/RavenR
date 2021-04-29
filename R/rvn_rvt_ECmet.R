@@ -62,7 +62,7 @@
 #' minimum and maximum temperatures. Subdaily data is not currenty supported.
 #'
 #' Note: this function is designated to use data from the weathercan package. The
-#' weathercan package is external to RavenR and is not an explicit dependent package
+#' weathercan package is external to RavenR and is not an explicit dependency
 #' of RavenR.
 #'
 #'
@@ -86,6 +86,10 @@
 #' Historical Data}
 #'
 #' @examples
+#'
+#' # note: Environment Canada is currently experiencing issues in supporting data downloads
+#'
+#' \dontrun{
 #' # Download data using weathercan weather_dl
 #' library(weathercan)
 #' kam <- weather_dl(station_ids = 51423,
@@ -100,6 +104,7 @@
 #' # default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
 #' rvn_rvt_ECmet(metdata = kam, forcing_set = 2,
 #'   filename = file.path(tempdir(), "rvn_rvt_ECmetfile2.rvt"))
+#'  }
 #'
 #' @export rvn_rvt_ECmet
 #' @importFrom xts xts
@@ -184,7 +189,7 @@ rvn_rvt_ECmet <-  function(metdata, filename=NULL, prd = NULL, stnName = NULL, f
       # verify snow measurements exist
       if("total_snow" %in% colnames(metdata)){
       rr.ts <-  xts(x=rr[,c("total_rain","total_snow","max_temp","min_temp")], order.by = dd)
-      rr.ts$total_snow <-  rr.ts$total_snow*10 # conversion from cm to mm (Raven convention)
+      #rr.ts$total_snow <-  rr.ts$total_snow*10 # conversion from cm to mm (Raven convention) # Incompatible with data density assumption
       } else {
         stop(paste0("Station does not have snowfall observations on record.\nLook for 'total_snow' as a parameter in the inputs. (Station id: ", sid,")"))
       }

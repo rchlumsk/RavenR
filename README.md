@@ -17,7 +17,12 @@ releases.
 
 ## Installation
 
-You can install RavenR from github with:
+The CRAN version of the package may also installed with:
+``` r
+install.packages("RavenR")
+```
+
+You can also install the latest RavenR version from github with:
 
 ``` r
 # install.packages("devtools")
@@ -70,5 +75,4 @@ plotting. Some of these include:
   - multiple bug fixes and improvements to handling rvi, rvh, and
     writing rvt files.
 
-The version 2.0.0 of this package will be submitted to CRAN shortly, and
-is currently passing `R CMD CHECK`.
+The version 2.0.1 of this package is currently available on CRAN.

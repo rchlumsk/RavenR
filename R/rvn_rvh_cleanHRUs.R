@@ -13,6 +13,8 @@
 #' @param slope_tol slope difference (in degrees) considered similar. only used if merge=TRUE.
 #' @param aspect_tol slope difference (in degrees) considered similar. only used if merge=TRUE.
 #' @param ProtectedHRUList list of HRU IDs that are sacrosanct (not to be removed)
+#' @param gridweights a list for gridweights, as returned from \code{\link{rvn_gridweights_read}}
+#' or \code{\link{rvn_gen_gridweights}}, to modify as HRUs are simplified
 #'
 #' @details
 #' rvh.clean removes HRUs in two ways:
@@ -23,7 +25,12 @@
 #'   2. it consolidates similar HRUs within the same subbasin (those with same land cover,
 #'     vegetation, soil profile and similar slope, aspect, and elevation)
 #'
-#' @return {hru_table}{cleaned HRU table as a dataframe}
+#'
+#' If a gridweights list is passed, a gridweights list is also returned, based on the modifications
+#' made to the hru table.
+#'
+#' @return \item{hru_table}{cleaned HRU table as a dataframe}
+#' \item{list}{xxx}
 #'
 #' @author James R. Craig, University of Waterloo
 #'
@@ -32,6 +39,8 @@
 #' \code{\link{rvn_rvh_write}} to write rvh information to file.
 #'
 #' @examples
+#'
+#' \dontrun{
 #' # read in example rvh file
 #' nith <- system.file("extdata","Nith.rvh",package = "RavenR")
 #' rvh <- rvn_rvh_read(nith)
@@ -41,11 +50,13 @@
 #'
 #' # clean contents (in this case, remove all HRUs covering less than 5% of the total area)
 #' rvh$HRUtable <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
+#' }
 #'
 #' @export rvn_rvh_cleanhrus
 #' @importFrom stats aggregate
 rvn_rvh_cleanhrus <- function(HRUtab, SBtab, area_tol=0.01, merge=FALSE,
-                            elev_tol=50, slope_tol=4, aspect_tol=20, ProtectedHRUList=c())
+                            elev_tol=50, slope_tol=4, aspect_tol=20, ProtectedHRUList=c(),
+                            gridweights=NULL)
 {
   #routine:
   init_nHRUs<-nrow(HRUtab)
@@ -83,55 +94,120 @@ rvn_rvh_cleanhrus <- function(HRUtab, SBtab, area_tol=0.01, merge=FALSE,
   rem1<-sum(HRUtab$remove==TRUE)
   area1<-sum(HRUtab[HRUtab$remove==TRUE,]$Area)
 
+  if (!is.null(gridweights)) {
+
+    ## checks for gridweights consistency
+
+    ## separate out components
+    dfgrid <- gridweights$GridWeights
+  }
+
   # merge overly similar HRUs (varying minutely in elevation/slope/aspect)
   #-----------------------------------------------------------
   if (merge==TRUE){
 
     HRUtab$similar <- NA
 
-    # for (i in 1:nrow(HRUtab))# old line
-    for (i in 1:(nrow(HRUtab)-1))
-    {
-      if (i %% 100==0){print(i)}
-      for (k in (i+1):nrow(HRUtab)) {  # change to check current row against all upcoming rows, and ensure that k != i for all i
-        if (HRUtab$SBID[i]==HRUtab$SBID[k]){ # kept separate for speed
-          if (HRUtab$LandUse[i]==HRUtab$LandUse[k])  {
-            if ((HRUtab$remove[i]!=TRUE) & (HRUtab$remove[k]!=TRUE)){
-              if  ((HRUtab$Vegetation[i]==HRUtab$Vegetation[k]) &
-                (HRUtab$SoilProfile[i]==HRUtab$SoilProfile[k]) &
-                (HRUtab$Terrain[i]==HRUtab$Terrain[k]) &
-                (HRUtab$Aquifer[i]==HRUtab$Aquifer[k]) &
-                !(HRUtab$ID[i] %in% ProtectedHRUList) &
-                !(HRUtab$ID[k] %in% ProtectedHRUList) &
-                (abs(HRUtab$Elevation[i]-HRUtab$Elevation[k])<elev_tol) &
-                (abs(HRUtab$Slope[i]-HRUtab$Slope[k])<slope_tol) &
-                ((abs(HRUtab$Aspect[i]-HRUtab$Aspect[k])<aspect_tol) |
-                 (abs(HRUtab$Aspect[i]-HRUtab$Aspect[k]-360)<aspect_tol) |
-                 (abs(HRUtab$Aspect[i]-HRUtab$Aspect[k]+360)<aspect_tol))
+    if (is.null(gridweights)) {
+
+      # for (i in 1:nrow(HRUtab))# old line
+      for (i in 1:(nrow(HRUtab)-1)) {
+        if (i %% 100==0){print(i)}
+        for (k in (i+1):nrow(HRUtab)) {  # change to check current row against all upcoming rows, and ensure that k != i for all i
+          if (HRUtab$SBID[i]==HRUtab$SBID[k]){ # kept separate for speed
+            if (HRUtab$LandUse[i]==HRUtab$LandUse[k])  {
+              if ((HRUtab$remove[i]!=TRUE) & (HRUtab$remove[k]!=TRUE)){
+                if  ((HRUtab$Vegetation[i]==HRUtab$Vegetation[k]) &
+                     (HRUtab$SoilProfile[i]==HRUtab$SoilProfile[k]) &
+                     (HRUtab$Terrain[i]==HRUtab$Terrain[k]) &
+                     (HRUtab$Aquifer[i]==HRUtab$Aquifer[k]) &
+                     !(HRUtab$ID[i] %in% ProtectedHRUList) &
+                     !(HRUtab$ID[k] %in% ProtectedHRUList) &
+                     (abs(HRUtab$Elevation[i]-HRUtab$Elevation[k])<elev_tol) &
+                     (abs(HRUtab$Slope[i]-HRUtab$Slope[k])<slope_tol) &
+                     ((abs(HRUtab$Aspect[i]-HRUtab$Aspect[k])<aspect_tol) |
+                      (abs(HRUtab$Aspect[i]-HRUtab$Aspect[k]-360)<aspect_tol) |
+                      (abs(HRUtab$Aspect[i]-HRUtab$Aspect[k]+360)<aspect_tol))
                 )
-              {
-                HRUtab$similar[i]<-HRUtab$ID[k]
-                HRUtab$remove[i]<-TRUE
-                Ak<-HRUtab$newarea[k]
-                Ai<-HRUtab$newarea[i]
+                {
 
-                HRUtab$Latitude[k]<-(HRUtab$Latitude[k]*Ak+HRUtab$Latitude[i]*Ai)/(Ai+Ak)
-                HRUtab$Longitude[k]<-(HRUtab$Longitude[k]*Ak+HRUtab$Longitude[i]*Ai)/(Ai+Ak)
-                HRUtab$Slope[k]<-(HRUtab$Slope[k]*Ak+HRUtab$Slope[i]*Ai)/(Ai+Ak)
-               # HRUtab$Aspect[k]<-(HRUtab$Aspect[k]*Ak+HRUtab$Aspect[i]*Ai)/(Ai+Ak)
+                  HRUtab$similar[i]<-HRUtab$ID[k]
+                  HRUtab$remove[i]<-TRUE
+                  Ak<-HRUtab$newarea[k]
+                  Ai<-HRUtab$newarea[i]
 
-                HRUtab$newarea[k]<-Ai+Ak
-                HRUtab$newarea[i]<-0.0
-                rem2<-rem2+1
+                  HRUtab$Latitude[k]<-(HRUtab$Latitude[k]*Ak+HRUtab$Latitude[i]*Ai)/(Ai+Ak)
+                  HRUtab$Longitude[k]<-(HRUtab$Longitude[k]*Ak+HRUtab$Longitude[i]*Ai)/(Ai+Ak)
+                  HRUtab$Slope[k]<-(HRUtab$Slope[k]*Ak+HRUtab$Slope[i]*Ai)/(Ai+Ak)
+                  # HRUtab$Aspect[k]<-(HRUtab$Aspect[k]*Ak+HRUtab$Aspect[i]*Ai)/(Ai+Ak)
+
+                  HRUtab$newarea[k]<-Ai+Ak
+                  HRUtab$newarea[i]<-0.0
+                  rem2<-rem2+1
+                }
+                else{
+                  HRUtab$similar[i]<-0
+                }
               }
-              else{
-                HRUtab$similar[i]<-0
+            }
+          }
+        }
+      }
+
+    } else {
+
+      # modify dfgrid at the same time
+
+      # for (i in 1:nrow(HRUtab))# old line
+      for (i in 1:(nrow(HRUtab)-1)) {
+        if (i %% 100==0){print(i)}
+        for (k in (i+1):nrow(HRUtab)) {  # change to check current row against all upcoming rows, and ensure that k != i for all i
+          if (HRUtab$SBID[i]==HRUtab$SBID[k]){ # kept separate for speed
+            if (HRUtab$LandUse[i]==HRUtab$LandUse[k])  {
+              if ((HRUtab$remove[i]!=TRUE) & (HRUtab$remove[k]!=TRUE)){
+                if  ((HRUtab$Vegetation[i]==HRUtab$Vegetation[k]) &
+                     (HRUtab$SoilProfile[i]==HRUtab$SoilProfile[k]) &
+                     (HRUtab$Terrain[i]==HRUtab$Terrain[k]) &
+                     (HRUtab$Aquifer[i]==HRUtab$Aquifer[k]) &
+                     !(HRUtab$ID[i] %in% ProtectedHRUList) &
+                     !(HRUtab$ID[k] %in% ProtectedHRUList) &
+                     (abs(HRUtab$Elevation[i]-HRUtab$Elevation[k])<elev_tol) &
+                     (abs(HRUtab$Slope[i]-HRUtab$Slope[k])<slope_tol) &
+                     ((abs(HRUtab$Aspect[i]-HRUtab$Aspect[k])<aspect_tol) |
+                      (abs(HRUtab$Aspect[i]-HRUtab$Aspect[k]-360)<aspect_tol) |
+                      (abs(HRUtab$Aspect[i]-HRUtab$Aspect[k]+360)<aspect_tol))
+                )
+                {
+                  HRUtab$similar[i]<-HRUtab$ID[k]
+                  HRUtab$remove[i]<-TRUE
+                  Ak<-HRUtab$newarea[k]
+                  Ai<-HRUtab$newarea[i]
+
+                  HRUtab$Latitude[k]<-(HRUtab$Latitude[k]*Ak+HRUtab$Latitude[i]*Ai)/(Ai+Ak)
+                  HRUtab$Longitude[k]<-(HRUtab$Longitude[k]*Ak+HRUtab$Longitude[i]*Ai)/(Ai+Ak)
+                  HRUtab$Slope[k]<-(HRUtab$Slope[k]*Ak+HRUtab$Slope[i]*Ai)/(Ai+Ak)
+                  # HRUtab$Aspect[k]<-(HRUtab$Aspect[k]*Ak+HRUtab$Aspect[i]*Ai)/(Ai+Ak)
+
+                  HRUtab$newarea[k]<-Ai+Ak
+                  HRUtab$newarea[i]<-0.0
+                  rem2<-rem2+1
+
+                  ## update dfgrid where HRUID is the one to be removed with the new one
+                  # changes the HRUID in dfgrid to the new HRU ID, such that it will be grouped
+                  # and recomputed later
+                  dfgrid[dfgrid$HRUID == HRUtab$ID[i],]$HRUID <- HRUtab$ID[k]
+
+                }
+                else{
+                  HRUtab$similar[i]<-0
+                }
               }
             }
           }
         }
       }
     }
+
   }
 
   # finalize changes
@@ -145,6 +221,26 @@ rvn_rvh_cleanhrus <- function(HRUtab, SBtab, area_tol=0.01, merge=FALSE,
   # return to order by HRUID
   HRUtab<-HRUtab[with(HRUtab, order(ID)),]
 
+  ## clean up gridweights
+  HRUID <- GRIDID <- WEIGHT <-  NULL  # declaration for CRAN passing
+  if (!is.null(gridweights)) {
+    # update gridweights with checks as needed
+    # merge possible duplicate HRUID/GRIDID pairs, sum weights
+    dfgrid %>%
+      group_by(HRUID, GRIDID) %>%
+      summarise(WEIGHT = sum(WEIGHT), .groups = 'drop') %>%
+      as.data.frame() -> dfgrid
+
+    # rescale weights to ensure weights sum to 1
+    for (hh in unique(dfgrid$HRUID)) {
+      dfgrid[dfgrid$HRUID == hh,]$WEIGHT <-
+        dfgrid[dfgrid$HRUID == hh,]$WEIGHT / sum(dfgrid[dfgrid$HRUID == hh,]$WEIGHT)
+      # if (sum(temp$WEIGHT) != 1) {print(sprintf("hh=%s not equal to 1", hh))}
+    }
+
+    gridweights$dfgrid <- dfgrid
+  }
+
   #report results
   #-----------------------------------------------------------
   print(paste0("HRU table Cleaned. #HRUs reduced from ",toString(init_nHRUs)," to ",toString(nrow(HRUtab)) ))
@@ -155,5 +251,13 @@ rvn_rvh_cleanhrus <- function(HRUtab, SBtab, area_tol=0.01, merge=FALSE,
   print(paste0("Initial area: ",toString(init_Area)," km2;  final area: ",toString(sum(HRUtab$Area)) ," km2"))
 
   #  return (list(HRUtable=HRUtab)) # should also return re-classification information (e.g., similarity list for plotting results)
-  return(data.frame(HRUtab))
+
+
+  if (is.null(gridweights)) {
+    return(data.frame(HRUtab))
+  } else {
+    return(list("hrutab"=data.frame(HRUtab),
+           "gridweights"=gridweights))
+  }
+
 }

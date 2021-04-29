@@ -1,7 +1,7 @@
 #' @title Generate Blank Raven SubBasin DataFrame
 #'
 #' @description
-#' Generates a blank data frame for Raven subbasin properties.
+#' Generates a blank data frame for Raven subbasin properties. Compatible with \code{\link{rvn_rvh_write}}.
 #'
 #' @param nSubBasins Number of SubBasins in model, used to determine number of rows in table (default = 1)
 #'

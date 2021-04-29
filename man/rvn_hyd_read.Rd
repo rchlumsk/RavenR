@@ -4,7 +4,7 @@
 \alias{rvn_hyd_read}
 \title{Read in Raven Hydrograph file}
 \usage{
-rvn_hyd_read(ff = NA, tzone = NULL)
+rvn_hyd_read(ff = NA, tzone = "UTC")
 }
 \arguments{
 \item{ff}{full file path to the Hydrographs.csv file}
@@ -34,8 +34,8 @@ sufficient.
 
 tzone is a string indicating the timezone of the supplied Hydrographs file. The
 timezone provided is coded into the resulting hyd data frame using the as.POSIXct
-function. If no timezone is provided, this is left as an empty string, and is
-determined by the function as the current time zone.
+function. The timezone is provided as "UTC" by default, and should be adjusted by
+the user to the local time zone as needed, based on the model run.
 }
 \examples{
 # read in hydrograph sample csv data from RavenR package

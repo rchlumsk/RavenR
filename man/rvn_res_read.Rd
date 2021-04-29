@@ -4,7 +4,7 @@
 \alias{rvn_res_read}
 \title{Read in Raven ReservoirStages file}
 \usage{
-rvn_res_read(ff = NA, tzone = NULL)
+rvn_res_read(ff = NA, tzone = "UTC")
 }
 \arguments{
 \item{ff}{full file path to the ReservoirStages.csv file}
@@ -31,6 +31,9 @@ here, for example sub24.
 ff is the full file path of the ReservoirStages.csv file. If the file is
 located in the current working directory, then simply the name of the file
 is sufficient.
+
+The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
+the user to the local time zone as needed, based on the model run.
 }
 \examples{
 # create full file path

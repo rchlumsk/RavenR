@@ -79,7 +79,11 @@ rvn_rvt_write <- function(ts, params, units, dates=NULL, prd=NULL,
   # change all NA values to Raven NA (-1.2345)
   ts[is.na(ts)] = -1.2345
 
-  fc <- file(paste0(ff,".rvt"),open='wt')
+  #-- Correct file extension if not included
+  if (rvn_substrRight(ff,4) != ".rvt") {
+    ff <- paste0(ff,".rvt")
+  }
+  fc <- file(ff, open='wt')
   writeLines(":MultiData",fc)
   writeLines(sprintf('%s %s %.2f %i', min_date, tt, dt, nrow(ts)), fc)
   writeLines(params,fc)

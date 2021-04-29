@@ -545,3 +545,52 @@ rvn_stringpad <- function(string, width, just='r')
     return(paste0(string, strrep(' ', padlength)))
   }
 }
+
+#' @title \%notin\% operator
+#'
+#' @description
+#' Syntax for the opposite of \%in\%
+#'
+#' @usage lhs \%notin\% rhs
+#' @examples
+#' seq(1,5,1) %notin% seq(3,7,1)
+#'
+#' @export
+"%notin%" <- function(x, table) match(x, table, nomatch = 0) == 0
+
+
+#' @title Fortify xts object to specific format
+#'
+#' @description
+#' Applies the fortify function to an xts object and updates the Index character
+#' column to a date column called 'Date'.
+#'
+#' @details
+#' This function is useful in preparing data to plotting or other tidy-style analysis.
+#' This function is used internally in many RavenR plotting functions.
+#'
+#' @param x xts formatted object to fortify to tibble
+#'
+#' @return tibble format of the xts data
+#'
+#' @examples
+#' ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
+#' hyd <- rvn_hyd_read(ff)$hyd
+#' hyd_fortified <- rvn_fortify_xts(hyd)
+#' head(hyd_fortified)
+#'
+#' @export rvn_fortify_xts
+#' @importFrom ggplot2 fortify
+rvn_fortify_xts <- function(x)
+{
+  if ("xts" %notin% class(x)) {
+    stop("x must be of class xts.")
+  }
+
+  y <- fortify(x)
+  colnames(y) <- c("Date",colnames(y)[-1])
+  y$Date <- as.Date(y$Date)
+  return(y)
+}
+
+

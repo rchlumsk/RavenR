@@ -4,7 +4,7 @@
 \alias{rvn_watershedmeb_read}
 \title{Read in Raven WatershedMassEnergyBalance file}
 \usage{
-rvn_watershedmeb_read(ff = NA, tzone = NULL)
+rvn_watershedmeb_read(ff = NA, tzone = "UTC")
 }
 \arguments{
 \item{ff}{full file path to the WatershedMassEnergyBalance.csv file}
@@ -31,6 +31,9 @@ handled, which is not as straightforward as some of the other Raven files.
 ff is the full file path of the WatershedMassEnergyBalance.csv file. If the
 file is located in the current working directory, then simply the name of
 the file is sufficient.
+
+The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
+the user to the local time zone as needed, based on the model run.
 }
 \examples{
 # locate RavenR Watershed Mass Energy Balance storage file
