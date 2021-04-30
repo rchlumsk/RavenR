@@ -313,6 +313,7 @@ Similar support for the `weathercan` package to write gauge forcing data exists 
 
 ## load RavenR package sample data
 data(rvn_weathercan_sample)
+kam <- rvn_weathercan_sample
 
 ## basic use, override filename to temporary file
 ## default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
