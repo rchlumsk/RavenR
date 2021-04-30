@@ -21,4 +21,6 @@
 #'
 #' @seealso \code{\link{rvn_rvt_tidyhydat}} for writing rvt files from tidyhydat data
 #'
+#' @source \url{https://wateroffice.ec.gc.ca/search/historical_e.html}
+#'
 "rvn_tidyhydat_sample"

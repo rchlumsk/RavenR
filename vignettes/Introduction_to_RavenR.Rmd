@@ -286,12 +286,12 @@ Here, we use sample data from the `tidyhydat` function, and write this to an rvt
 ```{r Write rvt file for flow observation data, message=FALSE, warning=FALSE, eval=FALSE}
 stations <- c("05CB004","05CA002")
 
-# Gather station data/info using tidyhydat functions
+## Gather station data/info using tidyhydat functions
 # library(tidyhydat)
 # hd <- tidyhydat::hy_daily_flows(station_number = stations,
 #  start_date = "1996-01-01", end_date = "1997-01-01")
 
-# load RavenR package sample data
+## load RavenR package sample data
 data(rvn_tidyhydat_sample)
 hd <- rvn_tidyhydat_sample
 
@@ -303,7 +303,23 @@ rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
   filename=c(tf1,tf2))
 ```
 
-Similar support for the `weathercan` package to write gauge forcing data exists within the `RavenR` package through the `rvn_rvt_ECmet` function. 
+Similar support for the `weathercan` package to write gauge forcing data exists within the `RavenR` package through the `rvn_rvt_ECmet` function. The `rvn_rvt_ECmet` function currently has two options for writing sets of forcing data. Here, we use the first option to write the total precipitation, maximum daily temperature, and minimum daily temperature from the 'Kamloops A' station to a Raven-compliant rvt format. The station metadata, also required for Raven gauge forcing data, is written to file when `write_stndata` is TRUE. The sample data obtained from the `weathercan` package is used here once again, but you are encouraged to try obtaining the data from the `weathercan` package directly using the commented out commands below. 
+
+```{r write rvt file for meteorological data, message=FALSE, warning=FALSE}
+## Obtain data using the weathercan package
+# library(weathercan)
+# kam <- weather_dl(station_ids = 51423,
+#                   start = "2016-10-01", end = "2019-09-30", interval="day")
+
+## load RavenR package sample data
+data(rvn_weathercan_sample)
+
+## basic use, override filename to temporary file
+## default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
+result <- rvn_rvt_ECmet(metdata = kam, forcing_set = 1,
+                        write_stndata = TRUE)
+```
+
 
 \newpage  
 

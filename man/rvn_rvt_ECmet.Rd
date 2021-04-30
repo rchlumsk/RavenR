@@ -109,13 +109,12 @@ of RavenR.
 }
 \examples{
 
-# note: Environment Canada is currently experiencing issues in supporting data downloads
-
-\dontrun{
-# Download data using weathercan weather_dl
-library(weathercan)
-kam <- weather_dl(station_ids = 51423,
+# note: example modified to avoid using weathercan directly, uses saved
+## weathercan data from RavenR package sample data
+# library(weathercan)
+# kam <- weather_dl(station_ids = 51423,
                   start = "2016-10-01", end = "2019-09-30", interval="day")
+data(rvn_weathercan_sample)
 
 # basic use, override filename to temporary file
 # default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
@@ -126,7 +125,6 @@ rvn_rvt_ECmet(metdata = kam, forcing_set = 1,
 # default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
 rvn_rvt_ECmet(metdata = kam, forcing_set = 2,
   filename = file.path(tempdir(), "rvn_rvt_ECmetfile2.rvt"))
- }
 
 }
 \seealso{

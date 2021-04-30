@@ -14,6 +14,9 @@ rvn_tidyhydat_sample is a tibble with 671 rows, and 5 columns.
   \item{Symbol}{additional data flags provided by WSC}
 }
 }
+\source{
+\url{https://wateroffice.ec.gc.ca/search/historical_e.html}
+}
 \usage{
 rvn_tidyhydat_sample
 }

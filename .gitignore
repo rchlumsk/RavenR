@@ -2,9 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-
 *.pdf
 *.html
-
-doc
-Meta
