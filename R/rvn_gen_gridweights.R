@@ -12,7 +12,9 @@
 #' and area[k][g] is the area of HRU k that is within cell g.
 #'
 #' By definition, the grid domain has to completely cover the HRU domain such that the sum of
-#' wt[k][g] for any k, over all g, is 1.0
+#' wt[k][g] for any k, over all g, is 1.0. However, the script currently normalizes weights such that
+#' all weights will sum to 1 for all HRUs where any portion of the HRU is overlapping with one or more
+#' grid cells.
 #'
 #' @details
 #' Not a tonne of QA/QC is currently included - can fail due to bad netCDF file or inappropriate UTM zone;
@@ -25,8 +27,8 @@
 #' write the grid weights file using the \code{\link{rvn_gridweights_write}} function. If outfile is provided,
 #' the \code{\link{rvn_gridweights_write}} function is called internally to write the gridweights file.
 #'
-#' @param HRUshpfile polygon shapefile of HRUs with data column containing HRU IDs (.shp extension expected)
-#' @param Gridshpfile polygon shapefile of grid cells with data column containing cell IDs (.shp extension expected)
+#' @param HRUshpfile polygon shapefile (as sf or file path) of HRUs with data column containing HRU IDs (.shp extension expected)
+#' @param Gridshpfile polygon shapefile (as sf or file path) of grid cells with data column containing cell IDs (.shp extension expected)
 #' @param ValidHRUIDs a vector of valid HRU IDs in the model
 #' @param HRUIDcol the name of the HRUshpfile polygon which contains the HRU IDs
 #' @param gridIDcol the name of the Gridshpfile polygon which contains the cell IDs
@@ -50,27 +52,21 @@
 #' rvh$HRUtable$Area <- rvh$SBtable$Area
 #' rvh$HRUtable$ID <- rvh$HRUtable$SBID
 #'
-#' # define HRU shapefile (use subbasin shapefile for example)
-#' HRUshpfile <- system.file("extdata","Nith_shapefile_sample.shp",package = "RavenR")
+#' # define HRU shapefile path (use subbasin shapefile for example)
+#' hrushpfile <- system.file("extdata","Nith_shapefile_sample.shp",package = "RavenR")
 #'
-#' # write grid shapefile from netcdf file
+#' # get grid shapefile from netcdf file
 #' nithnc <- system.file("extdata/Nith_era5_sample.nc", package="RavenR")
-#' Gridshpfile <- file.path(tempdir(), "Nith_gridcells.shp")
-#' myshp <- rvn_netcdf_to_gridshp(ncfile=nithnc, projID=26917, outshp=Gridshpfile)
+#' gridshp <- rvn_netcdf_to_gridshp(ncfile=nithnc, projID=26917)
 #'
-#' # generate .rvt file of grid weights
-#' ValidHRUIDs <- rvh$HRUtable$ID
-#' tfout <- file.path(tempdir(), "Nith_GridWeights.rvt")
-#' rvn_gen_gridweights(HRUshpfile, Gridshpfile, ValidHRUIDs,
-#' gridIDcol = 'GridIDs', HRUIDcol = "subID", outfile = tfout)
+#' # calculate gridweights
+#' gw <- rvn_gen_gridweights(hrushpfile, gridshp,
+#' gridIDcol = 'GridIDs', HRUIDcol = "subID")
 #'
 #'
 #' @export rvn_gen_gridweights
-#' @importFrom rgdal readOGR
-#' @importFrom rgeos gBuffer gIntersection
-#' @importFrom methods slot
 #' @importFrom raster crs
-#' @importFrom sf st_crs
+#' @importFrom sf st_crs read_sf st_buffer st_intersection st_area
 #' @importFrom dplyr group_by summarise
 rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs=NULL, HRUIDcol="HRU_ID",
                                 gridIDcol="GridIDs", outfile=NULL)
@@ -78,11 +74,25 @@ rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs=NULL, HRUID
 
   # read in HRU file
   #----------------------------------------------------------
-  dsn=normalizePath(dirname(HRUshpfile))
-  lay=substr(basename(HRUshpfile),1,nchar(basename(HRUshpfile))-4)
-  HRUshp<-readOGR(dsn = dsn,layer = lay) # returns SpatialPolygonsDataFrame
+  if ("sf" %in% class(HRUshpfile)) {
+    HRUshp <- HRUshpfile
+
+    # file path provided, read in shapefile
+  } else if (class(HRUshpfile) == "character") {
+
+    if (file.exists(HRUshpfile)) {
+      HRUshp <- read_sf(HRUshpfile)
+    } else {
+      stop(sprintf("HRUshpfile '%s' not found.",HRUshpfile))
+    }
+  }
+
+  # dsn=normalizePath(dirname(HRUshpfile))
+  # lay=substr(basename(HRUshpfile),1,nchar(basename(HRUshpfile))-4)
+  # HRUshp <- readOGR(dsn = dsn,layer = lay) # returns SpatialPolygonsDataFrame
   # HRUshp <- read_sf(HRUshpfile)
-  if (!(HRUIDcol %in% colnames(HRUshp@data))){
+
+  if (!(HRUIDcol %in% colnames(HRUshp))){
     print(paste0("HRU ID column name ",HRUIDcol,"is not in shapefile ",HRUshpfile))
     return()
   }
@@ -99,11 +109,25 @@ rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs=NULL, HRUID
 
   # read in Grid file
   #---------------------------------------------------------
-  dsn=normalizePath(dirname(Gridshpfile))
-  lay=substr(basename(Gridshpfile),1,nchar(basename(Gridshpfile))-4)
-  GRDshp<-readOGR(dsn = dsn,layer = lay) # returns SpatialPolygonsDataFrame
+  if ("sf" %in% class(Gridshpfile)) {
+    GRDshp <- Gridshpfile
+
+    # file path provided, read in shapefile
+  } else if (class(Gridshpfile) == "character") {
+
+    if (file.exists(HRUshpfile)) {
+      GRDshp <- read_sf(Gridshpfile)
+    } else {
+      stop(sprintf("Gridshpfile '%s' not found.",Gridshpfile))
+    }
+  }
+
+  # dsn=normalizePath(dirname(Gridshpfile))
+  # lay=substr(basename(Gridshpfile),1,nchar(basename(Gridshpfile))-4)
+  # GRDshp<-readOGR(dsn = dsn,layer = lay) # returns SpatialPolygonsDataFrame
   # GRDshp <- read_sf(Gridshpfile)
-  if (!(gridIDcol %in% colnames(GRDshp@data))){
+
+  if (!(gridIDcol %in% colnames(GRDshp))){
     print(paste0("Grid cell column name ",gridIDcol,"is not in shapefile ",Gridshpfile))
     return()
   }
@@ -116,19 +140,23 @@ rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs=NULL, HRUID
 
   # calculate areas of shapes (presumes non-geographic coordinates)
   #----------------------------------------------------------
-  HRUshp$HRUarea <-sapply(slot(HRUshp, "polygons"), slot, "area")
-  GRDshp$Gridarea<-sapply(slot(GRDshp, "polygons"), slot, "area")
-  #HRUshp$polygons is a SpatialPolygons datatype [sp]
+  # HRUshp$HRUarea <-sapply(slot(HRUshp, "polygons"), slot, "area")
+  # GRDshp$Gridarea<-sapply(slot(GRDshp, "polygons"), slot, "area")
+  HRUshp$HRUarea <- as.numeric(st_area(HRUshp))
+  # GRDshp$Gridarea <- st_area(GRDshp)
 
   # intersect HRUs and Grids after repairing HRU file structure
   #----------------------------------------------------------
   print("fixing")
-  HRUshp <- gBuffer(HRUshp, byid=TRUE, width=0) # returns SpatialPolygonsDataFrame
-  GRDshp <- gBuffer(GRDshp, byid=TRUE, width=0) # returns SpatialPolygonsDataFrame
+  # HRUshp <- gBuffer(HRUshp, byid=TRUE, width=0) # returns SpatialPolygonsDataFrame
+  # GRDshp <- gBuffer(GRDshp, byid=TRUE, width=0) # returns SpatialPolygonsDataFrame
+  HRUshp <- st_buffer(HRUshp, dist=0)
+  GRDshp <- st_buffer(GRDshp, dist=0)
   print("...done fixing")
 
   print("intersecting...")
-  isect<-gIntersection(HRUshp, GRDshp, byid=TRUE)
+  # isect<-gIntersection(HRUshp, GRDshp, byid=TRUE)
+  isect <- sf::st_intersection(HRUshp, GRDshp)
   if (is.null(isect)){
     print("Cannot create gaugeweights file - HRU and grid shapefiles don't overlap ")
     return()
@@ -145,42 +173,77 @@ rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs=NULL, HRUID
 
   # calculate new area of shapes
   #----------------------------------------------------------
-  isect$iarea<-sapply(slot(isect, "polygons"), slot, "area")
+  # isect$iarea<-sapply(slot(isect, "polygons"), slot, "area")
+  isect$iarea <- as.numeric(st_area(isect))
 
   # extract HRU and grid indices from gIntersection-generated 'ID' field
   #----------------------------------------------------------
-  isect$id   <-sapply(slot(isect, "polygons"), slot, "ID")
-  for (k in 1:nrow(isect)) {
-    isect$hindex[k]<-as.numeric(strsplit(isect$id[k], " ")[[1]][1])+1
-    isect$gindex[k]<-as.numeric(strsplit(isect$id[k], " ")[[1]][2])+1
-  }
+  # isect$id   <-sapply(slot(isect, "polygons"), slot, "ID")
+  # for (k in 1:nrow(isect)) {
+  #   isect$hindex[k]<-as.numeric(strsplit(isect$id[k], " ")[[1]][1])+1
+  #   isect$gindex[k]<-as.numeric(strsplit(isect$id[k], " ")[[1]][2])+1
+  # }
 
   # compute Gridweights data frame
   #----------------------------------------------------------
   # wtsum <-rep(0.0,nrow(HRUshp))
-  dfgrid <- data.frame(matrix(NA,nrow=nrow(isect),ncol=3))
-  colnames(dfgrid) <- c("HRUID","GRIDID","WEIGHT")
-  for (i in 1:nrow(isect)) {
-    wt<-0
-    k<-isect$hindex[i] # HRU index
-    g<-isect$gindex[i] # grid cell index
-    if ((k>=1) & (k<=nrow(HRUshp))) {
-      # for each HRU, wt[k][g]=area[k][g]/area[k]
+  # dfgrid <- data.frame(matrix(NA,nrow=nrow(isect),ncol=3))
+  # colnames(dfgrid) <- c("HRUID","GRIDID","WEIGHT")
 
-      if (HRUshp$HRUarea[k]>0){
-        wt<-isect$iarea[i] / HRUshp$HRUarea[k]
-      }
-      if (wt>0){
-        HRUID <- as.numeric(HRUshp[[HRUIDcol]][k])
-        GridID <- as.numeric(GRDshp[[gridIDcol]][g])
-        # if (HRUID %in% ValidHRUIDs){
-          # write(paste("  ",HRUID," ",GridID ," ",wt),append=TRUE,file=outfile)
-        dfgrid[i,] <- c(HRUID, GridID, wt)
-        # }
-        # wtsum[k]<-wtsum[k]+wt
-      }
-    }
-  }
+  # dfgrid <- data.frame("HRUID"=NA, "GRIDID"=NA, "WEIGHT"=NA,
+                       # nrow=0)
+
+  ## simplifying script - just get all rows, calculate initial weights, aggregate and normalize afterwards
+
+
+  dfgrid <- data.frame(isect[[HRUIDcol]],
+                       isect[[gridIDcol]],
+                       isect$iarea / isect$HRUarea)
+
+  # dfgrid <- data.frame(matrix(NA,nrow=0,ncol=3))
+  colnames(dfgrid) <- c("HRUID","GRIDID","WEIGHT")
+
+  ## to do - add check for non-overlapping areas, option/flag on whteher to normalize
+
+
+  # # get list of hrus in the intersection and cross-ref with ValidHRUIDs
+  # hrus <- unique(isect[[HRUIDcol]])
+  # hrus <- hrus[which(hrus %in% ValidHRUIDs)]
+
+  # for each hrus, get all gridweights and bind with dfgrid
+
+  # for (hru in hrus) {
+  #   dfgrid_temp <- data.frame(matrix(NA,nrow=0,ncol=3))
+  #   colnames(dfgrid_temp) <- c("HRUID","GRIDID","WEIGHT")
+  #
+  #   temp <- isect[isect[[HRUIDcol]] == hru,]
+  #   temp$WEIGHT <- temp
+  #
+  #
+  # }
+
+
+  # for (i in 1:nrow(isect)) {
+  #   wt<-0
+  #   k<-isect$hindex[i] # HRU index
+  #   g<-isect$gindex[i] # grid cell index
+  #   if ((k>=1) & (k<=nrow(HRUshp))) {
+  #     # for each HRU, wt[k][g]=area[k][g]/area[k]
+  #
+  #     if (HRUshp$HRUarea[k]>0){
+  #       wt<-isect$iarea[i] / HRUshp$HRUarea[k]
+  #     }
+  #     if (wt>0){
+  #       HRUID <- as.numeric(HRUshp[[HRUIDcol]][k])
+  #       GridID <- as.numeric(GRDshp[[gridIDcol]][g])
+  #       # if (HRUID %in% ValidHRUIDs){
+  #         # write(paste("  ",HRUID," ",GridID ," ",wt),append=TRUE,file=outfile)
+  #       dfgrid[i,] <- c(HRUID, GridID, wt)
+  #       # }
+  #       # wtsum[k]<-wtsum[k]+wt
+  #     }
+  #   }
+  # }
 
   # merge/update/rescale Gridweights data frame
   #----------------------------------------------------------
@@ -210,7 +273,7 @@ rvn_gen_gridweights <- function(HRUshpfile, Gridshpfile, ValidHRUIDs=NULL, HRUID
        "GridWeights"=dfgrid)
 
 
-  # write Gridweights file
+  # write Gridweights file (if provided)
   #----------------------------------------------------------
 
   if (!is.null(outfile)) {

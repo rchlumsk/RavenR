@@ -13,7 +13,7 @@
 #' @param slope_tol slope difference (in degrees) considered similar. only used if merge=TRUE.
 #' @param aspect_tol slope difference (in degrees) considered similar. only used if merge=TRUE.
 #' @param ProtectedHRUList list of HRU IDs that are sacrosanct (not to be removed)
-#' @param gridweights a list for gridweights, as returned from \code{\link{rvn_gridweights_read}}
+#' @param gridweights a list for gridweights, as produced by rvn_gridweights_read (in dev)
 #' or \code{\link{rvn_gen_gridweights}}, to modify as HRUs are simplified
 #'
 #' @details
@@ -30,7 +30,6 @@
 #' made to the hru table.
 #'
 #' @return \item{hru_table}{cleaned HRU table as a dataframe}
-#' \item{list}{xxx}
 #'
 #' @author James R. Craig, University of Waterloo
 #'
@@ -40,7 +39,6 @@
 #'
 #' @examples
 #'
-#' \dontrun{
 #' # read in example rvh file
 #' nith <- system.file("extdata","Nith.rvh",package = "RavenR")
 #' rvh <- rvn_rvh_read(nith)
@@ -50,7 +48,7 @@
 #'
 #' # clean contents (in this case, remove all HRUs covering less than 5% of the total area)
 #' rvh$HRUtable <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
-#' }
+#'
 #'
 #' @export rvn_rvh_cleanhrus
 #' @importFrom stats aggregate

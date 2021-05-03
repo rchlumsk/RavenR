@@ -9,6 +9,8 @@ rvn_rvt_read(filename, tzone = "UTC")
 \arguments{
 \item{filename}{the name of the .rvt file (with .rvt extension included ), either relative
 to the working directory or absolute.}
+
+\item{tzone}{string indicating the timezone of the data provided in filename (default "UTC")}
 }
 \value{
 Returns an xts time series with at least one dataset (multiple for :MultiData files)

@@ -4,7 +4,12 @@
 \alias{\%notin\%}
 \title{\%notin\% operator}
 \usage{
-lhs \%notin\% rhs
+x \%notin\% table
+}
+\arguments{
+\item{x}{values to be matched}
+
+\item{table}{the values to be matched against}
 }
 \description{
 Syntax for the opposite of \%in\%

@@ -9,7 +9,7 @@ rvn_hyd_read(ff = NA, tzone = "UTC")
 \arguments{
 \item{ff}{full file path to the Hydrographs.csv file}
 
-\item{tzone}{string indicating the timezone of the data in ff}
+\item{tzone}{string indicating the timezone of the data in ff (default "UTC")}
 }
 \value{
 \item{hyd}{data frame from the file with standardized names}

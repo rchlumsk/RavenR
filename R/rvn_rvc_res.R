@@ -47,7 +47,7 @@ rvn_rvc_res <- function(ff, initial_percent=0.0, output="initial_res_conditions.
   resdf <- res$res
 
   # initiate files
-  fc2 <- file(output, open='w+a')
+  fc2 <- file(output, open='w+')
   writeLines(c('# Initial conditions for reservoirs in a Raven model',
                '# Copy + Paste these lines into the rvc file',
                '#'), fc2)

@@ -51,7 +51,6 @@
 #' @importFrom sp coordinates proj4string spTransform Polygons Polygon SpatialPolygonsDataFrame SpatialPolygons CRS
 #' @importFrom sf st_write
 #' @importFrom deldir deldir tile.list
-#' @importFrom methods slot
 #' @importFrom ncdf4 nc_open ncvar_get
 rvn_netcdf_to_gridshp <- function(ncfile,projID=NULL,outshp=NULL)
 {

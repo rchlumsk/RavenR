@@ -6,10 +6,6 @@
 #'
 #' @details
 #'
-#' Note - v2 of this function simply extracts all columns related to the given
-#' subbasin, and returns the xts formatted data frame (rather than a list of individual series).
-#'
-#'
 #' rvn_hyd_extract is used to extract the modelled and observed data from a Raven
 #' hydrograph object by name reference. It is also easy to create plots of
 #' modelled and observed data using this function. The simulated and observed
@@ -34,6 +30,8 @@
 #' @param subs column name for plotting/extracting
 #' @param hyd full hydrograph data frame (including units) produced by hyd.read
 #' @param prd time period for plotting, as string. See details
+#' @param rename_cols boolean for whether to rename columns to generic terms (sim, obs, etc.) or leave
+#' column names as they appear in hyd
 #' @return returns an xts object with sim, obs, inflow, and obs_inflow time series (if available)
 #'  \item{sim}{model simulation for specified column and period}
 #'  \item{obs}{observed data for specified column and period}
@@ -78,7 +76,7 @@ rvn_hyd_extract <- function(subs=NA, hyd=NA, prd=NULL, rename_cols=TRUE) {
     stop("hyd is required for this function; please supply the full output file from hyd.read.")
   }
 
-  # mysub <- NULL
+  mysub <- ind <- NULL
 
   hydrographs <- hyd$hyd
   units <- hyd$units
@@ -104,7 +102,7 @@ rvn_hyd_extract <- function(subs=NA, hyd=NA, prd=NULL, rename_cols=TRUE) {
   ind.obsinflow <- tempgrep(mysub.obsinflow,mycols)
 
   ind_names <- c("sim","obs","resinflow","obs_resinflow")
-  # ind <- c(ind.sim,ind.obs,ind.inflow,ind.obsinflow)
+  ind <- c(ind.sim,ind.obs,ind.inflow,ind.obsinflow)
 
   dfnames <- data.frame("ind_names"=ind_names,
              "ind"=c(ind.sim,ind.obs,ind.inflow,ind.obsinflow))

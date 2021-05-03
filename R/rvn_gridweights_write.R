@@ -23,22 +23,20 @@
 #' rvh$HRUtable$Area <- rvh$SBtable$Area
 #' rvh$HRUtable$ID <- rvh$HRUtable$SBID
 #'
-#' # define HRU shapefile (use subbasin shapefile for example)
-#' HRUshpfile <- system.file("extdata","Nith_shapefile_sample.shp",package = "RavenR")
+#' # define HRU shapefile path (use subbasin shapefile for example)
+#' hrushpfile <- system.file("extdata","Nith_shapefile_sample.shp",package = "RavenR")
 #'
-#' # write grid shapefile from netcdf file
+#' # get grid shapefile from netcdf file
 #' nithnc <- system.file("extdata/Nith_era5_sample.nc", package="RavenR")
-#' Gridshpfile <- file.path(tempdir(), "Nith_gridcells.shp")
-#' myshp <- rvn_netcdf_to_gridshp(ncfile=nithnc, projID=26917, outshp=Gridshpfile)
+#' gridshp <- rvn_netcdf_to_gridshp(ncfile=nithnc, projID=26917)
 #'
-#' # generate .rvt file of grid weights
-#' ValidHRUIDs <- rvh$HRUtable$ID
-#' tfout <- file.path(tempdir(), "Nith_GridWeights.rvt")
-#' gw <- rvn_gen_gridweights(HRUshpfile, Gridshpfile, ValidHRUIDs,
+#' # calculate gridweights
+#' gw <- rvn_gen_gridweights(hrushpfile, gridshp,
 #' gridIDcol = 'GridIDs', HRUIDcol = "subID")
 #'
 #' # write the gridweights (gw) object to file
-#' rvn_gridweights_write(gw, outfile=file.path(tempdir(), "Nith_GridWeights.rvt"))
+#' tfout <- file.path(tempdir(), "Nith_GridWeights.rvt")
+#' rvn_gridweights_write(gw, outfile=tfout)
 #'
 #' @export rvn_gridweights_write
 rvn_gridweights_write <- function(gridweights=NULL, outfile="GridWeights.rvt") {

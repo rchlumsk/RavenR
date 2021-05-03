@@ -52,7 +52,7 @@ rvn_rvt_obsfile_irregular <- function(filename,ts,SBID,typestr="HYDROGRAPH", uni
                   year(ts), month(ts), day(ts),
                   hour(ts), minute(ts), second(ts),
                   ts[,1])) %>%
-  write(., file = filename, ncolumns=1,append = TRUE, sep = " ")
+  write(file = filename, ncolumns=1,append = TRUE, sep = " ")
   write(":EndIrregularObservations",append=TRUE,file=filename)
   return(TRUE)
 }

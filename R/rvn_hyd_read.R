@@ -24,7 +24,7 @@
 #' the user to the local time zone as needed, based on the model run.
 #'
 #' @param ff full file path to the Hydrographs.csv file
-#' @param tzone string indicating the timezone of the data in ff
+#' @param tzone string indicating the timezone of the data in ff (default "UTC")
 #' @return \item{hyd}{data frame from the file with standardized names}
 #' @seealso \code{\link{rvn_hyd_extract}} for extraction tools related to the
 #' rvn_hyd_read output file

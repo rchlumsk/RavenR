@@ -14,9 +14,9 @@ rvn_gen_gridweights(
 )
 }
 \arguments{
-\item{HRUshpfile}{polygon shapefile of HRUs with data column containing HRU IDs (.shp extension expected)}
+\item{HRUshpfile}{polygon shapefile (as sf or file path) of HRUs with data column containing HRU IDs (.shp extension expected)}
 
-\item{Gridshpfile}{polygon shapefile of grid cells with data column containing cell IDs (.shp extension expected)}
+\item{Gridshpfile}{polygon shapefile (as sf or file path) of grid cells with data column containing cell IDs (.shp extension expected)}
 
 \item{ValidHRUIDs}{a vector of valid HRU IDs in the model}
 
@@ -42,7 +42,9 @@ where wt[k][g] is the weight of cell g in HRU k, area[k] is the total area of HR
 and area[k][g] is the area of HRU k that is within cell g.
 
 By definition, the grid domain has to completely cover the HRU domain such that the sum of
-wt[k][g] for any k, over all g, is 1.0
+wt[k][g] for any k, over all g, is 1.0. However, the script currently normalizes weights such that
+all weights will sum to 1 for all HRUs where any portion of the HRU is overlapping with one or more
+grid cells.
 
 Not a tonne of QA/QC is currently included - can fail due to bad netCDF file or inappropriate UTM zone;
 uses rgdal and rgeos libraries, and the accuracy of the gIntersection() routine
@@ -65,19 +67,16 @@ rvh$HRUtable <- rvh$HRUtable[c(1,6,15,25),]
 rvh$HRUtable$Area <- rvh$SBtable$Area
 rvh$HRUtable$ID <- rvh$HRUtable$SBID
 
-# define HRU shapefile (use subbasin shapefile for example)
-HRUshpfile <- system.file("extdata","Nith_shapefile_sample.shp",package = "RavenR")
+# define HRU shapefile path (use subbasin shapefile for example)
+hrushpfile <- system.file("extdata","Nith_shapefile_sample.shp",package = "RavenR")
 
-# write grid shapefile from netcdf file
+# get grid shapefile from netcdf file
 nithnc <- system.file("extdata/Nith_era5_sample.nc", package="RavenR")
-Gridshpfile <- file.path(tempdir(), "Nith_gridcells.shp")
-myshp <- rvn_netcdf_to_gridshp(ncfile=nithnc, projID=26917, outshp=Gridshpfile)
+gridshp <- rvn_netcdf_to_gridshp(ncfile=nithnc, projID=26917)
 
-# generate .rvt file of grid weights
-ValidHRUIDs <- rvh$HRUtable$ID
-tfout <- file.path(tempdir(), "Nith_GridWeights.rvt")
-rvn_gen_gridweights(HRUshpfile, Gridshpfile, ValidHRUIDs,
-gridIDcol = 'GridIDs', HRUIDcol = "subID", outfile = tfout)
+# calculate gridweights
+gw <- rvn_gen_gridweights(hrushpfile, gridshp,
+gridIDcol = 'GridIDs', HRUIDcol = "subID")
 
 
 }
