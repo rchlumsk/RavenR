@@ -131,7 +131,6 @@ rvn_rvt_ECmet(metdata = kam, forcing_set = 2,
 \seealso{
 \code{\link{rvn_rvt_wsc}} to convert WSC flow gauge data to Raven format
 
-Download EC climate data from
-\href{https://climate.weather.gc.ca/historical_data/search_historic_data_e.html}{EC
-Historical Data}
+Download Environment Canada Historical weather data from (climate.weather.gc.ca), or use the
+`weathercan` package to access this data through R.
 }

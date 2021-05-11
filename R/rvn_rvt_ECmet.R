@@ -65,7 +65,6 @@
 #' weathercan package is external to RavenR and is not an explicit dependency
 #' of RavenR.
 #'
-#'
 #' @param metdata EC meteorological data from one or more stations (e.g., from weathercan::weather_dl())
 #' @param filename specified name of file to write to (optional)
 #' @param prd (optional) data period to use in .rvt file
@@ -81,9 +80,8 @@
 #'
 #' @seealso \code{\link{rvn_rvt_wsc}} to convert WSC flow gauge data to Raven format
 #'
-#' Download EC climate data from
-#' \href{https://climate.weather.gc.ca/historical_data/search_historic_data_e.html}{EC
-#' Historical Data}
+#' Download Environment Canada Historical weather data from (climate.weather.gc.ca), or use the
+#' `weathercan` package to access this data through R.
 #'
 #' @examples
 #'

@@ -2,7 +2,7 @@
 title: "Introduction to RavenR"
 author: "Robert Chlumsky, Dr. James R. Craig"
 date: "March 1, 2021"
-output: pdf_document
+output: html_document
 urlcolor: blue
 vignette: >
   %\VignetteIndexEntry{Introduction to RavenR}
@@ -16,7 +16,7 @@ editor_options:
 
 This short document is intended to get you started with using RavenR to aid your analysis with the Raven Hydrologic Modelling Framework. This tutorial will get you up and running with the RavenR package and comfortable running a few commands. Some knowledge or R is presumed in this document. If you are not comfortable with R, take a look at any number of R training and Introductory resources, such as the [tRaining repository](https://github.com/rchlumsk/tRaining)) on Github.
 
-This exercise will use the Nith River modelled output available from within the RavenR package, thus the functions to read in data from csv files are not required. However, it is recommended that you download the Nith river model files, and try to both run the model and read in the output files. The Nith river model can be downloaded from the  [Raven Tutorial #2](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html).
+This exercise will use the Nith River modelled output available from within the RavenR package, thus the functions to read in data from csv files are not required. However, it is recommended that you download the Nith river model files, and try to both run the model and read in the output files. The Nith river model can be downloaded from the [Raven Tutorial #2](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html).
 
 ## Getting Acquainted with RavenR
 
@@ -26,9 +26,9 @@ If you don't have RavenR yet installed in your R library, run the following comm
 install.packages("RavenR")
 ```
 
-For those interested in the latest versions of RavenR or in contributing to the development of RavenR, the package may be found on Github at \url{https://github.com/rchlumsk/RavenR}. Packages on Github may also be installed from within R using the `devtools` library.
+For those interested in the latest versions of RavenR or in contributing to the development of RavenR, the package may be found on [Github](https://github.com/rchlumsk/RavenR) at <https://github.com/rchlumsk/RavenR>. Packages on Github may also be installed from within R using the `devtools` library with the code below.
 
-```{r Installing RavenR from Github, eval=FALSE, include=FALSE}
+```{r Installing RavenR from Github, eval=FALSE, include=TRUE}
 # install.packages("devtools")
 library(devtools)
 devtools::install_github("rchlumsk/RavenR")
@@ -380,17 +380,15 @@ Modify the above script to generate png image plots of monthly subbasin-averaged
 
 Then, add a set of diagnostic plots related to the Hydrographs.csv file. For example, you may wish to compare annual peaks in the data or flow volumes.
 
-# Exercise 2 - Build Raven Input Files
+# Exercise 2 - Build Raven Input rvt Files
 
 If you have completed the workflow exercise above, you may build on the Introduction to R exercise from the earlier session to build Raven-compliant input files for the Raven River in Alberta. Using your knowledge of R and RavenR, undertake the following tasks using only R and a text file editor.
 
-* build an rvt file of observed hydrograph flows from the Raven River WSC gauge;  
-* build rvt file(s) for at least one meteorological gauge located close to the WSC gauge;  
-* create a plot of the model structure used for the Raven River model (in the Tutorial files);  
-* create a plot of the subbasin network from the rvh file in the Raven River model;  
-* determine the total upstream area of basin in the model; and  
-* use the custom output functions to determine the aridity index (P/PET) of the watershed.  
+* build an rvt file of observed hydrograph flows from the Raven River WSC gauge; and   
+* build rvt file(s) for at least one meteorological gauge located close to the WSC gauge.
 
 # Conclusion
 
-This tutorial is meant to serve as a brief introduction to the RavenR package. If you have any comments, suggestions or bug reports, please leave a note on the issues page of the Github project ([RavenR Github page](https://github.com/rchlumsk/RavenR)), email the authors of the package, or feel free to let us know on the [Raven forum](http://www.civil.uwaterloo.ca/raven_forum/). Additional Raven materials can be found on the [Raven downloads page](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html).
+This tutorial is meant to serve as a brief introduction to the RavenR package. If you have any comments, suggestions or bug reports, please leave a note on the issues page of the Github project ([RavenR Github page](https://github.com/rchlumsk/RavenR)), email the authors of the package, or feel free to let us know on the [Raven forum](http://www.civil.uwaterloo.ca/raven_forum/). 
+
+Additional Raven materials can be found on the [Raven downloads page](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html), and additional RavenR vignettes can be found on Github in the [vignettes folder](https://github.com/rchlumsk/RavenR/tree/master/vignettes).

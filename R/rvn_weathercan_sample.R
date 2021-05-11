@@ -13,6 +13,6 @@
 #'
 #' @seealso \code{\link{rvn_rvt_ECmet}} for writing rvt files from weathercan data
 #'
-#' @source \url{https://climate.weather.gc.ca/historical_data/search_historic_data_e.html}
+#'  @source Historical Climate Data from Environment Canada (climate.weather.gc.ca) via `weathercan` package
 #'
 "rvn_weathercan_sample"

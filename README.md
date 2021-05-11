@@ -1,7 +1,7 @@
 README
 ================
 
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+![lifecycle](./man/figures/lifecycle-experimental.svg)
 [![Travis build
 status](https://travis-ci.org/rchlumsk/RavenR.svg?branch=master)](https://travis-ci.org/rchlumsk/RavenR)
 [![license](https://img.shields.io/badge/license-GPL3-lightgrey.svg)](https://choosealicense.com/)

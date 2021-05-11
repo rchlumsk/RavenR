@@ -2,7 +2,7 @@
 % Please edit documentation in R/rvn_rvt_wsc.R
 \name{rvn_rvt_wsc}
 \alias{rvn_rvt_wsc}
-\title{EC Streamgauge File Conversion}
+\title{WSC Streamgauge File Conversion}
 \usage{
 rvn_rvt_wsc(
   ff,
@@ -89,7 +89,5 @@ rvn_rvt_wsc(ff,subIDs=c(6), filename=file.path(tempdir(), "stn_02GB001.rvt"))
 \code{\link{rvn_annual_peak_event}} to consider the timing of peak
 events
 
-Download EC streamgauge data from
-\href{https://wateroffice.ec.gc.ca/search/historical_e.html}{WSC Historical
-Data}.
+Download data from the Water Survey of Canada (wateroffice.ec.gc.ca).
 }

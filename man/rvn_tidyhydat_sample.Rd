@@ -15,7 +15,7 @@ rvn_tidyhydat_sample is a tibble with 671 rows, and 5 columns.
 }
 }
 \source{
-\url{https://wateroffice.ec.gc.ca/search/historical_e.html}
+Water Survey of Canada (wateroffice.ec.gc.ca) via `tidyhydat` package
 }
 \usage{
 rvn_tidyhydat_sample

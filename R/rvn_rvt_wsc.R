@@ -1,4 +1,4 @@
-#' @title EC Streamgauge File Conversion
+#' @title WSC Streamgauge File Conversion
 #'
 #' @description
 #' rvn_rvt_wsc converts Environment Canada historical streamgauge data,
@@ -60,9 +60,7 @@
 #' @seealso \code{\link{rvn_annual_peak_event}} to consider the timing of peak
 #' events
 #'
-#' Download EC streamgauge data from
-#' \href{https://wateroffice.ec.gc.ca/search/historical_e.html}{WSC Historical
-#' Data}.
+#' Download data from the Water Survey of Canada (wateroffice.ec.gc.ca).
 #'
 #' @examples
 #' ff = system.file("extdata",'Daily__Oct-1-2020_08_20_52PM.csv', package="RavenR")

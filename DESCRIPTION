@@ -1,8 +1,8 @@
 Package: RavenR
 Type: Package
 Title: Raven Hydrological Modelling Framework R Support and Analysis
-Version: 2.0.6
-Date: 2021-04-30
+Version: 2.0.9
+Date: 2021-05-05
 Authors@R: c(
     person("Robert", "Chlumsky", email = "rchlumsk@uwaterloo.ca", role = c("cre","aut")),
     person("James", "Craig", email = "jrcraig@uwaterloo.ca", role = "ctb"),
@@ -22,6 +22,7 @@ Imports:
     dygraphs,
     gdata,
     ggplot2,
+    lifecycle,
     igraph,
     lubridate,
     magrittr,
@@ -47,7 +48,6 @@ Suggests:
     weathercan,
     tidyhydat
 URL: https://github.com/rchlumsk/RavenR
-VignetteBuilder: knitr
 License: GPL-3
 Encoding: UTF-8
 LazyData: TRUE

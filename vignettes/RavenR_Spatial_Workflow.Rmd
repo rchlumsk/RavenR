@@ -1,0 +1,243 @@
+---
+title: "RavenR Spatial Workflow"
+author: "Robert Chlumsky, Dr. James R. Craig"
+date: "May 11, 2021"
+output: html_document
+urlcolor: blue
+vignette: >
+  %\VignetteIndexEntry{RavenR Spatial Workflow}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+# RavenR Spatial Workflow
+
+This short document is intended to introduce some workflows for using RavenR in spatial analysis and plotting. If you have not yet completed the **[Introduction to RavenR](https://github.com/rchlumsk/RavenR/blob/master/vignettes/Introduction_to_RavenR.Rmd)** vignette or used RavenR before, it is recommended that you complete that vignette before this one.
+
+## Loading Additional Libraries
+
+This workflow will use some additional libraries that are not required for using RavenR as a standalone package. Please install the packages listed below if they are not already installed, and load the libraries into your session.
+
+```{r load libraries, message=FALSE, warning=FALSE, results='hide'}
+library(RavenR)
+library(magick)
+library(gifski)
+library(ggplot2)
+library(sf)
+knitr::opts_chunk$set(fig.width=10,fig.height=7) #default figure height
+```
+  
+## Check the subbasin network
+
+As a first step, we can examine the model rvh file using tools within `RavenR`. Using the Nith watershed, we can read in the rvh file and allow RavenR to calculate the upstream area of each subbasin.
+
+```{r read rvh file Nith and generate subbasin plot}
+# read in rvh file
+rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package="RavenR"))
+head(rvh$SBtable)
+
+# create network plot of watershed structure from rvh file with labels
+rvn_subbasin_network_plot(rvh$SBtable, labeled=TRUE)
+```
+
+This plot is relatively simple in the Nith, a simple configuration with four subbasins. However, we can also use the same tools to plot the network the Liard model (located in the Northwest Territories), which has more subbasins.
+
+```{r network plot for Liard model, message=FALSE}
+# download the Liard Raven model from civil.uwaterloo.ca/jrcraig/
+download.file(url="http://www.civil.uwaterloo.ca/jrcraig/LiardRavenModel.zip",
+              destfile="LiardRavenModel.zip")
+unzip("LiardRavenModel.zip", exdir="LiardRavenModel")
+
+# read in the rvh file for the Liard model
+rvh <- rvn_rvh_read("LiardRavenModel/Liard.rvh")
+
+# create the subbasin network plot
+rvn_subbasin_network_plot(rvh$SBtable, labeled=TRUE)
+```
+
+## Create a basic subbasin map
+
+First, we create a basic map of the subbasin using simple tools within `ggplot2`. There are a number of ways to accomplish this, but here we use the `geom_sf` function to plot the subbasins and fill the colours based on subbasin ID.
+
+```{r basic subbasin map only}
+shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR")
+shp <- sf::read_sf(shpfilename)
+
+# convert discrete variable into a factor for easy plotting
+shp$subID <- as.factor(shp$subID)
+
+ggplot()+
+  geom_sf(data=shp, aes(fill=subID))
+```
+
+We can also plot custom output data to the subbasin map. The `RavenR` package has a function (\code\link{rvn_subbasin_map}}) to accomplish this, which uses the `geom_sf` function to create a plot after pre-processing the custom data to adjust the plot fill colours. 
+
+```{r basic map with custom output using the RavenR package}
+# Custom Output data from Raven for Nith basin
+cust.data <- rvn_custom_read(system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv",
+                                         package="RavenR"))
+
+subIDcol <- 'subID' # attribute in shapefile with subbasin IDs
+plot.date <- "2003-03-30" # date for which to plot custom data
+
+# function call for a static image
+rvn_subbasin_map(shpfilename, subIDcol, plot.date, cust.data)+
+  scale_fill_gradient(low='white', high='blue', limits=c(1, 10))
+```
+
+  
+## Animate a Subbasin Map
+
+Here, we provide a wrapper for the \code{\link{rvn_subbasin_map}} function to generate a series of saved subbasin maps for different time steps, and merge them into a single gif. This code essentially loops the function for each time step, saves an image file into a temporary folder, and then merges the images to form an animated gif. It is worth nothing that the \code{rvn_subbasin_map} function uses the `ggplot2` library with the \code{\link{geom_sf}} function to plot the data.
+
+First, we define the `SBMap_animate` function that use the `RavenR` functionality linked with ImageMagick through the `magick` library for manipulating images.
+
+```{r define SBMap_animate function}
+SBMap_animate <- function(shpfilename,subIDcol,plot.daterange,cust.data,
+                          gif.filename='subbasin_animated_plot.gif',
+                          gif.speed=1,
+                          cleanup=TRUE) {
+  current.wd <- getwd()
+  rand.dir <- paste0('scratch_SBMap',"_",paste0(ceiling(runif(20,min=0,max=10)),collapse=""))
+  dir.create(rand.dir)
+  # get the dates to plot from the supplied plot.daterange object
+  plot.dates <- lubridate::date(cust.data[plot.daterange])
+  for (i in seq(1,length(plot.dates))) {
+    # png(file=paste0(rand.dir,"/",sprintf("plot_%02d.png",i)), width=500, height=500)
+    p1 <- RavenR::rvn_subbasin_map(shpfilename,subIDcol,plot.dates[i],cust.data)+
+      scale_fill_gradient(low='white', high='blue', limits=c(1, 10))+
+                            ggtitle("Average PRECIP by Subbasin")
+    ggsave(paste0(rand.dir,"/",sprintf("plot_%02d.png",i)),
+           plot=p1,
+           dpi=100)
+  }
+
+  # generate an animation from the images created
+  pp <- list.files(pattern='*\\.png', recursive=TRUE)
+  pp <- pp[grep(rand.dir,pp)]
+  img <- image_read(pp)
+  image_write_gif(img, path=gif.filename, delay=gif.speed)
+  # delete subfolder
+  if (cleanup) { unlink(rand.dir,recursive = T,force = T) }
+  return(TRUE)
+}
+```
+
+Now, we use this function to animate custom output precipitation data for the Nith river watershed, and generate a gif of daily precipitation from Jan 1st to Jan 15th, 2003. This may take some time.
+
+```{r generate gif for Nith precipitation, message=FALSE, eval=FALSE}
+# function call for an animated image
+SBMap_animate(shpfilename = shpfilename,
+              subIDcol = 'subID',
+              plot.daterange = "2003-01-01/2003-01-15",
+              cust.data,
+              gif.speed=0.25)
+```
+
+The resulting animated image is shown below.
+
+![Nith watershed animation with precipitation custom output data.](subbasin_animated_plot.gif)
+
+Note that other tools exist in R that could have been used for this purpose. For example, \link{gganimate} could be used to simplify the code we have above. 
+
+## Live Map with leaflet
+
+The (leaflet package)[https://rstudio.github.io/leaflet/] in R brings the utilities from leaflet (https://leafletjs.com/), a JavaScript library, directly into R. This utility allows us to make interactive spatial maps easily within R.
+
+### Single data point leaflet map
+
+We can add the subbasin data for the Nith watershed directly into a leaflet map. First, let's create a very basic leaflet map in the area around the University of Waterloo campus.
+
+```{r initial leaflet map}
+library(leaflet)
+
+m <- leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=-80.542764, lat=43.471794, popup="University of Waterloo - Main Campus")
+m
+```
+
+We can add our shapefile data to this map as well, although we will need to convert the Nith shapefile into lat/long coordinates first. Additionally, satellite view is often more helpful than streetview in hydrologic applications, so we will switch the basemap to ESRI World Imagery.
+
+
+```{r leaflet map with shapefile polygons}
+# transform from UTM17N to lat/long WGS84
+basinshp <- read_sf(shpfilename)
+basinshp_latlong <- st_transform(basinshp, "+proj=longlat +datum=WGS84 +no_defs")
+
+m <- leaflet(basinshp_latlong) %>%
+  addProviderTiles('Esri.WorldImagery') %>%  # add ESRI satellite imagery
+  addMarkers(lng=-80.542764, lat=43.471794, popup="University of Waterloo - Main Campus") %>% 
+  addPolygons(opacity=0.75)
+m
+```
+
+This displays the data, however, if we want to 1) adjust the colour of subbasins based on their numbering, and 2) make the data from the shapefile interactive to the user (i.e. click on the subbasin and see its properties), we adjust our code as per the block below. Note that with leaflet, we must define the labels and colour palette manually.
+
+```{r leaflet map with shapefile and labels}
+# calculate areas from GIS
+basinshp_latlong$area <- st_area(basinshp_latlong)/1e6
+
+# define labels for each polygon
+labels <- sprintf(
+  "<strong>subID</strong> %s, <strong>area</strong> %.1f km<sup>2</sup>",
+  basinshp_latlong$subID, basinshp_latlong$area) %>% 
+  lapply(htmltools::HTML)
+
+# define colours for each polygon
+pal <- colorBin("inferno", domain = basinshp_latlong$subID)
+
+m <- leaflet(basinshp_latlong) %>%
+  addProviderTiles('Esri.WorldImagery') %>%  # add ESRI satellite imagery
+  addMarkers(lng=-80.542764, lat=43.471794, popup="University of Waterloo - Main Campus") %>% 
+  addPolygons(opacity=0.9,
+      label = labels,
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto"),
+    fillColor = ~pal(subID),
+    color='White',
+    weight=1)
+m
+```
+
+\newpage
+
+# Exercise 1 - Custom Data Subbasin Plot for Liard watershed
+
+In this exercise, we will use the Liard model and supplementary data to create a subbasin map based on output from the Liard model. You will use the :CustomOutput function in Raven to generate daily precipitation and potential evapotranspiration outputs for each subbasin, calculate an average annual aridity ratio (P/PET) for each subbasin, and plot this data by subbasin.
+
+Your solution to this exercise should follow these steps:
+
+1. Download the data from civil.uwaterloo.ca/jrcraig/LiardShapefiles.zip and unzip them (using R!)  
+
+2. Modify the Liard.rvi file (downloaded earlier in this vignette) to generate the precipitation and potential evapotranspiration custom outputs, and re-run the Raven model for the Liard basin
+
+3. Read in the data and calculate the annual average aridity ratio for each subbasin (hint: the \code{\link{rvn_custom_read}} and \code{\link{rvn_apply_wyearly}} functions may be helpful here). 
+
+4. Read in the Liard subbasin shapefile; create a simple map of the subbasin first
+
+5. Plot the average annual aridity ratio to each subbasin (use either ggplot+geom_sf or the \code{\link{rvn_subbasin_map}} function)
+
+
+# Exercise 2 - Interactive map for the Liard Basin
+
+In this exercise, create an aesthetically pleasing and interactive map of the Liard basin. You may use the `leaflet` library or any other that you prefer, and the spatial data for the Liard basin downloaded in Exercise 1. 
+
+Bonus: add the average annual aridity ratio to the interactive map, both to adjust the fill colour of each subbasin and as text that appears when the subbasin is selected.
+
+\newpage
+
+## Other packages for interactive mapping
+
+While we demonstrate interactive mapping using the `leaflet` library here, other packages exist with similar functionality; some of these may even be easier to use. For example, you are encouraged to take a look at the [tmap library](https://cran.r-project.org/web/packages/tmap/vignettes/tmap-getstarted.html) and the [mapview](https://r-spatial.github.io/mapview/) library.
+
+
+# Conclusion
+
+This tutorial is meant to introduce some useful workflows in spatial analysis and plotting as a complement to the `RavenR` package. If you have any comments, suggestions or bug reports, please leave a note on the issues page of the Github project ([RavenR Github page](https://github.com/rchlumsk/RavenR)), email the authors of the package, or feel free to let us know on the [Raven forum](http://www.civil.uwaterloo.ca/raven_forum/).
+
+Additional Raven materials can be found on the [Raven downloads page](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html), and additional RavenR vignettes can be found on Github in the [vignettes folder](https://github.com/rchlumsk/RavenR/tree/master/vignettes).
