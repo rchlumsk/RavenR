@@ -1,7 +1,7 @@
 ---
 title: "RavenR Spatial Workflow"
-author: "Robert Chlumsky, Dr. James R. Craig"
-date: "May 11, 2021"
+author: "Robert Chlumsky, Dr. James R. Craig, and Larry (Haobo) Liu"
+date: "May 12, 2021"
 output: html_document
 urlcolor: blue
 vignette: >
@@ -44,14 +44,17 @@ rvn_subbasin_network_plot(rvh$SBtable, labeled=TRUE)
 
 This plot is relatively simple in the Nith, a simple configuration with four subbasins. However, we can also use the same tools to plot the network the Liard model (located in the Northwest Territories), which has more subbasins.
 
-```{r network plot for Liard model, message=FALSE}
-# download the Liard Raven model from civil.uwaterloo.ca/jrcraig/
-download.file(url="http://www.civil.uwaterloo.ca/jrcraig/LiardRavenModel.zip",
-              destfile="LiardRavenModel.zip")
-unzip("LiardRavenModel.zip", exdir="LiardRavenModel")
+```{r download and unzip the Liard model, eval=FALSE}
+# download the Liard Raven model from http://raven.uwaterloo.ca/Downloads.html
+download.file(url="http://raven.uwaterloo.ca/files/LiardRiverModel.zip",
+              destfile="LiardRiverModel.zip")
+unzip("LiardRiverModel.zip", exdir="LiardRiverModel")
+```
 
+
+```{r network plot for Liard model, message=FALSE}
 # read in the rvh file for the Liard model
-rvh <- rvn_rvh_read("LiardRavenModel/Liard.rvh")
+rvh <- rvn_rvh_read("LiardRiverModel/Liard.rvh")
 
 # create the subbasin network plot
 rvn_subbasin_network_plot(rvh$SBtable, labeled=TRUE)
@@ -61,7 +64,7 @@ rvn_subbasin_network_plot(rvh$SBtable, labeled=TRUE)
 
 First, we create a basic map of the subbasin using simple tools within `ggplot2`. There are a number of ways to accomplish this, but here we use the `geom_sf` function to plot the subbasins and fill the colours based on subbasin ID.
 
-```{r basic subbasin map only}
+```{r basic subbasin map only with ggplot}
 shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR")
 shp <- sf::read_sf(shpfilename)
 
@@ -142,9 +145,143 @@ The resulting animated image is shown below.
 
 Note that other tools exist in R that could have been used for this purpose. For example, \link{gganimate} could be used to simplify the code we have above. 
 
+## Interactive mapping with plotly
+
+The `plotly` package is a common one for creating interactive plots (see some [examples](https://plotly.com/r/#maps)). A basic plotly figure provides interactive labels for the data, as well as figure controls such as a zoom function. A basic example is provided below, displaying daily rainfall as a barplot using RavenR sample forcing data.
+
+
+```{r basic plotly example with forcing data, message=FALSE, warning=FALSE}
+library(plotly)
+
+data("rvn_forcing_data")
+forcing_data <- rvn_fortify_xts(rvn_forcing_data$forcings)
+
+fig <- plot_ly(data = forcing_data, x = ~Date, y = ~rain, type='bar')
+fig
+```
+
+The `plotly` library can also be used to create interactive maps. The most basic way to do this is to read in a shapefile, and plot it directly with plotly. Here, we read in the Liard shapefile and plot it with plotly. We use the general \code{\link{plot_ly}} function, although \code{\link{plot_geo}} could also be used.
+
+```{r basic plotly map for Liard watershed, message=FALSE, warning=FALSE}
+shp_Liard <- sf::read_sf("./LiardRiverModel/shapefiles/subbasin_20180718.shp")
+plot_ly(shp_Liard)
+```
+
+We can also convert a ggplot object to a plotly object, which can be helpful for those familiar with the ggplot2 syntax.
+
+```{r convert ggplot object to plotly for basic choropleth map}
+# convert discrete variable into a factor for easy plotting
+shp_Liard$Sub_B <-  as.factor(shp_Liard$Sub_B)
+
+# add random precipitation data for plotting, up to 25mm
+shp_Liard$precip <- runif(n=nrow(shp_Liard), min=0, max=25)
+
+# create ggplot object
+g1 <- ggplot()+
+  geom_sf(data=shp_Liard, aes(fill=precip, group=Sub_B))
+g1
+
+# plot with plotly instead
+ggplotly(g1)
+```
+
+
+### Dynamic Choropleth map with plotly
+
+In this example, a dynamic and interactive choropleth map of the Nith watershed is generated using the `plotly` library. This will plot the custom output daily precipitation for each subbasin in the Nith watershed.
+
+Here, the Nith geospatial data will be converted to geojson format in this process. We begin by preparing the custom output and geospatial data for plotting.
+
+```{r read in and prepare data custom output data for plotting, message=FALSE, warning=FALSE}
+library(tidyr)
+
+precip <- system.file("extdata",
+                      "run1_PRECIP_Daily_Average_BySubbasin.csv",
+                                         package="RavenR") %>% 
+rvn_custom_read()
+
+# subset the data to March 2003 to reduce rendering time 
+precip <- precip["2003-03-01/2003-03-31"]
+
+precip <- rvn_fortify_xts(precip)
+
+precip_long <- precip %>% 
+  pivot_longer(cols=colnames(precip)[-1], 
+               values_to="precip",
+               names_to="subID")
+
+precip_long$hover <- sprintf("hru:%s precip:%.1f", precip_long$subID, precip_long$precip)
+precip_long$date <- as.character(precip_long$Date)
+```
+
+```{r read in and prepare data geospatial data for plotting, message=FALSE, warning=FALSE}
+library(raster)
+library(geojsonsf)
+library(geojsonio)
+library(rjson)
+
+## read shapefile as sf and reproject into lat/long
+shp <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR") %>% 
+  sf::read_sf(.)
+
+# convert to lat/long coordinates
+if (as.character(crs(shp)) != "+proj=longlat +datum=WGS84 +no_defs") {
+  shp <- st_transform(shp, "+proj=longlat +datum=WGS84 +no_defs")
+}
+names(shp) <- tolower(names(shp))
+
+## convert to geojson
+subbasin_utm <- geojson_json(shp,
+                             geometry = "polygon",
+                             group = 'group')
+temp_json <- tempfile(fileext=".json")
+geojson_write(subbasin_utm, file = temp_json)
+
+# Reading in the saved geojson file
+subbasin_geojson <- rjson::fromJSON(file=temp_json)
+```
+
+We can now plot the data using our geojson with the plotly library. Note: you will need to Zoom in to the Nith watershed from the global map produced initially.
+
+```{r dynamic choropleth map }
+# Setting font and label styles
+fontstyle <- list(
+  size = 16,
+  color = "black")
+    
+label <- list(
+  bgcolor = "#EEEEEE",
+  bordercolor = "transparent",
+  font = fontstyle
+)
+
+# Plotting animated map
+fig <- plot_ly(precip_long,
+               frame = ~date) %>% 
+  add_trace(
+    type = "choropleth",
+    geojson = subbasin_geojson,
+    locations = precip_long$subID,
+    z = precip_long$precip,
+    color = precip_long$precip,
+    colorscale = 'YlGnBu',
+    reversescale = TRUE,
+    featureidkey = "properties.subid",
+    zmin=0,
+    zmax=max(precip_long$precip),
+    text = ~hover,
+    hoverinfo = 'text') %>%
+  style(hoverlabel = label) %>%
+  config(displayModeBar = FALSE) %>% 
+  colorbar(ticksuffix = "mm")
+
+fig
+```
+
+
 ## Live Map with leaflet
 
-The (leaflet package)[https://rstudio.github.io/leaflet/] in R brings the utilities from leaflet (https://leafletjs.com/), a JavaScript library, directly into R. This utility allows us to make interactive spatial maps easily within R.
+The [leaflet package](https://rstudio.github.io/leaflet/) in R brings the utilities from leaflet (https://leafletjs.com/), a JavaScript library, directly into R. This utility allows us to make interactive spatial maps easily within R.
 
 ### Single data point leaflet map
 
@@ -212,28 +349,32 @@ In this exercise, we will use the Liard model and supplementary data to create a
 
 Your solution to this exercise should follow these steps:
 
-1. Download the data from civil.uwaterloo.ca/jrcraig/LiardShapefiles.zip and unzip them (using R!)  
+1. Download the Liard data from http://raven.uwaterloo.ca/Downloads.html and unzip them (using R!)  
 
-2. Modify the Liard.rvi file (downloaded earlier in this vignette) to generate the precipitation and potential evapotranspiration custom outputs, and re-run the Raven model for the Liard basin
+2. Modify the Liard.rvi file to generate the precipitation and potential evapotranspiration custom outputs, and re-run the Raven model for the Liard basin.
 
 3. Read in the data and calculate the annual average aridity ratio for each subbasin (hint: the \code{\link{rvn_custom_read}} and \code{\link{rvn_apply_wyearly}} functions may be helpful here). 
 
-4. Read in the Liard subbasin shapefile; create a simple map of the subbasin first
+4. Read in the Liard subbasin shapefile; create a simple map of the subbasin first.
 
-5. Plot the average annual aridity ratio to each subbasin (use either ggplot+geom_sf or the \code{\link{rvn_subbasin_map}} function)
+5. Plot the average annual aridity ratio to each subbasin (use either ggplot+geom_sf or the \code{\link{rvn_subbasin_map}} function).
 
 
-# Exercise 2 - Interactive map for the Liard Basin
+# Exercise 2 - Interactive leaflet map for the Liard Basin
 
-In this exercise, create an aesthetically pleasing and interactive map of the Liard basin. You may use the `leaflet` library or any other that you prefer, and the spatial data for the Liard basin downloaded in Exercise 1. 
+Following from Exercise 1, create an aesthetically pleasing and interactive map of the Liard basin. You may use the `tmap` or `mapview` libraries instead of `leaflet` if you prefer.
 
 Bonus: add the average annual aridity ratio to the interactive map, both to adjust the fill colour of each subbasin and as text that appears when the subbasin is selected.
+
+# Exercise 3 - Dynamic choropleth map for the Liard Basin
+
+Using the examples for the Nith basin, generic a dynamic choropleth map using the `plotly` library for the Liard Basin. Modify the Liard.rvi file to output custom output (daily average precipitation by subbasin, or your choice of forcing or other output), and use that data as input for the choropleth.
 
 \newpage
 
 ## Other packages for interactive mapping
 
-While we demonstrate interactive mapping using the `leaflet` library here, other packages exist with similar functionality; some of these may even be easier to use. For example, you are encouraged to take a look at the [tmap library](https://cran.r-project.org/web/packages/tmap/vignettes/tmap-getstarted.html) and the [mapview](https://r-spatial.github.io/mapview/) library.
+While we demonstrate interactive mapping using the `leaflet` and `plotly` libraries here, other packages exist with similar functionality; some of these may even be easier to use. For example, you are encouraged to take a look at the [tmap library](https://cran.r-project.org/web/packages/tmap/vignettes/tmap-getstarted.html) and the [mapview](https://r-spatial.github.io/mapview/) library.
 
 
 # Conclusion
