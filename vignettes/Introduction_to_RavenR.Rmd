@@ -341,15 +341,21 @@ outdir <- "./output/"
 
 ## if this generates an error for you, the Nith folder cannot be found. 
 # Please update the modelfolder variable accordingly 
-if (!dir.exists(modelfolder)) {stop(sprintf("The folder %s does not exist, please verify!"))}
+if (!dir.exists(modelfolder)) {
+  stop(sprintf("The folder %s does not exist, please verify!", modelfolder))
+  }
 
 setwd(modelfolder)
 
 # RUN RAVEN
 # =====================================================
-# writes complete command prompt command
+# writes complete command prompt command (Windows)
 # > Raven.exe [filename] -o [outputdir]
 RavenCMD <- sprintf("Raven.exe %s -o %s", fileprefix, outdir)
+
+# or adjust string if in a macos/ linux environemnt
+# RavenCMD <- sprintf("./Raven.exe %s -o %s", fileprefix, outdir)
+
 system(RavenCMD) # this runs raven from the command prompt
 ```
 

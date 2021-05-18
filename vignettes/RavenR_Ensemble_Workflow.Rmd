@@ -1,0 +1,308 @@
+---
+title: "RavenR Ensemble Workflow"
+author: "Robert Chlumsky, Dr. James R. Craig"
+date: "May 18, 2021"
+output: html_document
+urlcolor: blue
+vignette: >
+  %\VignetteIndexEntry{RavenR Ensemble Workflow}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+# RavenR Ensemble Workflow
+
+This short document is intended to introduce some workflows for running and analyzing multiple RavenR models in support of model ensembles. If you have not yet completed the **[Introduction to RavenR](https://github.com/rchlumsk/RavenR/blob/master/vignettes/Introduction_to_RavenR.Rmd)** vignette or used RavenR before, it is recommended that you complete that vignette before this one.
+
+## Loading Additional Libraries
+
+This workflow will use some additional libraries that are not required for using RavenR as a standalone package. Please install the packages listed below if they are not already installed, and load the libraries into your session.
+
+```{r load libraries, message=FALSE, warning=FALSE, results='hide'}
+library(RavenR)
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(lubridate)
+library(xts)
+library(dygraphs)
+library(htmlwidgets)
+knitr::opts_chunk$set(fig.width=10,fig.height=5) #default figure height
+```
+  
+## Setup the Liard Model and Raven executable
+
+We begin by downloading the model files and spatial data for the Liard, which is located in the Northwest Territories, and is discussed further in the paper by [Brown and Craig, 2020](https://www.tandfonline.com/doi/abs/10.1080/07011784.2020.1803143?journalCode=tcwr20). The block below downloads the zip file to the C drive in a TEMP folder, but this may be adjusted to the folder location of your preference.
+
+```{r download Liard River model files, message=FALSE, warning=FALSE, eval=FALSE}
+# download the Liard Raven model from http://raven.uwaterloo.ca/Downloads.html
+outdir <- "C:/TEMP/"
+download.file(url="http://raven.uwaterloo.ca/files/LiardRiverModel.zip",
+              destfile=paste0(outdir,"LiardRiverModel.zip"))
+unzip(paste0(outdir,"LiardRiverModel.zip"), exdir=paste0(outdir,"LiardRiverModel"))
+
+# set working directory in new unzipped folder
+setwd(paste0(outdir,"LiardRiverModel"))
+```
+
+Now, we setup our Raven executable for use within R by declaring our path to the model files and Raven executable, and generate a Raven execution command. Following the general example in the [Basic HTML Raven Workflow](http://raven.uwaterloo.ca/BasicRavenRWorkflow.html), we define a simple function that will run a Raven model, with inputs specific to the Liard model as the function defaults. In this case, we provide a path to the latest Raven executable in the C drive, which can be used to run models in other locations. We also provide an opportunity for additional commands to be provided to Raven with the `addtlcmds` parameter.
+
+Note that on operating different systems, this syntax and file paths may need to be slightly adjusted.
+
+```{r setup Raven configuration, message=FALSE, warning=FALSE}
+
+runRaven <- function(fileprefix="Liard", 
+                     ravenfile="C:/Raven/exe/Raven.exe",
+                     runtag="",
+                     indir=getwd(),
+                     outdir=paste0(getwd(),"/output/"),
+                     addtlcmds="",
+                     showoutput=FALSE) {
+  
+  RavenCMD <-paste(ravenfile," ",indir,"/",fileprefix," -o ",outdir,sep="");
+  invisible(system(RavenCMD, show.output.on.console = showoutput));
+}
+```
+
+In order to facilitate a fast run of the Liard model, open the Liard.rvi file and change the duration to 1095 instead of 7305 - we will run each Liard model for just three years instead of 20.
+
+Once you have done that, try out the `runRaven` command, and see that it functions as expected. Note that the defined function does not show the Raven output by default (with `showoutput=FALSE`), but if you wish to see the Raven output in R, simply change this parameter to `TRUE`.
+
+```{r try the runRaven command, message=FALSE, warning=FALSE, eval=FALSE}
+runRaven(showoutput = TRUE)
+```
+
+Create a base model run output folder called 'output_base' by passing this as a parameter value to outdir.
+
+```{r use runRaven to create a base model output, message=FALSE, warning=FALSE, eval=FALSE}
+runRaven(outdir=paste0(getwd(),"/output_base/"))
+```
+
+
+## Parametric Ensemble
+
+We will create a workflow to generate a simple parametric model ensemble of the Liard model, which samples the value of the parameter OW_PET_CORR.
+
+**Question:** Check the Raven manual for a description of the parameter OW_PET_CORR. How would you expect the parameter to impact the models?
+
+To do this, start by undertaking the following steps (either manually or using the R script below).
+
+1. Copy the Liard.rvp file and rename the copy as Liard.rvp.tpl (this will be our template file)
+2. In the Liard.rvp.tpl file, substitute the value of the OW_PET_CORR parameter (in one of the :LandUseParameterList blocks) as par_x01 instead of 0.8.
+
+The Liard.rvp.tpl file will serve as a template file, in which the placeholder value in the template file (par_x01) can be overwritten with a provided parameter value to be used in simulation. Note that in this particular case the file only has one value of 0.8, thus we can use the string substituion directly, but for other parameters or values we may need to define a more clever string replacecment (or perform this operation manually).
+
+
+```{r create Liard rvp template file and subsitute OW_PET_CORR value, eval=FALSE}
+
+gsub(pattern="0.8,",
+     replacement="par_x01,",
+     x=readLines("Liard.rvp")) %>% 
+  writeLines(., "Liard.rvp.tpl")
+```
+
+Now, we will run our Raven model N times with uniformly sampled random values for the parameter `OW_PET_CORR`, and store the outputs in separate folders. In the workflow below, the `gsub` function is used to substitute the `par_x01` string within the template file with a provided parameter value; the updated file is then provided as a regular rvp file for Raven.
+
+To keep our folder tidy, we begin by creating a parent folder to store the output folders of each run.
+
+```{r setup parametric ensemble for OW_PET_CORR, eval=TRUE}
+# setup the parametric model run
+if (!(dir.exists("output_parametric"))) {
+  dir.create("output_parametric")
+}
+
+N <- 20                 # number of runs to generate
+min_OW_PET_CORR <- 0    # minimum parameter value
+max_OW_PET_CORR <- 3    # maximum parameter value
+
+# determine random values to use
+set.seed(20201114)
+values_OW_PET_CORR <- runif(n=N, min=min_OW_PET_CORR, max=max_OW_PET_CORR )
+```
+```{r run parametric ensemble for OW_PET_CORR, eval=FALSE}
+# run Raven N times to generate model ensembles
+for (i in 1:N) {
+  
+  # create a new Liard.rvp file with random parameter value
+  gsub(pattern="par_x01",
+     replacement=sprintf("%.4f", values_OW_PET_CORR[i]),
+     x=readLines("Liard.rvp.tpl")) %>% 
+  writeLines(., "Liard.rvp")
+  
+  # build output path
+  outpath <- paste0(getwd(),sprintf("/output_parametric/output_%02d",i))
+  
+  # run Raven model and store output
+  runRaven(outdir=outpath)
+}
+```
+
+
+With the model runs created, we now read in the hydrographs, and plot them as a distribution of model results. To begin, we read in the hydrographs from each of the N simulations. The Liard model is a distributed model, but for our purposes here, the hydrographs at the model outlet at subbasin 63 are collected.
+
+```{r read in parametric model ensemble results} 
+
+nrow_timesteps <- 1096      # three years of simulation
+sub_to_extract <- "SUB_63"  # subbasin outlet
+
+# setup data structure for hydraographs
+hyd_df <- data.frame(matrix(NA,nrow=nrow_timesteps,ncol=(N+1)))
+colnames(hyd_df) <- c("Date",sprintf("hyd_%02d",seq(1,N)))
+
+for (i in 1:N) {
+  
+  #read in the hydrograph of sub_63 for all of the ensemble runs, store in the hyd_df dataframe
+  myhyd <- rvn_hyd_read(ff=sprintf("./output_parametric/output_%02d/Hydrographs.csv",i))
+  hyd_df[,(i+1)] <- as.numeric(myhyd$hyd[,sub_to_extract])
+}
+
+# collect date column
+hyd_df[,1] <- rvn_fortify_xts(myhyd$hyd)$Date
+
+# convert the dataframe to an xts (extended time series) data format
+hyd_df_xts <- xts(hyd_df[,2:(N+1)], order.by=hyd_df$Date)
+```
+
+We can now plot the hydrographs of all N simulations.
+
+```{r plot all N hydrographs for parametric ensemble}
+
+# create a 'long' rather than wide tibble
+hyd_df_longer <- hyd_df %>% 
+  pivot_longer(cols=colnames(hyd_df)[-1], 
+               names_to="hyd_no", 
+               values_to="flow")
+
+# plot hydrographs with ggplot2
+ggplot(hyd_df_longer, aes(x=Date, y=flow))+
+  geom_line(alpha=0.5, color='blue')
+```
+
+This plot can also be provided as a dygraph for easier viewing of results in an extended simulation period of three years.
+
+```{r plot all N hydrographs for parametric ensemble as a dygraph}
+dygraph(hyd_df_xts) %>% 
+  htmltools::tagList()
+```
+
+We can also plot the hydrographs using the information from the OW_PET_CORR values to colour the lines, rather than just the rather non-informative index of 1 to N. To achieve this, we add a column to our `hyd_df_longer` data frame, and map the values of the ensemble (from 1-20) to the values from our sampled parameter values for OW_PET_CORR. These values can then be used directly in producing our hydrograph plot based on the OW_PET_CORR values rather than ensemble number.
+
+```{r update dataset with parameter values for OW_PET_CORR}
+
+hyd_df_longer$OW_PET_CORR <- 
+  plyr::mapvalues(hyd_df_longer$hyd_no, 
+                  from=sprintf("hyd_%02d",seq(1,N)), 
+                  to=values_OW_PET_CORR)
+
+hyd_df_longer$OW_PET_CORR <- as.numeric(hyd_df_longer$OW_PET_CORR)
+```
+
+**Question:** Create a new hydrograph plot with the `ggplot2` library, where the colour is specified by the values of the OW_PET_CORR values rather than the ensemble number.
+
+```{r plot all N hydrographs for parametric ensemble based on OW_PET_CORR, echo=FALSE}
+
+# plot hydrographs with ggplot2
+ggplot(hyd_df_longer, aes(x=Date, y=flow, color=OW_PET_CORR))+
+  geom_line()
+```
+
+**Question:** Based on the hydrograph plot, how does the value of the OW_PET_CORR parameter affect the resulting hydrograph? Are there periods when the differences between the ensemble models are more or less pronounced?
+
+
+One question that we may be interested in answering through ensembles is how the parameter values impact particular metrics. For example, we can determine how the OW_PET_CORR parameter affects metrics such as average annual peak flow values and average annual flow volume while all other parameters and inputs to the model are held fixed. 
+
+**Question:** Which of those two metrics experience a larger percent change relative to the base run? From a hydrological perspective, does it make sense that changing the values of a PET correction factor would affect one of these metrics more than the other? Compute the range of percent change for each metric in order to support the discussion.
+
+```{r plot parametric ensemble of average annual peak flow values}
+
+avg_peak_flows <- rvn_apply_wyearly(hyd_df_xts, FUN=RavenR::cmax) %>% 
+  apply(., MARGIN=2, FUN=mean) %>% 
+  as.numeric()
+
+plot(values_OW_PET_CORR, avg_peak_flows,
+     xlab="OW_PET_CORR", ylab="Average Annual Peak Flow (cms)",
+     main="Average Annual Peak Flow by OW_PET_CORR values",
+     pch=20)
+```
+
+```{r check percent change in annual average peak flow, eval=FALSE, include=FALSE}
+
+base_peak_flow <- rvn_hyd_read("output_base/Hydrographs.csv")$hyd$SUB_63 %>% 
+  rvn_apply_wyearly(., FUN=RavenR::cmax) %>% 
+    apply(., MARGIN=2, FUN=mean) %>% 
+  as.numeric()
+
+# max, base, and min values of annual average peak flow
+c(max(avg_peak_flows),
+  base_peak_flow,
+  min(avg_peak_flows)
+)
+
+# percent change in peak flow
+c(
+  (max(avg_peak_flows) - base_peak_flow)/base_peak_flow*100,
+  (min(avg_peak_flows) - base_peak_flow)/base_peak_flow*100
+)
+```
+
+
+```{r plot parametric ensemble of average annual volume}
+
+avg_volume <- rvn_apply_wyearly(hyd_df_xts, FUN=function(x) apply(x, 2, sum)) %>% 
+  apply(., MARGIN=2, FUN=mean) %>% 
+  as.numeric()
+
+plot(values_OW_PET_CORR, avg_volume,
+     xlab="OW_PET_CORR", ylab="Average Annual Flow Volume (m3/s*d)",
+     main="Average Annual Flow Volume by OW_PET_CORR values",
+     pch=20)
+```
+
+
+```{r check percent change in annual average volume, eval=FALSE, include=FALSE}
+base_volume <- rvn_hyd_read("output_base/Hydrographs.csv")$hyd$SUB_63 %>% 
+  rvn_apply_wyearly(., FUN=function(x) apply(x, 2, sum)) %>% 
+    apply(., MARGIN=2, FUN=mean) %>% 
+  as.numeric()
+
+# max, base, and min values of annual average peak flow
+c(max(avg_volume),
+  base_volume,
+  min(avg_volume)
+)
+
+# percent change in peak flow
+c(
+  (max(avg_volume) - base_volume)/base_volume*100,
+  (min(avg_volume) - base_volume)/base_volume*100
+)
+```
+
+
+
+\newpage
+
+# Exercise 1 - Produce ensembles with more than one parameter being varied
+
+In this workflow, we see how changing a single parameter value can produce a distribution of results. In this exercise, create a new workflow that modifies the RAINSNOW_TEMP parameter and the DEP_SEEP_K parameter, in addition to the OW_PET_CORR parameter. You will need to determine an appropriate sampling distribution and range for each of these parameters. 
+
+In this workflow, undertake the following steps:
+
+1. Check the Raven manual for more information on these additional parameters (RAINSNOW_TEMP and DEP_SEEP_K). How would you expect that changing these values would impact model results? Would you consider them to be 'important' parameters?
+2. Setup the Liard.rvp.tpl file with additional parameters par_x02 and par_x03 in place of the RAINSNOW_TEMP and DEP_SEEP_K parameters.  
+3. Run the Raven model N times in a new folder (e.g. ./output_three_parameters/); with the additional parameters, it may make sense to increase the number of model ensembles from the N in the workflow (i.e. greater than 20 ensembles)  
+4. Read in all model hydrographs for the subbasin outlet  
+5. Determine the average annual peak flow and average annual volume for each ensemble, and plot the results  
+6. Quantify the parametric uncertainty in average annual volume by calculating the resulting quantiles of average annual volume for the ensemble results. How do these compare to the results from varying a single parameter?
+
+
+\newpage
+
+# Conclusion
+
+This tutorial is meant to introduce some useful workflows in running model ensembles as a complement to the `RavenR` package. If you have any comments, suggestions or bug reports, please leave a note on the issues page of the Github project ([RavenR Github page](https://github.com/rchlumsk/RavenR)), email the authors of the package, or feel free to let us know on the [Raven forum](http://www.civil.uwaterloo.ca/raven_forum/).
+
+Additional Raven materials can be found on the [Raven downloads page](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html), and additional RavenR vignettes can be found on Github in the [vignettes folder](https://github.com/rchlumsk/RavenR/tree/master/vignettes).
