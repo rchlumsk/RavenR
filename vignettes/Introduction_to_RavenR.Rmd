@@ -1,7 +1,7 @@
 ---
 title: "Introduction to RavenR"
 author: "Robert Chlumsky, Dr. James R. Craig"
-date: "March 1, 2021"
+date: "May 19, 2021"
 output: html_document
 urlcolor: blue
 vignette: >
@@ -110,6 +110,17 @@ myplots <- rvn_forcings_plot(ff_data$forcings)
 # myplots$AllForcings
 myplots$PET
 ```
+
+The legend for the forcing plot functions is turned off by default, but can be added back in using the `theme` function from `ggplot2` to add the legend to the plot.
+
+```{r Plot forcing data with labels}
+library(ggplot2)
+
+myplots <- rvn_forcings_plot(ff_data$forcings)
+myplots$Radiation +
+  theme(legend.position="bottom")
+```
+
 
 ### Hydrograph and Diagnostics
 
