@@ -11,7 +11,7 @@ Authors@R: c(
     person("Sarah", "Grass", email = "sgrass@nhcweb.com", role = "ctb"),
     person("Simon", "Lin", email = "simon.lin@uwaterloo.ca", role = "ctb"),
     person("Rezgar", "Arabzadeh", email = "rezgar.arabzadeh@uwaterloo.ca", role = "ctb"))
-Description: Utilities for processing input and output files associated with the Raven Hydrological Modelling Framework. Includes various plotting functions, model diagnostics, reading output files into xts format, and support for writing Raven input files (rvt, rvh, rvc, etc.).
+Description: Utilities for processing input and output files associated with the Raven Hydrological Modelling Framework. Includes various plotting functions, model diagnostics, reading output files into extensible time series format, and support for writing Raven input files.
 Note: Package is in active development; please report errors and suggestions to rchlumsk@uwaterloo.ca.
 Depends:
     R (>= 3.6.0)

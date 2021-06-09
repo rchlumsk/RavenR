@@ -22,7 +22,7 @@ Note that the `RavenR` package is focused on handling Raven input/output files, 
 
 ## Getting Acquainted with RavenR
 
-If you don't have RavenR yet installed in your R library, run the following commands to install the RavenR package directly from the Comprehensive R Archive Network (CRAN), which is available on [CRAN as version 2.0.1](https://cran.r-project.org/web/packages/RavenR/index.html).
+If you don't have RavenR yet installed in your R library, run the following commands to install the RavenR package directly from the Comprehensive R Archive Network (CRAN), which is available on [CRAN](https://CRAN.R-project.org/package=RavenR).
 
 ```{r Installing RavenR from CRAN, eval=FALSE}
 install.packages("RavenR")
