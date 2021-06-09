@@ -5,5 +5,9 @@
 ^NEWS\.md$
 ^CONTRIBUTING\.md$
 ^pdf$
+^html$
 ^tarballs$
 ^LICENSE$
+^doc$
+^Meta$
+^.rvt$
