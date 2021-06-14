@@ -5,7 +5,7 @@ README
 [![Travis build
 status](https://travis-ci.org/rchlumsk/RavenR.svg?branch=master)](https://travis-ci.org/rchlumsk/RavenR)
 [![license](https://img.shields.io/badge/license-GPL3-lightgrey.svg)](https://choosealicense.com/)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3468442.svg)](https://doi.org/10.5281/zenodo.3468442)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4248183.svg)](https://doi.org/10.5281/zenodo.4248183)
 
 # RavenR <img src="inst/extdata/logo/RavenR_logo_small.png" align="right" />
 
