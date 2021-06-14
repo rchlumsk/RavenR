@@ -12,8 +12,7 @@ rvn_rvh_cleanhrus(
   elev_tol = 50,
   slope_tol = 4,
   aspect_tol = 20,
-  ProtectedHRUList = c(),
-  gridweights = NULL
+  ProtectedHRUList = c()
 )
 }
 \arguments{
@@ -33,9 +32,6 @@ default value of 0.01 would indicate anything smaller than 1 percent of watershe
 \item{aspect_tol}{slope difference (in degrees) considered similar. only used if merge=TRUE.}
 
 \item{ProtectedHRUList}{list of HRU IDs that are sacrosanct (not to be removed)}
-
-\item{gridweights}{a list for gridweights, as produced by rvn_gridweights_read (in dev)
-or \code{\link{rvn_gen_gridweights}}, to modify as HRUs are simplified}
 }
 \value{
 \item{hru_table}{cleaned HRU table as a dataframe}
@@ -52,10 +48,6 @@ subbasin are expanded by the lost area to keep the same relative coverage.
 
   2. it consolidates similar HRUs within the same subbasin (those with same land cover,
     vegetation, soil profile and similar slope, aspect, and elevation)
-
-
-If a gridweights list is passed, a gridweights list is also returned, based on the modifications
-made to the hru table.
 }
 \examples{
 
