@@ -1,9 +1,9 @@
 README
 ================
 
+[![CRAN
+status](https://www.r-pkg.org/badges/version/RavenR)](https://cran.r-project.org/package=RavenR)
 ![lifecycle](./man/figures/lifecycle-experimental.svg)
-[![Travis build
-status](https://travis-ci.org/rchlumsk/RavenR.svg?branch=master)](https://travis-ci.org/rchlumsk/RavenR)
 [![license](https://img.shields.io/badge/license-GPL3-lightgrey.svg)](https://choosealicense.com/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4248183.svg)](https://doi.org/10.5281/zenodo.4248183)
 
@@ -32,13 +32,15 @@ devtools::install_github("rchlumsk/RavenR")
 
 ## Tutorials and Quick Start Guide
 
-Please see the vignettes or pdf folder for RavenR Tutorials and Quick
-Start Guides. Sample data is included in the package, so you need only
+Please see the package vignette for an overview of the RavenR package. 
+Sample data is included in the package, so you need only
 to install the RavenR library and follow along in the guide documents to
 get started.
 
-\*\*Note that as of v1.2, the vignettes are out of date and will be
-updated in the next update.
+The RavenR vignette can be accessed with the `browseVignettes` function.
+``` r
+browseVignettes("RavenR")
+```
 
 ## RavenR Wishlist
 
