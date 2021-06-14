@@ -204,57 +204,6 @@ xts::apply.yearly(myhyd$hyd$Sub36, mean, na.rm=TRUE)
 RavenR::rvn_apply_wyearly(myhyd$hyd$Sub36, mean, na.rm=TRUE)
 ```
 
-<!-- ## Spatial Plotting with Custom Data -->
-
-<!-- The RavenR package also has some basic functionality for spatial plots. This section will use some of the sample spatial data for the Nith basin to build a subbasin plot from custom output data, which can be modified to show any custom output data. -->
-
-<!-- Begin by loading in the appropriate sample data files, and locating them on the local machine. This includes a custom output of daily average precipitation by subbasin for the Nith subbasin. -->
-
-<!-- ```{r Subbasin map plot, fig.height=5, fig.width=6} -->
-<!-- # Raw sample data -->
-<!-- shpfilename <- system.file("extdata","Nith_shapefile_sample.shp",package="RavenR") -->
-
-<!-- # plot shapefile with baseplot in R -->
-<!-- sf::read_sf(shpfilename) -> shp -->
-<!-- # plot(shp$geometry) -->
-
-<!-- # Custom Output data from Raven for Nith basin -->
-<!-- cust.data <- rvn_custom_read(system.file("extdata","run1_PRECIP_Daily_Average_BySubbasin.csv", -->
-<!--                                      package="RavenR")) -->
-
-<!-- subIDcol <- 'subID' # attribute in shapefile with subbasin IDs -->
-<!-- plot.date <- "2003-03-30" # date for which to plot custom data -->
-
-<!-- # function call -->
-<!-- rvn_subbasin_map(shpfilename, subIDcol, plot.date, cust.data) -->
-<!-- ``` -->
-
-<!-- This produces a basic static map of the Nith subbasins provided in the sample file, with the precipitation data from the Custom Output data provided at the date specified. We can customize the plot now using the functionality of `ggplot2`, for example, adding a title to the plot and changing the legend axis to discrete rather than continuous. -->
-
-<!-- ```{r Updated subbasin map plot, fig.height=5, fig.width=6, message=FALSE, warning=FALSE} -->
-<!-- library(ggplot2) -->
-
-<!-- # create an updated plot -->
-<!-- p1 <- rvn_subbasin_map(shpfilename, subIDcol, plot.date, cust.data) -->
-<!-- p1 + ggtitle("Daily Average Precipitation (mm/d)") + -->
-<!--       scale_fill_binned() -->
-<!-- ``` -->
-
-<!-- This function can accept any custom output data as the input data for a given subbasin shapefile, provided that the numbering  -->
-<!-- of the custom data and the labels on the subbasin IDs in the shapefile correspond. Try to use the sample external data for snowpack in this plot as well! Use the 'run1_SNOW_Daily_Average_BySubbasin.csv' file and change the colour scheme to the colour-blind friendly set 'viridis'. -->
-
-<!-- ```{r Subbasin map of snowpack, fig.height=5, fig.width=6, message=FALSE, warning=FALSE} -->
-<!-- cust.data <- rvn_custom_read(system.file("extdata","run1_SNOW_Daily_Average_BySubbasin.csv", -->
-<!--                                      package="RavenR")) -->
-<!-- plot.title <- 'Daily Average Snowpack (mm SWE)' -->
-<!-- plot.date <- "2003-03-01" # date for which to plot custom data -->
-
-<!-- # create an updated plot, change the colour scheme -->
-<!-- rvn_subbasin_map(shpfilename, subIDcol, plot.date, cust.data)+ -->
-<!--   ggtitle(plot.title)+ -->
-<!--   scale_fill_binned(type="viridis") -->
-<!-- ``` -->
-
 ## RVI File Utilities
 
 The RavenR package can read the rvi file and generate a network plot of the model connections, which is helpful in understanding the model configuration. This can be done as follows, again using the Nith rvi file as an example. The network plot may be directly written to file by supplying a file name to the `pdfout` argument, which is NULL by default.
