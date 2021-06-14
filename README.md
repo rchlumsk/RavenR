@@ -78,4 +78,3 @@ plotting. Some of these include:
   - multiple bug fixes and improvements to handling rvi, rvh, and
     writing rvt files.
 
-The version 2.0.1 of this package is currently available on CRAN.
