@@ -5,7 +5,7 @@
 #' flow series.
 #'
 #' @details
-#' This function calculates the monthly volume biases and optionally creates a
+#' Calculates the monthly volume biases and optionally creates a
 #' plot of them. The monthly volume biases are averaged across all years of
 #' data. If normalized, the biases are calculated as:
 #'

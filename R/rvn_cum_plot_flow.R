@@ -6,7 +6,7 @@
 #' diagnotic analysis of model outputs.
 #'
 #' @details
-#' This function will plot the simulated series in all cases, and will include
+#' Plots the simulated series in all cases, and will include
 #' the observed and inflow plots if they are supplied.
 #'
 #' The sim and obs should be of time series (xts) format. The flow series are

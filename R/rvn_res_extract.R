@@ -6,7 +6,7 @@
 #' file).
 #'
 #' @details
-#' rvn_res_extract is used to extract the modelled and observed data from a Raven
+#' Extracts the modelled and observed data from a Raven
 #' reservoir object by name reference. It is also easy to create plots of
 #' modelled and observed data using this function. The simulated and observed
 #' files are outputted regardless of whether a plot is created, for the

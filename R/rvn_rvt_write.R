@@ -4,7 +4,7 @@
 #' rvn_rvt_write generates a Raven rvt file from a time series
 #'
 #' @details
-#' This function writes the rvt file for a given time series dataset. The function will write out
+#' Writes the rvt file for a given time series dataset. The function will write out
 #' the entirety of the columns provided in the given xts object. Please ensure that the
 #' parameters supplied in the params and units objects match the xts object supplied.
 #'

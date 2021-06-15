@@ -4,7 +4,7 @@
 #' rvn_flow_spaghetti creates a spaghetti plot of the flow series provided.
 #'
 #' @details
-#' This function creates a spaghetti plot of the annual flow series in each
+#' Creates a spaghetti plot of the annual flow series in each
 #' year of data provided. The flows are plotted for each water year of data
 #' available, set as October 1st.
 #'

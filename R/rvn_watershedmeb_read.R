@@ -5,7 +5,7 @@
 #' produced by the modelling Framework Raven.
 #'
 #' @details
-#' This function expects a full file path to the WatershedMassEnergyBalance.csv
+#' Expects a full file path to the WatershedMassEnergyBalance.csv
 #' file, then reads in the file using read.csv. The main advantage of this
 #' functon is renaming the columns to nicer names and extracting the units into
 #' something much easier to read. The from and to rows are also properly

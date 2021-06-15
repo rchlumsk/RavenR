@@ -5,7 +5,7 @@
 #' based on the water year.
 #'
 #' @details
-#' This function creates a scatterplot of the annual observed and simulated
+#' Creates a scatterplot of the annual observed and simulated
 #' peaks, calculated for each available water year of data
 #' within the two series provided; note that the difference between this and
 #' the annual.peak function is that here the peak event simulated for the same

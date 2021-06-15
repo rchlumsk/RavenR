@@ -5,7 +5,7 @@
 #' Useful in diagnotic analysis of model outputs.
 #'
 #' @details
-#' This function creates a scatterplot of flows.
+#' Creates a scatterplot of flows.
 #'
 #' The sim and obs should be of time series (xts) format. The flow series are
 #' assumed to be daily flows with units of m3/s.

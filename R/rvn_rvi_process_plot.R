@@ -5,7 +5,7 @@
 #' and returns the connections information as a network graph ggplot object.
 #'
 #' @details
-#' This function uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot.
+#' Uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot.
 #'
 #' @param connections a dataframe of from-to connections generated using rvn_rvi_connections()
 #' @param pdfout name of pdf file to save the network plot to, if null no PDF is generated

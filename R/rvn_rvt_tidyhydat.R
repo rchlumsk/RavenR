@@ -6,7 +6,7 @@
 #' Raven.
 #'
 #' @details
-#' This function takes a single flow tibble generated from tidyhydat and converts the flow data for
+#' Takes a single flow tibble generated from tidyhydat and converts the flow data for
 #' each station in the file into .rvt formatted files for a Raven model. If
 #' multiple stations exist in the .csv file, multiple observation files are created
 #'

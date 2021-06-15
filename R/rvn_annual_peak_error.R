@@ -5,7 +5,7 @@
 #' percent errors, based on the water year.
 #'
 #' @details
-#' This function creates a plot of the percent errors in simulated peaks for
+#' Creates a plot of the percent errors in simulated peaks for
 #' each water year. The peaks are calculated as the magnitude of the largest
 #' event in each water year. Note that the rvn_annual_peak_error function is first
 #' used to obtain the peaks in each year, then the percent errors are

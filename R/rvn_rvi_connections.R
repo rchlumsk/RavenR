@@ -5,7 +5,7 @@
 #' the list of hydrologic process connections.
 #'
 #' @details
-#' This function relies on a valid and up-to-date RavenProcessConnections.dat file.
+#' Relies on a valid and up-to-date RavenProcessConnections.dat file.
 #' This file is provided with the RavenR package, but
 #' may be overrided by a more recent file if provided manually.
 #'

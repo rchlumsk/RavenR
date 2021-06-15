@@ -6,7 +6,7 @@
 #' Raven.
 #'
 #' @details
-#' This function takes a single WSC flow file and converts the flow data for
+#' Takes a single WSC flow file and converts the flow data for
 #' each station in the file into .rvt formatted files for a Raven model. If
 #' multiple stations exist in the .csv file,
 #'

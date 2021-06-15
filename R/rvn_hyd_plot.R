@@ -5,7 +5,7 @@
 #' equivalently a stage plot for reservoir stages.
 #'
 #' @details
-#' This function creates a hydrograph plot using the supplied time series; any
+#' Creates a hydrograph plot using the supplied time series; any
 #' series not supplied will not be plotted. If the precip time series is
 #' supplied, the secondary y axis will be used to plot the precip time series.
 #'

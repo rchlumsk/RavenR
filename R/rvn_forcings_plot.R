@@ -5,7 +5,7 @@
 #' and potential melt), which summarize the watershed-averaged forcings. Returns a list with the individual plots.
 #'
 #' @details
-#' This function creates multiple plots from a ForcingFunctions.csv file
+#' Creates multiple plots from a ForcingFunctions.csv file
 #' structure generating using RavenR's forcings.read function
 #'
 #' @param forcings forcings attribute from forcings.read function
@@ -29,12 +29,16 @@
 #' prd = "2002-10-01/2003-09-30"
 #' rvn_forcings_plot(fdata,prd)$AllForcings
 #'
+#' rvn_forcings_plot(fdata,prd)$Temperature+
+#' theme(legend.position='top')
+#'
+#'
 #' @export rvn_forcings_plot
 #' @importFrom ggplot2 fortify ggplot aes scale_color_manual xlab ylab theme element_blank element_rect element_text ylim xlim scale_x_datetime
 #' @importFrom reshape2 melt
 #' @importFrom cowplot plot_grid ggdraw draw_label
 #' @importFrom lubridate year
-rvn_forcings_plot <-function(forcings,prd=NULL)
+rvn_forcings_plot <-function(forcings, prd=NULL)
 {
 
   Index <- value <- variable <- color <- PET <- potential.melt <- NULL
@@ -62,19 +66,21 @@ rvn_forcings_plot <-function(forcings,prd=NULL)
 
   #Temperature
   temp.data <- melt(plot.data, id.vars = "Index", measure.vars = c("temp_daily_max", "temp_daily_min"))
-  temp.data$color <- "red"
-  temp.data$color[temp.data$value<0] <- "purple"
+  temp.data$color <- "blue"
+  temp.data$color[temp.data$value<0] <- "red"
 
   p2 <- ggplot(temp.data)+
     geom_line(aes(x= Index, y= value, group = variable, color = color))+
     geom_hline(yintercept = 0)+
-    scale_color_manual(values = c("red","purple"))+
+    scale_color_manual(values = c("blue","red"))+
     ylim(c(min(plot.data$temp_daily_min),max(plot.data$temp_daily_max)))+
     ylab(expression(paste("Min/Max Daily Temperature (",degree,"C)")))+
     xlab("")+
     rvn_theme_RavenR()+
     theme(legend.position = "none",
           axis.title = element_text(size = 7))
+
+  p2
 
   #PET
   p3 <- ggplot(plot.data)+

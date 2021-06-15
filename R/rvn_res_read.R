@@ -5,7 +5,7 @@
 #' modelling Framework Raven.
 #'
 #' @details
-#' This function expects a full file path to the ReservoirStages.csv file, then
+#' Expects a full file path to the ReservoirStages.csv file, then
 #' reads in the file using read.csv. The main advantage of this function is
 #' renaming the columns to nicer names and extracting the units into something
 #' much easier to read.

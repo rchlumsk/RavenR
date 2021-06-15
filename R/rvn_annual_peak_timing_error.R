@@ -5,7 +5,7 @@
 #' peak timing errors, based on the water year.
 #'
 #' @details
-#' This function creates a plot of the peak timing errors in simulated peaks
+#' Creates a plot of the peak timing errors in simulated peaks
 #' for each water year. The difference in days between the simulated peak and
 #' observed peak are plotted (and/or returned in the data frame) for the water
 #' year. This diagnostic is useful in determining how accurate the timing of

@@ -5,7 +5,7 @@
 #' diagnotic analysis of model outputs.
 #'
 #' @details
-#' This function creates a residuals time series plot for flow values, with the
+#' Creates a residuals time series plot for flow values, with the
 #' option to smooth out the values using the rollmean function in zoo. The
 #' winter months are optionally shaded in the time series; winter period is
 #' defined as December 1st to March 31st.

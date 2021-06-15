@@ -7,7 +7,7 @@
 #' subbasin characteristics such as total upstream area and dominant land/vegetation classes.
 #'
 #' @details
-#' This function does not like comma-delimited tables with a trailing comma. The function also
+#' The supplied file should not be comma-delimited with a trailing comma. The function also
 #' does not like tabs in the rvh file, the file should be untabified first.
 #' This function uses the igraph library t0o build the networks and compute the total upstream area.
 #' The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :SubBasins-:EndSubBasins

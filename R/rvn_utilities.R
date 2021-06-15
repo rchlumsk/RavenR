@@ -233,7 +233,7 @@ cmax <- function(x, na.rm = FALSE)
 #' with the maximum value and associated date.
 #'
 #' @details
-#' This function is intended to act as the which.max function, applicable
+#' Acts as the which.max function, applicable
 #' to xts objects and returning values in an xts format.
 #'
 #' Note that when deploying the rvn_apply_wyearly function, the dates are overwritten
@@ -489,7 +489,7 @@ rvn_stringpad <- function(string, width, just='r')
 #' column to a date column called 'Date'.
 #'
 #' @details
-#' This function is useful in preparing data to plotting or other tidy-style analysis.
+#' Useful in preparing data to plotting or other tidy-style analysis.
 #' This function is used internally in many RavenR plotting functions.
 #'
 #' @param x xts formatted object to fortify to tibble
