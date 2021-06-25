@@ -38,7 +38,7 @@ rvn_annual_peak_event_error creates a plot of the annual observed and simulated
 peak event errors.
 }
 \details{
-This function creates a plot of the percent errors in simulated peak events
+Creates a plot of the percent errors in simulated peak events
 for each water year. The peaks are calculated as using flows from the same
 day as the peak event in the observed series, i.e. the timing of the peak is
 considered here. Note that the rvn_annual_peak_event function is first used to

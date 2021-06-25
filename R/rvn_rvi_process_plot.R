@@ -96,7 +96,7 @@ rvn_rvi_process_plot <- function(connections, pdfout=NULL)
   p1 <- ggplot()+
     geom_segment(data=g,aes(x=from.x,xend = to.x, y=from.y,yend = to.y),
                  arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "gray40") +
-    geom_label(data = layout, aes(x=V1, y=V2, label = Label), fill = "lightblue")+
+    geom_label_repel(data = layout, aes(x=V1, y=V2, label = Label), fill = "lightblue")+
     xlim(c(x.min,x.max))+
     theme(panel.grid = element_blank(),
           axis.ticks = element_blank(),

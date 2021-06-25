@@ -24,10 +24,10 @@ rvn_exhaustive_mb_read is used to read in the ExhaustiveMassBalance.csv file pro
 the modelling Framework Raven.
 }
 \details{
-This function expects a full file path to the ExhaustiveMassBalance.csv file,
-then reads in the file using read.csv. The main advantage of this functon is
+Expects a full file path to the ExhaustiveMassBalance.csv file,
+then reads in the file using read.csv. The main advantage of this function is
 renaming the columns to nicer names and extracting the units into something
-much easier to read.
+that is much easier to read.
 
 ff is the full file path of the ExhaustiveMassBalance.csv file. If the file is
 located in the current working directory, then simply the name of the file

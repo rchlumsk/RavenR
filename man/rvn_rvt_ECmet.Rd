@@ -47,7 +47,7 @@ rvn_rvt_ECmet converts Environment Canada historical meteorological data for a
 given station into the .rvt format usable in Raven.
 }
 \details{
-The function prints in the :MultiData format; the particular set of forcings to
+Writes data in the :MultiData format; the particular set of forcings to
 print can be set with the forcing_set command. The data should be downloaded
 with missing days included. The download website is linked below.
 

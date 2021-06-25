@@ -19,7 +19,7 @@ rvn_hyd_read is used to read in the Hydrographs.csv file produced by the
 modelling Framework Raven.
 }
 \details{
-This function expects a full file path to the Hydrographs.csv file, then
+Expects a full file path to the Hydrographs.csv file, then
 reads in the file using fread. The main advantage of this function is
 renaming the columns to nicer names and extracting the units into something
 much easier to read.

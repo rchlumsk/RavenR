@@ -41,7 +41,7 @@ returns a list with annual volume data in a data frame, and a ggplot object
 rvn_annual_volume creates a plot of the annual observed and simulated volumes.
 }
 \details{
-This function creates a scatterplot of the annual observed and simulated
+Creates a scatterplot of the annual observed and simulated
 volumes, calculated for each available water year of data within the two series provided.
 The sim and obs should be of time
 series (xts) format and are assumed to be of the same length and time

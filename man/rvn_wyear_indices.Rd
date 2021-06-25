@@ -25,7 +25,7 @@ for example as June 30th for a July 1 water year (i.e. the Australian water year
 This function is useful in supplying endpoints for water year evaluations.
 }
 \details{
-Note that this function is meant to emulate the \code{\link{endpoints}} function
+Emulates the \code{\link{endpoints}} function
 for a water year period. The first and last points are included in all supplied endpoints,
 which may introduce partial periods to the analysis.#'
 }

@@ -33,7 +33,7 @@ rvn_res_plot(
 rvn_res_plot creates a reservoir stage plot for the supplied stage series.
 }
 \details{
-This function creates a reservoir stage plot using the supplied time series;
+Creates a reservoir stage plot using the supplied time series;
 any series not supplied will not be plotted. If the precip time series is
 supplied, the secondary y axis will be used to plot the precip time series.
 

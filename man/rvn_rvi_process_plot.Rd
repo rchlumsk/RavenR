@@ -19,7 +19,7 @@ This routine takes a connections data from generated using rvn_rvi_connections()
 and returns the connections information as a network graph ggplot object.
 }
 \details{
-This function uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot.
+Uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot.
 }
 \note{
 tries to follow basic network structure, accomodates unrecognized state variables on LHS of plot

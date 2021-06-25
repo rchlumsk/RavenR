@@ -41,7 +41,7 @@ separate .rvt file}
 rvn_rvt_flow generates a Raven rvt file from a flow series
 }
 \details{
-This function writes the rvt file for a given time series of
+Writes the rvt file for a given time series of
 flows. The supplied flows should be in the xts format. This
 function operates similarly to the ECflow.rvt function (
 linked below).

@@ -21,7 +21,8 @@ rvn_rvc_from_custom_output(filename, custfiles, FUN, init_date = NULL, ...)
 TRUE upon success
 }
 \description{
-Generate RVC file from Custom Output CSVs
+rvn_rvc_from_custom_output creates an initial conditions rvc file that specifies the initial state
+using the information from the supplied custom output file.
 }
 \examples{
 # Create array of custom output file(s)

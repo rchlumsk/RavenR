@@ -17,7 +17,7 @@ rvn_which_max_xts applies the which.max function and returns an xts object
 with the maximum value and associated date.
 }
 \details{
-This function is intended to act as the which.max function, applicable
+Acts as the which.max function, applicable
 to xts objects and returning values in an xts format.
 
 Note that when deploying the rvn_apply_wyearly function, the dates are overwritten

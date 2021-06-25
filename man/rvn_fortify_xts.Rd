@@ -17,7 +17,7 @@ Applies the fortify function to an xts object and updates the Index character
 column to a date column called 'Date'.
 }
 \details{
-This function is useful in preparing data to plotting or other tidy-style analysis.
+Useful in preparing data to plotting or other tidy-style analysis.
 This function is used internally in many RavenR plotting functions.
 }
 \examples{

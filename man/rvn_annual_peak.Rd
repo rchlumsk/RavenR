@@ -38,7 +38,7 @@ returns a list with peak data in a data frame, and a ggplot object
 rvn_annual_peak creates a plot of the annual observed and simulated peaks, based on the water year.
 }
 \details{
-This function creates a scatterplot of the annual observed and simulated
+Creates a scatterplot of the annual observed and simulated
 peaks, calculated for each available water year of data
 within the two series provided. The default start of the water year
 is October 1st, but may be adjusted through function parameters. Note that the

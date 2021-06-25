@@ -41,7 +41,7 @@ Takes \code{\link{rvn_rvh_read}}-generated HRUtable and SBTable and returns clea
 with (hopefully) fewer HRUs
 }
 \details{
-rvh.clean removes HRUs in two ways:
+rvn_rvh_cleanhrus removes HRUs in two ways:
 
   1. it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
 subbasin are expanded by the lost area to keep the same relative coverage.

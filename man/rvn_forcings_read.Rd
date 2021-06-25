@@ -20,7 +20,7 @@ rvn_forcings_read is used to read in the ForcingFunctions.csv file produced by
 the modelling Framework Raven.
 }
 \details{
-This function expects a full file path to the ForcingFunctions.csv file,
+Expects a full file path to the ForcingFunctions.csv file,
 then reads in the file using read.csv. The main advantage of this functon is
 renaming the columns to nicer names and extracting the units into something
 much easier to read.

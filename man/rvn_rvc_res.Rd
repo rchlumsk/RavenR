@@ -22,7 +22,7 @@ rvn_rvc_res is used to write an initial conditions (rvc) format file for Raven,
 with the calculated reservoir stages written in.
 }
 \details{
-This function is used to write an initial conditions format file for Raven
+Writes an initial conditions format file for Raven
 with the relevant initial reservoir stages. This file can be used directly
 as the model rvc file, or one may copy and paste the information into a
 separate rvc file for use (i.e. if there is other information to be included
