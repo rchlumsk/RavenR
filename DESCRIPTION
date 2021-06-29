@@ -22,6 +22,8 @@ Depends:
 Imports:
     colorspace,
     cowplot,
+    DiagrammeR,
+    DiagrammeRsvg,
     dplyr,
     dygraphs,
     gdata,
@@ -32,6 +34,7 @@ Imports:
     purrr,
     RCurl,
     reshape2,
+    rsvg,
     scales,
     stats,
     stringr,

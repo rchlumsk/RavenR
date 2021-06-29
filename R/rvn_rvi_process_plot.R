@@ -14,7 +14,7 @@
 #'
 #' @author James R. Craig, University of Waterloo
 #'
-#' @note tries to follow basic network structure, accomodates unrecognized state variables on LHS of plot
+#' @note tries to follow basic network structure, accommodates unrecognized state variables on LHS of plot
 #'
 #' @seealso \code{\link{rvn_rvi_connections}} to generate connections table from an rvi object
 #'
@@ -96,15 +96,15 @@ rvn_rvi_process_plot <- function(connections, pdfout=NULL)
   p1 <- ggplot()+
     geom_segment(data=g,aes(x=from.x,xend = to.x, y=from.y,yend = to.y),
                  arrow = arrow(length = unit(0.2, "cm"), type = "closed"), color = "gray40") +
-    geom_label_repel(data = layout, aes(x=V1, y=V2, label = Label), fill = "lightblue")+
+    geom_label(data = layout, aes(x=V1, y=V2, label = Label), fill = "lightblue")+
     xlim(c(x.min,x.max))+
     theme(panel.grid = element_blank(),
-          axis.ticks = element_blank(),
-          axis.text = element_blank(),
+          # axis.ticks = element_blank(),
+          # axis.text = element_blank(),
           axis.title = element_blank(),
           axis.line = element_blank(),
-          legend.position = "none")+
-    rvn_theme_RavenR()
+          legend.position = "none")
+    # rvn_theme_RavenR()
 
   if (!is.null(pdfout)) {ggsave(pdfout,p1, units = "in", height = 7, width = 7, dpi =300)}
   return(p1)
