@@ -26,7 +26,6 @@
 #'
 #' @export rvn_custom_output_plot
 #' @importFrom ggplot2 fortify ggplot aes geom_line ylab xlab scale_colour_brewer scale_x_datetime geom_step ggtitle
-#' @importFrom reshape2 melt
 #' @importFrom xts xtsAttributes
 rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL)
 {
@@ -40,7 +39,7 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL)
 
   # Put into approrpiate format
   df.plot <- fortify(cust[,IDs])
-  df.plot <- reshape2::melt(df.plot, id.vars = "Index")
+  df.plot <- pivot_longer(df.plot, !Index, names_to = "variable",values_to = "value")
 
   # Break down xts attributes to get title
   xtsAttributes(cust) %>% data.frame() -> xdf
