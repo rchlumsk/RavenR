@@ -25,8 +25,9 @@
 #' rvn_custom_output_plot(mycustomdata, IDs=seq(1,10), prd="2002-10-01/2003-06-01")
 #'
 #' @export rvn_custom_output_plot
-#' @importFrom ggplot2 fortify ggplot aes geom_line ylab xlab scale_colour_brewer scale_x_datetime geom_step ggtitle
 #' @importFrom xts xtsAttributes
+#' @importFrom ggplot2 fortify ggplot aes geom_line ylab xlab scale_colour_brewer scale_x_datetime geom_step ggtitle
+#' @importFrom tidyr pivot_longer
 rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL)
 {
 

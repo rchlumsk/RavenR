@@ -36,6 +36,7 @@
 #' @export rvn_forcings_plot
 #' @importFrom ggplot2 fortify ggplot aes scale_color_manual xlab ylab theme element_blank element_rect element_text ylim xlim scale_x_datetime
 #' @importFrom cowplot plot_grid ggdraw draw_label
+#' @importFrom tidyr pivot_longer
 #' @importFrom lubridate year
 rvn_forcings_plot <-function(forcings, prd=NULL)
 {
@@ -59,7 +60,7 @@ rvn_forcings_plot <-function(forcings, prd=NULL)
     ylab("Precipitation (mm/d)")+
     xlab("")+
     rvn_theme_RavenR()+
-    theme(legend.position = c(0.8,0.8),
+    theme(legend.position = "none", # c(0.8,0.8),
           legend.title = element_blank(),
           legend.background = element_rect(fill = "transparent"),
           axis.title = element_text(size = 7))
@@ -83,7 +84,7 @@ rvn_forcings_plot <-function(forcings, prd=NULL)
 
   #PET
   p3 <- ggplot(plot.data)+
-    geom_line(aes(x = Index, y = PET), color = "navy")+
+    geom_line(aes(x = Index, y = PET), color="navy")+
     ylab('PET (mm/d)')+
     xlab("")+
     rvn_theme_RavenR()+

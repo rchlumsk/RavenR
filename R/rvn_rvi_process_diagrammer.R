@@ -33,7 +33,7 @@
 #' render_graph()
 #'
 #' @importFrom igraph get.data.frame graph_from_data_frame vertex.attributes
-#' @importFrom DiagrammeR get_node_df set_node_position create_graph add_node add_edge edge_aes
+#' @importFrom DiagrammeR get_node_df set_node_position create_graph add_node add_edge edge_aes export_graph
 #'
 #' @export rvn_rvi_process_diagrammer
 #'

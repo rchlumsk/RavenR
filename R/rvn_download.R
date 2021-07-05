@@ -40,6 +40,7 @@
 #' @export rvn_download
 #' @importFrom stringr str_match_all str_match
 #' @importFrom RCurl url.exists
+#' @importFrom utils win.version unzip download.file
 rvn_download<-function(version=NA,NetCDF=FALSE)
 {
    # path<-paste(.libPaths()[1],"/RavenR/",sep="")
