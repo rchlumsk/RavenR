@@ -35,7 +35,6 @@
 #'
 #' @export rvn_forcings_plot
 #' @importFrom ggplot2 fortify ggplot aes scale_color_manual xlab ylab theme element_blank element_rect element_text ylim xlim scale_x_datetime
-#' @importFrom reshape2 melt
 #' @importFrom cowplot plot_grid ggdraw draw_label
 #' @importFrom lubridate year
 rvn_forcings_plot <-function(forcings, prd=NULL)
@@ -51,7 +50,8 @@ rvn_forcings_plot <-function(forcings, prd=NULL)
 
   # Precipitation
   plot.data$Total_Precip <- plot.data$rain + plot.data$snow
-  precip.data <- melt(plot.data, id.vars = "Index", measure.vars = c("Total_Precip","snow"))
+  precip.data <- pivot_longer(plot.data[,c("Index","Total_Precip","snow")], cols = c("Total_Precip","snow"),  names_to = "variable",
+                              values_to = "value")
   p1 <- ggplot(precip.data)+
     geom_line(aes(x= Index, y= value, color = variable))+
     scale_color_manual(values = c("blue", "cyan"))+
@@ -65,9 +65,10 @@ rvn_forcings_plot <-function(forcings, prd=NULL)
           axis.title = element_text(size = 7))
 
   #Temperature
-  temp.data <- melt(plot.data, id.vars = "Index", measure.vars = c("temp_daily_max", "temp_daily_min"))
-  temp.data$color <- "blue"
-  temp.data$color[temp.data$value<0] <- "red"
+  temp.data <- pivot_longer(plot.data[,c("Index","temp_daily_max","temp_daily_min")], cols = c("temp_daily_max", "temp_daily_min"),
+                            names_to = "variable",values_to = "value")
+  temp.data$color <- "Above 0 deg C"
+  temp.data$color[temp.data$value<0] <- "Below 0 deg C"
 
   p2 <- ggplot(temp.data)+
     geom_line(aes(x= Index, y= value, group = variable, color = color))+
@@ -80,8 +81,6 @@ rvn_forcings_plot <-function(forcings, prd=NULL)
     theme(legend.position = "none",
           axis.title = element_text(size = 7))
 
-  p2
-
   #PET
   p3 <- ggplot(plot.data)+
     geom_line(aes(x = Index, y = PET), color = "navy")+
@@ -93,11 +92,12 @@ rvn_forcings_plot <-function(forcings, prd=NULL)
 
   #Radiation
   plot.data$SW_LW <- plot.data$SW.radiation + plot.data$LW.radiation
-  rad.data <- melt(plot.data, id.vars = "Index", measure.vars = c("LW.radiation","SW.radiation","ET.radiation","SW_LW"))
+  rad.data <- pivot_longer(plot.data[,c("Index","LW.radiation","SW.radiation","ET.radiation","SW_LW")], cols = c("LW.radiation","SW.radiation","ET.radiation","SW_LW"),
+                           names_to = "variable",values_to = "value")
 
   p4 <- ggplot(rad.data)+
     geom_line(aes(x = Index, y = value, color = variable))+
-    scale_color_manual(values = c("black", "blue", "blue", "blue"))+
+    scale_color_manual(values = c("black", "blue", "red", "purple"))+
     ylab('Radiation (MJ/m2/d)')+
     xlab("")+
     rvn_theme_RavenR()+
