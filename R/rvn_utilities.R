@@ -517,3 +517,74 @@ rvn_fortify_xts <- function(x)
 }
 
 
+#' @title Provide mappings for rvt files
+#'
+#' @description
+#' Provides global variables to the environment regarding the mapping of rvt_type and data_type
+#' that are used in the \code{\link{rvn_rvt_write}} function.
+#'
+#' @return \code{TRUE} if executed successfully.
+#'
+#' @seealso \code{\link{rvn_rvt_write}}
+#'
+#' @examples
+#' rvn_rvt_mappings()
+#'
+#' # view global variables
+#' rvt_mapping
+#' rvt_data_type_mapping
+#'
+#' @export rvn_rvt_mappings
+rvn_rvt_mappings <- function() {
+
+  # generates globally accessible variables for rvt_mapping and rvt_data_type_mapping
+
+  # update based on additional entries in the list
+  rvt_mapping <<- list(
+
+    "ObservationData"=list(
+      c("data_type","basin_ID","units"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ObservationWeights"=list(
+      c("data_type","basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "IrregularWeights"=list(
+      c("data_type","basin_ID","num_points")
+    ),
+
+    "ReservoirExtraction"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMaxStage"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    )
+
+  )
+
+
+  # update this based on table C.1 in Raven Manual?
+  rvt_data_type_mapping <<- list(
+    "HYDROGRAPH"=list(
+      "units"="m3/s"
+    ),
+    "RESERVOIR_STAGE"=list(
+      "units"="m"
+    ),
+    "RESERVOIR_INFLOW"=list(
+      "units"="m3/s"
+    ),
+    "RESERVOIR_NETINFLOW"=list(
+      "units"="m3/s"
+    )
+  )
+
+  return(TRUE)
+}
+

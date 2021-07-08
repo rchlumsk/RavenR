@@ -24,12 +24,12 @@
 #' rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
 #' conn <- rvn_rvi_connections(rvi)
 #'
-#' rvn_rvi_process_plot(conn)
+#' rvn_rvi_process_ggplot(conn)
 #'
-#' @export rvn_rvi_process_plot
+#' @export rvn_rvi_process_ggplot
 #' @importFrom igraph get.data.frame graph_from_data_frame vertex.attributes
 #' @importFrom ggplot2 ggplot geom_segment geom_label xlim theme aes arrow unit ggsave
-rvn_rvi_process_plot <- function(connections, pdfout=NULL)
+rvn_rvi_process_ggplot <- function(connections, pdfout=NULL)
 {
 
   from.x <- to.x <- from.y <- to.y <- V1 <- V2 <- Label <- NULL

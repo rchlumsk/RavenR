@@ -29,6 +29,8 @@
 #' rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
 #' conn <- rvn_rvi_connections(rvi)
 #'
+#' library(DiagrammeR)
+#'
 #' rvn_rvi_process_diagrammer(conn) %>%
 #' render_graph()
 #'
