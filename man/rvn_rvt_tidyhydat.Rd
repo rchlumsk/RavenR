@@ -11,7 +11,8 @@ rvn_rvt_tidyhydat(
   stnNames = NULL,
   write_redirect = FALSE,
   flip_number = FALSE,
-  rd_file = "flow_stn_redirect_text.rvt"
+  rd_file = "flow_stn_redirect_text.rvt",
+  filename = NULL
 )
 }
 \arguments{
@@ -28,11 +29,11 @@ rvn_rvt_tidyhydat(
 \item{flip_number}{(optional) put the subID first in the .rvt filename}
 
 \item{rd_file}{(optional) name of the redirect file created (if write_redirect = TRUE)}
+
+\item{filename}{specified name of file(s) to write to (optional)}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
-
-See also the \href{http://www.raven.uwaterloo.ca/}{Raven page}
 }
 \description{
 rvn_rvt_tidyhydat converts Environment Canada historical streamgauge data,
@@ -40,7 +41,7 @@ accessed via the tidyhydat package, into .rvt format files usable in
 Raven.
 }
 \details{
-This function takes a single flow tibble generated from tidyhydat and converts the flow data for
+Takes a single flow tibble generated from tidyhydat and converts the flow data for
 each station in the file into .rvt formatted files for a Raven model. If
 multiple stations exist in the .csv file, multiple observation files are created
 
@@ -68,25 +69,32 @@ flip_number is a useful option to place the subID first in the filename.
 This is often cleaner for organizing files in a folder, since the
 alphabeticized order is not dependent on the station name, and the observed
 files will be in one set.
+
+The function will write to name generated from the station name(s), otherwise
+the .rvt filename may be specified with the filename argument (full path to
+the filename, including .rvt extension). If multiple stations are provided,
+the filename argument may be a vector of filenames.
 }
 \examples{
-library(tidyhydat)
+
+# note: example modified to avoid using tidyhydat directly, uses saved
+## tidyhydat data from RavenR package sample data
+# library(tidyhydat)
 stations <- c("05CB004","05CA002")
 
 # Gather station data/info using tidyhydat functions
-hd <- tidyhydat::hy_daily_flows(station_number = stations,
-  start_date = "1996-01-01", end_date = "2000-01-01")
+# hd <- tidyhydat::hy_daily_flows(station_number = stations,
+#  start_date = "1996-01-01", end_date = "1997-01-01")
+data(rvn_tidyhydat_sample)
+hd <- rvn_tidyhydat_sample
 
-station_info <- hy_stations(stations)
+# station_info <- hy_stations(stations)
+
+tf1 <- file.path(tempdir(), "station1.rvt")
+tf2 <- file.path(tempdir(), "station2.rvt")
 
 # Create RVT files
 rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
-  stnNames=station_info$STATION_NAME, flip_number=TRUE)
+  filename=c(tf1,tf2))
 
 }
-\keyword{Raven}
-\keyword{conversion}
-\keyword{flow}
-\keyword{rvt}
-\keyword{streamgauge}
-\keyword{tidyhydat}

@@ -5,7 +5,7 @@
 #' modelling Framework Raven.
 #'
 #' @details
-#' This function expects a full file path to the Hydrographs.csv file, then
+#' Expects a full file path to the Hydrographs.csv file, then
 #' reads in the file using fread. The main advantage of this function is
 #' renaming the columns to nicer names and extracting the units into something
 #' much easier to read.
@@ -20,19 +20,14 @@
 #'
 #' tzone is a string indicating the timezone of the supplied Hydrographs file. The
 #' timezone provided is coded into the resulting hyd data frame using the as.POSIXct
-#' function. If no timezone is provided, this is left as an empty string, and is
-#' determined by the function as the current time zone.
+#' function. The timezone is provided as "UTC" by default, and should be adjusted by
+#' the user to the local time zone as needed, based on the model run.
 #'
 #' @param ff full file path to the Hydrographs.csv file
-#' @param tzone string indicating the timezone of the data in ff
+#' @param tzone string indicating the timezone of the data in ff (default "UTC")
 #' @return \item{hyd}{data frame from the file with standardized names}
 #' @seealso \code{\link{rvn_hyd_extract}} for extraction tools related to the
 #' rvn_hyd_read output file
-#'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://raven.uwaterloo.ca/}{Raven page}
-#'
 #'
 #' @examples
 #' # read in hydrograph sample csv data from RavenR package
@@ -48,7 +43,7 @@
 #' @export rvn_hyd_read
 #' @importFrom xts xts
 #' @importFrom utils read.csv
-rvn_hyd_read <- function(ff=NA,tzone=NULL) {
+rvn_hyd_read <- function(ff=NA, tzone="UTC") {
 
   if (missing(ff)) {
     stop("Requires the full file path to the Hydrographs.csv file.")
@@ -105,6 +100,10 @@ rvn_hyd_read <- function(ff=NA,tzone=NULL) {
         units[i] = mysplit[3]
         obs_flag[i] = TRUE
         newcols[i] = sprintf("%s_obs",mysplit[1])
+      } else if (mysplit[2] == "obs" & mysplit[3] == "res") {
+        units[i] = mysplit[length(mysplit)]
+        obs_flag[i] = TRUE
+        newcols[i] = sprintf("%s_obs_resinflow",mysplit[1])
       } else if (mysplit[2] == "inflow") {
         units[i] = mysplit[3]
         obs_flag[i] = FALSE

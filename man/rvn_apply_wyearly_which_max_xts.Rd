@@ -30,6 +30,3 @@ rvn_apply_wyearly_which_max_xts(rvn_hydrograph_data$hyd$Sub43_obs)
 rvn_apply_wyearly_which_max_xts(rvn_hydrograph_data$hyd)
 
 }
-\keyword{max}
-\keyword{which}
-\keyword{xts}

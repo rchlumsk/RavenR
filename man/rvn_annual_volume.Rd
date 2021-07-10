@@ -11,7 +11,8 @@ rvn_annual_volume(
   dd = 30,
   add_line = TRUE,
   add_r2 = FALSE,
-  add_eqn = FALSE
+  add_eqn = FALSE,
+  add_labels = FALSE
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ rvn_annual_volume(
 \item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
 
 \item{add_eqn}{optionally adds the equation for a linear regression line through the origin (default FALSE)}
+
+\item{add_labels}{optionally adds year-ending labels to each point on plot using geom_text (default FALSE)}
 }
 \value{
 returns a list with annual volume data in a data frame, and a ggplot object
@@ -38,7 +41,7 @@ returns a list with annual volume data in a data frame, and a ggplot object
 rvn_annual_volume creates a plot of the annual observed and simulated volumes.
 }
 \details{
-This function creates a scatterplot of the annual observed and simulated
+Creates a scatterplot of the annual observed and simulated
 volumes, calculated for each available water year of data within the two series provided.
 The sim and obs should be of time
 series (xts) format and are assumed to be of the same length and time
@@ -65,6 +68,9 @@ rvn_annual_volume(sim,obs)
 # create a plot of the annual volumes with r2
 rvn_annual_volume(sim,obs,add_r2=TRUE, add_eqn=TRUE)
 
+# create a plot of the annual volumes with year-ending labels
+rvn_annual_volume(sim,obs, add_labels=TRUE)
+
 # calculate annual volumes for different water years (e.g. ending Oct 31)
 vv <- rvn_annual_volume(sim, obs, mm=10, dd=31)
 vv$df.volume
@@ -74,12 +80,4 @@ vv$p1
 \seealso{
 \code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow
 values
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{annual}
-\keyword{diagnostics}
-\keyword{volume}

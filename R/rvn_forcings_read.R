@@ -5,7 +5,7 @@
 #' the modelling Framework Raven.
 #'
 #' @details
-#' This function expects a full file path to the ForcingFunctions.csv file,
+#' Expects a full file path to the ForcingFunctions.csv file,
 #' then reads in the file using read.csv. The main advantage of this functon is
 #' renaming the columns to nicer names and extracting the units into something
 #' much easier to read.
@@ -13,6 +13,9 @@
 #' ff is the full file path of the ForcingFunctions.csv file. If the file is
 #' located in the current working directory, then simply the name of the file
 #' is sufficient.
+#'
+#' The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
+#' the user to the local time zone as needed, based on the model run.
 #'
 #' @param ff full file path to the ForcingFunctions.csv file
 #' @param tzone string indicating the timezone of the data in ff
@@ -23,23 +26,20 @@
 #'
 #' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven read.csv forcing functions
 #' @examples
 #'
 #' # read in sample forcings data
 #' ff <- system.file("extdata","run1_ForcingFunctions.csv", package="RavenR")
 #' myforcings <- rvn_forcings_read(ff)
 #'
-#' # check data
-#' head(myforcings$forcings)
+#' # check data (first 5 columns for brevity)
+#' head(myforcings$forcings[,1:5])
+#' summary(myforcings$forcings[,1:5])
 #'
 #' @export rvn_forcings_read
 #' @importFrom xts xts
 #' @importFrom utils read.csv
-rvn_forcings_read <- function(ff=NA, tzone=NULL)
+rvn_forcings_read <- function(ff=NA, tzone="UTC")
 {
 
   if (missing(ff)) {

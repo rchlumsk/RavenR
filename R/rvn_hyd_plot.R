@@ -5,7 +5,7 @@
 #' equivalently a stage plot for reservoir stages.
 #'
 #' @details
-#' This function creates a hydrograph plot using the supplied time series; any
+#' Creates a hydrograph plot using the supplied time series; any
 #' series not supplied will not be plotted. If the precip time series is
 #' supplied, the secondary y axis will be used to plot the precip time series.
 #'
@@ -31,15 +31,13 @@
 #' @param prd period to use in plotting
 #' @param winter_shading optionally adds shading for winter months (default FALSE)
 #' @param wsdates integer vector of winter shading period dates (see details)
-#' @return \item{TRUE}{return TRUE if the function is executed properly}
+#' @return \item{p1}{returns ggplot plot object}
+#'
 #' @seealso \code{\link{rvn_flow_spaghetti}} to create a spaghetti plot of annual
 #' flow series
 #'
 #' \code{\link{rvn_hyd_extract}} to extract time series from Raven objects
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://raven.uwaterloo.ca/}{Raven page}
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs
@@ -62,11 +60,11 @@
 #' # add the winter shading
 #' rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=TRUE)
 #'
-#' # change winter shading dates
+#' # change winter shading dates (Nov 1st to April 15th)
 #' rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=TRUE, wsdates=c(11,1,4,15))
 #'
 #' @export rvn_hyd_plot
-#' @importFrom ggplot2 fortify ggplot geom_line scale_x_date xlab ylab theme aes scale_colour_brewer geom_bar
+#' @importFrom ggplot2 fortify ggplot geom_line xlab ylab theme aes scale_colour_brewer geom_bar
 #' @importFrom cowplot plot_grid
 rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
                          winter_shading=FALSE, wsdates=c(12,1,3,31))
@@ -85,48 +83,32 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     stop("Must supply at least one flow series to plot.")
   }
 
-  # determine period ----
-  # determine the period to use
-  # if (!(is.null(prd))) {
-  #
-  #   # period is supplied; check that it makes sense
-  #   firstsplit <- unlist(strsplit(prd,"/"))
-  #   if (length(firstsplit) != 2) {
-  #     stop("Check the format of supplied period; should be two dates separated by '/'.")
-  #   }
-  #   if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
-  #       || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
-  #     stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
-  #   }
-  # } else {
-  #   # period is not supplied
-  #   # define entire range as period
-  #   N <- nrow(base)
-  #   prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(base[1,1]),month(base[1,1]),day(base[1,1]),
-  #                  year(base[N,1]),month(base[N,1]),day(base[N,1]) )
-  # }
   prd <- rvn_get_prd(sim, prd)
 
   #Create X axis limits from period
-  x.min <- as.Date(unlist(strsplit(prd,"/"))[1])
-  x.max <- as.Date(unlist(strsplit(prd,"/"))[2])
+  # x.min <- as.Date(unlist(strsplit(prd,"/"))[1])
+  # x.max <- as.Date(unlist(strsplit(prd,"/"))[2])
+
 
   #Create data frame for plotting
   df.plot <- data.frame()
 
   if (!(is.null(sim))) {
+    sim <- sim[prd]
     sim_temp <- fortify(sim)
     sim_temp$ID <- "Sim"
     colnames(sim_temp) <- c("Date","Flow","ID")
     df.plot <- rbind(df.plot,sim_temp)
   }
   if (!(is.null(obs))) {
+    obs <- obs[prd]
     obs_temp <- fortify(obs)
     obs_temp$ID <- "Obs"
     colnames(obs_temp) <- c("Date","Flow","ID")
     df.plot <- rbind(df.plot,obs_temp)
   }
   if (!(is.null(inflow))) {
+    inflow <- inflow[prd]
     inflow_temp <- fortify(inflow)
     inflow_temp$ID <- "Inflow"
     colnames(inflow_temp) <- c("Date","Flow","ID")
@@ -137,7 +119,8 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
 
   p1 <- ggplot()+
     geom_line(data=df.plot, aes(x=Date,y=Flow,color=ID))+
-    scale_x_date(limits = c(x.min,x.max))+
+    # scale_x_date(limits = c(x.min,x.max))+
+    scale_x_date()+
     xlab("Date")+
     ylab(expression("Flow ("*m^3*"/s)"))+
     rvn_theme_RavenR()+
@@ -153,8 +136,6 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
                           origin = "1970-01-01")
 
     shade <- data.frame(winter.start,winter.end)
-    # shade$winter.start <- as.Date(shade$winter.start
-    # shade$winter.end <- as.Date(shade$winter.end)
     shade$y.start <- -Inf
     shade$y.end <- Inf
 
@@ -165,20 +146,27 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
   #Add precipitation
   if (!(is.null(precip))){
 
-    df.precip.plot <- fortify(precip)
-    colnames(df.precip.plot)[1] <- "Date"
-    df.precip.plot$ID <- "Precip"
+    df.precip.plot <- rvn_fortify_xts(precip[prd])
 
-    df.precip.plot$Date <- as.Date(as.character(df.precip.plot$Date))
+    if ("precip" %notin% colnames(precip)) {
+      warning("'precip' column name not found in precip object, using first column as precipitation data anyway.")
+
+      if (ncol(df.precip.plot) == 2) {
+        colnames(df.precip.plot) <- c("Date","precip")
+      } else {
+        colnames(df.precip.plot) <- c(c("Date","precip"), colnames(df.precip.plot)[3:ncol(df.precip.plot)])
+      }
+    }
 
     p2 <- ggplot()+
       geom_bar(data=df.precip.plot, aes(x=Date,y=precip), stat="identity", color = "blue")+
-      scale_x_date(limits = c(x.min,x.max))+
+      # scale_x_date(limits = c(x.min,x.max))+
+      scale_x_date()+
       ylab("Precip (mm)")+
       xlab("")+
       rvn_theme_RavenR()
 
-    p1 <- plot_grid(p2,p1,nrow=2)
+    p1 <- plot_grid(p2,p1,nrow=2, rel_heights=c(1,1.15), align="v")
   }
 
   return(p1)

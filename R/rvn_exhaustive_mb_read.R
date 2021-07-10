@@ -5,29 +5,32 @@
 #' the modelling Framework Raven.
 #'
 #' @details
-#' This function expects a full file path to the ExhaustiveMassBalance.csv file,
-#' then reads in the file using read.csv. The main advantage of this functon is
+#' Expects a full file path to the ExhaustiveMassBalance.csv file,
+#' then reads in the file using read.csv. The main advantage of this function is
 #' renaming the columns to nicer names and extracting the units into something
-#' much easier to read.
+#' that is much easier to read.
 #'
 #' ff is the full file path of the ExhaustiveMassBalance.csv file. If the file is
 #' located in the current working directory, then simply the name of the file
 #' is sufficient.
 #'
+#' tzone is a string indicating the timezone of the supplied file. The
+#' timezone provided is coded into the resulting data frame using the as.POSIXct
+#' function. If no timezone is provided, this is left as an empty string, and is
+#' determined by the function as the current time zone.
+#'
 #' @param ff full file path to the ExhaustiveMassBalance.csv file
 #' @param join_categories boolean whether add to the category tag as a column
 #' name prefix in exhaustivemb output (default TRUE)
+#' @param tzone string indicating the timezone of the data in ff
 #' @return \item{exhaustivemb}{data frame from the file with standardized
 #' names} \item{units}{vector corresponding to units of each column}
 #' \item{categories}{vector corresponding to the storage category of each column}
-#' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
+#'
+#' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file, and
 #' \code{\link{rvn_exhaustive_mb_read}} for reading in the
 #' WatershedMassEnergyBalance.csv file
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven read.csv exhaustive mass balance
 #' @examples
 #' # Read in exhaustive MB file, create plot
 #' ff <- system.file("extdata","run1_ExhaustiveMassBalance.csv", package="RavenR")
@@ -41,7 +44,8 @@
 #'      main="Cumulative Surface Water Infiltration")
 #' @export rvn_exhaustive_mb_read
 #' @importFrom xts xts
-rvn_exhaustive_mb_read <- function(ff=NA,join_categories=TRUE) {
+rvn_exhaustive_mb_read <- function(ff=NA, join_categories=TRUE, tzone=NULL)
+{
 
   if (missing(ff)) {
     stop("Requires the full file path to the ExhaustiveMassBalance.csv file")
@@ -63,10 +67,12 @@ rvn_exhaustive_mb_read <- function(ff=NA,join_categories=TRUE) {
   # re-read with specified colClasses
   emb <- read.csv(ff,header=TRUE,skip=1,colClasses = classes,na.strings=c("---",'NA','1.#INF'))
 
-  # careful in date-time formats; excel can screw it up if csv is saved over. This works for
-  # un untouched Raven output file
-  # date.time <- as.POSIXct(paste(emb$date,emb$hour), format="%Y-%m-%d %H:%M:%S")
-  date.time <- as.POSIXct(paste(emb[,2],emb[,3]), format="%Y-%m-%d %H:%M:%S") # assuming order of dt columns
+  if (is.null(tzone)) {
+    # date.time <- as.POSIXct(paste(hydrographs$date,hydrographs$hour), format="%Y-%m-%d %H:%M:%S")
+    date.time <- as.POSIXct(paste(emb[,2],emb[,3]), format="%Y-%m-%d %H:%M:%S")
+  } else {
+    date.time <- as.POSIXct(paste(emb[,2],emb[,3]), format="%Y-%m-%d %H:%M:%S", tz=tzone)
+  }
 
   # head(date.time)
   cols <- colnames(emb)

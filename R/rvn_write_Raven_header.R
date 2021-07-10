@@ -14,15 +14,13 @@
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
 #'
 #' @examples
-#' rvn_write_Raven_header(filename = 'HogwartsBasin.rvp',
+#' tf <- file.path(tempdir(), 'HogwartsBasin.rvp')
+#' rvn_write_Raven_header(filename = tf,
 #'                     filetype = 'rvp ASCII Raven 2.9.1',
 #'                     author   = 'Harry Potter')
 #'
 #' # view file
-#' readLines("HogwartsBasin.rvp")
-#'
-#' # cleanup temporary file
-#' unlink("HogwartsBasin.rvp")
+#' readLines(tf)
 #'
 #' @export rvn_write_Raven_header
 rvn_write_Raven_header <- function(filename, filetype, author=NULL,

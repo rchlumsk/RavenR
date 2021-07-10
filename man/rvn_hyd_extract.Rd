@@ -4,7 +4,7 @@
 \alias{rvn_hyd_extract}
 \title{Extract function for Raven Hydrograph object}
 \usage{
-rvn_hyd_extract(subs = NA, hyd = NA, prd = NULL)
+rvn_hyd_extract(subs = NA, hyd = NA, prd = NULL, rename_cols = TRUE)
 }
 \arguments{
 \item{subs}{column name for plotting/extracting}
@@ -12,19 +12,23 @@ rvn_hyd_extract(subs = NA, hyd = NA, prd = NULL)
 \item{hyd}{full hydrograph data frame (including units) produced by hyd.read}
 
 \item{prd}{time period for plotting, as string. See details}
+
+\item{rename_cols}{boolean for whether to rename columns to generic terms (sim, obs, etc.) or leave
+column names as they appear in hyd}
 }
 \value{
-returns a list with sim, obs, and inflow time series
+returns an xts object with sim, obs, inflow, and obs_inflow time series (if available)
  \item{sim}{model simulation for specified column and period}
  \item{obs}{observed data for specified column and period}
  \item{inflow}{inflow simulation for specified column and period}
+ \item{obs_inflow}{observed inflow simulation for specified column and period}
 }
 \description{
 rvn_hyd_extract is used for extracting data from the Raven hydrograph object.
-Works for objects from rvn_hyd_extract function (from the Hydrographs.csv file).
+Works for objects passed from rvn_hyd_read function (which reads the Hydrographs.csv file produced by the modelling framework Raven).
 }
 \details{
-rvn_hyd_extract is used to extract the modelled and observed data from a Raven
+Extracts the modelled and observed data from a Raven
 hydrograph object by name reference. It is also easy to create plots of
 modelled and observed data using this function. The simulated and observed
 files are outputted regardless of whether a plot is created, for the
@@ -57,25 +61,20 @@ flow_36 <- rvn_hyd_extract(subs="Sub36",myhyd)
 
 attributes(flow_36)
 
-# plot the simulated flow values
-plot(flow_36$sim,col='red')
-# plot observed values on same plot
-lines(flow_36$obs,lty=5,col='black')
+# extract simulated and observed flows
+sim <- flow_36$sim
+obs <- flow_36$obs
 
-# example for precipitation
+# extract precipitation forcings
 myprecip <- rvn_hyd_extract(subs="precip",hyd=myhyd)
+myprecip <- myprecip$sim
 
+# plot all components using rvn_hyd_plot
+rvn_hyd_plot(sim,obs,precip=myprecip)
 
 }
 \seealso{
 \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file and
 creating the object required in this function.
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+\code{\link{rvn_hyd_plot}} for conveniently plotting the output object contents onto the same figure.
 }
-\keyword{Raven}
-\keyword{extract}
-\keyword{hydrograph}
-\keyword{plot}

@@ -34,14 +34,6 @@ rvn_subbasin_network_plot(rvh$SBtable)
 rvn_subbasin_network_plot(rvh$SBtable, labeled=TRUE)
 
 }
-\seealso{
-See also the \href{http://raven.uwaterloo.ca/}{Raven page}
-\code{\link{rvn_subbasin_map}} to map results for subbasins.
-}
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{Network}
-\keyword{Plot}
-\keyword{Raven}
-\keyword{Stream}

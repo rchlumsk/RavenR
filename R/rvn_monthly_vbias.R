@@ -5,7 +5,7 @@
 #' flow series.
 #'
 #' @details
-#' This function calculates the monthly volume biases and optionally creates a
+#' Calculates the monthly volume biases and optionally creates a
 #' plot of them. The monthly volume biases are averaged across all years of
 #' data. If normalized, the biases are calculated as:
 #'
@@ -33,13 +33,10 @@
 #' @param add_labels optionally adds labels for early peak/late peaks on right
 #' side axis (default TRUE)
 #' @return \item{mvbias}{monthly volume biases}
+#'
 #' @seealso \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 #' volumes
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven monthly volume bias diagnostics
 #' @examples
 #' # load sample hydrograph data, two years worth of sim/obs
 #' data(rvn_hydrograph_data)

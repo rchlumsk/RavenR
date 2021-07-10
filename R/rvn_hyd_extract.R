@@ -5,7 +5,7 @@
 #' Works for objects passed from rvn_hyd_read function (which reads the Hydrographs.csv file produced by the modelling framework Raven).
 #'
 #' @details
-#' rvn_hyd_extract is used to extract the modelled and observed data from a Raven
+#' Extracts the modelled and observed data from a Raven
 #' hydrograph object by name reference. It is also easy to create plots of
 #' modelled and observed data using this function. The simulated and observed
 #' files are outputted regardless of whether a plot is created, for the
@@ -29,17 +29,18 @@
 #' @param subs column name for plotting/extracting
 #' @param hyd full hydrograph data frame (including units) produced by hyd.read
 #' @param prd time period for plotting, as string. See details
-#' @return returns a list with sim, obs, and inflow time series
+#' @param rename_cols boolean for whether to rename columns to generic terms (sim, obs, etc.) or leave
+#' column names as they appear in hyd
+#' @return returns an xts object with sim, obs, inflow, and obs_inflow time series (if available)
 #'  \item{sim}{model simulation for specified column and period}
 #'  \item{obs}{observed data for specified column and period}
 #'  \item{inflow}{inflow simulation for specified column and period}
+#'  \item{obs_inflow}{observed inflow simulation for specified column and period}
+#'
 #'
 #' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file and
 #' creating the object required in this function.
-#' \code{\link{rvn_hyd_plot}} for conveniently plotting the output object contents onto the same figure. \cr
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://raven.uwaterloo.ca/}{Raven page}.
+#' \code{\link{rvn_hyd_plot}} for conveniently plotting the output object contents onto the same figure.
 #'
 #' @examples
 #' # read in hydrograph sample csv data from RavenR package
@@ -65,7 +66,7 @@
 #' rvn_hyd_plot(sim,obs,precip=myprecip)
 #'
 #' @export rvn_hyd_extract
-rvn_hyd_extract <- function(subs=NA, hyd=NA, prd=NULL) {
+rvn_hyd_extract <- function(subs=NA, hyd=NA, prd=NULL, rename_cols=TRUE) {
 
   if (missing(subs)) {
     stop("subs is required for this function.")
@@ -74,9 +75,8 @@ rvn_hyd_extract <- function(subs=NA, hyd=NA, prd=NULL) {
     stop("hyd is required for this function; please supply the full output file from hyd.read.")
   }
 
-  mysub <- NULL
+  mysub <- ind <- NULL
 
-  # extract random pair
   hydrographs <- hyd$hyd
   units <- hyd$units
   mycols <- colnames(hydrographs)
@@ -84,60 +84,42 @@ rvn_hyd_extract <- function(subs=NA, hyd=NA, prd=NULL) {
   mysub.sim <- sprintf("\\b%s\\b",subs)
   mysub.obs <- sprintf("\\b%s_obs\\b",subs)
   mysub.inflow <- sprintf("\\b%s_resinflow\\b",subs)
+  mysub.obsinflow <- sprintf("\\b%s_obs_resinflow\\b",subs)
 
-  ind.sim <- grep(mysub.sim,mycols)
-  ind.obs <- grep(mysub.obs,mycols)
-  ind.inflow <- grep(mysub.inflow,mycols)
+  tempgrep <- function(pattern, x) {
+    xx <- grep(pattern, x)
+    if (length(xx) == 0) {
+      return(NA)
+    } else {
+      return(xx)
+    }
+  }
 
-  ind <- c(ind.sim,ind.inflow,ind.obs)
+  ind.sim <- tempgrep(mysub.sim,mycols)
+  ind.obs <- tempgrep(mysub.obs,mycols)
+  ind.inflow <- tempgrep(mysub.inflow,mycols)
+  ind.obsinflow <- tempgrep(mysub.obsinflow,mycols)
 
-  if (length(ind)==0) {
+  ind_names <- c("sim","obs","resinflow","obs_resinflow")
+  ind <- c(ind.sim,ind.obs,ind.inflow,ind.obsinflow)
+
+  dfnames <- data.frame("ind_names"=ind_names,
+             "ind"=c(ind.sim,ind.obs,ind.inflow,ind.obsinflow))
+  dfnames <- dfnames[!is.na(dfnames$ind),]
+
+  if (nrow(dfnames)==0) {
     stop(sprintf("%s not found in the columns, check the supplied subs argument.",mysub))
-  } else if (length(ind) > 3) {
-    stop(sprintf("There are %i matches for %s, expect a maximum of 3.",length(ind),mysub))
+  } else if (nrow(dfnames) > 4) {
+    stop(sprintf("There are %i matches for %s, expect a maximum of 4.",length(ind),mysub))
   }
 
-  # assume first column is always simulated one; observed or inflows follow afterwards
-  # assume if all 3 columns exist, observed is the second one (obs before inflows)
-  mysim <- NULL
-  myobs <- NULL
-  myinflow <- NULL
+  prd <- rvn_get_prd(hydrographs[,dfnames$ind[1]], prd)
+  res <- hydrographs[prd,dfnames$ind]
 
-  if (length(ind.sim) == 1) {
-    mysim <- hydrographs[,ind.sim]
-  }
-  if (length(ind.obs) == 1) {
-    myobs <- hydrographs[,ind.obs]
-  }
-  if (length(ind.inflow) == 1) {
-    myinflow <- hydrographs[,ind.inflow]
+  if (rename_cols) {
+    colnames(res) <- dfnames$ind_names
   }
 
-  # determine the period to use
-  # if (!(is.null(prd))) {
-  #
-  #   # prd is supplied; check that it makes sense
-  #   firstsplit <- unlist(strsplit(prd,"/"))
-  #   if (length(firstsplit) != 2) {
-  #     stop("Check the format of supplied period argument prd; should be two dates separated by '/'.")
-  #   }
-  #   if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
-  #       || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
-  #     stop("Check the format of supplied period argument prd; two dates should be in YYYY-MM-DD format.")
-  #   }
-  #   # add conversion to date with xts format check ?
-  #
-  # } else {
-  #   # period is not supplied
-  #
-  #   # not using smart.period function and no period supplied; use whole range
-  #   N <- nrow(hydrographs)
-  #   prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(hydrographs[1,1]),month(hydrographs[1,1]),day(hydrographs[1,1]),
-  #                     year(hydrographs[N,1]),month(hydrographs[N,1]),day(hydrographs[N,1]) )
-  # }
-  prd <- rvn_get_prd(mysim, prd)
-
-  # return values
-  return(list("sim" = mysim[prd,1], "obs" = myobs[prd,1],"resinflow"=myinflow[prd,1]))
+  return(res)
 }
 

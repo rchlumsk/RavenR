@@ -4,7 +4,7 @@
 #' rvn_fdc_plot generation a flow duration curve plot.
 #'
 #' @details
-#' This function creates a flow duration curve using the rvn_hyd_extract obejct for
+#' Creates a flow duration curve using the rvn_hyd_extract obejct for
 #' a given basin. The hydrograph object passed should be the output from the
 #' rvn_hyd_extract function, which has attributes for sim and obs; if the obs is
 #' NULL, only the sim FDC will be plotted.
@@ -16,14 +16,11 @@
 #' @param obs (optional) observed hydrograph xts time series
 #' @param prd (optional) time period over which the plot is generated
 #' @param seasonal (optional) boolean whether to add the winter and summer FDC
-#' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
+#'
+#' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file, and
 #' \code{\link{rvn_hyd_extract}} for extracting basin flow information from a
 #' rvn_hyd_read object
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven flow duration curve plot diagnostics
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs
@@ -96,7 +93,8 @@ rvn_fdc_plot <-function(sim=NULL,obs=NULL,prd=NULL,seasonal=FALSE){
     scale_y_continuous(name = "% of flow less than daily discharge",limits = c(0,1))+
     rvn_theme_RavenR()+
     #ggtitle("Flow Exceedance")+
-    scale_colour_brewer(type = "qual", palette = 3)
+    scale_colour_brewer(type = "qual", palette = 3)+
+    rvn_theme_RavenR()
 
   return(p1)
 }

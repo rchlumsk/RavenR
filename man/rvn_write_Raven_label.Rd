@@ -31,23 +31,21 @@ Writes common Raven labeled line to file, with optional value (appends)
 }
 \examples{
 
+tf <- file.path(tempdir(), "Hogwarts.rvi")
+
 # Numeric example
-rvn_write_Raven_label('Duration', 'Hogwarts.rvi', value=365)
+rvn_write_Raven_label('Duration', filename=tf, value=365)
 
 # Hydrologic Processes
-rvn_write_Raven_label('HydrologicProcesses', 'Hogwarts.rvi')
+rvn_write_Raven_label('HydrologicProcesses', tf)
 
 # String example, with indent
-rvn_write_Raven_label('SnowBalance', filename = 'Hogwarts.rvi',
+rvn_write_Raven_label('SnowBalance', filename = tf,
                       value = paste('SNOBAL_HMETS', 'MULTIPLE', 'MULTIPLE'),
                       indent_level = 1)
-# etc...
 
-# Preview
-readLines("Hogwarts.rvi")
-
-# cleanup temporary file
-unlink("Hogwarts.rvi")
+# Preview file
+readLines(tf)
 
 }
 \author{
