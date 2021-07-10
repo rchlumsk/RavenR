@@ -7,7 +7,7 @@
 rvn_rvh_cleanhrus(
   HRUtab,
   SBtab,
-  area_tol = 0.01,
+  area_tol = 0.001,
   merge = FALSE,
   elev_tol = 50,
   slope_tol = 4,
@@ -21,7 +21,7 @@ rvn_rvh_cleanhrus(
 \item{SBtab}{table of Subbasins generated (typically) by \code{\link{rvn_rvh_read}}}
 
 \item{area_tol}{percentage of watershed area beneath which HRUs should be removed (e.g.,
-default value of 0.01 would indicate anything smaller than 1 percent of watershed extent should be removed)}
+0.01 would indicate anything smaller than 1 percent of watershed extent should be removed)}
 
 \item{merge}{TRUE if similar HRUs are to be merged (this can be slow for large models)}
 
@@ -34,39 +34,45 @@ default value of 0.01 would indicate anything smaller than 1 percent of watershe
 \item{ProtectedHRUList}{list of HRU IDs that are sacrosanct (not to be removed)}
 }
 \value{
-\item{hru_table}{cleaned HRU table as a dataframe}
+{hru_table}{revised HRU table as a dataframe}
 }
 \description{
 Takes \code{\link{rvn_rvh_read}}-generated HRUtable and SBTable and returns cleaned HRUtable
 with (hopefully) fewer HRUs
 }
 \details{
-rvn_rvh_cleanhrus removes HRUs in two ways:
-
-  1. it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
-subbasin are expanded by the lost area to keep the same relative coverage.
-
-  2. it consolidates similar HRUs within the same subbasin (those with same land cover,
+rvh.clean removes HRUs in two ways:
+    (1) it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
+    subbasin are expanded by the lost area to keep the same relative coverage.
+    (2) it consolidates similar HRUs within the same subbasin (those with same land cover,
     vegetation, soil profile and similar slope, aspect, and elevation)
 }
 \examples{
+  # read in example rvh file
+  nith <- system.file("extdata","Nith.rvh",package = "RavenR")
+  rvh <- rvn_rvh_read(nith)
 
-# read in example rvh file
-nith <- system.file("extdata","Nith.rvh",package = "RavenR")
-rvh <- rvn_rvh_read(nith)
+  # clean contents (in this case, remove all HRUs covering less than 5\% of the total area)
+  rvh <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merg=TRUE)
 
-# number of HRUs in existing configuration
-nrow(rvh$HRUtable)
+  # write to new file, while preserving all unedited information using rvn_rvh_overwrite:
+  rvn_rvh_overwrite(nith,"Nith_cleaned.rvh",
+                    SBtable = rvh$SBtable,
+                    HRUtable = rvh$HRUtable)
 
-# clean contents (in this case, remove all HRUs covering less than 5\% of the total area)
-rvh$HRUtable <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
-
+  # write just the Subbasin and HRU tables to new file using rvn_rvh_write:
+  rvn_rvh_write("Nith_cleaned_write.rvh", SBtable = rvh$SBtable, HRUtable = rvh$HRUtable)
 
 }
 \seealso{
-\code{\link{rvn_rvh_read}} for the function used to read in the HRU and Subbasin data, and
-\code{\link{rvn_rvh_write}} to write rvh information to file.
+\code{\link{rvn_rvh_read}} for the function used to read in the HRU and SubBasin data
+See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
 }
 \author{
 James R. Craig, University of Waterloo
 }
+\keyword{HRUs}
+\keyword{Raven}
+\keyword{clean}
+\keyword{merge}
+\keyword{rvh}

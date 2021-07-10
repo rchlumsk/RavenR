@@ -16,7 +16,7 @@ rvn_flow_spaghetti(flow)
 rvn_flow_spaghetti creates a spaghetti plot of the flow series provided.
 }
 \details{
-Creates a spaghetti plot of the annual flow series in each
+This function creates a spaghetti plot of the annual flow series in each
 year of data provided. The flows are plotted for each water year of data
 available, set as October 1st.
 
@@ -35,15 +35,22 @@ generation of plot titles.
 
 # load sample hydrograph data, two years worth of sim/obs
 data(rvn_hydrograph_data)
+sim <- rvn_hydrograph_data$hyd$Sub36
+sim2 <- rvn_hydrograph_data$hyd$Sub43
 
 # create spaghetti plot of simulated flows
-rvn_flow_spaghetti(rvn_hydrograph_data$hyd$Sub36)
-
-# create spaghetti plot of observed flows
-rvn_flow_spaghetti(rvn_hydrograph_data$hyd$Sub36_obs)
+rvn_flow_spaghetti(sim)
 
 }
 \seealso{
 \code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow
 values
+
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{Raven}
+\keyword{diagnostics}
+\keyword{flow}
+\keyword{spaghetti}

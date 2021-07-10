@@ -23,12 +23,13 @@
 #'                            'ORGANIC'   = c(0.0000, 0.0000))
 #' attributes <- c('%SAND','%CLAY','%SILT','%ORGANIC')
 #' units <-  rep('none',4)
-#'
-#' tf <- file.path(tempdir(), "Hogwarts.rvp")
-#' rvn_write_Raven_table(tf, attributes = attributes, units = units, df = soil_classes)
+#' rvn_write_Raven_table('Hogwarts.rvp', attributes = attributes, units = units, df = soil_classes)
 #'
 #' # view file
-#' readLines(tf)
+#' readLines("Hogwarts.rvp")
+#'
+#' # cleanup temporary file
+#' unlink("Hogwarts.rvp")
 #'
 #' @export rvn_write_Raven_table
 #' @importFrom gdata write.fwf

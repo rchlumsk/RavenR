@@ -4,7 +4,7 @@
 \alias{rvn_watershedmeb_read}
 \title{Read in Raven WatershedMassEnergyBalance file}
 \usage{
-rvn_watershedmeb_read(ff = NA, tzone = "UTC")
+rvn_watershedmeb_read(ff = NA, tzone = NULL)
 }
 \arguments{
 \item{ff}{full file path to the WatershedMassEnergyBalance.csv file}
@@ -22,7 +22,7 @@ rvn_watershedmeb_read is used to read in the WatershedMassEnergyBalance.csv file
 produced by the modelling Framework Raven.
 }
 \details{
-Expects a full file path to the WatershedMassEnergyBalance.csv
+This function expects a full file path to the WatershedMassEnergyBalance.csv
 file, then reads in the file using read.csv. The main advantage of this
 functon is renaming the columns to nicer names and extracting the units into
 something much easier to read. The from and to rows are also properly
@@ -31,9 +31,6 @@ handled, which is not as straightforward as some of the other Raven files.
 ff is the full file path of the WatershedMassEnergyBalance.csv file. If the
 file is located in the current working directory, then simply the name of
 the file is sufficient.
-
-The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
-the user to the local time zone as needed, based on the model run.
 }
 \examples{
 # locate RavenR Watershed Mass Energy Balance storage file
@@ -52,4 +49,14 @@ mywshdmeb$from
 \seealso{
 \code{\link{rvn_watershed_read}} for reading in the
 WatershedStorage.csv file
+
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{Raven}
+\keyword{balance}
+\keyword{energy}
+\keyword{mass}
+\keyword{read.csv}
+\keyword{watershed}

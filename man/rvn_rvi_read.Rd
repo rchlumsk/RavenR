@@ -20,9 +20,11 @@ This routine reads in a valid Raven main input (.rvi) file and returns the
 information about hydrological processes as a data table.
 }
 \details{
-This function does not like tabs in the .rvi file - it should be untabified first. Comma-delimited tables with a trailing comma are also problematic.
+does not like tabs in the .rvi file - it should be untabified first.
 The .rvi file can have arbitrary contents outside of the :HydrologicProcesses-
 :EndHydrologicProcesses block and :SubBasins-:EndSubBasins command blocks.
+
+does not like comma-delimited tables with a trailing comma
 }
 \examples{
 # sample workflow of rvn_rvi_read
@@ -33,6 +35,15 @@ rvn_rvi_read(.)
 nrow(rvi$HydProcTable)
 
 }
+\seealso{
+rvi.connections
+See also the \href{http://raven.uwaterloo.ca/}{Raven page}
+}
 \author{
 James R. Craig, University of Waterloo
 }
+\keyword{Hydrologic}
+\keyword{Processes}
+\keyword{Raven}
+\keyword{read}
+\keyword{rvi}

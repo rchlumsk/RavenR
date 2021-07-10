@@ -2,11 +2,11 @@
 #'
 #' @description
 #' rvn_res_extract is used for extracting data from the Raven reservoir object.
-#' Works for objects from \code{\link{rvn_res_read}} function (for reading in the ReservoirStages.csv
+#' Works for objects from rvn_res_extract function (from the ReservoirStages.csv
 #' file).
 #'
 #' @details
-#' Extracts the modelled and observed data from a Raven
+#' rvn_res_extract is used to extract the modelled and observed data from a Raven
 #' reservoir object by name reference. It is also easy to create plots of
 #' modelled and observed data using this function. The simulated and observed
 #' files are outputted regardless of whether a plot is created, for the
@@ -33,13 +33,17 @@
 #' @return \item{sim}{model simulation for specified column and period}
 #' \item{obs}{observed data for specified column and period}
 #' \item{inflow}{inflow simulation for specified column and period}
-#'
 #' @seealso \code{\link{rvn_res_read}} for reading in the Reservoirs.csv file and
 #' creating the object required in this function. \code{\link{rvn_res_plot}} for
 #' plotting the extracted stage time series
 #'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' @keywords Raven plot extract reservoir
 #' @examples
 #'
+#' \dontrun{
 #' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
 #'
 #' # Read in Raven Reservoirs file, store into myres
@@ -47,11 +51,11 @@
 #'
 #' # Extract stage using this function
 #' stage36 <- rvn_res_extract(subs="sub36",res=myres,prd="2002-10-01/2003-10-01")
-#' summary(stage36)
-#' summary(stage36$sim)
 #'
 #' # Example for precipitation
 #' precip <- rvn_res_extract(subs="precip",res=myres)
+#'
+#' }
 #'
 #' @export rvn_res_extract
 rvn_res_extract <- function(subs=NA, res=NA, prd=NULL) {

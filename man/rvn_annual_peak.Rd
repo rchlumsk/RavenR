@@ -38,19 +38,18 @@ returns a list with peak data in a data frame, and a ggplot object
 rvn_annual_peak creates a plot of the annual observed and simulated peaks, based on the water year.
 }
 \details{
-Creates a scatterplot of the annual observed and simulated
-peaks, calculated for each available water year of data
-within the two series provided. The default start of the water year
-is October 1st, but may be adjusted through function parameters. Note that the
-calculation uses the peak magnitude of simulated and observed series in each water year, without
+This function creates a scatterplot of the annual observed and simulated
+peaks, calculated for each available water year of data (Oct 1st hardcoded)
+within the two series provided. Note that the calculation uses the peak
+magnitude of simulated and observed series in each water year, without
 considering the timing of the events in each series.
 
 The sim and obs should be of time series (xts) format and are assumed to be
 of the same length and time period. The flow series are assumed to be daily
 flows with units of m3/s.
 
-The R2 diagnostic is calculated for a fit with no intercept, consistent with the provided
-1:1 line (in a perfect fit the points are identical, and intercept is automatically zero).
+The R2 diagnostic is calculated for a fit with no intercept (in a perfect
+fit the points are identical, and intercept is automatically zero).
 
 Note that a plot title is purposely omitted in order to allow the automatic
 generation of plot titles.
@@ -76,4 +75,12 @@ peak_df$p1
 \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 volumes \code{\link{rvn_annual_peak_event}} to consider the timing of peak
 events.
+
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{Raven}
+\keyword{annual}
+\keyword{diagnostics}
+\keyword{peak}

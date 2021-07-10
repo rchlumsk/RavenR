@@ -25,7 +25,7 @@ for example as June 30th for a July 1 water year (i.e. the Australian water year
 This function is useful in supplying endpoints for water year evaluations.
 }
 \details{
-Emulates the \code{\link{endpoints}} function
+Note that this function is meant to emulate the \code{\link{endpoints}} function
 for a water year period. The first and last points are included in all supplied endpoints,
 which may introduce partial periods to the analysis.#'
 }
@@ -48,4 +48,12 @@ rvn_forcing_data$forcings[., 1:2]
 \seealso{
 \code{\link{rvn_apply_wyearly}} to apply functions over the water year
 \code{\link{endpoints}} workhorse function for generating endpoints in xts for other periods
+
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{Raven}
+\keyword{indices}
+\keyword{water}
+\keyword{year}

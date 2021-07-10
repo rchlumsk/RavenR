@@ -4,19 +4,18 @@
 #' rvn_annual_peak creates a plot of the annual observed and simulated peaks, based on the water year.
 #'
 #' @details
-#' Creates a scatterplot of the annual observed and simulated
-#' peaks, calculated for each available water year of data
-#' within the two series provided. The default start of the water year
-#' is October 1st, but may be adjusted through function parameters. Note that the
-#' calculation uses the peak magnitude of simulated and observed series in each water year, without
+#' This function creates a scatterplot of the annual observed and simulated
+#' peaks, calculated for each available water year of data (Oct 1st hardcoded)
+#' within the two series provided. Note that the calculation uses the peak
+#' magnitude of simulated and observed series in each water year, without
 #' considering the timing of the events in each series.
 #'
 #' The sim and obs should be of time series (xts) format and are assumed to be
 #' of the same length and time period. The flow series are assumed to be daily
 #' flows with units of m3/s.
 #'
-#' The R2 diagnostic is calculated for a fit with no intercept, consistent with the provided
-#' 1:1 line (in a perfect fit the points are identical, and intercept is automatically zero).
+#' The R2 diagnostic is calculated for a fit with no intercept (in a perfect
+#' fit the points are identical, and intercept is automatically zero).
 #'
 #' Note that a plot title is purposely omitted in order to allow the automatic
 #' generation of plot titles.
@@ -36,6 +35,10 @@
 #' volumes \code{\link{rvn_annual_peak_event}} to consider the timing of peak
 #' events.
 #'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#'
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs
@@ -52,11 +55,12 @@
 #' peak_df <- rvn_annual_peak(sim, obs, add_r2=TRUE, add_eqn=TRUE)
 #' peak_df$p1
 #'
+#' @keywords Raven annual peak diagnostics
 #' @export rvn_annual_peak
 #' @importFrom stats lm
 #' @importFrom lubridate year date
 #' @importFrom ggplot2 ggplot aes geom_point geom_abline geom_text scale_x_continuous scale_y_continuous
-rvn_annual_peak <- function(sim, obs, mm=9, dd=30, add_line = TRUE,
+rvn_annual_peak <- function(sim, obs, mm=9, dd=30,add_line = TRUE,
                              add_r2 = FALSE, add_eqn = FALSE)
 {
 
@@ -66,6 +70,14 @@ rvn_annual_peak <- function(sim, obs, mm=9, dd=30, add_line = TRUE,
   df <- data.frame("date.end" = dates,
                    "sim.peak" = as.numeric(max.sim),
                    "obs.peak" = as.numeric(max.obs))
+
+  if (add_r2) {
+    max.obs.mean <- mean(max.obs)
+    ss.err <- sum((max.sim - max.obs)^2)
+    ss.tot <- sum((max.obs - max.obs.mean)^2)
+    text.labels <- lubridate::year(dates)
+    r2 <- 1 - ss.err/ss.tot
+  }
 
   x.lab <- expression("Observed Peak Discharge ("*m^3*"/s)")
   y.lab <- expression("Simulated Peak Discharge ("*m^3*"/s)")
@@ -85,12 +97,8 @@ rvn_annual_peak <- function(sim, obs, mm=9, dd=30, add_line = TRUE,
       geom_abline(linetype=2)
   }
 
-  if (add_r2 | add_eqn) {
-    m <- lm(max.sim ~ 0 + max.obs)
-  }
-
   if (add_r2){
-    r2.label <- paste("R^2 == ", round(summary(m)$r.squared,3))
+    r2.label <- paste("R^2 == ", round(r2,2))
     p1 <- p1 +
       geom_text(x= max(max.obs, max.sim),
                 y= min(max.sim, max.obs),
@@ -100,7 +108,8 @@ rvn_annual_peak <- function(sim, obs, mm=9, dd=30, add_line = TRUE,
                 size = 3.5)
   }
 
-  if (add_eqn) {
+  if (add_eqn){
+    m <- lm(max.sim ~ 0 + max.obs)
     coeff <- round(as.numeric(m$coefficients[1]), 3)
     equation <- paste0( "y = ", coeff, "x")
     p1 <- p1 +

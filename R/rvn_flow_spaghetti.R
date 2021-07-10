@@ -4,7 +4,7 @@
 #' rvn_flow_spaghetti creates a spaghetti plot of the flow series provided.
 #'
 #' @details
-#' Creates a spaghetti plot of the annual flow series in each
+#' This function creates a spaghetti plot of the annual flow series in each
 #' year of data provided. The flows are plotted for each water year of data
 #' available, set as October 1st.
 #'
@@ -21,24 +21,26 @@
 #'
 #' @param flow time series object of simulated flows
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
-#'
 #' @seealso \code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow
 #' values
 #'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' @keywords Raven flow spaghetti diagnostics
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs
 #' data(rvn_hydrograph_data)
+#' sim <- rvn_hydrograph_data$hyd$Sub36
+#' sim2 <- rvn_hydrograph_data$hyd$Sub43
 #'
 #' # create spaghetti plot of simulated flows
-#' rvn_flow_spaghetti(rvn_hydrograph_data$hyd$Sub36)
-#'
-#' # create spaghetti plot of observed flows
-#' rvn_flow_spaghetti(rvn_hydrograph_data$hyd$Sub36_obs)
+#' rvn_flow_spaghetti(sim)
 #'
 #' @export rvn_flow_spaghetti
 #' @importFrom lubridate yday
-#' @importFrom ggplot2 ggplot geom_line scale_y_continuous scale_x_continuous aes fortify
+#' @importFrom ggplot2 ggplot geom_line scale_y_continuous scale_x_continuous aes
 rvn_flow_spaghetti <- function(flow)
 {
 
@@ -47,7 +49,8 @@ rvn_flow_spaghetti <- function(flow)
   ticks.at <- seq(1, 366, 1)
   ticks.seq <- c(seq(274, 366, 1), seq(1, 273, 1))
 
-  plot.df <- fortify(flow)
+  # plot.df <- fortify(flow)
+  plot.df <- data.frame(flow)
 
   plot.df$doy <- lubridate::yday(plot.df$Index)
   plot.df$Year <- as.factor(year(plot.df$Index))

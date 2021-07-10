@@ -4,7 +4,7 @@
 \alias{rvn_res_read}
 \title{Read in Raven ReservoirStages file}
 \usage{
-rvn_res_read(ff = NA, tzone = "UTC")
+rvn_res_read(ff = NA, tzone = NULL)
 }
 \arguments{
 \item{ff}{full file path to the ReservoirStages.csv file}
@@ -19,7 +19,7 @@ rvn_res_read is used to read in the ReservoirStages.csv file produced by the
 modelling Framework Raven.
 }
 \details{
-Expects a full file path to the ReservoirStages.csv file, then
+This function expects a full file path to the ReservoirStages.csv file, then
 reads in the file using read.csv. The main advantage of this function is
 renaming the columns to nicer names and extracting the units into something
 much easier to read.
@@ -31,9 +31,6 @@ here, for example sub24.
 ff is the full file path of the ReservoirStages.csv file. If the file is
 located in the current working directory, then simply the name of the file
 is sufficient.
-
-The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
-the user to the local time zone as needed, based on the model run.
 }
 \examples{
 # create full file path
@@ -50,4 +47,11 @@ myres$units
 \seealso{
 \code{\link{rvn_res_extract}} for extraction tools related to the
 rvn_res_read output file
+
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{Raven}
+\keyword{read.csv}
+\keyword{reservoir}

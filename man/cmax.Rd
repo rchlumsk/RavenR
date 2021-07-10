@@ -15,13 +15,12 @@ cmax(x, na.rm = FALSE)
 x with the max value in each column determined
 }
 \description{
-Applies the base::max function across columns.
+cmax standards for column maximum, applies the max function across columns.
 }
 \details{
 It applies the base::max function over
 columns, which is advantageous for calculating the max within a column
-rather than the max of the whole data frame. The default base::max will not work
-properly for data frames and other structures in applying over columns or different periods.
+rather than the max of the whole data frame.
 
 This function was included for usage with the apply.<period> and rvn_apply_wyearly
 function, as the base::max function does not work properly across columns.
@@ -34,6 +33,13 @@ rvn_apply_wyearly(rvn_hydrograph_data$hyd, cmax, na.rm=TRUE)
 
 }
 \seealso{
-\code{\link{rvn_apply_wyearly}} where this function can be applied for the water year,
-and the xts functions such as \code{\link{apply.yearly}} and \code{\link{apply.monthly}}
+\code{\link{rvn_apply_wyearly}} where this function can be applied for the water year
+
+The original [SO post](https://stackoverflow.com/questions/51623745/how-to-use-apply-daily-period-apply-for-calculating-maximum-per-column-in-xts-ti)
+
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{columns}
+\keyword{max}

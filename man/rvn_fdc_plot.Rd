@@ -19,7 +19,7 @@ rvn_fdc_plot(sim = NULL, obs = NULL, prd = NULL, seasonal = FALSE)
 rvn_fdc_plot generation a flow duration curve plot.
 }
 \details{
-Creates a flow duration curve using the rvn_hyd_extract obejct for
+This function creates a flow duration curve using the rvn_hyd_extract obejct for
 a given basin. The hydrograph object passed should be the output from the
 rvn_hyd_extract function, which has attributes for sim and obs; if the obs is
 NULL, only the sim FDC will be plotted.
@@ -43,7 +43,17 @@ rvn_fdc_plot(sim,obs,seasonal=TRUE)
 
 }
 \seealso{
-\code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file, and
+\code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
 \code{\link{rvn_hyd_extract}} for extracting basin flow information from a
 rvn_hyd_read object
+
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{Raven}
+\keyword{curve}
+\keyword{diagnostics}
+\keyword{duration}
+\keyword{flow}
+\keyword{plot}

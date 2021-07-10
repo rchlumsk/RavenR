@@ -4,15 +4,13 @@
 \alias{rvn_exhaustive_mb_read}
 \title{Read in Raven Exhaustive Mass Balance file}
 \usage{
-rvn_exhaustive_mb_read(ff = NA, join_categories = TRUE, tzone = NULL)
+rvn_exhaustive_mb_read(ff = NA, join_categories = TRUE)
 }
 \arguments{
 \item{ff}{full file path to the ExhaustiveMassBalance.csv file}
 
 \item{join_categories}{boolean whether add to the category tag as a column
 name prefix in exhaustivemb output (default TRUE)}
-
-\item{tzone}{string indicating the timezone of the data in ff}
 }
 \value{
 \item{exhaustivemb}{data frame from the file with standardized
@@ -24,19 +22,14 @@ rvn_exhaustive_mb_read is used to read in the ExhaustiveMassBalance.csv file pro
 the modelling Framework Raven.
 }
 \details{
-Expects a full file path to the ExhaustiveMassBalance.csv file,
-then reads in the file using read.csv. The main advantage of this function is
+This function expects a full file path to the ExhaustiveMassBalance.csv file,
+then reads in the file using read.csv. The main advantage of this functon is
 renaming the columns to nicer names and extracting the units into something
-that is much easier to read.
+much easier to read.
 
 ff is the full file path of the ExhaustiveMassBalance.csv file. If the file is
 located in the current working directory, then simply the name of the file
 is sufficient.
-
-tzone is a string indicating the timezone of the supplied file. The
-timezone provided is coded into the resulting data frame using the as.POSIXct
-function. If no timezone is provided, this is left as an empty string, and is
-determined by the function as the current time zone.
 }
 \examples{
 # Read in exhaustive MB file, create plot
@@ -51,7 +44,16 @@ plot(embd$exhaustive_mb$SURFACE_WATER.Infiltration,
      main="Cumulative Surface Water Infiltration")
 }
 \seealso{
-\code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file, and
+\code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
 \code{\link{rvn_exhaustive_mb_read}} for reading in the
 WatershedMassEnergyBalance.csv file
+
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{Raven}
+\keyword{balance}
+\keyword{exhaustive}
+\keyword{mass}
+\keyword{read.csv}

@@ -4,10 +4,10 @@
 \alias{rvn_rvh_read}
 \title{Read Raven .rvh (watershed discretization) file}
 \usage{
-rvn_rvh_read(ff)
+rvn_rvh_read(filename)
 }
 \arguments{
-\item{ff}{the filepath of the .rvh file (with .rvh extension included).}
+\item{filename}{the name of the .rvh file (with .rvh extension included ), either relative to the working directory or absolute.}
 }
 \value{
 Returns a list including:
@@ -34,16 +34,12 @@ network object which describes stream network connectivity and adds additional H
 subbasin characteristics such as total upstream area and dominant land/vegetation classes.
 }
 \details{
-The supplied file should not be comma-delimited with a trailing comma. The function also
-does not like tabs in the rvh file, the file should be untabified first.
-This function uses the igraph library t0o build the networks and compute the total upstream area.
+does not like comma-delimited tables with a trailing comma
+}
+\note{
+depends upon igraph library; does not like tabs in the .rvh file - it should be untabified first.
 The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :SubBasins-:EndSubBasins
 command blocks.
-
-The ff argument can be a relative path name or absolute one.
-
-The TotalUpstreamArea is the total drainage area upstream of the given subbasin outlet. With this calculation,
-headerwater subbasins will have a total upstream area equal to their own subbasin area.
 }
 \examples{
   # load example rvh file
@@ -51,32 +47,31 @@ headerwater subbasins will have a total upstream area equal to their own subbasi
   rvh <- rvn_rvh_read(nith)
 
   # number of HRUs
-  nrow(rvh$HRUtable)
+  numHRUs <- nrow(rvh$HRUtable)
 
   # total watershed area
-  sum(rvh$HRUtable$Area)
+  watershed.area <- sum(rvh$HRUtable$Area)
 
-  # sub-table of headwater basins (upstream area = subbasin area)
-  rvh$SBtable$SBID[rvh$SBtable$Area == rvh$SBtable$TotalUpstreamArea]
+  # sub-table of headwater basins
+  headwaterBasins <- subset(rvh$SBtable, TotalUpstreamArea == 0)
 
   # sub-table of Urban HRUs
-  subset(rvh$HRUtable, LandUse == "URBAN")
+  urbanHRUs <- subset(rvh$HRUtable, LandUse == "URBAN")
 
   # get total area upstream of subbasin containing outlet
   upstr <- cumsum(rvh$SBtable$Area)
   upstr[rvh$SBtable$Downstream_ID == -1]
 
-  # show upstream areas for each subbasin
-  rvh$SBtable[,c("SBID","TotalUpstreamArea")]
-
-  # plot network diagram using igraph library
-  igraph::plot.igraph(rvh$SBnetwork)
-
 }
 \seealso{
 \code{\link{rvn_rvh_write}} to write contents of the generated (and usually modified HRU and SubBasin tables)
 \code{\link{rvn_subbasin_network_plot}} to plot the subbasin network
+See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 }
 \author{
 James R. Craig, University of Waterloo
 }
+\keyword{HRUs}
+\keyword{Raven}
+\keyword{SubBasins}
+\keyword{rvh}

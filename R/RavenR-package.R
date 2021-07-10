@@ -15,7 +15,6 @@
 #' @seealso The package \href{https://github.com/rchlumsk/RavenR}{GitHub page} and
 #' \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
-#' \href{http://raven.uwaterloo.ca/}{Raven web site}
-#'
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 #'
 NULL

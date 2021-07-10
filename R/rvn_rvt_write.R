@@ -1,196 +1,109 @@
 #' @title Write Raven rvt file from Time Series
 #'
 #' @description
-#' rvn_rvt_write generates a Raven rvt file of the specified type from an xts time series.
+#' rvn_rvt_write generates a Raven rvt file from a time series
 #'
 #' @details
-#' Writes the rvt file for a given time series dataset. The type of rvt file to write is
-#' determined by the rvt_type argument, which must match one of the supported Raven types.
-#' Note that this function does not support the writing of meteorological data, this is handled
-#' by the \code{rvn_rvt_write_met} function.
+#' This function writes the rvt file for a given time series dataset. The function will write out
+#' the entirety of the columns provided in the given xts object. Please ensure that the
+#' parameters supplied in the params and units objects match the xts object supplied.
 #'
-#' The format of the rvt file, including required fields to write to file, are determined from
-#' the supplied rvt_type parameter and from the mapping provided by \code{rvn_rvt_mapping}. The
-#' data_type is also checked against the provided mappings to check for valid state variables and
-#' accompanying units.
+#' @param ts time series to write in xts or dataframe format
+#' @param dates vector of date objects passed, necessary only if ts is not xts
+#' @param prd period to use in writing rvt file, format "YYYY-MM-DD/YYYY-MM-DD"
+#' @param tt initial start time to file
+#' @param dt time interval to write to file
+#' @param params the full string expression for the parameters line to write to file
+#' @param units the full string expression for the units line to write to file
+#' @param ff filename to write to without .rvt extension (added automatically)
+#' @return \item{flag}{returns TRUE if the function executed successfully}
 #'
-#' No quality control of the data is performed here. Some rvt types, such as ObservationWeights,
-#' cannot have missing values in the data; it is the responsibility of the user to supply \code{x} with
-#' no missing values if required. Any missing values in \code{x} are written to file with the
-#' missing value code provided by \code{NA_value}.
+#' @seealso \code{\link{rvn_rvt_wsc}} to create an rvt file from Water Survey Canada (WSC) data
 #'
-#' \code{x} should be an xts time series object with multiple rows of data and a single column.
-#'
-#' @param x time series in xts format to write to file
-#' @param filename name of output file (with rvt extension)
-#' @param rvt_type type of rvt file to write (e.g. ObservationData)
-#' @param data_type type of data in x (e.g. HYDROGRAPH)
-#' @param basin_ID subbasin (or HRU) ID corresponding to the time series
-#' @param NA_value value to use for NA values in rvt file (default -1.2345 for Raven format)
-#' @return \code{TRUE} if the function executed successfully
-#'
-#' @seealso \code{\link{rvn_rvt_read}} to read in rvt data files,
-#' and \code{rvn_rvt_ECmet} to write meteorological rvt files.
-#'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/Default.html}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' @keywords Raven rvt flow file
 #' @examples
 #'
 #' # load sample flow data
 #' system.file('extdata','run1_Hydrographs.csv', package = "RavenR") %>%
-#' rvn_hyd_read() -> mydata
+#' read.csv(.) -> mydata
 #'
-#' # write time series to rvt file using data from subbasin 36 as observed data
-#' rvn_rvt_write(x=mydata$hyd$Sub36,
-#'   rvt_type = "ObservationData",
-#'   data_type = "HYDROGRAPH",
-#'   basin_ID = 36,
-#'   filename = file.path(tempdir(), 'mydata.rvt'))
+#' # generate time-series object from Sub basin 36 observations
+#' flows <- xts(mydata$Sub36..observed...m3.s.,order.by = as.Date(paste0(mydata$date,mydata$time)))
 #'
-#'   rvn_rvt_write(x=mydata$hyd$Sub36,
-#'   rvt_type = "ObservationData",
-#'   data_type = "HYDROGRAPH",
-#'   basin_ID = 36)
+#' # write time series to rvt file
+#' rvn_rvt_write(flows,params = "HYDROGRAPH", units = "m3/s", ff = 'raven_rvt_write')
 #'
 #' @export rvn_rvt_write
-#' @importFrom xts is.xts timeBased
-#' @importFrom lubridate as_datetime
-rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
-                          data_type="HYDROGRAPH",
-                          basin_ID=NULL, NA_value=-1.2345) {
-
-
-  # flow.sim <- NULL
-
-
-  # some function or pull in of data for rvt_mapping
-  # likely to be updated, possibly as an internal data structure?
-  rvn_rvt_mappings()
-
-  ### general inputs checks
-
-  if (timeBased(x) || !is.xts(x)) {
-    stop("x must be of class xts")
-  }
-
-  # check for non-zero length in series
-  if (is.null(nrow(x)) | nrow(x) == 0) {
-    stop("x must have some data")
-  }
-
-  # check for a single column
-  if (ncol(x) > 1) {
-    warning("x has multiple columns, only the first will be used")
-    x <- x[,1]
-  }
-
-  if (is.null(filename)) {
-    if (is.null(colnames(x))) {
-      filename <- sprintf("rvn_rvt_output_%s.rvt",format(Sys.Date()))
-      warning(sprintf("No filename provided, auto-generated as %s", filename))
+#' @importFrom stats start
+#' @importFrom xts is.xts
+#' @importFrom lubridate date
+#' @importFrom gdata write.fwf
+rvn_rvt_write <- function(ts, params, units, dates=NULL, prd=NULL,
+                          tt="00:00:00", dt=1.0, ff="raven_rvt_write.rvt")
+{
+  # Deal with dates
+  if(!is.null(dates)) {
+    min_date <- start(ts)
+  } else {
+    # XTS
+    if (is.xts(ts)) {
+      min_date <- as.character(lubridate::date(ts[1]))
     } else {
-      filename <- sprintf("rvn_rvt_%s_%s.rvt",colnames(x), format(Sys.Date()))
-      warning(sprintf("No filename provided, auto-generated as %s", filename))
-    }
-  } else if (rvn_substrRight(filename,4) != ".rvt") {
-    warning("Adding .rvt extension to filename")
-    filename <- sprintf("%s.rvt",filename)
-  }
-
-  # check rvt type
-  if (rvt_type %notin% names(rvt_mapping)) {
-    stop(sprintf("Unknown rvt_type %s, please ensure the rvt_type is a recognized type:\n%s",rvt_type,
-                 paste(names(rvt_mapping), collapse="\n")))
-  }
-
-  # list of items that will be written based on the rvt_type
-  rvt_writelist <- rvt_mapping[[rvt_type]]
-
-  # check data type (if in the rvt_mapping list)
-  if ("data_type" %in% unlist(rvt_writelist)) {
-    if (data_type %notin% names(rvt_data_type_mapping)) {
-      stop(sprintf("Unknown data_type %s, please ensure the data_type is a recognized type:\n%s",data_type,
-                   paste(names(rvt_data_type_mapping), collapse="\n")))
+      stop("Argument 'dates' must be passed for non-XTS time series (ts) arguments")
     }
   }
 
-  # similar check for basin_ID
-  if (is.null(basin_ID) & "basin_ID" %in% unlist(rvt_writelist)) {
-    basin_ID <- 12345
-    warning(sprintf("basin_ID is required but not provided, using default placeholder value of %i",basin_ID))
-  }
+  # # determine the period to use
+  # if (!(is.null(prd))) {
+  #
+  #   # period is supplied; check that it makes sense
+  #   firstsplit <- unlist(strsplit(prd,"/"))
+  #   if (length(firstsplit) != 2) {
+  #     stop("Check the format of supplied period; should be two dates separated by '/'.")
+  #   }
+  #   if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
+  #       || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
+  #     stop("Check the format of supplied period; two dates should be in YYYY-MM-DD format.")
+  #   }
+  # }
 
-  ### xts data checks
+  prd <- rvn_get_prd(ts,prd)
 
-  # check the interval for consistency
-  if (length(grep("Irregular", x=rvt_type)) != 1) {
-    difftime_check <- difftime(x[2:length(x)], x[1:(length(x)-1)] , units="day")
-    if (any(difftime_check != difftime_check[1])) {
-      stop("Inconsistent timesteps found in data; consider using tools such as RavenR::rvn_ts_infill to fix the time series.")
-    }
-    time_interval <- difftime_check[1]
-    start_datetime <- format(as_datetime(x[1]), "%Y-%M-%d %H:%M:%S")
+  # begin writing rvt file
+  if (!(is.null(prd))) {
+    ts <- ts[prd]
 
-  } else {
-    time_interval <- NA
-  }
-
-  # get other properties of x
-  num_points <- nrow(x)
-
-  # change all NA values to NA value
-  x[is.na(x)] <- NA_value
-
-
-  ### write file
-  xx <- coredata(x)
-  fc <- file(filename,open='w+')
-
-  if (!is.na(time_interval)) {
-
-    # write regular time series (even interval)
-
-    ## write first line
-    ss1 <- paste0( c(sprintf(":%s",rvt_type),
-                     unlist(rvt_writelist[[1]])),
-                   collapse = " ")
-    ss1 <- gsub("\\bdata_type\\b", data_type, ss1)
-    ss1 <- gsub("\\bbasin_ID\\b", basin_ID, ss1)
-    ss1 <- gsub("\\bunits\\b", rvt_data_type_mapping[[data_type]]$units, ss1)
-    writeLines(ss1,fc)
-
-    ss2 <- paste0(c("  ",
-                    unlist(rvt_writelist[[2]])),
-                  collapse = " ")
-    ss2 <- gsub("\\bstart_datetime\\b", start_datetime, ss2)
-    ss2 <- gsub("\\btime_interval\\b", time_interval, ss2)
-    ss2 <- gsub("\\bnum_points\\b", num_points, ss2)
-    writeLines(ss2,fc)
-
-    for (j in 1:num_points) {
-      writeLines(sprintf('  %g',xx[j]),fc)
-    }
-
-  } else {
-
-    # write irregular time series
-
-    ## write first line
-    ss1 <- paste0(c( sprintf(":%s",rvt_type),
-                     unlist(rvt_writelist[[1]])),
-                  collapse = " ")
-    ss1 <- gsub("\\bdata_type\\b", data_type, ss1)
-    ss1 <- gsub("\\bbasin_ID\\b", basin_ID, ss1)
-    ss1 <- gsub("\\bnum_points\\b", num_points, ss1)
-    ss1 <- gsub("\\bunits\\b", rvt_data_type_mapping[[data_type]]$units, ss1)
-    writeLines(ss1,fc)
-
-    for (j in 1:num_points) {
-      writeLines(sprintf('  %s %g', format(as_datetime(x[j]), "%Y-%M-%d %H:%M:%S"),xx[j]),fc)
+    # check that the supplied period works
+    if (nrow(ts) == 0) {
+      stop("ts has zero points in the supplied period, please adjust period and/or data accordingly.")
     }
   }
 
-  # close off file
-  writeLines(sprintf(':End%s',rvt_type),fc)
+  # change all NA values to Raven NA (-1.2345)
+  ts[is.na(ts)] = -1.2345
+
+  fc <- file(paste0(ff,".rvt"),open='wt')
+  writeLines(":MultiData",fc)
+  writeLines(sprintf('%s %s %.2f %i', min_date, tt, dt, nrow(ts)), fc)
+  writeLines(params,fc)
+  writeLines(units,fc)
+  # write.fwf writes nicely-spaced tables, but perhaps this isn't desired in the
+  # RVT file since it often isn't edited by hand (and the spaces take up more disk space!)
+  write.fwf(x = ts,
+                   file = fc,
+                   append = TRUE,
+                   justify = 'right',
+                   colnames = FALSE,
+                   sep = ', ',
+                   scientific = TRUE)
+  #for (j in 1:nrow(ts)) {
+  #  writeLines(sprintf(rep("%g ",ncol(ts)),ts[j,1:ncol(ts)]),fc)
+  #}
+  rvn_write_Raven_label('EndMultiData',fc)
   close(fc)
 
-  return(TRUE)
+  return("flag"=TRUE)
 }

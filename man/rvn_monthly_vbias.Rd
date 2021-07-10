@@ -34,7 +34,7 @@ rvn_monthly_vbias creates a plot of the monthly volume biases in the simulated
 flow series.
 }
 \details{
-Calculates the monthly volume biases and optionally creates a
+This function calculates the monthly volume biases and optionally creates a
 plot of them. The monthly volume biases are averaged across all years of
 data. If normalized, the biases are calculated as:
 
@@ -69,4 +69,13 @@ rvn_monthly_vbias(sim,obs,normalize = FALSE)
 \seealso{
 \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
 volumes
+
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{Raven}
+\keyword{bias}
+\keyword{diagnostics}
+\keyword{monthly}
+\keyword{volume}

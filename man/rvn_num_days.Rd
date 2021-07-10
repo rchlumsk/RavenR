@@ -15,10 +15,8 @@ rvn_num_days(date1, date2)
 \item{int}{number of days between the two days}
 }
 \description{
-rvn_num_days is used to calculate the number of days between two provided dates.
-}
-\details{
-This method handles leap years if they exist between the specified dates.
+rvn_num_days is used to calculate the number of days in the month; handles leap
+years
 }
 \examples{
 rvn_num_days(as.Date("2017-02-05"),as.Date("2017-02-12"))
@@ -29,3 +27,5 @@ rvn_num_days(as.Date("2017-02-05"),as.Date("2017-02-12"))
 \code{\link{rvn_num_days_month}} for calculating the number of days in a
 month
 }
+\keyword{days}
+\keyword{number}

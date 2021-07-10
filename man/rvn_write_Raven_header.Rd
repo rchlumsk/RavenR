@@ -30,13 +30,15 @@ TRUE returns TRUE if executed successfully
 Writes the common Raven file header to file. All lines are Appended.
 }
 \examples{
-tf <- file.path(tempdir(), 'HogwartsBasin.rvp')
-rvn_write_Raven_header(filename = tf,
+rvn_write_Raven_header(filename = 'HogwartsBasin.rvp',
                     filetype = 'rvp ASCII Raven 2.9.1',
                     author   = 'Harry Potter')
 
 # view file
-readLines(tf)
+readLines("HogwartsBasin.rvp")
+
+# cleanup temporary file
+unlink("HogwartsBasin.rvp")
 
 }
 \author{

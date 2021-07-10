@@ -5,7 +5,7 @@
 #' the list of hydrologic process connections.
 #'
 #' @details
-#' Relies on a valid and up-to-date RavenProcessConnections.dat file.
+#' This function relies on a valid and up-to-date RavenProcessConnections.dat file.
 #' This file is provided with the RavenR package, but
 #' may be overrided by a more recent file if provided manually.
 #'
@@ -19,7 +19,7 @@
 #' @author James R. Craig, University of Waterloo
 #'
 #' @seealso \code{\link{rvn_rvi_read}} to read a .rvi file and generate an rvi object, and
-#' \code{\link{rvn_rvi_process_ggplot}} or \code{\link{rvn_rvi_process_diagrammer}} to plot the process network produced in this function.
+#' \code{\link{rvn_rvi_process_plot}} to plot the process network produced in this function.
 #'
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'

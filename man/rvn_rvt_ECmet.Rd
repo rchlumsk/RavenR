@@ -6,7 +6,6 @@
 \usage{
 rvn_rvt_ECmet(
   metdata,
-  filename = NULL,
   prd = NULL,
   stnName = NULL,
   forcing_set = 1,
@@ -19,8 +18,6 @@ rvn_rvt_ECmet(
 }
 \arguments{
 \item{metdata}{EC meteorological data from one or more stations (e.g., from weathercan::weather_dl())}
-
-\item{filename}{specified name of file to write to (optional)}
 
 \item{prd}{(optional) data period to use in .rvt file}
 
@@ -47,13 +44,9 @@ rvn_rvt_ECmet converts Environment Canada historical meteorological data for a
 given station into the .rvt format usable in Raven.
 }
 \details{
-Writes data in the :MultiData format; the particular set of forcings to
+The function prints in the :MultiData format; the particular set of forcings to
 print can be set with the forcing_set command. The data should be downloaded
 with missing days included. The download website is linked below.
-
-The function will write to name generated from the station name, otherwise
-the .rvt filename may be specified with the filename argument (full path to
-the filename, including .rvt extension).
 
 prd is used by the xts formatted-data to restrict the data reported in .rvt
 files, for each station, to this period. The prd should be defined in
@@ -104,33 +97,44 @@ Note: Data quality is not assessed in this package, such as consistency between
 minimum and maximum temperatures. Subdaily data is not currenty supported.
 
 Note: this function is designated to use data from the weathercan package. The
-weathercan package is external to RavenR and is not an explicit dependency
+weathercan package is external to RavenR and is not an explicit dependent package
 of RavenR.
 }
 \examples{
+# Download data using weathercan weather_dl
+library(weathercan)
+kam <- weather_dl(station_ids = 51423,
+                  start = "2016-10-01", end = "2019-09-30", interval="day")
 
-# note: example modified to avoid using weathercan directly, uses saved
-## weathercan data from RavenR package sample data
-# library(weathercan)
-# kam <- weather_dl(station_ids = 51423,
-#                   start = "2016-10-01", end = "2019-09-30", interval="day")
-data(rvn_weathercan_sample)
-kam <- rvn_weathercan_sample
-
-# basic use, override filename to temporary file
+# basic use, includes "met_" prefix
 # default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
-rvn_rvt_ECmet(metdata = kam, forcing_set = 1,
-  filename = file.path(tempdir(), "rvn_rvt_ECmetfile1.rvt"))
+rvn_rvt_ECmet(metdata = kam, forcing_set = 1)
 
-# use the second forcing set instead
-# default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
+# set without prefix, station data and redirect files created
+# forcing_set 2 includes (RAINFALL, SNOWFALL, MAX TEMP, MIN TEMP)
 rvn_rvt_ECmet(metdata = kam, forcing_set = 2,
-  filename = file.path(tempdir(), "rvn_rvt_ECmetfile2.rvt"))
+  prefix = NULL, write_stndata = TRUE, write_redirect = TRUE)
+
+# cleanup demo files
+unlink("met_KAMLOOPS_A.rvt.rvt")
 
 }
 \seealso{
 \code{\link{rvn_rvt_wsc}} to convert WSC flow gauge data to Raven format
 
-Download Environment Canada Historical weather data from (climate.weather.gc.ca), or use the
-`weathercan` package to access this data through R.
+Download EC climate data from
+\href{http://climate.weather.gc.ca/historical_data/search_historic_data_e.html}{EC
+Historical Data}
+
+Download multiple years of climate data, see
+\href{ftp://ftp.tor.ec.gc.ca/Pub/Get_More_Data_Plus_de_donnees/Readme.txt}{instructions}
+
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{Raven}
+\keyword{conversion}
+\keyword{meteorological}
+\keyword{rvt}
+\keyword{station}

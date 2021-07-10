@@ -6,7 +6,7 @@
 #' Raven.
 #'
 #' @details
-#' Takes a single flow tibble generated from tidyhydat and converts the flow data for
+#' This function takes a single flow tibble generated from tidyhydat and converts the flow data for
 #' each station in the file into .rvt formatted files for a Raven model. If
 #' multiple stations exist in the .csv file, multiple observation files are created
 #'
@@ -35,11 +35,6 @@
 #' alphabeticized order is not dependent on the station name, and the observed
 #' files will be in one set.
 #'
-#' The function will write to name generated from the station name(s), otherwise
-#' the .rvt filename may be specified with the filename argument (full path to
-#' the filename, including .rvt extension). If multiple stations are provided,
-#' the filename argument may be a vector of filenames.
-#'
 #' @param indata tibble of WSC flow data from tidyhydat's hy_daily_flows() function
 #' @param subIDs vector of subbasin IDs to correspond to the stations in indata
 #' @param prd (optional) data period to use in .rvt file
@@ -47,38 +42,30 @@
 #' @param write_redirect (optional) write the :RedirectToFile commands in a separate .rvt file
 #' @param rd_file (optional) name of the redirect file created (if write_redirect = TRUE)
 #' @param flip_number (optional) put the subID first in the .rvt filename
-#' @param filename specified name of file(s) to write to (optional)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #'
+#' See also the \href{http://www.raven.uwaterloo.ca/}{Raven page}
+#' @keywords Raven streamgauge flow rvt conversion tidyhydat
 #' @examples
-#'
-#' # note: example modified to avoid using tidyhydat directly, uses saved
-#' ## tidyhydat data from RavenR package sample data
-#' # library(tidyhydat)
+#' library(tidyhydat)
 #' stations <- c("05CB004","05CA002")
 #'
 #' # Gather station data/info using tidyhydat functions
-#' # hd <- tidyhydat::hy_daily_flows(station_number = stations,
-#' #  start_date = "1996-01-01", end_date = "1997-01-01")
-#' data(rvn_tidyhydat_sample)
-#' hd <- rvn_tidyhydat_sample
+#' hd <- tidyhydat::hy_daily_flows(station_number = stations,
+#'   start_date = "1996-01-01", end_date = "2000-01-01")
 #'
-#' # station_info <- hy_stations(stations)
-#'
-#' tf1 <- file.path(tempdir(), "station1.rvt")
-#' tf2 <- file.path(tempdir(), "station2.rvt")
+#' station_info <- hy_stations(stations)
 #'
 #' # Create RVT files
 #' rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
-#'   filename=c(tf1,tf2))
+#'   stnNames=station_info$STATION_NAME, flip_number=TRUE)
 #'
 #' @export rvn_rvt_tidyhydat
 #' @importFrom dplyr distinct pull select
 #' @importFrom xts xts
 rvn_rvt_tidyhydat <- function(indata, subIDs, prd=NULL, stnNames=NULL,
                               write_redirect=FALSE, flip_number=FALSE,
-                              rd_file = 'flow_stn_redirect_text.rvt',
-                              filename=NULL)
+                              rd_file = 'flow_stn_redirect_text.rvt')
 {
 
   STATION_NUMBER <- Date <- Value <- NULL
@@ -117,22 +104,18 @@ rvn_rvt_tidyhydat <- function(indata, subIDs, prd=NULL, stnNames=NULL,
       stop(sprintf("Empty time series for station %s, check the supplied period and/or the availability of flow data in the supplied file.",stns[i]))
     }
 
-    # determine file name
-    if (!is.null(filename)) {
-      rvt.name <- filename[i]
-    } else {
-      if (flip_number) {
-        if (!(is.null(stnNames))) {
-          rvt.name <- sprintf('%i_%s.rvt',subIDs[i],stnNames[i])
-        } else {
-          rvt.name <- sprintf('%i_%s.rvt',subIDs[i],stns[i])
-        }
+    # write .rvt file
+    if (flip_number) {
+      if (!(is.null(stnNames))) {
+        rvt.name <- sprintf('%i_%s.rvt',subIDs[i],stnNames[i])
       } else {
-        if (!(is.null(stnNames))) {
-          rvt.name <- sprintf('%s_%i.rvt',stnNames[i],subIDs[i])
-        } else {
-          rvt.name <- sprintf('%s_%i.rvt',stns[i],subIDs[i])
-        }
+        rvt.name <- sprintf('%i_%s.rvt',subIDs[i],stns[i])
+      }
+    } else {
+      if (!(is.null(stnNames))) {
+        rvt.name <- sprintf('%s_%i.rvt',stnNames[i],subIDs[i])
+      } else {
+        rvt.name <- sprintf('%s_%i.rvt',stns[i],subIDs[i])
       }
     }
 

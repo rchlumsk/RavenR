@@ -16,6 +16,10 @@
 #'
 #' @author James R. Craig, University of Waterloo
 #'
+#' @seealso
+#' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
+#' \code{\link{rvn_subbasin_map}} to map results for subbasins.
+#'
 #' @examples
 #' # read in rvh file
 #' rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package="RavenR"))
@@ -25,6 +29,8 @@
 #'
 #' # include labels
 #' rvn_subbasin_network_plot(rvh$SBtable, labeled=TRUE)
+#'
+#' @keywords Raven Network Stream Plot
 #'
 #' @export rvn_subbasin_network_plot
 #' @importFrom ggplot2 ggplot geom_segment geom_point theme aes geom_text geom_label

@@ -5,7 +5,7 @@
 #' peak timing errors, based on the water year.
 #'
 #' @details
-#' Creates a plot of the peak timing errors in simulated peaks
+#' This function creates a plot of the peak timing errors in simulated peaks
 #' for each water year. The difference in days between the simulated peak and
 #' observed peak are plotted (and/or returned in the data frame) for the water
 #' year. This diagnostic is useful in determining how accurate the timing of
@@ -43,6 +43,10 @@
 #' events \code{\link{rvn_annual_peak_event_error}} to calculate errors in peak
 #' events
 #'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#'
 #' @examples
 #' # load sample hydrograph data, two years worth of sim/obs
 #' data(rvn_hydrograph_data)
@@ -55,9 +59,10 @@
 #' peak1$p1
 #'
 #' # plot directly and without labels
-#' rvn_annual_peak_timing_error(sim, obs, add_line=TRUE, add_labels=FALSE)
+#' rvn_annual_peak_timing_error(sim, obs, add_line=T, add_labels=FALSE)
 #'
 #'
+#' @keywords Raven annual peak timing error diagnostics
 #' @export rvn_annual_peak_timing_error
 #' @importFrom stats lm
 #' @importFrom lubridate year date

@@ -45,4 +45,11 @@ rvn_get_prd(rvn_hydrograph_data$hyd$Sub43_obs, "2020-01-01/2020-02-01")
 }
 \seealso{
 \code{\link{rvn_theme_RavenR}} provides a theme for the RavenR package
+
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{get}
+\keyword{prd}
+\keyword{xts}

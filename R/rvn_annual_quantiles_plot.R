@@ -18,8 +18,8 @@
 #' rvn_hyd_extract(subs="Sub36",.) ->
 #' hyd_data
 #'
-#' # Calculate quantiles for the simulated hydrograph
-#' qdat <- rvn_annual_quantiles(hyd_data$sim)
+#' # Calculate quantiles
+#' qdat <- rvn_annual_quantiles(hyd_data$obs)
 #' head(qdat)
 #'
 #' # Plot

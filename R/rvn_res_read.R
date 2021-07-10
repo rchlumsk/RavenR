@@ -5,7 +5,7 @@
 #' modelling Framework Raven.
 #'
 #' @details
-#' Expects a full file path to the ReservoirStages.csv file, then
+#' This function expects a full file path to the ReservoirStages.csv file, then
 #' reads in the file using read.csv. The main advantage of this function is
 #' renaming the columns to nicer names and extracting the units into something
 #' much easier to read.
@@ -18,15 +18,16 @@
 #' located in the current working directory, then simply the name of the file
 #' is sufficient.
 #'
-#' The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
-#' the user to the local time zone as needed, based on the model run.
-#'
 #' @param ff full file path to the ReservoirStages.csv file
 #' @param tzone string indicating the timezone of the data in ff
 #' @return \item{res}{data frame from the file with standardized names}
 #' @seealso \code{\link{rvn_res_extract}} for extraction tools related to the
 #' rvn_res_read output file
 #'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' @keywords Raven read.csv reservoir
 #' @examples
 #' # create full file path
 #' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
@@ -41,7 +42,7 @@
 #' @export rvn_res_read
 #' @importFrom xts xts
 #' @importFrom utils read.csv
-rvn_res_read <- function(ff=NA, tzone="UTC")
+rvn_res_read <- function(ff=NA, tzone=NULL)
 {
 
   if (missing(ff)) {

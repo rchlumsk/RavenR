@@ -23,11 +23,14 @@ rvn_substrMRight("hello world",3)
 }
 \seealso{
 \code{\link{rvn_substrRight}} for using n characters from the right
-side of string
+side of string,
 
 \code{\link{rvn_substrLeft}} for using n characters from the left side of
-string
+string,
 
 \code{\link{rvn_substrMLeft}} for removing n characters from the left side of a
-string
+string,
 }
+\keyword{minus}
+\keyword{right}
+\keyword{string}

@@ -5,7 +5,7 @@
 #' percent errors, based on the water year.
 #'
 #' @details
-#' Creates a plot of the percent errors in simulated peaks for
+#' This function creates a plot of the percent errors in simulated peaks for
 #' each water year. The peaks are calculated as the magnitude of the largest
 #' event in each water year. Note that the rvn_annual_peak_error function is first
 #' used to obtain the peaks in each year, then the percent errors are
@@ -17,6 +17,9 @@
 #' The sim and obs should be of time series (xts) format and are assumed to be
 #' of the same length and time period. The flow series are assumed to be daily
 #' flows with units of m3/s.
+#'
+#' The R2 diagnostic is calculated for a fit with no intercept (in a perfect
+#' fit the points are identical, and intercept is automatically zero).
 #'
 #' The add_labels will add the labels of 'overprediction' and 'underprediction'
 #' to the right hand side axis if set to TRUE. This is useful in interpreting
@@ -41,6 +44,10 @@
 #' events \code{\link{rvn_annual_peak_event_error}} to calculate errors in peak
 #' events.
 #'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#'
 #' @examples
 #'
 #' system.file("extdata","run1_Hydrographs.csv", package="RavenR") %>%
@@ -59,6 +66,8 @@
 #' # plot directly and without labels
 #' rvn_annual_peak_error(sim, obs, add_line=TRUE, add_labels=FALSE)
 #'
+#'
+#' @keywords Raven annual peak error diagnostics
 #' @export rvn_annual_peak_error
 #' @importFrom stats lm
 #' @importFrom lubridate year date

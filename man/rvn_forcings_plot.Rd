@@ -19,7 +19,7 @@ rvn_forcings_plot generates a set of 5 plots (precip,temperature,PET,radiation,
 and potential melt), which summarize the watershed-averaged forcings. Returns a list with the individual plots.
 }
 \details{
-Creates multiple plots from a ForcingFunctions.csv file
+This function creates multiple plots from a ForcingFunctions.csv file
 structure generating using RavenR's forcings.read function
 }
 \examples{
@@ -37,12 +37,16 @@ p1$AllForcings
 prd = "2002-10-01/2003-09-30"
 rvn_forcings_plot(fdata,prd)$AllForcings
 
-rvn_forcings_plot(fdata,prd)$Temperature+
-theme(legend.position='top')
-
-
 }
 \seealso{
 \code{\link{rvn_forcings_read}} for the function used to read in the
 forcings function data
+
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{Raven}
+\keyword{diagnostics}
+\keyword{forcing}
+\keyword{plot}

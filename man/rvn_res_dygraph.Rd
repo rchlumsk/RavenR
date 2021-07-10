@@ -17,6 +17,8 @@ rvn_res_dygraph(resdata, timezone = "UTC", basins = "", figheight = 400)
 }
 \value{
 a list of plot handles to dygraph plots
+
+See also \href{http://raven.uwaterloo.ca/}{Raven page}
 }
 \description{
 rvn_res_dygraph plots modeled vs observed stage plots when supplied with reservoir stage data
@@ -34,6 +36,7 @@ dyplots[[2]]
 
 
 }
-\seealso{
-\code{\link{rvn_hyd_dygraph}} to generate dygraphs for hydrograph series
-}
+\keyword{Raven}
+\keyword{plotting}
+\keyword{reservoir}
+\keyword{stage}

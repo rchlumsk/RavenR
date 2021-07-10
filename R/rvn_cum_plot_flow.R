@@ -6,7 +6,7 @@
 #' diagnotic analysis of model outputs.
 #'
 #' @details
-#' Plots the simulated series in all cases, and will include
+#' This function will plot the simulated series in all cases, and will include
 #' the observed and inflow plots if they are supplied.
 #'
 #' The sim and obs should be of time series (xts) format. The flow series are
@@ -31,12 +31,16 @@
 #' @seealso \code{\link{rvn_flow_scatterplot}} for creating flow scatterplots
 #' @seealso \code{\link{rvn_cum_plot_flow}} for creating generic cumulative function plotting
 #'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' @keywords Raven flow cumulative diagnostics
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs
-#' data(rvn_hydrograph_data)
-#' sim <- rvn_hydrograph_data$hyd$Sub36
-#' obs <- rvn_hydrograph_data$hyd$Sub36_obs
+#' data(hydrograph_data)
+#' sim <- hydrograph_data$hyd$Sub36
+#' obs <- hydrograph_data$hyd$Sub36_obs
 #'
 #' # plot cumulative flow for sim and obs
 #' rvn_cum_plot_flow(sim,obs)

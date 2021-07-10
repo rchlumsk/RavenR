@@ -5,7 +5,7 @@
 #' Raven.
 #'
 #' @details
-#' Expects a full file path to the WatershedStorage.csv file,
+#' This function expects a full file path to the WatershedStorage.csv file,
 #' then reads in the file using read.csv. The main advantage of this functon is
 #' renaming the columns to nicer names and extracting the units into something
 #' much easier to read.
@@ -18,9 +18,6 @@
 #' located in the current working directory, then simply the name of the file
 #' is sufficient.
 #'
-#' The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
-#' the user to the local time zone as needed, based on the model run.
-#'
 #' @param ff full file path to the WatershedStorage.csv file
 #' @param tzone string indicating the timezone of the data in ff
 #' @return \item{watershed_storage}{data frame from the file with standardized
@@ -29,6 +26,10 @@
 #' \code{\link{rvn_watershedmeb_read}} for reading in the
 #' WatershedMassEnergyBalance.csv file
 #'
+#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' Craig's research page} for software downloads, including the
+#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
+#' @keywords Raven read.csv watershed storage
 #' @examples
 #'
 #' # locate in RavenR Watershed storage file
@@ -42,7 +43,7 @@
 #'
 #' @export rvn_watershed_read
 #' @importFrom utils read.csv
-rvn_watershed_read <- function(ff=NA, tzone="UTC") {
+rvn_watershed_read <- function(ff=NA, tzone=NULL) {
 
   if (missing(ff)) {
     stop("Requires the full file path to the WatershedStorage.csv file")

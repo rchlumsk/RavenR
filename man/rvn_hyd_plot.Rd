@@ -30,14 +30,14 @@ rvn_hyd_plot(
 \item{wsdates}{integer vector of winter shading period dates (see details)}
 }
 \value{
-\item{p1}{returns ggplot plot object}
+\item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
 rvn_hyd_plot creates a hydrograph plot object for the supplied flow series, or
 equivalently a stage plot for reservoir stages.
 }
 \details{
-Creates a hydrograph plot using the supplied time series; any
+This function creates a hydrograph plot using the supplied time series; any
 series not supplied will not be plotted. If the precip time series is
 supplied, the secondary y axis will be used to plot the precip time series.
 
@@ -48,7 +48,7 @@ the plotting limits in time. If the data is used directly from Raven output,
 this is not a concern. The supplied time series should be in xts format,
 which again can be obtained directly by using the hyd.extract function.
 
-The winter_shading argument will add a transparent grey shading for the
+The winter_shading argument will add a transparent cyan shading for the
 specified period by wsdates in each year that is plotted.
 
 wsdates is formatted as c(winter start month, winter start day, winter end month, winter end day).
@@ -78,7 +78,7 @@ rvn_hyd_plot(sim,obs,precip=precip,prd=prd)
 # add the winter shading
 rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=TRUE)
 
-# change winter shading dates (Nov 1st to April 15th)
+# change winter shading dates
 rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=TRUE, wsdates=c(11,1,4,15))
 
 }
@@ -87,4 +87,11 @@ rvn_hyd_plot(sim,obs,precip=precip,prd=prd, winter_shading=TRUE, wsdates=c(11,1,
 flow series
 
 \code{\link{rvn_hyd_extract}} to extract time series from Raven objects
+
+See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+Craig's research page} for software downloads, including the
+\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
+\keyword{Raven}
+\keyword{flow}
+\keyword{hydrograph}
