@@ -5,7 +5,7 @@
 #' and potential melt), which summarize the watershed-averaged forcings. Returns a list with the individual plots.
 #'
 #' @details
-#' This function creates multiple plots from a ForcingFunctions.csv file
+#' Creates multiple plots from a ForcingFunctions.csv file
 #' structure generating using RavenR's forcings.read function
 #'
 #' @param forcings forcings attribute from forcings.read function
@@ -14,10 +14,6 @@
 #' @seealso \code{\link{rvn_forcings_read}} for the function used to read in the
 #' forcings function data
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven forcing plot diagnostics
 #' @examples
 #'
 #' # read in sample forcings data
@@ -33,12 +29,16 @@
 #' prd = "2002-10-01/2003-09-30"
 #' rvn_forcings_plot(fdata,prd)$AllForcings
 #'
+#' rvn_forcings_plot(fdata,prd)$Temperature+
+#' theme(legend.position='top')
+#'
+#'
 #' @export rvn_forcings_plot
 #' @importFrom ggplot2 fortify ggplot aes scale_color_manual xlab ylab theme element_blank element_rect element_text ylim xlim scale_x_datetime
-#' @importFrom reshape2 melt
 #' @importFrom cowplot plot_grid ggdraw draw_label
+#' @importFrom tidyr pivot_longer
 #' @importFrom lubridate year
-rvn_forcings_plot <-function(forcings,prd=NULL)
+rvn_forcings_plot <-function(forcings, prd=NULL)
 {
 
   Index <- value <- variable <- color <- PET <- potential.melt <- NULL
@@ -51,7 +51,8 @@ rvn_forcings_plot <-function(forcings,prd=NULL)
 
   # Precipitation
   plot.data$Total_Precip <- plot.data$rain + plot.data$snow
-  precip.data <- melt(plot.data, id.vars = "Index", measure.vars = c("Total_Precip","snow"))
+  precip.data <- pivot_longer(plot.data[,c("Index","Total_Precip","snow")], cols = c("Total_Precip","snow"),  names_to = "variable",
+                              values_to = "value")
   p1 <- ggplot(precip.data)+
     geom_line(aes(x= Index, y= value, color = variable))+
     scale_color_manual(values = c("blue", "cyan"))+
@@ -59,20 +60,21 @@ rvn_forcings_plot <-function(forcings,prd=NULL)
     ylab("Precipitation (mm/d)")+
     xlab("")+
     rvn_theme_RavenR()+
-    theme(legend.position = c(0.8,0.8),
+    theme(legend.position = "none", # c(0.8,0.8),
           legend.title = element_blank(),
           legend.background = element_rect(fill = "transparent"),
           axis.title = element_text(size = 7))
 
   #Temperature
-  temp.data <- melt(plot.data, id.vars = "Index", measure.vars = c("temp_daily_max", "temp_daily_min"))
-  temp.data$color <- "red"
-  temp.data$color[temp.data$value<0] <- "purple"
+  temp.data <- pivot_longer(plot.data[,c("Index","temp_daily_max","temp_daily_min")], cols = c("temp_daily_max", "temp_daily_min"),
+                            names_to = "variable",values_to = "value")
+  temp.data$color <- "Above 0 deg C"
+  temp.data$color[temp.data$value<0] <- "Below 0 deg C"
 
   p2 <- ggplot(temp.data)+
     geom_line(aes(x= Index, y= value, group = variable, color = color))+
     geom_hline(yintercept = 0)+
-    scale_color_manual(values = c("red","purple"))+
+    scale_color_manual(values = c("blue","red"))+
     ylim(c(min(plot.data$temp_daily_min),max(plot.data$temp_daily_max)))+
     ylab(expression(paste("Min/Max Daily Temperature (",degree,"C)")))+
     xlab("")+
@@ -82,7 +84,7 @@ rvn_forcings_plot <-function(forcings,prd=NULL)
 
   #PET
   p3 <- ggplot(plot.data)+
-    geom_line(aes(x = Index, y = PET), color = "navy")+
+    geom_line(aes(x = Index, y = PET), color="navy")+
     ylab('PET (mm/d)')+
     xlab("")+
     rvn_theme_RavenR()+
@@ -91,11 +93,12 @@ rvn_forcings_plot <-function(forcings,prd=NULL)
 
   #Radiation
   plot.data$SW_LW <- plot.data$SW.radiation + plot.data$LW.radiation
-  rad.data <- melt(plot.data, id.vars = "Index", measure.vars = c("LW.radiation","SW.radiation","ET.radiation","SW_LW"))
+  rad.data <- pivot_longer(plot.data[,c("Index","LW.radiation","SW.radiation","ET.radiation","SW_LW")], cols = c("LW.radiation","SW.radiation","ET.radiation","SW_LW"),
+                           names_to = "variable",values_to = "value")
 
   p4 <- ggplot(rad.data)+
     geom_line(aes(x = Index, y = value, color = variable))+
-    scale_color_manual(values = c("black", "blue", "blue", "blue"))+
+    scale_color_manual(values = c("black", "blue", "red", "purple"))+
     ylab('Radiation (MJ/m2/d)')+
     xlab("")+
     rvn_theme_RavenR()+

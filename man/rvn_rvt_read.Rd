@@ -4,11 +4,13 @@
 \alias{rvn_rvt_read}
 \title{Read .rvt (Raven time series) file}
 \usage{
-rvn_rvt_read(filename)
+rvn_rvt_read(filename, tzone = "UTC")
 }
 \arguments{
 \item{filename}{the name of the .rvt file (with .rvt extension included ), either relative
 to the working directory or absolute.}
+
+\item{tzone}{string indicating the timezone of the data provided in filename (default "UTC")}
 }
 \value{
 Returns an xts time series with at least one dataset (multiple for :MultiData files)
@@ -21,21 +23,17 @@ information as an xts time series.
 It supports :MultiData, :Data, :ObservedData,
 :BasinInflowHydrograph, and most of the other :Data-like time series commands. It does
 NOT support the master .rvt file with :Gauge or :GriddedForcing commands
+
+The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
+the user to the local time zone as needed, based on the model run.
 }
 \examples{
 # read in rvt file
-system.file('extdata','GlenAllan.rvt',package="RavenR")\%>\%
+system.file('extdata','GlenAllan.rvt',package="RavenR") \%>\%
 rvn_rvt_read(.) -> rvt
 plot(rvt$TEMP_DAILY_MIN)
 
 }
-\seealso{
-See also the \href{http://raven.uwaterloo.ca/}{Raven page}
-}
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{Raven}
-\keyword{rvt}
-\keyword{series}
-\keyword{time}

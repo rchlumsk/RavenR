@@ -13,8 +13,10 @@ rvn_num_days_month(date)
 \item{int}{number of days in the month}
 }
 \description{
-rvn_num_days_month is used to calculate the number of days in the month; handles
-leap years
+rvn_num_days_month is used to calculate the number of days in the month
+}
+\details{
+This method includes leap years if they exist in the specified month.
 }
 \examples{
 
@@ -33,6 +35,3 @@ See original code on post in Stack Overflow
 \href{http://stackoverflow.com/questions/6243088/find-out-the-number-of-days-of-a-month-in-rfind}{
 the number of days in a month}
 }
-\keyword{days}
-\keyword{month}
-\keyword{number}

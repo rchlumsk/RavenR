@@ -12,7 +12,7 @@ rvn_calc_runoff_coeff(
 )
 }
 \arguments{
-\item{rvhfile}{rvh filename (absolute or relative to working directory, with .rvh extension)}
+\item{rvhfile}{file path to Raven rvh file}
 
 \item{custfile}{file path to Raven-generated custom output precip-by-subbasin file}
 
@@ -45,17 +45,13 @@ Only determines runoff coefficient from available data - prone to overestimation
 
  bp <- barplot(t(as.matrix(runcoefs)),
   main="Runoff Coefficient Comparison (w/ rough data coverage correction)",
-  ylab = "Runoff coeff", ylim=c(0,3),beside=TRUE,
+  ylab = "Runoff coeff", ylim=c(0,1),beside=TRUE,
   col=c("blue","deepskyblue"),legend.text=c("sim","obs"),las=2)
 
 }
 \seealso{
-See also the \href{http://raven.uwaterloo.ca/}{Raven web site}
+\code{\link{rvn_rvh_read}} for reading and processing Raven rvh file
 }
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{Raven}
-\keyword{coefficient}
-\keyword{runoff}
-\keyword{rvh}

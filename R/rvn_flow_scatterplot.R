@@ -5,7 +5,7 @@
 #' Useful in diagnotic analysis of model outputs.
 #'
 #' @details
-#' This function creates a scatterplot of flows.
+#' Creates a scatterplot of flows.
 #'
 #' The sim and obs should be of time series (xts) format. The flow series are
 #' assumed to be daily flows with units of m3/s.
@@ -23,13 +23,10 @@
 #' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
 #' @param add_eqn optionally adds the equation for a linear regression line (default FALSE)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
+#'
 #' @seealso \code{\link{rvn_forcings_read}} for reading in the ForcingFunctions
 #' file
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords Raven flow scatterplot diagnostics
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs
@@ -65,10 +62,12 @@ rvn_flow_scatterplot <- function(sim,obs,add_line=TRUE,add_r2=FALSE, add_eqn = F
       geom_abline(linetype="dashed")
   }
 
+  if (add_r2 | add_eqn) {
+    m <- lm(sim ~ 0 + obs)
+  }
+
   if (add_r2) {
-    r2 <- 1 - (sum((obs - sim)^2, na.rm = TRUE)/sum((obs - mean(obs,
-                                                             na.rm = TRUE))^2, na.rm = TRUE))
-    r2.label <- paste("R^2 == ", round(r2,2))
+    r2.label <- paste("R^2 == ", round(summary(m)$r.squared,3))
     p1 <- p1 +
       geom_text(x= max(obs, sim, na.rm = TRUE)*0.9,
                 y= max(obs, sim, na.rm = TRUE)*0.18,
@@ -78,8 +77,7 @@ rvn_flow_scatterplot <- function(sim,obs,add_line=TRUE,add_r2=FALSE, add_eqn = F
                 size = 3.5)
 
     if (add_eqn){
-      m <- lm(sim ~  obs)
-      coeff <- round(as.numeric(m$coefficients), 3)
+      coeff <- round(as.numeric(m$coefficients[1]), 3)
       # equation <- paste0( "y = ", coeff[2], "x + ", coeff[1])
       equation <- paste0( "y = ", coeff, "x ")
       p1 <- p1 +

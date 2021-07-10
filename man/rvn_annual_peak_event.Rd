@@ -40,7 +40,7 @@ rvn_annual_peak_event creates a plot of the annual observed and simulated peaks,
 based on the water year.
 }
 \details{
-This function creates a scatterplot of the annual observed and simulated
+Creates a scatterplot of the annual observed and simulated
 peaks, calculated for each available water year of data
 within the two series provided; note that the difference between this and
 the annual.peak function is that here the peak event simulated for the same
@@ -71,21 +71,8 @@ peak1 <- rvn_annual_peak_event(sim, obs)
 peak1$df_peak_event
 peak1$p1
 
-# add the r2 regression line and plot directly
-rvn_annual_peak_event(sim, obs, add_r2=TRUE)
-
-
 }
 \seealso{
 \code{\link{rvn_annual_peak}} to create a scatterplot of annual peaks
 (consider the magnitude of peaks only)
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{annual}
-\keyword{diagnostics}
-\keyword{event}
-\keyword{peak}

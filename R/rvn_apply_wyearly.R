@@ -6,7 +6,7 @@
 #' example apply.daily, apply.monthly, etc.
 #'
 #' @details
-#' This is a function especially helpful to hydrology data or results. The default water year start is
+#' The default water year start is
 #' October 1st, but may be adjusted with the mm and dd arguments. The values for
 #' mm and dd indicate the end of the water year period (i.e. mm=9 and dd=30 indicates
 #' a new water year on Oct 1).
@@ -18,9 +18,6 @@
 #' @param dd day of water year ending (default 30)
 #' @seealso \code{\link{rvn_wyear_indices}} for obtaining endpoints in the water year
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/software.html}{James R.
-#' Craig's research page} for software downloads
-#' @keywords water year apply
 #' @examples
 #' # use sample forcing data (or use forcings_read to read in ForcingFunctions.csv)
 #' data(rvn_forcing_data)

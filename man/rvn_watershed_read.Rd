@@ -4,7 +4,7 @@
 \alias{rvn_watershed_read}
 \title{Read in Raven WatershedStorage file}
 \usage{
-rvn_watershed_read(ff = NA, tzone = NULL)
+rvn_watershed_read(ff = NA, tzone = "UTC")
 }
 \arguments{
 \item{ff}{full file path to the WatershedStorage.csv file}
@@ -20,7 +20,7 @@ rvn_watershed_read is used to read in the WatershedStorage.csv file produced by
 Raven.
 }
 \details{
-This function expects a full file path to the WatershedStorage.csv file,
+Expects a full file path to the WatershedStorage.csv file,
 then reads in the file using read.csv. The main advantage of this functon is
 renaming the columns to nicer names and extracting the units into something
 much easier to read.
@@ -32,6 +32,9 @@ containers.
 ff is the full file path of the WatershedStorage.csv file. If the file is
 located in the current working directory, then simply the name of the file
 is sufficient.
+
+The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
+the user to the local time zone as needed, based on the model run.
 }
 \examples{
 
@@ -49,12 +52,4 @@ head(mywshd$watershed_storage)
 \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
 \code{\link{rvn_watershedmeb_read}} for reading in the
 WatershedMassEnergyBalance.csv file
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{read.csv}
-\keyword{storage}
-\keyword{watershed}

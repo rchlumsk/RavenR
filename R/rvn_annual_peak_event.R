@@ -5,7 +5,7 @@
 #' based on the water year.
 #'
 #' @details
-#' This function creates a scatterplot of the annual observed and simulated
+#' Creates a scatterplot of the annual observed and simulated
 #' peaks, calculated for each available water year of data
 #' within the two series provided; note that the difference between this and
 #' the annual.peak function is that here the peak event simulated for the same
@@ -39,10 +39,6 @@
 #' @seealso \code{\link{rvn_annual_peak}} to create a scatterplot of annual peaks
 #' (consider the magnitude of peaks only)
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#'
 #' @examples
 #'
 #' # load sample hydrograph data, two years worth of sim/obs
@@ -55,11 +51,6 @@
 #' peak1$df_peak_event
 #' peak1$p1
 #'
-#' # add the r2 regression line and plot directly
-#' rvn_annual_peak_event(sim, obs, add_r2=TRUE)
-#'
-#'
-#' @keywords Raven annual peak event diagnostics
 #' @export rvn_annual_peak_event
 #' @importFrom stats lm
 #' @importFrom lubridate year date
@@ -71,16 +62,18 @@ rvn_annual_peak_event <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r
   max.dates <- lubridate::date(max.obs)
   max.sim <- sim[max.dates]
 
-  df <- data.frame("obs.dates" = max.dates,
-                   "sim.peak.event" = as.numeric(max.sim),
-                   "obs.peak.event" = as.numeric(max.obs))
+  max.sim <- as.numeric(max.sim)
+  max.obs <- as.numeric(max.obs)
 
-  if (add_r2) {
-    max.obs.mean <- mean(max.obs)
-    ss.err <- sum((max.sim - max.obs)^2)
-    ss.tot <- sum((max.obs - max.obs.mean)^2)
-    r2 <- 1 - ss.err/ss.tot
-  }
+  df <- data.frame(matrix(NA, nrow=length(max.dates), ncol=3))
+  df[,1] <- max.dates
+  df[,2] <- max.sim
+  df[,3] <- max.obs
+  colnames(df) <- c("obs.dates","sim.peak.event","obs.peak.event")
+
+  # df <- data.frame("obs.dates" = max.dates,
+  #                  "sim.peak.event" = as.numeric(max.sim),
+  #                  "obs.peak.event" = as.numeric(max.obs))
 
   x.lab <- expression("Observed Peak Discharge ("*m^3*"/s)")
   y.lab <- expression("Simulated Peak Discharge ("*m^3*"/s)")
@@ -107,8 +100,12 @@ rvn_annual_peak_event <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r
       geom_abline(linetype=2)
   }
 
+  if (add_r2 | add_eqn) {
+    m <- lm(max.sim ~ max.obs + 0)
+  }
+
   if (add_r2){
-    r2.label <- paste("R^2 == ", round(r2,2))
+    r2.label <- paste("R^2 == ", round(summary(m)$r.squared,3))
     p1 <- p1 +
       geom_text(x= x.lim[2],
                 y= y.lim[1]*1.9,
@@ -119,8 +116,7 @@ rvn_annual_peak_event <- function (sim, obs, mm=9, dd=30, add_line = TRUE, add_r
                 size = 3.5)
   }
 
-  if (add_eqn){
-    m <- lm(max.sim ~ 0 + max.obs)
+  if (add_eqn) {
     coeff <- round(as.numeric(m$coefficients[1]), 3)
     equation <- paste0( "y = ", coeff, "x")
     p1 <- p1 +

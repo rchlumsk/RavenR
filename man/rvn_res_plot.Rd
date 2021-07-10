@@ -7,10 +7,10 @@
 rvn_res_plot(
   sim = NULL,
   obs = NULL,
-  inflow = NULL,
   precip = NULL,
   prd = NULL,
-  winter_shading = TRUE
+  winter_shading = FALSE,
+  wsdates = c(12, 1, 3, 31)
 )
 }
 \arguments{
@@ -18,43 +18,50 @@ rvn_res_plot(
 
 \item{obs}{time series object of observed stage}
 
-\item{inflow}{time series object of inflow to subbasin}
-
 \item{precip}{time series object of precipitation}
 
 \item{prd}{period to use in plotting}
 
-\item{winter_shading}{optionally adds shading for winter months (default
-TRUE)}
+\item{winter_shading}{optionally adds shading for winter months (default FALSE)}
+
+\item{wsdates}{integer vector of winter shading period dates (see details)}
 }
 \value{
-\item{TRUE}{return TRUE if the function is executed properly}
+\item{p1}{returns ggplot plot object}
 }
 \description{
-rvn_res_plot creates a reservoir stage plot for the supplied flow series, or
-equivalently a stage plot for reservoir stages.
+rvn_res_plot creates a reservoir stage plot for the supplied stage series.
 }
 \details{
-This function creates a reservoir stage plot using the supplied time series;
+Creates a reservoir stage plot using the supplied time series;
 any series not supplied will not be plotted. If the precip time series is
 supplied, the secondary y axis will be used to plot the precip time series.
 
 The function assumes that the supplied time series have the same length and
 duration in time. If this is not true, then the defined period or period
-calculated from the first available flow series will be used to determine
+calculated from the first available stage series will be used to determine
 the plotting limits in time. If the data is used directly from Raven output,
 this is not a concern. The supplied time series should be in xts format,
 which again can be obtained directly by using the rvn_res_extract function.
 
-The winter_shading argument will add a transparent cyan shading for the
-December 1st to March 31st period in each year that is plotted.
+The winter_shading argument will add a transparent grey shading for the
+December 1st to March 31st period in each year that is plotted (or other
+period specified by wsdates).
 
-Note that a plot title is purposely omitted in order to allow the automatic
-generation of plot titles.
+wsdates is formatted as c(winter start month, winter start day, winter end month, winter end day).
 }
 \examples{
+
+# read in sample reservoir file
+ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")
+rvn_res_read(ff) \%>\%
+rvn_res_extract(subs="sub36", res=.) -> mystage
+sim <- mystage$sim
+obs <- mystage$obs
+precip <- rvn_res_read(ff)$res$precip
+
 # create a nice reservoir stage plot
-rvn_res_plot(sim,obs,zero_axis=FALSE)
+rvn_res_plot(sim,obs)
 
 # create a reservoir stage plot with precip as well
 rvn_res_plot(sim,obs,precip=precip)
@@ -63,16 +70,11 @@ rvn_res_plot(sim,obs,precip=precip)
 prd <- "2003-10-01/2005-10-01"
 rvn_res_plot(sim,obs,precip=precip,prd=prd)
 
+# add winter shading
+rvn_res_plot(sim,obs,precip=precip, winter_shading=TRUE)
+
 }
 \seealso{
-\code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
-
+\code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file, and
 \code{\link{rvn_res_extract}} to extract time series from Raven objects
-
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-Craig's research page} for software downloads, including the
-\href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
 }
-\keyword{Raven}
-\keyword{reservoir}
-\keyword{stage}

@@ -8,7 +8,6 @@
 #'
 #' \code{\link{rvn_substrMRight}} for removing n characters from the right side of a string
 #'
-#' @keywords string left
 #' @examples
 #'
 #' rvn_substrLeft("hello world",3)
@@ -33,11 +32,10 @@ rvn_substrLeft <- function(x, n)
 #' side of string,
 #'
 #' \code{\link{rvn_substrLeft}} for using n characters from the left side of
-#' string,
+#' string
 #'
 #' \code{\link{rvn_substrMRight}} for removing n characters from the right side of
-#' a string,
-#' @keywords string left minus
+#' a string
 #' @examples
 #'
 #' rvn_substrMLeft("hello world",3)
@@ -59,14 +57,13 @@ rvn_substrMLeft <- function(x, n)
 #' @param x a string to manipulate
 #' @param n number of characters to remove from the right side of the string
 #' @seealso \code{\link{rvn_substrRight}} for using n characters from the right
-#' side of string,
+#' side of string
 #'
 #' \code{\link{rvn_substrLeft}} for using n characters from the left side of
-#' string,
+#' string
 #'
 #' \code{\link{rvn_substrMLeft}} for removing n characters from the left side of a
-#' string,
-#' @keywords string right minus
+#' string
 #' @examples
 #'
 #' rvn_substrMRight("hello world",3)
@@ -88,14 +85,13 @@ rvn_substrMRight <- function(x, n)
 #' @param x a string to manipulate
 #' @param n number of characters to use from the right side of the string
 #' @seealso \code{\link{rvn_substrLeft}} for using n characters from the left side
-#' of string,
+#' of string
 #'
 #' \code{\link{rvn_substrMRight}} for removing n characters from the right side of
-#' a string,
+#' a string
 #'
 #' \code{\link{rvn_substrMLeft}} for removing n characters from the left side of a
 #' string
-#' @keywords string right
 #' @examples
 #'
 #' rvn_substrRight("hello world",3)
@@ -107,92 +103,6 @@ rvn_substrRight <- function(x, n)
   substr(x, nchar(x)-n+1, nchar(x))
 }
 
-
-#' @title Add Transparency to Colours
-#'
-#' @description
-#' rvn_col_transparent is used to adjust colour codes to introduce transparency
-#'
-#' @details
-#' Note that this function is not required for ggplot objects, as transparency can be
-#' added with the `alpha` parameter.
-#'
-#' @param colour time series containing columns you wish to reseasonalize. xts
-#' object
-#' @param trans integer describing the degree of transparency, from ~200
-#' (slightly transparent) to <10 (very transparent)
-#' @return \item{res}{returned updated colour code with transparency}
-#' @seealso See original code on post in Stack Overflow
-#' \href{http://stackoverflow.com/questions/12995683/any-way-to-make-plot-points-in-scatterplot-more-transparent-in-rmaking}{
-#' plot points transparent in R}
-#' @seealso \code{\link{rvn_iscolour}} for checking validity of colour codes
-#' @keywords colour transparency
-#' @examples
-#'
-#' # plot randomly distributed data
-#' plot(rnorm(20),col='black')
-#'
-#' # create a transparent blue colour for plotting
-#' mycol <- rvn_col_transparent('blue',100)
-#'
-#' # plot more random points in transparent blue colour
-#' points(rnorm(20),col=mycol)
-#'
-#' @export rvn_col_transparent
-#' @importFrom grDevices col2rgb
-rvn_col_transparent <- function(colour,trans)
-{
-  # This function adds transparancy to a colour.
-  # Define transparancy with an integer between 0 and 255
-  # 0 being fully transparant and 255 being fully visable
-  # Works with either colour and trans a vector of equal length,
-  # or one of the two of length 1.
-  # from http://stackoverflow.com/questions/12995683/any-way-to-make-plot-points-in-scatterplot-more-transparent-in-r
-
-  if (length(colour)!=length(trans)&!any(c(length(colour),length(trans))==1)) stop("Vector lengths not correct")
-  if (length(colour)==1 & length(trans)>1) colour <- rep(colour,length(trans))
-  if (length(trans)==1 & length(colour)>1) trans <- rep(trans,length(colour))
-
-  num2hex <- function(x)
-  {
-    hex <- unlist(strsplit("0123456789ABCDEF",split=""))
-    return(paste(hex[(x-x%%16)/16+1],hex[x%%16+1],sep=""))
-  }
-  rgb <- rbind(col2rgb(colour),trans)
-  res <- paste("#",apply(apply(rgb,2,num2hex),2,paste,collapse=""),sep="")
-  return(res)
-}
-
-
-#' @title Check Validity of Colour Representation
-#'
-#' @description
-#' rvn_iscolour checks whether a string or string vector contains valid colour representations
-#' (in text or hexadecimal form). Useful in error checking colour arguments for functions.
-#'
-#' @param x string or string vector of colour representations to test
-#' @return \item{y}{vector of TRUE or FALSE indicating whether the colour is valid}
-#' @seealso See original code on post in Stack Overflow
-#' \href{https://stackoverflow.com/questions/13289009/check-if-character-string-is-a-valid-color-representation?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa}{
-#' Check if character string is a valid color representation}
-#' @seealso \code{\link{rvn_col_transparent}} for creating transparent colour codes
-#' @keywords colour check valid
-#' @examples
-#'
-#'rvn_iscolour(c(NA, "black", "blackk", "1", "#00", "#000000"))
-#'#   <NA>   black  blackk       1     #00 #000000
-#'#   TRUE    TRUE   FALSE    TRUE   FALSE    TRUE
-#'
-#' @export rvn_iscolour
-rvn_iscolour <- function(x)
-{
-  sapply(x, function(X) {
-    tryCatch(is.matrix(col2rgb(X)),
-             error = function(e) FALSE)
-  })
-}
-
-
 #' @title Months in the Year vector
 #'
 #' @description
@@ -200,13 +110,11 @@ rvn_iscolour <- function(x)
 #'
 #' @param short boolean to return shortened form of months
 #' @return {character array of month names}
+#'
 #' @seealso \code{\link{rvn_num_days}} for calculating the number of days in a
 #' month
-#' @keywords months year
 #' @examples
-#' months_of_the_year <- rvn_month_names()
-#' months_of_the_year
-#'
+#' rvn_month_names()
 #' rvn_month_names(FALSE)
 #'
 #' @export rvn_month_names
@@ -224,15 +132,18 @@ rvn_month_names <- function(short=TRUE)
 #' @title Number of Days between two dates
 #'
 #' @description
-#' rvn_num_days is used to calculate the number of days in the month; handles leap
-#' years
+#' rvn_num_days is used to calculate the number of days between two provided dates.
+#'
+#' @details
+#' This method handles leap years if they exist between the specified dates.
 #'
 #' @param date1 first day, date format
 #' @param date2 second day, date format
 #' @return \item{int}{number of days between the two days}
+#'
 #' @seealso \code{\link{rvn_num_days_month}} for calculating the number of days in a
 #' month
-#' @keywords days number
+#'
 #' @examples
 #' rvn_num_days(as.Date("2017-02-05"),as.Date("2017-02-12"))
 #' # 7
@@ -240,8 +151,7 @@ rvn_month_names <- function(short=TRUE)
 #' @export rvn_num_days
 rvn_num_days <- function(date1,date2)
 {
-
-  # update with this syntax?
+  # alternate method
   # as.numeric(difftime(index(date1) ,index(date2) , units = c("days")))
 
   return( length(seq.Date(from=date1,to=date2,by=1))-1 )
@@ -251,8 +161,10 @@ rvn_num_days <- function(date1,date2)
 #' @title Number of Days in Month
 #'
 #' @description
-#' rvn_num_days_month is used to calculate the number of days in the month; handles
-#' leap years
+#' rvn_num_days_month is used to calculate the number of days in the month
+#'
+#' @details
+#' This method includes leap years if they exist in the specified month.
 #'
 #' @param date object in date format
 #' @return \item{int}{number of days in the month}
@@ -262,7 +174,6 @@ rvn_num_days <- function(date1,date2)
 #' See original code on post in Stack Overflow
 #' \href{http://stackoverflow.com/questions/6243088/find-out-the-number-of-days-of-a-month-in-rfind}{
 #' the number of days in a month}
-#' @keywords number days month
 #' @examples
 #'
 #' rvn_num_days_month(as.Date("2016-02-05"))
@@ -284,12 +195,13 @@ rvn_num_days_month <- function(date)
 #' @title cmax
 #'
 #' @description
-#' cmax standards for column maximum, applies the max function across columns.
+#' Applies the base::max function across columns.
 #'
 #' @details
 #' It applies the base::max function over
 #' columns, which is advantageous for calculating the max within a column
-#' rather than the max of the whole data frame.
+#' rather than the max of the whole data frame. The default base::max will not work
+#' properly for data frames and other structures in applying over columns or different periods.
 #'
 #' This function was included for usage with the apply.<period> and rvn_apply_wyearly
 #' function, as the base::max function does not work properly across columns.
@@ -299,14 +211,8 @@ rvn_num_days_month <- function(date)
 #'
 #' @return x with the max value in each column determined
 #'
-#' @seealso \code{\link{rvn_apply_wyearly}} where this function can be applied for the water year
-#'
-#' The original [SO post](https://stackoverflow.com/questions/51623745/how-to-use-apply-daily-period-apply-for-calculating-maximum-per-column-in-xts-ti)
-#'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords max columns
+#' @seealso \code{\link{rvn_apply_wyearly}} where this function can be applied for the water year,
+#' and the xts functions such as \code{\link{apply.yearly}} and \code{\link{apply.monthly}}
 #'
 #' @examples
 #' data(rvn_hydrograph_data)
@@ -327,7 +233,7 @@ cmax <- function(x, na.rm = FALSE)
 #' with the maximum value and associated date.
 #'
 #' @details
-#' This function is intended to act as the which.max function, applicable
+#' Acts as the which.max function, applicable
 #' to xts objects and returning values in an xts format.
 #'
 #' Note that when deploying the rvn_apply_wyearly function, the dates are overwritten
@@ -340,10 +246,6 @@ cmax <- function(x, na.rm = FALSE)
 #' @seealso \code{\link{which.max}} base which.max function
 #' \code{\link{rvn_apply_wyearly_which_max_xts}} for using apply_wyearly with the rvn_which_max_xts function
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords which max xts
 #' @examples
 #' data(rvn_hydrograph_data)
 #'
@@ -357,7 +259,6 @@ cmax <- function(x, na.rm = FALSE)
 #' @importFrom lubridate date
 rvn_which_max_xts <- function(x)
 {
-  # return(x[which.max(x)])
   if ("xts" %in% class(x) & ncol(x) == 1 ) {
 
     df <- data.frame(date=lubridate::date(x)[which.max(x)],max=as.numeric(x[which.max(x)]))
@@ -384,8 +285,6 @@ rvn_which_max_xts <- function(x)
 #' @param dd day of water year (default 30)
 #'
 #' @return {xts object with max values and corresponding dates}
-#'
-#' @keywords which max xts
 #'
 #' @examples
 #' data(rvn_hydrograph_data)
@@ -441,10 +340,6 @@ rvn_apply_wyearly_which_max_xts <- function(x, mm=9, dd=30)
 #' @return {prd argument with warnings provided if needed}
 #' @seealso \code{\link{rvn_theme_RavenR}} provides a theme for the RavenR package
 #'
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
-#' Craig's research page} for software downloads, including the
-#' \href{http://www.civil.uwaterloo.ca/jrcraig/Raven/Main.html}{Raven page}
-#' @keywords get prd xts
 #' @examples
 #' data(rvn_hydrograph_data)
 #'
@@ -571,3 +466,125 @@ rvn_stringpad <- function(string, width, just='r')
     return(paste0(string, strrep(' ', padlength)))
   }
 }
+
+#' @title \%notin\% operator
+#'
+#' @description
+#' Syntax for the opposite of \%in\%
+#'
+#' @param x values to be matched
+#' @param table the values to be matched against
+#'
+#' @examples
+#' seq(1,5,1) %notin% seq(3,7,1)
+#'
+#' @export
+"%notin%" <- function(x, table) match(x, table, nomatch = 0) == 0
+
+
+#' @title Fortify xts object to specific format
+#'
+#' @description
+#' Applies the fortify function to an xts object and updates the Index character
+#' column to a date column called 'Date'.
+#'
+#' @details
+#' Useful in preparing data to plotting or other tidy-style analysis.
+#' This function is used internally in many RavenR plotting functions.
+#'
+#' @param x xts formatted object to fortify to tibble
+#'
+#' @return tibble format of the xts data
+#'
+#' @examples
+#' ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
+#' hyd <- rvn_hyd_read(ff)$hyd
+#' hyd_fortified <- rvn_fortify_xts(hyd)
+#' head(hyd_fortified)
+#'
+#' @export rvn_fortify_xts
+#' @importFrom ggplot2 fortify
+rvn_fortify_xts <- function(x)
+{
+  if ("xts" %notin% class(x)) {
+    stop("x must be of class xts.")
+  }
+
+  y <- fortify(x)
+  colnames(y) <- c("Date",colnames(y)[-1])
+  y$Date <- as.Date(y$Date)
+  return(y)
+}
+
+
+#' @title Provide mappings for rvt files
+#'
+#' @description
+#' Provides global variables to the environment regarding the mapping of rvt_type and data_type
+#' that are used in the \code{\link{rvn_rvt_write}} function.
+#'
+#' @return \code{TRUE} if executed successfully.
+#'
+#' @seealso \code{\link{rvn_rvt_write}}
+#'
+#' @examples
+#' rvn_rvt_mappings()
+#'
+#' # view global variables
+#' rvt_mapping
+#' rvt_data_type_mapping
+#'
+#' @export rvn_rvt_mappings
+rvn_rvt_mappings <- function() {
+
+  # generates globally accessible variables for rvt_mapping and rvt_data_type_mapping
+
+  # update based on additional entries in the list
+  rvt_mapping <<- list(
+
+    "ObservationData"=list(
+      c("data_type","basin_ID","units"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ObservationWeights"=list(
+      c("data_type","basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "IrregularWeights"=list(
+      c("data_type","basin_ID","num_points")
+    ),
+
+    "ReservoirExtraction"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMaxStage"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    )
+
+  )
+
+
+  # update this based on table C.1 in Raven Manual?
+  rvt_data_type_mapping <<- list(
+    "HYDROGRAPH"=list(
+      "units"="m3/s"
+    ),
+    "RESERVOIR_STAGE"=list(
+      "units"="m"
+    ),
+    "RESERVOIR_INFLOW"=list(
+      "units"="m3/s"
+    ),
+    "RESERVOIR_NETINFLOW"=list(
+      "units"="m3/s"
+    )
+  )
+
+  return(TRUE)
+}
+

@@ -24,7 +24,7 @@ the Hydrographs.csv output can be found in the Raven manual.
 }
 
 The Nith River model can be downloaded from the Raven Tutorials (tutorial #2)
-\url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}
+\url{http://raven.uwaterloo.ca/Downloads.html}
 }
 \usage{
 rvn_hydrograph_data

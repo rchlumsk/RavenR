@@ -11,8 +11,8 @@
 #'
 #' @return a list of plot handles to dygraph plots
 #'
-#' See also \href{http://raven.uwaterloo.ca/}{Raven page}
-#' @keywords Raven reservoir stage plotting
+#' @seealso \code{\link{rvn_hyd_dygraph}} to generate dygraphs for hydrograph series
+#'
 #' @examples
 #' # read in Raven Reservoir Stages file
 #' ff <- system.file("extdata","ReservoirStages.csv", package="RavenR")

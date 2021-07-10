@@ -29,22 +29,19 @@ Creates an observation data file named filename from a continuous (gap-free) xts
 ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
 
 # read in Raven Hydrographs file, store into mydata
-mydata <- rvn_hyd_read(ff)
+mydata <- rvn_hyd_read(ff, tzone="EST")
 
 # generate rvt file using just observations from Subbasin ID 36
 flows <- rvn_ts_infill(mydata$hyd$Sub36_obs)
-rvn_rvt_obsfile("run1_Hydrographs.rvt", flows, 36, typestr = "HYDROGRAPH")
+tf <- file.path(tempdir(), "run1_Hydrographs.rvt")
+rvn_rvt_obsfile(tf, flows, 36, typestr = "HYDROGRAPH")
+readLines(tf) \%>\% head()
 
-# cleanup example files
-unlink('run1_Hydrographs.rvt')
 
 }
 \seealso{
-\code{\link{rvn_ts_infill}} for infilling time series, and  \code{\link{rvn_rvt_obsweights}} to write an rvt observation weights file.
-See also the \href{http://raven.uwaterloo.ca/}{Raven website}
+\code{\link{rvn_ts_infill}} for infilling time series, and \code{\link{rvn_rvt_obsweights}} to write an rvt observation weights file.
 }
 \author{
 James R. Craig, University of Waterloo
 }
-\keyword{Raven}
-\keyword{observations}
