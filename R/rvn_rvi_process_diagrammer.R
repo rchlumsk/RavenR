@@ -45,9 +45,6 @@ rvn_rvi_process_diagrammer <- function(connections, pdfout=NULL)
   # build vertices from connections data
   verts <- unique( c(connections$From,connections$To) )
 
-  # temporary fix to conditional statement
-  connections[is.na(connections$Conditional),]$Conditional <- FALSE
-
   nverts<-length(verts)
   layout<-matrix(1:nverts*2,nrow=nverts,ncol=2)
   count=1
@@ -91,7 +88,7 @@ rvn_rvi_process_diagrammer <- function(connections, pdfout=NULL)
 
   for (i in 1:nrow(connections)) {
 
-    if (connections$Conditional[i]) {
+    if (connections$Conditional[i] != "") {
       d1 <- d1 %>% add_edge(from=connections$From[i],
                             to=connections$To[i],
                             edge_aes = edge_aes(
@@ -124,7 +121,7 @@ rvn_rvi_process_diagrammer <- function(connections, pdfout=NULL)
   }
 
   # render graph in viewer
-  # render_graph(dg)
+  # render_graph(d1)
 
   if (!is.null(pdfout)) {export_graph(d1, file_name=pdfout)}
   return(d1)

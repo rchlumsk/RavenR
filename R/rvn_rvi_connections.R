@@ -38,13 +38,15 @@ rvn_rvi_connections<-function(rvi,
 
   HPTable <- rvi$HydProcTable
 
+  # update condition and conditional here
+  # update reference to RavenProcessConnections.dat with new files
+
   if (nrow(HPTable)==0){
     print("WARNING (rvn_rvi_connections): no rows in hydrologicprocess table")
     return (NA)
   }
-  if (ncol(HPTable)!=5){
-    print("WARNING (rvn_rvi_connections): improper hydrological process table data frame format")
-    return (NA)
+  if (paste(names(HPTable), collapse=" ") != "ProcessType Algorithm From To Conditional Note"){ #  & ncol(HPTable)!=6
+    stop("(rvn_rvi_connections): improper hydrological process table data frame format")
   }
   stopifnot(file.exists(ProcConDataFile))
   delim=""
@@ -82,6 +84,7 @@ rvn_rvi_connections<-function(rvi,
           tmp$To[j]=HPTable$To[i]
         }
         tmp$Conditional[j]=HPTable$Conditional[i] # copy conditional over from .rvi
+        tmp$Note[j] <- HPTable$Note[i] # copy over information from rvi
       }
       connections<-rbind(connections,tmp) # append
     }

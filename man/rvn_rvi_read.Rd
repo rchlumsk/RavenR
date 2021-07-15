@@ -13,7 +13,7 @@ to the working directory or absolute.}
 \value{
 Returns a list including a lone item:
 \item{HydProcTable}{a data table of hydrologic processes. Includes the following data columns:
-process type, algorithm, 'from' compartment, 'to' compartment, and condition}
+process type, algorithm, 'from' compartment, 'to' compartment, conditional (logical), and condition (character)}
 }
 \description{
 This routine reads in a valid Raven main input (.rvi) file and returns the
