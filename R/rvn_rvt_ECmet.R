@@ -169,23 +169,6 @@ rvn_rvt_met <-  function(metdata, filename=NULL, prd = NULL, stnName = NULL, pre
 
   # Make sure dates are of Date Class
   metdata$DATE <- as.Date(metdata$DATE)
-  if (is.na(max(metdata$DATE))) {
-    stop('date column not formated properly (e.g. "%Y-%m-%d")')
-  }
-
-  # check for correct time intervals (daily only) and timestamp gaps
-  dd <- metdata$DATE # as.Date(format(as.POSIXct(rr$date, format = "%Y-%m-%d %H:%M:%S"), format = "%Y-%m-%d"))
-  difftime_check <- difftime(dd[2:length(dd)], dd[1:(length(dd)-1)] , units="day")
-
-  if ("time" %in% colnames(metdata)){ # catches weathercan data supplied at hourly intervals
-    stop("\nSome weathercan-derived data appear to be at hourly intervals. Please re-supply these data at daily intervals.")
-  }
-
-  if(any(difftime_check != 1)) {
-    # Can't it handle if dt > 1? Also, should we not have the user pass this? --> monthly data format support to come later.
-    stop(sprintf(
-      "\nIrregular time gaps detected: Data should be supplied at daily intervals.\nConsider using tools such as RavenR::rvn_ts_infill to fix the time series."))
-  }
 
   # Replace spaces in Station Names with underscores
   metdata$STATION_NAME <- gsub(" ", "_", metdata$STATION_NAME)
@@ -207,6 +190,25 @@ rvn_rvt_met <-  function(metdata, filename=NULL, prd = NULL, stnName = NULL, pre
     # Verify existing record overlaps with desired period
     if(nrow(rr) == 0 & !is.null(prd)){
       message(paste0("No data available for desired period at ",sn," (station name: ",sn,")"))
+    }
+
+    # Make sure dates are of Date Class
+    if (is.na(max(rr$DATE))) {
+      stop('date column not formated properly (e.g. "%Y-%m-%d")')
+    }
+
+    # check for correct time intervals (daily only) and timestamp gaps
+    dd <- rr$DATE # as.Date(format(as.POSIXct(rr$date, format = "%Y-%m-%d %H:%M:%S"), format = "%Y-%m-%d"))
+    difftime_check <- difftime(dd[2:length(dd)], dd[1:(length(dd)-1)] , units="day")
+
+    if ("time" %in% colnames(rr)){ # catches weathercan data supplied at hourly intervals
+      stop("\nSome weathercan-derived data appear to be at hourly intervals. Please re-supply these data at daily intervals.")
+    }
+
+    if(any(difftime_check != 1)) {
+      # Can't it handle if dt > 1? Also, should we not have the user pass this? --> monthly data format support to come later.
+      stop(sprintf(
+        "\nIrregular time gaps detected: Data should be supplied at daily intervals.\nConsider using tools such as RavenR::rvn_ts_infill to fix the time series."))
     }
 
     # create time series for extracted parameters
@@ -263,8 +265,8 @@ rvn_rvt_met <-  function(metdata, filename=NULL, prd = NULL, stnName = NULL, pre
       # multiple data columns, use :MultiData format
       writeLines(sprintf(":MultiData"),fc)
       writeLines(sprintf("  %s 1.0 %i",format(min(as_datetime(rr.ts)),"%Y-%m-%d %H:%M:%S"),nrow(rr.ts)),fc)
-      writeLines(sprintf(":Parameters %s",paste(data_col, collapse = " ")),fc)
-      writeLines(sprintf(":Units %s",paste(data_units, collapse = " ")),fc)
+      writeLines(sprintf("  :Parameters %s",paste(data_col, collapse = " ")),fc)
+      writeLines(sprintf("  :Units %s",paste(data_units, collapse = " ")),fc)
     }else{
       # singular data column, use FORCING_TYPE
       writeLines(sprintf(":Data %s %s",data_col, data_units))
