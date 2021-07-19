@@ -585,6 +585,34 @@ rvn_rvt_mappings <- function() {
     )
   )
 
+  # met variables based on table C.2 in Raven Manual
+  rvn_met_data_mapping <- list(
+    "PRECIP"=list("units"="mm/d"),
+    "SNOW_FRAC"=list("units"="%"),
+    "SNOWFALL"=list("units"="mm/d"),
+    "RAINFALL"=list("units"="mm/d"),
+    "TEMP_AVE"=list("units"="C"),
+    "TEMP_MAX"=list("units"="C"),
+    "TEMP_MIN"=list("units"="C"),
+    "REL_HUMIDITY"=list("units"="%"),
+    "ET_RADIA"=list("units"="MJ/m2/d"),
+    "SHORTWAVE"=list("units"="MJ/m2/d"),
+    "LW_INCOMING"=list("units"="MJ/m2/d"),
+    "WIND_VEL"=list("units"="m/s"),
+    "PET"=list("units"="mm/d"),
+    "OW_PET"=list("units"="mm/d"),
+    "POTENTIAL_MELT"=list("units"="mm/d")
+  )
+
+  # weathercan mapping to standard Raven names
+  rvn_weathercan_mapping <<- list(
+    "TOTAL_PRECIP"=list("PRECIP"),
+    "TOTAL_RAIN"=list("RAINFALL"),
+    "TOTAL_SNOW"=list("SNOWFALL"),
+    "MAX_TEMP"=list("TEMP_MAX"),
+    "MIN_TEMP"=list("TEMP_MIN")
+  )
+
   return(TRUE)
 }
 
