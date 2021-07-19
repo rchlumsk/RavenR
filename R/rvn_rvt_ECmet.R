@@ -1,12 +1,12 @@
 #' @title EC Climate Station File Conversion
 #'
 #' @description
-#' rvn_rvt_ECmet converts Environment Canada historical meteorological data for a
-#' given station into the .rvt format usable in Raven.
+#' rvn_rvt_met converts meteorological data for a given station into the
+#' .rvt format usable in Raven.
 #'
 #' @details
-#' Writes data in the :MultiData format; the particular set of forcings to
-#' print can be set with the forcing_set command. The data should be downloaded
+#' Writes data in either :Data or :MultiData format depending on the number of
+#' supported parameter columns provided. The data should be downloaded and prepared
 #' with missing days included. The download website is linked below.
 #'
 #' The function will write to name generated from the station name, otherwise
@@ -26,6 +26,7 @@
 #' prefix can be used to add a prefix to the .rvt file name, ("met_" by default)
 #' which may be useful in organizing multiple climate data files.
 #'
+#' (THE FOLLOWING PARAGRAPH IS SUPERCEDED BY THE NEXT - NEEDS REVIEW)
 #' forcing_set specifies the set of forcings to print to .rvt file. Currently
 #' there are only two available sets. A value of 1 prints total precipitation,
 #' and 2 splits the precipitation into rainfall and snowfall. In some cases the
@@ -33,6 +34,11 @@
 #' the particular climate station before printing rvt files. Both sets
 #' currently print max and min daily temperature. Future extensions to this
 #' function may provide more options for forcing sets.
+#'
+#' In some cases the EC data splits total precipitation into rainfall and snowfall,
+#' and in others it only provides total preciptation - met rvt files should provide
+#' precipitation data either explicitly as 'RAINFALL' and 'SNOWFALL' timeseries, or
+#' simply as "TOTAL_PRECIP" (with the option of pairing "SNOW_FRAC").
 #'
 #' write_redirect will print out the :RedirectToFile commands in a separate
 #' file, met_redirects.rvt. These commands can be copied into the main model's
@@ -69,7 +75,6 @@
 #' @param filename specified name of file to write to (optional)
 #' @param prd (optional) data period to use in .rvt file
 #' @param stnName (optional) station name to use (instead of name in file)
-#' @param forcing_set (optional) specifies the set of forcings to print to file
 #' @param prefix (optional) prefixes the file name (default: "met_")
 #' @param write_redirect (optional) write the :RedirectToFile commands in a
 #' separate .rvt file
@@ -87,42 +92,67 @@
 #'
 #' # note: example modified to avoid using weathercan directly, uses saved
 #' ## weathercan data from RavenR package sample data
-#' # library(weathercan)
-#' # kam <- weather_dl(station_ids = 51423,
-#' #                   start = "2016-10-01", end = "2019-09-30", interval="day")
 #' data(rvn_weathercan_sample)
 #' kam <- rvn_weathercan_sample
 #'
 #' # basic use, override filename to temporary file
-#' # default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
-#' rvn_rvt_ECmet(metdata = kam, forcing_set = 1,
-#'   filename = file.path(tempdir(), "rvn_rvt_ECmetfile1.rvt"))
+#' rvn_rvt_met(metdata = kam,
+#'   filename = file.path(tempdir(), "rvn_rvt_ECmetfile.rvt"))
 #'
-#' # use the second forcing set instead
-#' # default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
-#' rvn_rvt_ECmet(metdata = kam, forcing_set = 2,
-#'   filename = file.path(tempdir(), "rvn_rvt_ECmetfile2.rvt"))
-#'
-#' @export rvn_rvt_ECmet
+#' @export rvn_rvt_met
 #' @importFrom xts xts
 #' @importFrom dplyr filter
 #' @importFrom ggplot2 autoplot theme element_blank
-rvn_rvt_ECmet <-  function(metdata, filename=NULL, prd = NULL, stnName = NULL, forcing_set = 1, prefix = 'met_',
+rvn_rvt_met <-  function(metdata, filename=NULL, prd = NULL, stnName = NULL, prefix = 'met_',
                            write_redirect = FALSE, write_stndata = FALSE, rd_file = "met_redirects.rvt",
                            stndata_file = "met_stndata.rvt") {
 
-  ## params
-  params <- c("max_temp","min_temp","mean_temp","total_rain","total_snow","total_precip")
+  ## load parameter mapping lists
+  rvn_weathercan_mapping()
+  rvn_met_data_mapping()
+  colnames(metdata) <- toupper(colnames(metdata)) # prevents any upper/lower case matching issues
+  mand_col = c("STATION_NAME","LAT","LON","ELEV","DATE")
 
   ## verify inputs
   if (nrow(metdata) <= 0) {
     stop("Requires at least one line of data")
   }
+  ## check column names
+  # mandatory columns
+  if(sum(mand_col %in% colnames(metdata)) < 5){
+    missing_col <- mand_col[!(mand_col %in% colnames(metdata))]
+    stop(sprintf("\nmissing required columns: %s", missing_col))
+  }
+
+  # supported data columns
+  data_col <- colnames(metdata)[!(colnames(metdata) %in% mand_col)]
+  ncheck <- sum(data_col %in% names(rvn_met_data_mapping)) + sum(data_col %in% names(rvn_weathercan_mapping))
+  if (ncheck != length(data_col)){
+    ns_col <- data_col[!(data_col %in% c(names(rvn_weathercan_mapping),names(rvn_met_data_mapping)))]
+    # here we assume all non-weathercan derived parameter columns are already properly formatted -
+    # (i.e., keep only supported columns)
+    data_col <- data_col[!(data_col %in% ns_col)]
+    warning("Some data columns are not supported. See ?rvn_rvt_met for details.")
+  }
+
+  # standardize column names
+  metdata = metdata[,c(mand_col,data_col)]
+  wcn <- data_col %in% names(rvn_weathercan_mapping)
+  if(any(wcn)){
+    # convert any weathercan parameter names to Raven convention
+    colnames(metdata)[colnames(metdata) %in% names(rvn_weathercan_mapping)] <-
+      unlist(rvn_weathercan_mapping[data_col])
+  }
+
+  # get units for each parameter
+  data_col <- colnames(metdata)[colnames(metdata)!=mand_col] # update parameter column names
+  data_units <- unlist(rvn_met_data_mapping[data_col])
+
   # Number of data sets
-  if (length(unique(metdata$station_id))>1) {
-    print(paste("Imported", as.character(length(unique(metdata$station_id))), "data sets"))
+  if (length(unique(metdata$STATION_NAME))>1) {
+    print(paste("Imported data from", length(unique(metdata$STATION_NAME)), "stations"))
   } else {
-    print("Imported 1 data set")
+    print("Imported data from 1 station")
   }
   # Confining dates for desired period
   if (!(is.null(prd))) {
@@ -137,23 +167,37 @@ rvn_rvt_ECmet <-  function(metdata, filename=NULL, prd = NULL, stnName = NULL, f
     }
   }
 
-  # Make sure dates are dates
-  metdata$date <- as.Date(metdata$date)
-  if (is.na(max(metdata$date))) {
-    stop('date column not formated properly (e.g. "%Y-%m-%d"')
+  # Make sure dates are of Date Class
+  metdata$DATE <- as.Date(metdata$DATE)
+  if (is.na(max(metdata$DATE))) {
+    stop('date column not formated properly (e.g. "%Y-%m-%d")')
+  }
+
+  # check for correct time intervals (daily only) and timestamp gaps
+  dd <- metdata$DATE # as.Date(format(as.POSIXct(rr$date, format = "%Y-%m-%d %H:%M:%S"), format = "%Y-%m-%d"))
+  difftime_check <- difftime(dd[2:length(dd)], dd[1:(length(dd)-1)] , units="day")
+
+  if ("time" %in% colnames(metdata)){ # catches weathercan data supplied at hourly intervals
+    stop("\nSome weathercan-derived data appear to be at hourly intervals. Please re-supply these data at daily intervals.")
+  }
+
+  if(any(difftime_check != 1)) {
+    # Can't it handle if dt > 1? Also, should we not have the user pass this? --> monthly data format support to come later.
+    stop(sprintf(
+      "\nIrregular time gaps detected: Data should be supplied at daily intervals.\nConsider using tools such as RavenR::rvn_ts_infill to fix the time series."))
   }
 
   # Replace spaces in Station Names with underscores
-  metdata$station_name <- gsub(" ", "_", metdata$station_name)
+  metdata$STATION_NAME <- gsub(" ", "_", metdata$STATION_NAME)
 
   # write status of each rvt file. Geographic data is written for every successful station into the main rvt metadata.
-  ws <- data.frame("station" = unique(metdata$station_id), "rvt.name" = NA ,"status" = NA)
+  ws <- data.frame("station" = unique(metdata$STATION_NAME), "rvt.name" = NA ,"status" = NA)
 
   ## Begin writing rvt file for each station listed in entry
-  for (i in 1:length(unique(metdata$station_id))){
-    rr <- metdata[metdata$station_id == unique(metdata$station_id)[i],]
-    sn <- unique(rr$station_name)
-    sid <- unique(rr$station_id)
+  for (i in 1:length(unique(metdata$STATION_NAME))){
+    rr <- metdata[metdata$STATION_NAME == unique(metdata$STATION_NAME)[i],c(mand_col,data_col)]
+    sn <- unique(rr$STATION_NAME)
+    #sid <- unique(rr$station_id) # keep only station name as identifier.
 
     # Subset period if necessary
     if (!(is.null(prd))) {
@@ -162,41 +206,17 @@ rvn_rvt_ECmet <-  function(metdata, filename=NULL, prd = NULL, stnName = NULL, f
 
     # Verify existing record overlaps with desired period
     if(nrow(rr) == 0 & !is.null(prd)){
-      message(paste0("No data available for desired period at ",sn," (station ID: ",sid,")"))
-    }
-
-    if ("time" %in% colnames(rr)){
-      stop(paste0("Function not available yet for non-daily time steps. Please re-download data at daily intervals.
-                   (Station ID:", sid,")"))
-    }
-
-    # Assuming dates are properly formatted
-    dd <- rr$date # as.Date(format(as.POSIXct(rr$date, format = "%Y-%m-%d %H:%M:%S"), format = "%Y-%m-%d"))
-    timestep <- as.numeric(as.difftime(dd[2:length(dd)]-dd[1:(length(dd)-1)], units = "days"))
-
-    if(sum(timestep != 1)>0) {
-      # Can't it handle if dt > 1? Also, should we not have the user pass this?
-      stop(paste0("Function not available yet for non-daily time steps. Please check time intervals. (Station ID: ",sid,")"))
+      message(paste0("No data available for desired period at ",sn," (station name: ",sn,")"))
     }
 
     # create time series for extracted parameters
-    if(forcing_set == 1){
-      rr.ts <-  xts(x=rr[,c("total_precip","max_temp","min_temp")], order.by = dd)
-    } else if(forcing_set == 2) {
-      # verify snow measurements exist
-      if("total_snow" %in% colnames(metdata)){
-      rr.ts <-  xts(x=rr[,c("total_rain","total_snow","max_temp","min_temp")], order.by = dd)
-      #rr.ts$total_snow <-  rr.ts$total_snow*10 # conversion from cm to mm (Raven convention) # Incompatible with data density assumption
-      } else {
-        stop(paste0("Station does not have snowfall observations on record.\nLook for 'total_snow' as a parameter in the inputs. (Station id: ", sid,")"))
-      }
-    } else {
-      stop("'forcing_set' value can only be set as 1 or 2. Type '?rvn_rvt_ECmet' for more details.")
+    rr.ts <- xts(rr[,data_col], order.by = dd)
+    if (any(is.na(rr.ts))){
+      rr.ts[is.na(rr.ts)] = NA_value # set to Raven default NA value -1.2345
+      warning("NA values detected and set to Raven NA (-1.2345) in time series - note that met forcings cannot have NA values.")
     }
 
-    #rr.ts[is.na(rr.ts)] = - 1.2345
-
-    # write rvt file
+    # check file names and name convention preferences
     if(!is.null(stnName)){
       if(length(stnName != length(unique(metdata$station_id)))){
         stop("Number of assigned station names does not match number of input stations.")
@@ -205,35 +225,66 @@ rvn_rvt_ECmet <-  function(metdata, filename=NULL, prd = NULL, stnName = NULL, f
       }
     }
 
-    rvt.name <- sprintf("%s.rvt",sn)
-    if(!is.null(prefix)) {
-      rvt.name <- sprintf("%s%s", prefix, rvt.name)
-    }
-    ws$rvt.name[ws$station==sid] <- rvt.name
-
     if (!is.null(filename)) {
-      rvt.name <- filename
+      rvt.name <- filename # write to existing file
+    }else if(!is.null(prefix)) {
+      rvt.name <- sprintf("%s%s.rvt", prefix, sn) # write new file with prefix
+    }else{
+     rvt.name <- sprintf('%s.rvt',sn) # write new file without prefix
     }
+    ws$rvt.name[ws$station==sn] <- rvt.name
 
-    # -- Modified to use rvn_rvt_write
+    # -- Modified to use rvn_rvt_write --> decoupled to support standalone :MultiData format
     #-- Data sets are subset & converted to dataframe prior to writing (rvn_rvt_write currently doens't handle tibbles)
     #   Dates are seperated out since we are not passing an XTS object
 
-    if(forcing_set == 1){
-      rvn_rvt_write(ts = rr.ts,
-                    ff = rvt.name,
-                    params = ":Parameters\tPRECIP\tTEMP_DAILY_MAX\tTEMP_DAILY_MIN",
-                    units  = ":Units\tmm/d\tC\tC")
-    } else {
-      rvn_rvt_write(ts = rr.ts,
-                    ff = rvt.name,
-                    params = ":Parameters\tRAINFALL\tSNOWFALL\tTEMP_DAILY_MAX\tTEMP_DAILY_MIN",
-                    units  = ":Units\tmm/d\tmm/d\tC\tC")
+    #if(forcing_set == 1){
+    #  rvn_rvt_write(ts = rr.ts,
+    #                ff = rvt.name,
+    #                params = ":Parameters\tPRECIP\tTEMP_DAILY_MAX\tTEMP_DAILY_MIN",
+    #                units  = ":Units\tmm/d\tC\tC")
+    #} else {
+    #  rvn_rvt_write(ts = rr.ts,
+    #                ff = rvt.name,
+    #                params = ":Parameters\tRAINFALL\tSNOWFALL\tTEMP_DAILY_MAX\tTEMP_DAILY_MIN",
+    #                units  = ":Units\tmm/d\tmm/d\tC\tC")
+    #}
+
+    # verify and write station meta-data
+    sd = rr[,mand_col] %>% select(.,!("DATE"))
+    if(sum(!(duplicated(sd)))>1){
+      stop("More than 1 set of meta-data exist for this station: ")
     }
 
+    ## begin writing rvt file
+    fc = file(ws$rvt.name,open = "w+")
+    # header block
+    if(length(data_col)>1){
+      # multiple data columns, use :MultiData format
+      writeLines(sprintf(":MultiData"),fc)
+      writeLines(sprintf("  %s 1.0 %i",format(min(as_datetime(rr.ts)),"%Y-%m-%d %H:%M:%S"),nrow(rr.ts)),fc)
+      writeLines(sprintf(":Parameters %s",paste(data_col, collapse = " ")),fc)
+      writeLines(sprintf(":Units %s",paste(data_units, collapse = " ")),fc)
+    }else{
+      # singular data column, use FORCING_TYPE
+      writeLines(sprintf(":Data %s %s",data_col, data_units))
+      writeLines(sprintf("  %s 1.0 %i",format(min(as_datetime(rr.ts)),"%Y-%m-%d %H:%M:%S"),nrow(rr.ts)))
+    }
+    # time series
+    for (j in 1:nrow(rr.ts)){
+      # currently prints to 1 decimal place precision (will need to modify for higher precision)
+      writeLines(sprintf("  %s",paste(coredata(rr.ts[j]),collapse=" ")),fc)
+    }
+    # end block
+    if(length(data_col>1)){
+      writeLines(":EndMultiData",fc)
+    }else{
+      writeLines(":EndData",fc)
+    }
+    close(fc)
     # Report success
     message(sprintf("Done writing to %s", rvt.name))
-    ws$status[ws$station == sid] = TRUE
+    ws$status[ws$station == sn] = TRUE
 
     # Provide a visual of generated time series
     print("Overview of generated timeseries")
@@ -242,7 +293,7 @@ rvn_rvt_ECmet <-  function(metdata, filename=NULL, prd = NULL, stnName = NULL, f
 
   ## Write geographic values of stations to main rvt file
   md <-  do.call("rbind",lapply(ws$station[ws$status == TRUE],function(s){
-    md <- metdata[metdata$station_id==s, c("station_name","lat","lon","elev")]
+    md <- metdata[metdata$STATION_NAME==s, c("STATION_NAME","LAT","LON","ELEV")]
     md <- data.frame(md[!duplicated(md),], "rvt.name" = ws$rvt.name[ws$station==s])
   }))
 
@@ -250,10 +301,10 @@ rvn_rvt_ECmet <-  function(metdata, filename=NULL, prd = NULL, stnName = NULL, f
   if(write_stndata){
     fc = file(stndata_file,open = "a+")
     for (k in 1:nrow(md)){
-      writeLines(sprintf(":Gauge %s", md$station_name[k]),fc)
-      writeLines(sprintf("  :Latitude %.6f", md$lat[k]),fc)
-      writeLines(sprintf("  :Longitude %.6f", md$lon[k]),fc)
-      writeLines(sprintf("  :Elevation %.2f", md$elev[k]),fc)
+      writeLines(sprintf(":Gauge %s", md$STATION_NAME[k]),fc)
+      writeLines(sprintf("  :Latitude %.6f", md$LAT[k]),fc)
+      writeLines(sprintf("  :Longitude %.6f", md$LON[k]),fc)
+      writeLines(sprintf("  :Elevation %.2f", md$ELEV[k]),fc)
       writeLines(":EndGauge\n",fc)
     }
     close(fc)
