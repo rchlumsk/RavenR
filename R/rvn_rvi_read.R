@@ -8,9 +8,10 @@
 #' to the working directory or absolute.
 #'
 #' @return
-#' Returns a list including a lone item:
+#' Returns a list with two items:
 #' \item{HydProcTable}{a data table of hydrologic processes. Includes the following data columns:
 #' process type, algorithm, 'from' compartment, 'to' compartment, conditional (logical), and condition (character)}
+#' \item{AliasTable}{a table of aliases read from the rvi file}
 #'
 #' @author James R. Craig, University of Waterloo
 #'
@@ -132,5 +133,14 @@ rvn_rvi_read<-function(filename)
   #delete conditionals rows
   HPTable<-HPTable[(HPTable$ProcessType!=":-->Conditional"),]
 
-  return (list(HydProcTable=HPTable))
+  # read aliases ----
+  alias_df <- data.frame(matrix(NA,nrow=0,ncol=2))
+  colnames(alias_df) <- c("Alias","Basename")
+  for (ind in grep(":Alias", readLines(filename), value = FALSE)) {
+    temp <- unlist(strsplit(readLines(filename)[ind],split=" "))
+    temp <- temp[temp != ""]
+    alias_df <- rbind(alias_df, data.frame(t(temp[2:3])))
+  }
+
+  return (list(HydProcTable=HPTable, AliasTable=alias_df))
 }

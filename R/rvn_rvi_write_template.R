@@ -166,12 +166,13 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
 
 :SoilModel           SOIL_MULTILAYER 3
 
-# an oddity unique to HBV:
-:LakeStorage SLOW_RESERVOIR
-
 # --Hydrologic Processes-------------------------
 :Alias       FAST_RESERVOIR SOIL[1]
 :Alias       SLOW_RESERVOIR SOIL[2]
+
+# an oddity unique to HBV:
+:LakeStorage SLOW_RESERVOIR
+
 :HydrologicProcesses
   :SnowRefreeze      FREEZE_DEGREE_DAY  SNOW_LIQ        SNOW
   :Precipitation     PRECIP_RAVEN       ATMOS_PRECIP    MULTIPLE

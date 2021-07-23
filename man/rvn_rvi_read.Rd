@@ -11,9 +11,10 @@ rvn_rvi_read(filename)
 to the working directory or absolute.}
 }
 \value{
-Returns a list including a lone item:
+Returns a list with two items:
 \item{HydProcTable}{a data table of hydrologic processes. Includes the following data columns:
 process type, algorithm, 'from' compartment, 'to' compartment, conditional (logical), and condition (character)}
+\item{AliasTable}{a table of aliases read from the rvi file}
 }
 \description{
 This routine reads in a valid Raven main input (.rvi) file and returns the

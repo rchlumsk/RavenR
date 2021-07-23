@@ -552,6 +552,10 @@ rvn_rvt_mappings <- function() {
       c("start_datetime","time_interval","num_points")
     ),
 
+    "IrregularObservations"=list(
+      c("data_type","basin_ID","num_points","units")
+    ),
+
     "IrregularWeights"=list(
       c("data_type","basin_ID","num_points")
     ),
@@ -561,7 +565,73 @@ rvn_rvt_mappings <- function() {
       c("start_datetime","time_interval","num_points")
     ),
 
+    "VariableWeirHeight"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+
     "ReservoirMaxStage"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMinStage"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMinStageFlow"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "OverrideReservoirFlow"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirTargetStage"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMinFlow"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMaxFlow"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMaxQDelta"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMaxQDecrease"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "BasinInflowHydrograph"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "BasinInflowHydrograph2"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "IrrigationDemand"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "EnvironmentalMinFlow"=list(
       c("basin_ID"),
       c("start_datetime","time_interval","num_points")
     )
@@ -586,7 +656,7 @@ rvn_rvt_mappings <- function() {
   )
 
   # met variables based on table C.2 in Raven Manual
-  rvn_met_data_mapping <- list(
+  rvn_met_data_mapping <<- list(
     "PRECIP"=list("units"="mm/d"),
     "SNOW_FRAC"=list("units"="%"),
     "SNOWFALL"=list("units"="mm/d"),
@@ -605,12 +675,17 @@ rvn_rvt_mappings <- function() {
   )
 
   # weathercan mapping to standard Raven names
+  ## weathercan_name <-> Raven_name
   rvn_weathercan_mapping <<- list(
     "TOTAL_PRECIP"=list("PRECIP"),
     "TOTAL_RAIN"=list("RAINFALL"),
     "TOTAL_SNOW"=list("SNOWFALL"),
     "MAX_TEMP"=list("TEMP_MAX"),
-    "MIN_TEMP"=list("TEMP_MIN")
+    "MIN_TEMP"=list("TEMP_MIN"),
+    "WIND_SPD"=list("WIND_VEL"), # warning on unit conversion
+    "REL_HUM"=list("REL_HUMIDITY"),
+    "PRECIP_AMT"=list("PRECIP"), # add warning on unit conversion
+    "PRESSURE"=list("AIR_PRES")
   )
 
   return(TRUE)

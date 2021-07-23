@@ -20,12 +20,17 @@
 #' Once downloaded, the Raven.exe file can be found with \code{system.file("extdata", "Raven.exe", package="RavenR")}
 #'
 #' @param version (optional) Character: The version of Raven to be downloaded. If not provided, the latest version will be downloaded.
-#' @param netCDF boolean whether to download the NetCDF-enabled version of Raven (default \code{FALSE})
+#' @param netCDF (logical) whether to download the NetCDF-enabled version of Raven (default \code{FALSE})
+#' @param check (logical) if \code{TRUE}, function will only check whether 'Raven.exe' has been downloaded to the RavenR folder
 #' @return Returns \code{TRUE} if executed successfully
 #'
 #' @seealso \code{\link{rvn_run}}
 #'
 #' @examples
+#'
+#' # check if Raven.exe has previously been downloaded
+#' rvn_download(check=TRUE)
+#'
 #' \dontrun{
 #' # download latest without netcdf support
 #' rvn_download()
@@ -41,13 +46,25 @@
 #' @importFrom stringr str_match_all str_match
 #' @importFrom RCurl url.exists
 #' @importFrom utils win.version unzip download.file
-rvn_download<-function(version=NA,NetCDF=FALSE)
+rvn_download<-function(version=NA,NetCDF=FALSE,check=FALSE)
 {
    # path<-paste(.libPaths()[1],"/RavenR/",sep="")
    # path1<-paste(.libPaths()[1],"/RavenR",sep="")
 
    download_path <- tempdir()
    save_path <- system.file("extdata",package="RavenR")
+
+   if (check) {
+
+      if (file.exists(sprintf("%s/Raven.exe",save_path))) {
+         print(sprintf("Raven.exe found in %s", save_path))
+         return(TRUE)
+      } else {
+         print(sprintf("Raven.exe NOT found in %s", save_path))
+         return(FALSE)
+      }
+      # stop()
+   }
 
    # path1 <- system.file("extdata",package="RavenR")
    # path <- sprintf("%s/",path1)

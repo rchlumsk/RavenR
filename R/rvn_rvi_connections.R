@@ -9,7 +9,7 @@
 #' This file is provided with the RavenR package, but
 #' may be overrided by a more recent file if provided manually.
 #'
-#' @param rvi data object generated from the rvn_rvi_read() routine
+#' @param rvi data object generated from the \code{\link{rvn_rvi_read}} routine
 #' @param ProcConDataFile (optional) path to RavenProcesConnections.dat file
 #'
 #' @return
