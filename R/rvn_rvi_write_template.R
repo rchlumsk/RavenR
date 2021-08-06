@@ -188,7 +188,7 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
   :Flush             RAVEN_DEFAULT      SURFACE_WATER   FAST_RESERVOIR
     :-->Conditional HRU_TYPE IS_NOT GLACIER
   :SoilEvaporation   SOILEVAP_HBV       SOIL[0]         ATMOSPHERE
-  :CapillaryRise     RISE_HBV           FAST_RESERVOIR 	SOIL[0]
+  :CapillaryRise     CRISE_HBV          FAST_RESERVOIR 	SOIL[0]
   :LakeEvaporation   LAKE_EVAP_BASIC    SLOW_RESERVOIR  ATMOSPHERE
   :Percolation       PERC_CONSTANT      FAST_RESERVOIR 	SLOW_RESERVOIR
   :Baseflow          BASE_POWER_LAW     FAST_RESERVOIR  SURFACE_WATER

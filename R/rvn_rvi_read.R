@@ -57,22 +57,38 @@ rvn_rvi_read<-function(filename)
 
     temp <- unlist(strsplit(trimws(HPtext[i]),split="\\s+"))
 
-    if (temp[1] == ":LateralFlush") {
-
-      if (length(temp) != 7) {
-        warning(sprintf("Incorrect number of entries for :LateralFlush on line %i (expected 7)\n%s",i,HPtext[i]))
+    # take only temp items before a comment char
+    if (any(rvn_substrLeft(temp,1) == "#")) {
+      if (which(rvn_substrLeft(temp,1) == "#")[1] > 1) {
+        temp <- temp[1:(which(rvn_substrLeft(temp,1) == "#")[1]-1)]
       } else {
-        HPTable[i,1:4] <- temp[c(1,2,4,7)]
-        HPTable[i,6] <- sprintf("LateralFlush from %s (%s) to %s (%s)",temp[3],temp[4], temp[6],temp[7])
+        temp <- NULL
       }
-    } else if (temp[1] == ":Split") {
-      HPTable[i,1:4] <- temp[1:4]
-      HPTable[i,6] <- sprintf("ADD :Split %s %s %s",
-                              temp[2], temp[3], temp[5])
-    } else if (length(temp) == 4) {
-      HPTable[i,1:4] <- temp
+    }
+
+    if (!is.null(temp)) {
+      if (temp[1] == ":LateralFlush") {
+
+        if (length(temp) != 7) {
+          warning(sprintf("Incorrect number of entries for :LateralFlush on line %i (expected 7)\n%s",i,HPtext[i]))
+        } else {
+          HPTable[i,1:4] <- temp[c(1,2,4,7)]
+          HPTable[i,6] <- sprintf("LateralFlush from %s (%s) to %s (%s)",temp[3],temp[4], temp[6],temp[7])
+        }
+      } else if (temp[1] == ":Split") {
+        HPTable[i,1:4] <- temp[1:4]
+        HPTable[i,6] <- sprintf("ADD :Split %s %s %s",
+                                temp[2], temp[3], temp[5])
+      } else if (rvn_substrLeft(temp[1],1) == "#") {
+        HPTable[i,] <- NA
+      } else if (length(temp) == 4) {
+        HPTable[i,1:4] <- temp
+      }
     }
   }
+
+  # remove NA rows
+  HPTable <- HPTable[!is.na(HPTable$ProcessType), ]
 
   # handle conditionals ----
   HPTable$Conditional <- ""
