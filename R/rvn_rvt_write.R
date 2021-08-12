@@ -10,7 +10,7 @@
 #' by the \code{rvn_rvt_write_met} function.
 #'
 #' The format of the rvt file, including required fields to write to file, are determined from
-#' the supplied rvt_type parameter and from the mapping provided by \code{rvn_rvt_mapping}. The
+#' the supplied rvt_type parameter and from the mapping provided by \code{data("rvn_rvt_mappings_data")}. The
 #' data_type is also checked against the provided mappings to check for valid state variables and
 #' accompanying units.
 #'
@@ -30,7 +30,7 @@
 #' @return \code{TRUE} if the function executed successfully
 #'
 #' @seealso \code{\link{rvn_rvt_read}} to read in rvt data files,
-#' and \code{rvn_rvt_ECmet} to write meteorological rvt files.
+#' and \code{rvn_rvt_write_met} to write meteorological rvt files.
 #'
 #' @examples
 #'
@@ -45,11 +45,6 @@
 #'   basin_ID = 36,
 #'   filename = file.path(tempdir(), 'mydata.rvt'))
 #'
-#'   rvn_rvt_write(x=mydata$hyd$Sub36,
-#'   rvt_type = "ObservationData",
-#'   data_type = "HYDROGRAPH",
-#'   basin_ID = 36)
-#'
 #' @export rvn_rvt_write
 #' @importFrom xts is.xts timeBased
 #' @importFrom lubridate as_datetime
@@ -57,13 +52,8 @@ rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
                           data_type="HYDROGRAPH",
                           basin_ID=NULL, NA_value=-1.2345) {
 
-
-  # flow.sim <- NULL
-
-
-  # some function or pull in of data for rvt_mapping
-  # likely to be updated, possibly as an internal data structure?
-  rvn_rvt_mappings()
+  # pull in rvt mappings within function
+  data("rvn_rvt_mappings_data")
 
   ### general inputs checks
 

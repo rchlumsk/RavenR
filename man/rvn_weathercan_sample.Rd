@@ -20,7 +20,7 @@ Note that this sample is provided to avoid loading the weathercan package while 
 Additional information on data provided by Environment Canada can be found on the Historical Data portal.
 }
 \seealso{
-\code{\link{rvn_rvt_ECmet}} for writing rvt files from weathercan data
+\code{\link{rvn_rvt_write_met}} for writing rvt files from meteorological data (including weathercan data).
 
  @source Historical Climate Data from Environment Canada (climate.weather.gc.ca) via `weathercan` package
 }

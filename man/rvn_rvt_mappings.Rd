@@ -13,6 +13,11 @@ rvn_rvt_mappings()
 Provides global variables to the environment regarding the mapping of rvt_type and data_type
 that are used in the \code{\link{rvn_rvt_write}} function.
 }
+\details{
+Function is used to update the rvn_rvt_mappings.RData file in the RavenR data folder,
+and should not be run by regular RavenR users. Most users should load the existing
+data objects in the /data folder with the \code{data("rvn_rvt_mappings_data")} command.
+}
 \examples{
 rvn_rvt_mappings()
 
@@ -24,3 +29,4 @@ rvt_data_type_mapping
 \seealso{
 \code{\link{rvn_rvt_write}}
 }
+\keyword{internal}

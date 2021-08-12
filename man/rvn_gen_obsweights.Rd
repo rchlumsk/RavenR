@@ -75,7 +75,7 @@ only November, December and January timestamps have a weight of 1
 
 }
 \seealso{
-\code{\link{rvn_rvt_obsweights}} to write the weights to an rvt file
+\code{\link{rvn_rvt_write}} to write the weights to an rvt file
 }
 \author{
 James R. Craig, University of Waterloo

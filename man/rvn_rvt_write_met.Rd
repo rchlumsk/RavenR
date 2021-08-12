@@ -6,54 +6,65 @@
 \usage{
 rvn_rvt_write_met(
   metdata,
-  filename = NULL,
-  stn_name = NULL,
-  latitude = NULL,
-  longitude = NULL,
-  include_vars = c("MAX_TEMP", "MIN_TEMP", "TOTAL_PRECIP"),
-  rvt_mapping = NULL,
-  write_stndata = FALSE,
+  rvt_met_mapping = NULL,
+  filenames = NULL,
+  met_file_prefix = "met_",
+  prd = NULL,
+  write_stndata = TRUE,
+  write_redirect = TRUE,
   filename_stndata = "met_stndata.rvt",
-  write_redirect = FALSE,
-  NA_value = -1.2345,
-  prefix = "met_"
+  NA_value = -1.2345
 )
 }
 \arguments{
-\item{metdata}{EC meteorological data from one or more stations (e.g., from weathercan::weather_dl())}
+\item{metdata}{EC meteorological data from one or more stations (e.g., from \code{weathercan::weather_dl()})}
 
-\item{filename}{specified name of file to write to (optional)}
+\item{rvt_met_mapping}{list that provides the mapping between metdata names and those used in Raven}
+
+\item{filenames}{(optional) character vector of filenames for the rvt data files, length same as number of stations in metdata}
+
+\item{met_file_prefix}{(optional) prefixes the file name (default: "met_")}
+
+\item{prd}{(optional) data period to use in .rvt file}
 
 \item{write_stndata}{(optional) write the gauge data to a separate .rvt file}
-
-\item{filename_stndata}{(optional) name of the station data file created (if write_stndata = TRUE)}
 
 \item{write_redirect}{(optional) write the :RedirectToFile commands in a
 separate .rvt file}
 
-\item{prefix}{(optional) prefixes the file name (default: "met_")}
+\item{filename_stndata}{(optional) name of the station data file created (if write_stndata = TRUE)}
 
-\item{prd}{(optional) data period to use in .rvt file}
-
-\item{stnName}{(optional) station name to use (instead of name in file)}
-
-\item{rd_file}{(optional) name of the redirect file created (if write_redirect = TRUE)}
+\item{NA_value}{(optional) value to use for NA values in rvt file (default -1.2345 for Raven format)}
 }
 \value{
 \item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
 rvn_rvt_write_met converts meteorological data for a given station into the
-.rvt format usable in Raven.
+Raven .rvt format.
 }
 \details{
 Writes data in either :Data or :MultiData format depending on the number of
 supported parameter columns provided. The data should be downloaded and prepared
-with missing days included. The download website is linked below.
+with missing days included, and preferably is downloaded directly using \code{weathercan}.
 
-The function will write to name generated from the station name, otherwise
-the .rvt filename may be specified with the filename argument (full path to
-the filename, including .rvt extension).
+metdata contains all of the meteorological data to be written to file. metdata should be
+in a tibble or data frame format, and is required to have a date/time column (either DATE,
+TIME, or DATETIME, all of which have at least a Date component), the STATION_NAME,
+and all desired forcings to be written to file. If the columns ELEV, LAT, LON are included,
+the station meta data may be written to a separate rvt file as well (see below). All supported
+data columns in metdata are written into rvt format, so the desired columns
+for the rvt file should be passed through metdata and filtered first if needed.
+
+rvt_met_mapping is a list that maps the metdata column names to Raven variables. If
+\code{weathercan} is used then this may be left NULL, as the mapping is automatically provided.
+Otherwise, the user must convert all desired column names to Raven-recognized names, or
+provide the mapping information as a list through this parameter. An example format can be seen
+(the mapping used for weathercan by default) in \code{data("rvn_rvt_mappings_data")}.
+
+filenames may be used to provide the specific desired filenames (with paths) for each
+station rvt data file being generated; this should be a character vector of length
+equal to the number of unique station names in the data.
 
 prd is used by the xts formatted-data to restrict the data reported in .rvt
 files, for each station, to this period. The prd should be defined in
@@ -61,60 +72,39 @@ files, for each station, to this period. The prd should be defined in
 empty time series (i.e. non-overlapping time periods), an error will be
 thrown.
 
-stnName can be supplied to overwrite the station name that is otherwise
-obtained from the Station Name field in the climate file. Spaces in raw Station
-Names will be replaced with underscores.
+met_file_prefix can be used to add a prefix to the .rvt data file names, ("met_" by default)
+which may be useful in organizing multiple climate data files. This is ignored
+if filenames are specified.
 
-prefix can be used to add a prefix to the .rvt file name, ("met_" by default)
-which may be useful in organizing multiple climate data files.
+write_stndata wil print out the gauge(s) metadata to file (specified by
+filename_stndata parameter) in the .rvt format, which is required to include a
+meterological station in Raven. The function will append to the file if it already exists, meaning
+that this works for iterations of this function. metdata must include the columns
+ELEV, LAT, and LON if station data is to be written, else the meta data file will not be created.
 
-(THE FOLLOWING PARAGRAPH IS SUPERCEDED BY THE NEXT - NEEDS REVIEW)
-forcing_set specifies the set of forcings to print to .rvt file. Currently
-there are only two available sets. A value of 1 prints total precipitation,
-and 2 splits the precipitation into rainfall and snowfall. In some cases the
-EC data provides only total precipitation, which is a good check to make for
-the particular climate station before printing rvt files. Both sets
-currently print max and min daily temperature. Future extensions to this
-function may provide more options for forcing sets.
-
-In some cases the EC data splits total precipitation into rainfall and snowfall,
-and in others it only provides total preciptation - met rvt files should provide
-precipitation data either explicitly as 'RAINFALL' and 'SNOWFALL' timeseries, or
-simply as "TOTAL_PRECIP" (with the option of pairing "SNOW_FRAC").
-
-write_redirect will print out the :RedirectToFile commands in a separate
-file, met_redirects.rvt. These commands can be copied into the main model's
+write_redirect will print out the :RedirectToFile commands into the file specified
+by filename_stndata, if write_stndata is \code{TRUE}. These commands can be copied into the main model's
 .rvt file to redirect to the produced time series files. The function will
 append to the file if it already exists, meaning that this works for
 iterations of this function.
 
-write_stndata wil print out the gauge metadata to file (met_stndata.rvt) in
-the .rvt format, which is required to include a meterological station in
-Raven. The function will append to the file if it already exists, meaning
-that this works for iterations of this function.
-
-perform.qc is currently under construction and is not yet available; setting
-to TRUE will result in an warning.
-
 The function has several built-in data quality checks. These include:
 
-* checking that all supplied files are for the same climate station
-* ensuring;
-the timestep (data resolution) is the same in each file
-* automatically;
-combining time series and ensuring there are no gaps in the data supplied
-(i.e. time gaps, not missing values);  and
+* checking that the time interval is consistent for each station;
+* ensuring that meta data is unique for each station name; and
 * check for missing data and issuing a warning that post-processing will be required
 
-Note: Data quality is not assessed in this package, such as consistency between
-minimum and maximum temperatures. Subdaily data is not currenty supported.
+Data quality is not assessed in this package, such as consistency between
+minimum and maximum temperatures and missing data. Consider viewing the RavenR.extras package for
+functions to interpolate missing meteorological data and checking for min/max temperature consistency.
 
-Note: this function is designated to use data from the weathercan package. The
+This function is designated to use data from the weathercan package, but may be used with any
+supplied data frame of meteorological information if in the correct format and other
+relevant information (such as rvt_met_mapping, if needed) is supplied. The
 weathercan package is external to RavenR and is not an explicit dependency
-of RavenR.
+of RavenR, although a sample weathercan data set can be viewed as \code{data(rvn_weathercan_sample)}.
 }
 \examples{
-
 # note: example modified to avoid using weathercan directly, uses saved
 ## weathercan data from RavenR package sample data
 data(rvn_weathercan_sample)
@@ -122,11 +112,11 @@ kam <- rvn_weathercan_sample
 
 # basic use, override filename to temporary file
 rvn_rvt_write_met(metdata = kam,
-  filename = file.path(tempdir(), "rvn_rvt_ECmetfile.rvt"))
+  filenames = file.path(tempdir(), "rvn_rvt_metfile.rvt"))
 
 }
 \seealso{
-\code{\link{rvn_rvt_wsc}} to convert WSC flow gauge data to Raven format
+\code{\link{rvn_rvt_write}} to write non-forcing time series data to Raven rvt format.
 
 Download Environment Canada Historical weather data from (climate.weather.gc.ca), or use the
 `weathercan` package to access this data through R.
