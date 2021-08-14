@@ -523,6 +523,11 @@ rvn_fortify_xts <- function(x)
 #' Provides global variables to the environment regarding the mapping of rvt_type and data_type
 #' that are used in the \code{\link{rvn_rvt_write}} function.
 #'
+#'#' @details
+#' Function is used to update the rvn_rvt_mappings.RData file in the RavenR data folder,
+#' and should not be run by regular RavenR users. Most users should load the existing
+#' data objects in the /data folder with the \code{data("rvn_rvt_mappings_data")} command.
+#'
 #' @return \code{TRUE} if executed successfully.
 #'
 #' @seealso \code{\link{rvn_rvt_write}}
@@ -534,6 +539,7 @@ rvn_fortify_xts <- function(x)
 #' rvt_mapping
 #' rvt_data_type_mapping
 #'
+#'#' @keywords internal
 #' @export rvn_rvt_mappings
 rvn_rvt_mappings <- function() {
 
@@ -541,6 +547,18 @@ rvn_rvt_mappings <- function() {
 
   # update based on additional entries in the list
   rvt_mapping <<- list(
+
+    "Data"=list(
+      c("forcing_type","units"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "MultiData"=list(
+      c(NULL),
+      c("start_datetime","time_interval","num_points"),
+      c(":Parameters"),
+      c(":Units")
+    ),
 
     "ObservationData"=list(
       c("data_type","basin_ID","units"),
@@ -552,6 +570,10 @@ rvn_rvt_mappings <- function() {
       c("start_datetime","time_interval","num_points")
     ),
 
+    "IrregularObservations"=list(
+      c("data_type","basin_ID","num_points","units")
+    ),
+
     "IrregularWeights"=list(
       c("data_type","basin_ID","num_points")
     ),
@@ -561,13 +583,76 @@ rvn_rvt_mappings <- function() {
       c("start_datetime","time_interval","num_points")
     ),
 
+    "VariableWeirHeight"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
     "ReservoirMaxStage"=list(
       c("basin_ID"),
       c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMinStage"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMinStageFlow"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "OverrideReservoirFlow"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirTargetStage"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMinFlow"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMaxFlow"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMaxQDelta"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "ReservoirMaxQDecrease"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "BasinInflowHydrograph"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "BasinInflowHydrograph2"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "IrrigationDemand"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
+    ),
+
+    "EnvironmentalMinFlow"=list(
+      c("basin_ID"),
+      c("start_datetime","time_interval","num_points")
     )
-
   )
-
 
   # update this based on table C.1 in Raven Manual?
   rvt_data_type_mapping <<- list(
@@ -585,15 +670,17 @@ rvn_rvt_mappings <- function() {
     )
   )
 
-  # met variables based on table C.2 in Raven Manual
-  rvn_met_data_mapping <- list(
+  ## add TEMP_DAILY_MIN, TEMP_DAILY_MAX?
+  rvn_met_raven_mapping <<- list(
     "PRECIP"=list("units"="mm/d"),
     "SNOW_FRAC"=list("units"="%"),
     "SNOWFALL"=list("units"="mm/d"),
     "RAINFALL"=list("units"="mm/d"),
-    "TEMP_AVE"=list("units"="C"),
-    "TEMP_MAX"=list("units"="C"),
-    "TEMP_MIN"=list("units"="C"),
+    "TEMP_AVE"=list("units"="DegC"),
+    "TEMP_MAX"=list("units"="DegC"),
+    "TEMP_DAILY_MAX"=list("units"="DegC"),
+    "TEMP_MIN"=list("units"="DegC"),
+    "TEMP_DAILY_MIN"=list("units"="DegC"),
     "REL_HUMIDITY"=list("units"="%"),
     "ET_RADIA"=list("units"="MJ/m2/d"),
     "SHORTWAVE"=list("units"="MJ/m2/d"),
@@ -605,14 +692,27 @@ rvn_rvt_mappings <- function() {
   )
 
   # weathercan mapping to standard Raven names
-  rvn_weathercan_mapping <<- list(
+  ## weathercan_name <-> Raven_name
+  rvt_met_mapping_weathercan <<- list(
     "TOTAL_PRECIP"=list("PRECIP"),
     "TOTAL_RAIN"=list("RAINFALL"),
     "TOTAL_SNOW"=list("SNOWFALL"),
     "MAX_TEMP"=list("TEMP_MAX"),
-    "MIN_TEMP"=list("TEMP_MIN")
+    "MIN_TEMP"=list("TEMP_MIN"),
+    "WIND_SPD"=list("WIND_VEL"), # warning on unit conversion
+    "REL_HUM"=list("REL_HUMIDITY"),
+    "PRECIP_AMT"=list("PRECIP"), # add warning on unit conversion
+    "PRESSURE"=list("AIR_PRES")
   )
+
+  # save to RavenR /data folder
+  # save(rvn_met_raven_mapping,
+  #      rvt_data_type_mapping,
+  #      rvt_mapping,
+  #      rvt_met_mapping_weathercan,
+  #      file="data/rvn_rvt_mappings_data.RData")
 
   return(TRUE)
 }
+
 
