@@ -166,12 +166,13 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
 
 :SoilModel           SOIL_MULTILAYER 3
 
-# an oddity unique to HBV:
-:LakeStorage SLOW_RESERVOIR
-
 # --Hydrologic Processes-------------------------
 :Alias       FAST_RESERVOIR SOIL[1]
 :Alias       SLOW_RESERVOIR SOIL[2]
+
+# an oddity unique to HBV:
+:LakeStorage SLOW_RESERVOIR
+
 :HydrologicProcesses
   :SnowRefreeze      FREEZE_DEGREE_DAY  SNOW_LIQ        SNOW
   :Precipitation     PRECIP_RAVEN       ATMOS_PRECIP    MULTIPLE
@@ -187,7 +188,7 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
   :Flush             RAVEN_DEFAULT      SURFACE_WATER   FAST_RESERVOIR
     :-->Conditional HRU_TYPE IS_NOT GLACIER
   :SoilEvaporation   SOILEVAP_HBV       SOIL[0]         ATMOSPHERE
-  :CapillaryRise     RISE_HBV           FAST_RESERVOIR 	SOIL[0]
+  :CapillaryRise     CRISE_HBV          FAST_RESERVOIR 	SOIL[0]
   :LakeEvaporation   LAKE_EVAP_BASIC    SLOW_RESERVOIR  ATMOSPHERE
   :Percolation       PERC_CONSTANT      FAST_RESERVOIR 	SLOW_RESERVOIR
   :Baseflow          BASE_POWER_LAW     FAST_RESERVOIR  SURFACE_WATER

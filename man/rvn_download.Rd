@@ -4,12 +4,14 @@
 \alias{rvn_download}
 \title{Downloads Raven}
 \usage{
-rvn_download(version = NA, NetCDF = FALSE)
+rvn_download(version = NA, NetCDF = FALSE, check = FALSE)
 }
 \arguments{
 \item{version}{(optional) Character: The version of Raven to be downloaded. If not provided, the latest version will be downloaded.}
 
-\item{netCDF}{boolean whether to download the NetCDF-enabled version of Raven (default \code{FALSE})}
+\item{check}{(logical) if \code{TRUE}, function will only check whether 'Raven.exe' has been downloaded to the RavenR folder}
+
+\item{netCDF}{(logical) whether to download the NetCDF-enabled version of Raven (default \code{FALSE})}
 }
 \value{
 Returns \code{TRUE} if executed successfully
@@ -34,6 +36,10 @@ will need to be re-run if RavenR is re-installed.
 Once downloaded, the Raven.exe file can be found with \code{system.file("extdata", "Raven.exe", package="RavenR")}
 }
 \examples{
+
+# check if Raven.exe has previously been downloaded
+rvn_download(check=TRUE)
+
 \dontrun{
 # download latest without netcdf support
 rvn_download()

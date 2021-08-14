@@ -4,10 +4,18 @@
 \alias{rvn_rvi_process_diagrammer}
 \title{Plot Raven hydrologic process network using DiagrammeR}
 \usage{
-rvn_rvi_process_diagrammer(connections, pdfout = NULL)
+rvn_rvi_process_diagrammer(
+  connections,
+  AliasTable = NULL,
+  sv_omit = c("SNOW_DEPTH", "COLD_CONTENT", "PONDED_WATER/SNOW_LIQ", "SOIL/AQUIFER",
+    "NEW_SNOW"),
+  pdfout = NULL
+)
 }
 \arguments{
 \item{connections}{a dataframe of from-to connections generated using rvn_rvi_connections()}
+
+\item{AliasTable}{a dataframe of state variable aliases, such as the one returned by \code{\link{rvn_rvi_read}}}
 
 \item{pdfout}{name of pdf file to save the network plot to, if null no PDF is generated}
 }

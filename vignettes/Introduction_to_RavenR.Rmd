@@ -1,7 +1,7 @@
 ---
 title: "Introduction to RavenR"
 author: "Robert Chlumsky, Dr. James R. Craig"
-date: "June 8, 2021"
+date: "August 12, 2021"
 output: rmarkdown::html_document
 urlcolor: blue
 vignette: >
@@ -206,14 +206,28 @@ RavenR::rvn_apply_wyearly(myhyd$hyd$Sub36, mean, na.rm=TRUE)
 
 ## RVI File Utilities
 
-The RavenR package can read the rvi file and generate a network plot of the model connections, which is helpful in understanding the model configuration. This can be done as follows, again using the Nith rvi file as an example. The network plot may be directly written to file by supplying a file name to the `pdfout` argument, which is NULL by default.
+The RavenR package can read the rvi file and generate a network plot of the model connections, which is helpful in understanding the model configuration. This can be done as follows, again using the Nith rvi file as an example. The network plot may be directly written to file by supplying a file name to the `pdfout` argument, which is NULL by default. The `rvn_rvi_process_diagrammer` function may also be used.
 
 ```{r rvi connection plot example}
 rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
 
 rvn_rvi_connections(rvi) %>% 
-rvn_rvi_process_plot(., pdfout = NULL)
+rvn_rvi_process_ggplot(., pdfout = NULL)
 ```
+
+The Raven User's Manual (Appendix D) provides a number of model templates that can be used to emulate existing model structures or act as starting points for modellers to then adapt to their applications. The `rvn_rvi_write_template` function allows these templates to be written directly to an rvi file, which reduces the effort in creating these initial template files. The `:CreateRVPTemplate` command is also included with these written files, with the presumption that the next step for the modeller would be to create a template RVP file for the model.
+
+## RVP Utilities
+
+Although tools to explicitly read or write rvp files is not currently available in RavenR, a useful function in calibration of Raven parameters is the `rvn_rvi_getparams` function. This will provide a data frame of paramter information (default, min, max, etc.) of parameters that are required in the model based on the provided rvi file. This can be a useful function in setting up parameter ranges and initial values for calibration.
+
+```{r rvp getparams example}
+system.file("extdata","Nith.rvi", package="RavenR") %>%
+  rvn_rvi_read() %>% 
+  rvn_rvi_getparams() %>% 
+  head() # preview of parameter data frame
+```
+
 
 ## RVH File Utilities
 
@@ -243,7 +257,7 @@ Try the example in the help file - `?rvn_rvh_cleanhrus`.
 
 ## RVT File Utilities
 
-The types of rvt files in Raven are plentiful, as rvt files are used in Raven for time series observations, forcing data, gauge data, etc. A handful of highly useful rvt utilities exist in the RavenR package for building these input files. For example, gauge observation data can be written to rvt format from the `tidyhydat` package for scraping Water Survey of Canada data.
+The types of rvt files in Raven are plentiful, as rvt files are used in Raven for time series observations, forcing data, gauge data, etc. A handful of highly useful rvt utilities exist in the RavenR package for reading and building these input files (\code{rvn_rvt_read}, \code{rvn_rvt_write}, and \code{rvn_rvt_write_met}). For example, gauge observation data can be written to rvt format from the `tidyhydat` package for scraping Water Survey of Canada data.
 
 Here, we use sample data from the `tidyhydat` function, and write this to an rvt file for use within a Raven model. The commands that would be used to extract data with the `tidyhydat` function is also provided below (but commented out). The sample data is used here to help meet compliance, but you are encouraged to try using the `tidyhydat` commands to try this functionality for yourself.
 
@@ -265,9 +279,12 @@ tf2 <- file.path(tempdir(), "station2.rvt")
 # Create RVT files
 rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
   filename=c(tf1,tf2))
+
+# preview first 6 lines of rvt file 1
+readLines(tf1) %>% head()
 ```
 
-Similar support for the `weathercan` package to write gauge forcing data exists within the `RavenR` package through the `rvn_rvt_ECmet` function. The `rvn_rvt_ECmet` function currently has two options for writing sets of forcing data. Here, we use the first option to write the total precipitation, maximum daily temperature, and minimum daily temperature from the 'Kamloops A' station to a Raven-compliant rvt format. The station metadata, also required for Raven gauge forcing data, is written to file when `write_stndata` is TRUE. The sample data obtained from the `weathercan` package is used here once again, but you are encouraged to try obtaining the data from the `weathercan` package directly using the commented out commands below. 
+Similar support for the `weathercan` package to write gauge forcing data exists within the `RavenR` package through the `rvn_rvt_write_met` function. The `rvn_rvt_write_met` function supports writing of all valid Raven forcing information, and will write all supplied (valid) data to rvt file. Here, we use the function to write the total precipitation, maximum daily temperature, and minimum daily temperature from the 'Kamloops A' station to a Raven-compliant rvt format. The station metadata, also required for Raven gauge forcing data, is written to a separate file. The sample data within RavenR is used once again, this time using the sample data obtained from the `weathercan`. However, you are encouraged to try obtaining the data from the `weathercan` package directly using the commented out commands below. 
 
 ```{r write rvt file for meteorological data, message=FALSE, warning=FALSE}
 ## Obtain data using the weathercan package
@@ -279,10 +296,19 @@ Similar support for the `weathercan` package to write gauge forcing data exists 
 data(rvn_weathercan_sample)
 kam <- rvn_weathercan_sample
 
-## basic use, override filename to temporary file
-## default forcing_set (PRECIP, MAX TEMP, MIN TEMP)
-result <- rvn_rvt_ECmet(metdata = kam, forcing_set = 1,
-                        write_stndata = TRUE)
+fpath1 <- file.path(tempdir(), "met_data.rvt")
+fpath2 <- file.path(tempdir(), "met_gauges.rvt")
+
+## basic use, provide temporary file names for writing
+## filter for particular columns to write to file
+result <- kam[,c("station_name","date","lat","lon","elev","max_temp","min_temp","total_precip")] %>% 
+            rvn_rvt_write_met(metdata = ., 
+                        filenames=fpath1,
+                        filename_stndata = fpath2)
+
+# preview files
+readLines(fpath1) %>% head() # data rvt file
+readLines(fpath2) %>% head() # gauge data file
 ```
 
 
@@ -383,7 +409,7 @@ met_data <- weathercan::weather_dl(station_ids = metstn$station_id,
                        interval="day")
 
 # write Raven rvt file
-rvn_rvt_ECmet(met_data)
+rvn_rvt_write_met(met_data)
 ```
 
 

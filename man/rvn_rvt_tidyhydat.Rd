@@ -6,6 +6,8 @@
 \usage{
 rvn_rvt_tidyhydat(
   indata,
+  rvt_type = "ObservationData",
+  data_type = "HYDROGRAPH",
   subIDs,
   prd = NULL,
   stnNames = NULL,
@@ -17,6 +19,10 @@ rvn_rvt_tidyhydat(
 }
 \arguments{
 \item{indata}{tibble of WSC flow data from tidyhydat's hy_daily_flows() function}
+
+\item{rvt_type}{type of rvt file to write (e.g. ObservationData, BasinInflowHydrograph, etc.)}
+
+\item{data_type}{Raven-syntax data type for flow data (default 'HYDROGRAPH')}
 
 \item{subIDs}{vector of subbasin IDs to correspond to the stations in indata}
 
@@ -43,7 +49,20 @@ Raven.
 \details{
 Takes a single flow tibble generated from tidyhydat and converts the flow data for
 each station in the file into .rvt formatted files for a Raven model. If
-multiple stations exist in the .csv file, multiple observation files are created
+multiple stations exist in indata, multiple observation files are created. This function
+is a wrapper for \code{rvn_rvt_write}, with the benefit of automatically parsing the
+tidyhydat download for possibly multiple stations in xts formats before passing
+to the rvt writing function.
+
+rvt_type is the specified rvt file type to write to (see the Raven User's Manual
+or the \code{rvn_rvt_mappings} function for more rvt types). This should be a flow-based
+rvt type, such as ObservationData, BasinInflowHydrograph, ReservoirExtraction, etc.
+Most applications of this will likely write the tidyhydat observations as
+ObservedData for use in model evaluation to historic records.
+
+data_type is the type of Raven input data type, likely 'HYDROGRAPH', for the corresponding
+flow data. If the flow is used as a reservoir-related flow, the data_type may be
+RESERVOIR_INFLOW or RESERVOIR_NETINFLOW.
 
 subIDs is required and should correspond to the subID to be used in the .rvt
 file for each station in the ff file, in the order in which it will be read
@@ -74,6 +93,10 @@ The function will write to name generated from the station name(s), otherwise
 the .rvt filename may be specified with the filename argument (full path to
 the filename, including .rvt extension). If multiple stations are provided,
 the filename argument may be a vector of filenames.
+
+Note that only daily flow data is supported, as tidyhydat only allows for the
+download of daily (or coarser resolution) flow data. Hourly data that is obtained
+must be first processed into xts format and then written with \code{\link{rvn_rvt_write}}.
 }
 \examples{
 

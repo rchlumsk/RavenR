@@ -14,6 +14,7 @@
 #' same library, if desired.
 #'
 #' @param connections a dataframe of from-to connections generated using rvn_rvi_connections()
+#' @param AliasTable a dataframe of state variable aliases, such as the one returned by \code{\link{rvn_rvi_read}}
 #' @param pdfout name of pdf file to save the network plot to, if null no PDF is generated
 #'
 #' @return \code{d1} returns DiagrammeR object. Also generates a .pdf file in working directory if pdfplot argument is not NULL.
@@ -39,14 +40,17 @@
 #'
 #' @export rvn_rvi_process_diagrammer
 #'
-rvn_rvi_process_diagrammer <- function(connections, pdfout=NULL)
+rvn_rvi_process_diagrammer <- function(connections, AliasTable=NULL,
+                                       sv_omit=c("SNOW_DEPTH","COLD_CONTENT","PONDED_WATER/SNOW_LIQ","SOIL/AQUIFER","NEW_SNOW"),
+                                       pdfout=NULL)
 {
 
   # build vertices from connections data
   verts <- unique( c(connections$From,connections$To) )
 
-  # temporary fix to conditional statement
-  connections[is.na(connections$Conditional),]$Conditional <- FALSE
+  if (!is.null(sv_omit)) {
+    verts <- verts[verts %notin% sv_omit]
+  }
 
   nverts<-length(verts)
   layout<-matrix(1:nverts*2,nrow=nverts,ncol=2)
@@ -86,35 +90,36 @@ rvn_rvi_process_diagrammer <- function(connections, pdfout=NULL)
   d1 <- create_graph()
 
   for (i in 1:length(verts)) {
-    d1 <- d1 %>% add_node(label=verts[i])
+    d1 <- d1 %>% add_node(label=verts[i],
+                          node_aes=node_aes(shape='rectangle'))
   }
 
   for (i in 1:nrow(connections)) {
 
-    if (connections$Conditional[i]) {
-      d1 <- d1 %>% add_edge(from=connections$From[i],
-                            to=connections$To[i],
-                            edge_aes = edge_aes(
-                              color = "red"
-                            ),
-                            edge_data=list("algorithm"=connections$Algorithm[i],
-                                           "processtype"=connections$ProcessType[i],
-                                           "conditional"=connections$Conditional[i]))
-    } else {
-      d1 <- d1 %>% add_edge(from=connections$From[i],
-                            to=connections$To[i],
-                            edge_data=list("algorithm"=connections$Algorithm[i],
-                                           "processtype"=connections$ProcessType[i],
-                                           "conditional"=connections$Conditional[i]))
+    if (connections$From[i] %in% verts & connections$To[i] %in% verts) {
+      if (connections$Conditional[i] != "") {
+        d1 <- d1 %>% add_edge(from=connections$From[i],
+                              to=connections$To[i],
+                              edge_aes = edge_aes(
+                                color = "red"
+                              ),
+                              edge_data=list("algorithm"=connections$Algorithm[i],
+                                             "processtype"=connections$ProcessType[i],
+                                             "conditional"=connections$Conditional[i]))
+      } else {
+        d1 <- d1 %>% add_edge(from=connections$From[i],
+                              to=connections$To[i],
+                              edge_data=list("algorithm"=connections$Algorithm[i],
+                                             "processtype"=connections$ProcessType[i],
+                                             "conditional"=connections$Conditional[i]))
+      }
     }
   }
-
 
   # set node positions
   nodes_df <- DiagrammeR::get_node_df(d1)
 
   for (i in 1:nrow(nodes_df)) {
-
     coords <- layout[layout$Label == nodes_df$label[i], c(1,2)]
 
     d1 <- d1 %>%
@@ -124,7 +129,7 @@ rvn_rvi_process_diagrammer <- function(connections, pdfout=NULL)
   }
 
   # render graph in viewer
-  # render_graph(dg)
+  # render_graph(d1)
 
   if (!is.null(pdfout)) {export_graph(d1, file_name=pdfout)}
   return(d1)

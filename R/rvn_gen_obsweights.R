@@ -59,7 +59,7 @@
 #'  tf2 <- file.path(tempdir(), "myobservations_wts.rvt")
 #'  rvn_rvt_obsweights(tf2, wts2, 36, typestr="HYDROGRAPH")
 #'
-#' @seealso \code{\link{rvn_rvt_obsweights}} to write the weights to an rvt file
+#' @seealso \code{\link{rvn_rvt_write}} to write the weights to an rvt file
 #'
 #' @export rvn_gen_obsweights
 #' @importFrom lubridate yday

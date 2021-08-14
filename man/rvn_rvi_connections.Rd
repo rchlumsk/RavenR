@@ -11,7 +11,7 @@ rvn_rvi_connections(
 )
 }
 \arguments{
-\item{rvi}{data object generated from the rvn_rvi_read() routine}
+\item{rvi}{data object generated from the \code{\link{rvn_rvi_read}} routine}
 
 \item{ProcConDataFile}{(optional) path to RavenProcesConnections.dat file}
 }
