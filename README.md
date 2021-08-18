@@ -52,12 +52,12 @@ To cite `RavenR` in publications, use:
   
 A BibTeX entry for LaTeX users is:
 
->  @Manual{RavenRPackage,
->    title = {RavenR: Raven Hydrological Modelling Framework R Support and Analysis},
->    author = {Robert Chlumsky},
->    year = {2021},
->    note = {R package version 2.1.1},
->    url = {https://github.com/rchlumsk/RavenR},
+>  @Manual{RavenRPackage,  
+>      title = {RavenR: Raven Hydrological Modelling Framework R Support and Analysis},  
+>      author = {Robert Chlumsky},  
+>      year = {2021},  
+>      note = {R package version 2.1.1},  
+>      url = {https://github.com/rchlumsk/RavenR},  
 >  }
 
 
@@ -87,3 +87,8 @@ plotting. Some of these include:
   - multiple bug fixes and improvements to handling rvi, rvh, and
     writing rvt files.
 
+## See Also
+
+* [RavenR.extras](https://github.com/rchlumsk/RavenR.extras): Additional RavenR utilities.
+
+* [Raven Hydrologic Modelling Framework](http://raven.uwaterloo.ca/): Robust and flexible Hydrologic Modelling Framework developd by Dr. James R. Craig at the University of Waterloo.
