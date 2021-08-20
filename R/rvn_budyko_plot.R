@@ -23,7 +23,7 @@
 #' @return \item{p1}{returns Budyko plot as ggplot object}
 #'
 #' @seealso \code{\link{rvn_watershedmeb_read}} for reading in the WatershedMassEnergyBalance.csv file, and
-#' \code{\link{rvn_apply_wyear}} to apply functions over the water year.
+#' \code{\link{rvn_apply_wyearly}} to apply functions over the water year.
 #'
 #' @examples
 #'

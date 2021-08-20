@@ -66,6 +66,10 @@ filenames may be used to provide the specific desired filenames (with paths) for
 station rvt data file being generated; this should be a character vector of length
 equal to the number of unique station names in the data.
 
+Note that the function uses
+\code{sort(unique(metdata$STATION_NAME))} to determine the order of stations,
+thus the filenames should correspond to the sorted vector of station numbers as well.
+
 prd is used by the xts formatted-data to restrict the data reported in .rvt
 files, for each station, to this period. The prd should be defined in
 "YYYY-MM-DD/YYYY-MM-DD" string format. If the period supplied results in an

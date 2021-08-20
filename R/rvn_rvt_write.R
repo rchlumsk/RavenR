@@ -14,7 +14,11 @@
 #' data_type is also checked against the provided mappings to check for valid state variables and
 #' accompanying units.
 #'
-#' No quality control of the data is performed here. Some rvt types, such as ObservationWeights,
+#' If the data is found to have an inconsistent timestep, the function will attempt to correct it
+#' by infilling missing time steps with \code{\link{rvn_ts_infill}}. If successful, a warning is issued
+#' to the user and the function will proceed, else an error will be raised.
+#'
+#' No other quality control of the data is performed here. Some rvt types, such as ObservationWeights,
 #' cannot have missing values in the data; it is the responsibility of the user to supply \code{x} with
 #' no missing values if required. Any missing values in \code{x} are written to file with the
 #' missing value code provided by \code{NA_value}.
@@ -53,11 +57,14 @@ rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
                           basin_ID=NULL, NA_value=-1.2345) {
 
   # pull in rvt mappings within function
-  data("rvn_rvt_mappings_data")
+  # data("rvn_rvt_mappings_data")
+  rvt_mapping <- get_rvt_mapping()
+  rvn_met_raven_mapping <- get_rvn_met_raven_mapping()
+  rvt_data_type_mapping <- get_rvt_data_type_mapping()
 
   ### general inputs checks
 
-  if (timeBased(x) || !is.xts(x)) {
+  if (timeBased(x) | !is.xts(x)) {
     stop("x must be of class xts")
   }
 
@@ -112,11 +119,35 @@ rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
 
   # check the interval for consistency
   if (length(grep("Irregular", x=rvt_type)) != 1) {
-    difftime_check <- difftime(x[2:length(x)], x[1:(length(x)-1)] , units="day")
-    if (any(difftime_check != difftime_check[1])) {
-      stop("Inconsistent timesteps found in data; consider using tools such as RavenR::rvn_ts_infill to fix the time series.")
+    difftime_check <- difftime(x[2:nrow(x)], x[1:(nrow(x)-1)], units="day")
+    if (any(difftime_check != difftime_check[1])) { # inconsistent timesteps found
+
+      # check length, is less than expected from time interval and start datetime
+      if (length(seq.POSIXt(from=as_datetime(x[1]),
+                            by=difftime_check[1], to=as_datetime(x[nrow(x)]))) > nrow(x)) {
+        # length of x is less than expected, attempt to infill
+        x_infilled <- rvn_ts_infill(x)
+
+        # recheck difftime
+        difftime_check <- difftime(x_infilled[2:nrow(x_infilled)], x_infilled[1:(nrow(x_infilled)-1)], units="day")
+        if (any(difftime_check != difftime_check[1])) {
+          # unable to fix with rvn_ts_infill
+          stop(sprintf("rvn_rvt_write: Inconsistent timesteps found in data for %s, which were not rectified with rvn_ts_infill.\nPlease review and fix time step issues in time series.",
+                       rvt.name))
+        } else {
+          # time series fixed with rvn_ts_infill, replace x and proceed
+          x <- x_infilled
+          warning(sprintf("rvn_rvt_write: Time series for %s adjusted with rvn_ts_infill.", rvt.name))
+        }
+
+      } else {
+        # length longer than expected, likely that some smaller frequency points exist.
+        # print(sprintf("error encountered on iteration %i",i))
+        stop(sprintf("rvn_rvt_write: Inconsistent timesteps found in data for %s, and series is longer than anticipated.\nConsider reducing temporal resolution to a consistent one with xts::apply* functions and/or infilling with rvn_ts_infill.",
+                     rvt.name))
+      }
     }
-    time_interval <- difftime_check[1]
+    time_interval <- as.numeric(difftime_check[1])
     start_datetime <- format(as_datetime(x[1]), "%Y-%M-%d %H:%M:%S")
 
   } else {
@@ -128,7 +159,6 @@ rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
 
   # change all NA values to NA value
   x[is.na(x)] <- NA_value
-
 
   ### write file
   xx <- coredata(x)

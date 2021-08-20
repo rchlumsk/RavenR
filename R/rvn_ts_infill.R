@@ -50,6 +50,8 @@ rvn_ts_infill <- function(ts)
     dates <- as.POSIXct(index(ts))
 
     if      (abs(min_interval-1/24)<0.001){byflag="hour"}
+    else if (abs(min_interval-1/96)<0.001){byflag="15 min"}
+    else if (abs(min_interval-1/48)<0.001){byflag="30 min"}
     else if (abs(min_interval-1.0 )<0.001){byflag="day"}
     else if (abs(min_interval-1/12)<0.001){byflag="2 hour"}
     else if (abs(min_interval-1/6 )<0.001){byflag="4 hour"}

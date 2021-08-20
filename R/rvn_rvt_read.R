@@ -43,7 +43,10 @@ rvn_rvt_read<-function(filename, tzone="UTC") {
   }
 
   # pull in rvt mappings within function
-  data("rvn_rvt_mappings_data")
+  # data("rvn_rvt_mappings_data")
+  rvt_mapping <- get_rvt_mapping()
+  rvn_met_raven_mapping <- get_rvn_met_raven_mapping()
+  rvt_data_type_mapping <- get_rvt_data_type_mapping()
 
   # determine which file type is being read
   for (nn in names(rvt_mapping)) {
