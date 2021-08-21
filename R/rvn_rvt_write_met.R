@@ -27,6 +27,10 @@
 #' station rvt data file being generated; this should be a character vector of length
 #' equal to the number of unique station names in the data.
 #'
+#' Note that the function uses
+#' \code{sort(unique(metdata$STATION_NAME))} to determine the order of stations,
+#' thus the filenames should correspond to the sorted vector of station numbers as well.
+#'
 #' prd is used by the xts formatted-data to restrict the data reported in .rvt
 #' files, for each station, to this period. The prd should be defined in
 #' "YYYY-MM-DD/YYYY-MM-DD" string format. If the period supplied results in an
@@ -101,12 +105,13 @@ rvn_rvt_write_met <-  function(metdata, rvt_met_mapping=NULL, filenames=NULL, me
                            write_stndata = TRUE, write_redirect=TRUE, filename_stndata = "met_stndata.rvt",
                             NA_value=-1.2345) {
 
-  data("rvn_rvt_mappings_data")
+  # data("rvn_rvt_mappings_data")
 
   ## load parameter mapping lists
   if (is.null(rvt_met_mapping)) {
     # no mappings provided, assume weathercan default mappings
-    rvt_met_mapping <- rvt_met_mapping_weathercan
+    rvt_met_mapping <- get_rvt_met_mapping_weathercan()
+
   } else {
 
     warning("No QA/QC provided for non-RavenR generated mappings. Names compatible with Raven directly will still be used.")
@@ -121,6 +126,8 @@ rvn_rvt_write_met <-  function(metdata, rvt_met_mapping=NULL, filenames=NULL, me
     #   stop("currenly not supported")
     # }
   }
+
+  rvn_met_raven_mapping <- get_rvn_met_raven_mapping()
 
   colnames(metdata) <- toupper(colnames(metdata)) # prevents any upper/lower case matching issues
   mand_col <- c("STATION_NAME","DATETIME")
@@ -197,7 +204,7 @@ rvn_rvt_write_met <-  function(metdata, rvt_met_mapping=NULL, filenames=NULL, me
   ws <- data.frame("station" = unique(metdata$STATION_NAME), "rvt.name" = NA ,"status" = NA)
 
   ## Begin writing rvt file for each station listed in entry
-  stns <- unique(metdata$STATION_NAME)
+  stns <- sort(unique(metdata$STATION_NAME))
   for (i in 1:length(stns)){
     sn <- stns[i]
     rr <- metdata[metdata$STATION_NAME == sn,c(mand_col,extra_col,data_col)]
@@ -287,7 +294,7 @@ rvn_rvt_write_met <-  function(metdata, rvt_met_mapping=NULL, filenames=NULL, me
       if (length(unique(md$STATION_NAME)) != nrow(md)) {
         warning("rvn_rvt_write_met: Station metadata is not unique by STATION_NAME; metadata not written to file.")
       } else {
-        fc = file(filename_stndata,open = "a+")
+        fc = file(filename_stndata,open = "w+")
         for (k in 1:nrow(md)){
           writeLines(sprintf(":Gauge %s", md$STATION_NAME[k]),fc)
           writeLines(sprintf("  :Latitude %.6f", md$LAT[k]),fc)

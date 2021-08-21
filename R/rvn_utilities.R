@@ -517,36 +517,24 @@ rvn_fortify_xts <- function(x)
 }
 
 
-#' @title Provide mappings for rvt files
+#' @title Provide mappings for rvt functions
 #'
 #' @description
-#' Provides global variables to the environment regarding the mapping of rvt_type and data_type
-#' that are used in the \code{\link{rvn_rvt_write}} function.
+#' Provides mapping of rvt_type and data_type that are used in the rvn_rvt functions.
 #'
-#' @details
-#' Function is used to update the rvn_rvt_mappings.RData file in the RavenR data folder,
-#' and should not be run by regular RavenR users. Most users should load the existing
-#' data objects in the /data folder with the \code{data("rvn_rvt_mappings_data")} command.
-#'
-#' @return \code{TRUE} if executed successfully.
-#'
-#' @seealso \code{\link{rvn_rvt_write}}
+#' @return list of \code{rvt_mapping}
 #'
 #' @examples
-#' rvn_rvt_mappings()
-#'
-#' # view global variables
-#' rvt_mapping
-#' rvt_data_type_mapping
+#' get_rvt_mapping()
 #'
 #' @keywords internal
-#' @export rvn_rvt_mappings
-rvn_rvt_mappings <- function() {
+#' @export get_rvt_mapping
+get_rvt_mapping <- function() {
 
   # generates globally accessible variables for rvt_mapping and rvt_data_type_mapping
 
   # update based on additional entries in the list
-  rvt_mapping <<- list(
+  rvt_mapping <- list(
 
     "Data"=list(
       c("forcing_type","units"),
@@ -654,8 +642,25 @@ rvn_rvt_mappings <- function() {
     )
   )
 
+  return(rvt_mapping)
+}
+
+#' @title Provide mappings for rvt functions
+#'
+#' @description
+#' Provides mapping of rvt_type and data_type that are used in the rvn_rvt functions.
+#'
+#' @return list of \code{rvt_data_type_mapping}
+#'
+#' @examples
+#' get_rvt_data_type_mapping()
+#'
+#' @keywords internal
+#' @export get_rvt_data_type_mapping
+get_rvt_data_type_mapping <- function() {
+
   # update this based on table C.1 in Raven Manual?
-  rvt_data_type_mapping <<- list(
+  rvt_data_type_mapping <- list(
     "HYDROGRAPH"=list(
       "units"="m3/s"
     ),
@@ -670,8 +675,25 @@ rvn_rvt_mappings <- function() {
     )
   )
 
+  return(rvt_data_type_mapping)
+}
+
+#' @title Provide mappings for rvt functions
+#'
+#' @description
+#' Provides mapping of rvt_type and data_type that are used in the rvn_rvt functions.
+#'
+#' @return list of \code{rvn_met_raven_mapping}
+#'
+#' @examples
+#' get_rvn_met_raven_mapping()
+#'
+#' @keywords internal
+#' @export get_rvn_met_raven_mapping
+get_rvn_met_raven_mapping <- function() {
+
   ## add TEMP_DAILY_MIN, TEMP_DAILY_MAX?
-  rvn_met_raven_mapping <<- list(
+  rvn_met_raven_mapping <- list(
     "PRECIP"=list("units"="mm/d"),
     "SNOW_FRAC"=list("units"="%"),
     "SNOWFALL"=list("units"="mm/d"),
@@ -691,9 +713,26 @@ rvn_rvt_mappings <- function() {
     "POTENTIAL_MELT"=list("units"="mm/d")
   )
 
+  return(rvn_met_raven_mapping)
+}
+
+#' @title Provide mappings for weathercan to rvt functions
+#'
+#' @description
+#' Provides mapping of weathercan variable names to Raven that are used in the rvn_rvt functions.
+#'
+#' @return list of \code{rvt_met_mapping_weathercan}
+#'
+#' @examples
+#' get_rvt_met_mapping_weathercan()
+#'
+#' @keywords internal
+#' @export get_rvt_met_mapping_weathercan
+get_rvt_met_mapping_weathercan <- function() {
+
   # weathercan mapping to standard Raven names
   ## weathercan_name <-> Raven_name
-  rvt_met_mapping_weathercan <<- list(
+  rvt_met_mapping_weathercan <- list(
     "TOTAL_PRECIP"=list("PRECIP"),
     "TOTAL_RAIN"=list("RAINFALL"),
     "TOTAL_SNOW"=list("SNOWFALL"),
@@ -705,14 +744,5 @@ rvn_rvt_mappings <- function() {
     "PRESSURE"=list("AIR_PRES")
   )
 
-  # save to RavenR /data folder
-  # save(rvn_met_raven_mapping,
-  #      rvt_data_type_mapping,
-  #      rvt_mapping,
-  #      rvt_met_mapping_weathercan,
-  #      file="data/rvn_rvt_mappings_data.RData")
-
-  return(TRUE)
+  return(rvt_met_mapping_weathercan)
 }
-
-

@@ -45,7 +45,7 @@
 #'
 #' flip_number is a useful option to place the subID first in the filename.
 #' This is often cleaner for organizing files in a folder, since the
-#' alphabeticized order is not dependent on the station name, and the observed
+#' alphabetized order is not dependent on the station name, and the observed
 #' files will be in one set.
 #'
 #' The function will write to name generated from the station name(s), otherwise
@@ -53,9 +53,17 @@
 #' the filename, including .rvt extension). If multiple stations are provided,
 #' the filename argument may be a vector of filenames.
 #'
+#' Note that the function uses
+#' \code{sort(unique(indata$STATION_NUMBER))} to determine the order of stations,
+#' thus the filenames and stnNames should correspond to the sorted vector of station numbers as well.
+#'
 #' Note that only daily flow data is supported, as tidyhydat only allows for the
 #' download of daily (or coarser resolution) flow data. Hourly data that is obtained
 #' must be first processed into xts format and then written with \code{\link{rvn_rvt_write}}.
+#'
+#' If the data is found to have an inconsistent timestep, the function will attempt to correct it
+#' by infilling missing time steps with \code{\link{rvn_ts_infill}}. If successful, a warning is issued
+#' to the user and the function will proceed, else an error will be raised.
 #'
 #' @param indata tibble of WSC flow data from tidyhydat's hy_daily_flows() function
 #' @param rvt_type type of rvt file to write (e.g. ObservationData, BasinInflowHydrograph, etc.)
@@ -92,7 +100,6 @@
 #'   filename=c(tf1,tf2))
 #'
 #' @export rvn_rvt_tidyhydat
-#' @importFrom dplyr distinct pull select
 #' @importFrom xts xts
 rvn_rvt_tidyhydat <- function(indata, rvt_type="ObservationData", data_type="HYDROGRAPH",
                               subIDs, prd=NULL, stnNames=NULL,
@@ -108,9 +115,7 @@ rvn_rvt_tidyhydat <- function(indata, rvt_type="ObservationData", data_type="HYD
     stop("Length of subIDs must be the same as stnNames.")
   }
 
-  # prd <- rvn_get_prd(indata, prd)
-
-  stns<-pull(distinct(select(indata,STATION_NUMBER)),STATION_NUMBER)
+  stns <- sort(unique(indata$STATION_NUMBER))
 
   # begin writing the support file
   if (write_redirect) {
@@ -120,8 +125,7 @@ rvn_rvt_tidyhydat <- function(indata, rvt_type="ObservationData", data_type="HYD
   # iterate through for all stations in the file
   for (i in 1:length(stns)) {
 
-    dd.temp <- dd.temp <- filter(indata,STATION_NUMBER == stns[i])
-    dd.temp <- select(dd.temp,Date,Value)
+    dd.temp <- indata[indata$STATION_NUMBER == stns[i],c("Date","Value")]
     ts.temp <- xts(order.by=as.Date(dd.temp$Date,format="%Y/%m/%d"),x=dd.temp$Value)
 
     if (!(is.null(prd))) {
@@ -156,14 +160,38 @@ rvn_rvt_tidyhydat <- function(indata, rvt_type="ObservationData", data_type="HYD
       }
     }
 
-    # fc <- file(rvt.name,open='w+')
-    # writeLines(sprintf(':ObservationData HYDROGRAPH %i m3/s # %s',subIDs[i],rvt.name),fc)
-    # writeLines(sprintf('%s 00:00:00 1.0 %i',as.character(lubridate::date(ts.temp[1])),nrow(ts.temp)),fc)
-    # for (j in 1:nrow(ts.temp)) {
-    #   writeLines(sprintf('%g',ts.temp[j]),fc)
-    # }
-    # writeLines(':EndObservationData',fc)
-    # close(fc)
+    # check for consistency in non-irregular time series; infill if needed
+    if (length(grep("Irregular", x=rvt_type)) != 1) {
+      difftime_check <- difftime(ts.temp[2:nrow(ts.temp)], ts.temp[1:(nrow(ts.temp)-1)], units="day")
+      if (any(difftime_check != difftime_check[1])) { # inconsistent timesteps found
+
+        # check length, is less than expected from time interval and start datetime
+        if (length(seq.POSIXt(from=as_datetime(ts.temp[1]),
+                              by=difftime_check[1], to=as_datetime(ts.temp[nrow(ts.temp)]))) > nrow(ts.temp)) {
+          # length of ts.temp is less than expected, attempt to infill
+          ts.temp_infilled <- rvn_ts_infill(ts.temp)
+
+          # recheck difftime
+          difftime_check <- difftime(ts.temp_infilled[2:nrow(ts.temp_infilled)], ts.temp_infilled[1:(nrow(ts.temp_infilled)-1)], units="day")
+          if (any(difftime_check != difftime_check[1])) {
+            # unable to fix with rvn_ts_infill
+            stop(sprintf("rvn_rvt_tidyhydat: Inconsistent timesteps found in data for %s, which were not rectified with rvn_ts_infill.\nPlease review and fix time step issues in time series.",
+                         rvt.name))
+          } else {
+            # time series fixed with rvn_ts_infill, replace ts.temp and proceed
+            ts.temp <- ts.temp_infilled
+            warning(sprintf("rvn_rvt_tidyhydat: Time series for %s adjusted with rvn_ts_infill.", rvt.name))
+          }
+
+        } else {
+          # length longer than expected, likely that some smaller frequency points exist.
+          # print(sprintf("error encountered on iteration %i",i))
+          stop(sprintf("rvn_rvt_tidyhydat: Inconsistent timesteps found in data for %s, and series is longer than anticipated.\nConsider reducing temporal resolution to a consistent one with xts::apply* functions and/or infilling with rvn_ts_infill.",
+                       rvt.name))
+        }
+      }
+      # time steps consistent (perhaps corrected with rvn_ts_infill) - proceed
+    }
 
     # send to rvn_rvt_write
     rvn_rvt_write(x=ts.temp, filename=rvt.name, rvt_type=rvt_type,

@@ -27,6 +27,7 @@ Imports:
     dplyr,
     dygraphs,
     gdata,
+    geosphere,
     ggplot2,
     igraph,
     lubridate,

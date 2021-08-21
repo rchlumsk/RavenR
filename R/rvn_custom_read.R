@@ -142,6 +142,8 @@ rvn_custom_read <- function(ff=NA, no_runname=FALSE, tzone="UTC") {
 
   # create xts custom data object
   dd <- xts(cust.data, order.by=tt)
+  names(dd) <- as.character(names(dd)) # convert to character
+  # should consider adding SUB or HRU prefix based on spatial aggregation
 
   # adds attributes to xts custom data object
     # replace with xtsAttribute ??

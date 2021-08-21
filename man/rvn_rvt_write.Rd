@@ -43,7 +43,11 @@ the supplied rvt_type parameter and from the mapping provided by \code{data("rvn
 data_type is also checked against the provided mappings to check for valid state variables and
 accompanying units.
 
-No quality control of the data is performed here. Some rvt types, such as ObservationWeights,
+If the data is found to have an inconsistent timestep, the function will attempt to correct it
+by infilling missing time steps with \code{\link{rvn_ts_infill}}. If successful, a warning is issued
+to the user and the function will proceed, else an error will be raised.
+
+No other quality control of the data is performed here. Some rvt types, such as ObservationWeights,
 cannot have missing values in the data; it is the responsibility of the user to supply \code{x} with
 no missing values if required. Any missing values in \code{x} are written to file with the
 missing value code provided by \code{NA_value}.
