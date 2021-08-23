@@ -32,7 +32,8 @@ rvn_met_interpolate(
 \description{
 rvn_met_interpolate interpolates/infills missing meteorological data by
 using an inverse-distance weighting scheme to infill using data from nearby
-meteorological stations.
+meteorological stations; issues where maximum temperature is less than minimum
+temperature can also be resolved.
 }
 \details{
 This function takes a meteorological data set with multiple station data in one data frame and
@@ -83,15 +84,6 @@ weather_data <- weather_dl(station_ids = all_stns$station_id, start = "2002-10-0
 dl_stn <- all_stns[c(1,3,4,6,7),]
 
 new_wd <- rvn_met_interpolate(weather_data = weather_data, key_stn_ids = dl_stn$station_id)
-
-# check if any values are still missing
-new_wd[new_wd$station_name == "GLEN ALLAN" & is.na(new_wd$total_precip),]
-new_wd[new_wd$station_name == "GLEN ALLAN" & is.na(new_wd$max_temp),]
-new_wd[new_wd$station_name == "GLEN ALLAN" & is.na(new_wd$min_temp),]
-
-new_wd[new_wd$station_name == "STRATFORD WWTP" & is.na(new_wd$total_precip),]
-new_wd[new_wd$station_name == "STRATFORD WWTP" & is.na(new_wd$max_temp),]
-new_wd[new_wd$station_name == "STRATFORD WWTP" & is.na(new_wd$min_temp),]
 
 # some missing values still exist - could re-run the script to infill these values again
 new_wd2 <- rvn_met_interpolate(weather_data = new_wd, key_stn_ids = dl_stn$station_id)

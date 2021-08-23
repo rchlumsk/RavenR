@@ -63,8 +63,7 @@
 #' @importFrom stats lm
 #' @importFrom lubridate year date
 #' @importFrom ggplot2 ggplot aes geom_point geom_hline geom_text scale_x_discrete scale_y_continuous
-rvn_annual_peak_error <- function(sim, obs, mm=9, dd=30, add_line = TRUE, add_labels = TRUE)
-{
+rvn_annual_peak_error <- function(sim, obs, mm=9, dd=30, add_line = TRUE, add_labels = TRUE) {
 
   df.peak <- rvn_annual_peak(sim, obs, mm=mm, dd=dd)$df_peak
   errs <- (df.peak$sim.peak - df.peak$obs.peak)/df.peak$obs.peak *
@@ -84,13 +83,15 @@ rvn_annual_peak_error <- function(sim, obs, mm=9, dd=30, add_line = TRUE, add_la
   }
 
   df.plot <- data.frame(cbind(text.labels,errs))
-  df.plot$text.labels <- as.factor(df.plot$text.labels)
+  # df.plot$text.labels <- as.factor(df.plot$text.labels)
 
   p1 <- ggplot(data=df.plot)+
     geom_point(aes(x=text.labels,y=errs))+
     scale_y_continuous(limits=c(y.min,y.max),name=y.lab)+
-    scale_x_discrete(name=x.lab)+
+    # scale_x_discrete(name=x.lab)+
+    xlab(x.lab)+
     rvn_theme_RavenR()
+
   if (add_line) {
     p1 <- p1+
       geom_hline(yintercept=0,linetype=2)
@@ -98,19 +99,36 @@ rvn_annual_peak_error <- function(sim, obs, mm=9, dd=30, add_line = TRUE, add_la
 
   if (add_labels) {
     p1 <- p1+
-      geom_text(x= max(as.numeric(df.plot$text.labels)+0.5),
-                y= y.max/2,
-                label= "Overpredict",
-                angle=90,
-                vjust = 0.5,
-                hjust = 0.5)
+      # geom_text(x= max(as.numeric(df.plot$text.labels)+0.5),
+      #           y= y.max/2,
+      #           label= "Overpredict",
+      #           angle=90,
+      #           vjust = 0.5,
+      #           hjust = 0.5)
+    annotate(geom='text',
+             x=Inf,
+             y=y.max/2,
+             size=3.5,
+             label= "Overpredict",
+             angle=90,
+             hjust=0.5,
+             vjust=-1)
+
     p1 <- p1+
-      geom_text(x=max(as.numeric(df.plot$text.labels)+0.5),
-                y= y.min/2,
-                label="Underpredict",
-                angle=90,
-                vjust = 0.5,
-                hjust = 0.5)
+      # geom_text(x=max(as.numeric(df.plot$text.labels)+0.5),
+      #           y= y.min/2,
+      #           label="Underpredict",
+      #           angle=90,
+      #           vjust = 0.5,
+      #           hjust = 0.5)
+    annotate(geom='text',
+             x=Inf,
+             y=y.min/2,
+             size=3.5,
+             label= "Underpredict",
+             angle=90,
+             hjust=0.5,
+             vjust=-1)
   }
   df <- data.frame(date.end = df.peak$date.end, errors = errs)
 
