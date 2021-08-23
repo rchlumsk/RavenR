@@ -746,3 +746,67 @@ get_rvt_met_mapping_weathercan <- function() {
 
   return(rvt_met_mapping_weathercan)
 }
+
+#' @title Calculate distance from long/lat
+#'
+#' @description Calculates distance between points based on a set of long/lat coordinates.
+#'
+#' @details
+#' Calculates distance in metres based on the longitude and latitude of two or more sets of points.
+#'
+#' The function uses either the Haversine or Vincenty Sphere methods to calculate the distances.
+#'
+#' @note
+#' Function is based on modifications from the \href{https://cran.r-project.org/package=geosphere}{geosphere package}
+#' scripts for \code{distHaversine} and \code{distVincentySphere}.
+#'
+#' @param p1 longitude/latitude of point(s); can be a vector of two numbers, or a matrix of 2 columns (long/lat).
+#' @param p2 second point in same format as \code{p1}
+#' @param method calculation method as either \code{haversine} (default) or {vincentysphere}
+#' @param r radius of the Earth in metres (default 6378137)
+#'
+#' @examples
+#' # calculate distance from Engineering 2 (p1) to Graduate House (p2) at the University of Waterloo
+#' rvn_dist_latlon(p1=c(-80.5402891965711,43.47088594350457), p2=c(-80.54096577853629,43.46976096704924))
+#'
+#' # distance from University of Waterloo to Windsor
+#' rvn_dist_latlon(p1=c(-80.5402891965711,43.47088594350457), p2=c(-83.02099905916948,42.283371378771555))
+#'
+#' @export rvn_dist_lonlat
+rvn_dist_lonlat <- function(p1, p2, method="haversine", r=6378137) {
+  toRad <- pi / 180
+  p1 <- matrix(p1,ncol=2) * toRad
+  if (missing(p2)) {
+    p2 <- p1[-1, ,drop=FALSE]
+    p1 <- p1[-nrow(p1), ,drop=FALSE]
+  } else {
+    p2 <- matrix(p2,ncol=2)  * toRad
+  }
+
+  p = cbind(p1[,1], p1[,2], p2[,1], p2[,2], as.vector(r))
+
+
+  if (tolower(method)=="haversine") {
+    dLat <- p[,4]-p[,2]
+    dLon <- p[,3]-p[,1]
+    a <- (sin(dLat/2))^2 + cos(p[,2]) * cos(p[,4]) * (sin(dLon/2))^2
+    # to avoid values of 'a' that are a sliver above 1
+    # which may occur at antipodes
+    # https://stackoverflow.com/questions/45889616/why-does-disthaversine-return-nan-for-some-pairs-of-coordinates#
+    a <- pmin(a, 1)
+    dist <- as.vector(2 * atan2(sqrt(a), sqrt(1-a)) * p[,5])
+  } else if (tolower(method)=="vincentysphere") {
+    lon1 <- p[,1]
+    lat1 <- p[,2]
+    lon2 <- p[,3]
+    lat2 <- p[,4]
+    x <- sqrt((cos(lat2) * sin(lon1-lon2))^2 + (cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lon1-lon2))^2)
+    y <- sin(lat1) * sin(lat2) + cos(lat1) * cos(lat2) * cos(lon1-lon2)
+    dist <- as.vector( p[,5] * atan2(x, y) )
+  } else {
+    warning(sprintf("rvn_dist_lonlat: Unrecognized method %s; should be 'haversine' or 'vincentysphere'.",method))
+    dist <- NULL
+  }
+
+  return(dist)
+}

@@ -8,7 +8,9 @@ rvn_met_interpolate(
   weather_data = NULL,
   cc = c("max_temp", "min_temp", "total_precip"),
   key_stn_ids = NULL,
-  ppexp = 2
+  ppexp = 2,
+  fix_interp_temp = TRUE,
+  fix_base_temp = FALSE
 )
 }
 \arguments{
@@ -19,6 +21,10 @@ rvn_met_interpolate(
 \item{key_stn_ids}{station IDs in which to perform the interpolation}
 
 \item{ppexp}{exponent to use in inverse distance weighting calculation (default 2)}
+
+\item{fix_interp_temp}{function will swap interpolated min and max temp if appropriate}
+
+\item{fix_base_temp}{function will swap any min and max temp if appropriate}
 }
 \value{
 \item{new_wd}{infilled meteorological data set}
@@ -51,8 +57,14 @@ Since the interpolation of all stations provided can become computationally expe
 specify which stations they want to interpolate data for with the key_stn_ids parameter. Station IDs that
 are not within the key_stn_ids (if not NULL) will still be used, but not themselves infilled.
 
-The distance calculation, estimating the distance between stations, is performed using the \code{distGeo}
-function from the \code{geosphere} package with default parameters.
+fix_interp_temp is a boolean for the function to swap any max_temp and min_temp fields where the maximum
+temperature is less than the minimum temperature, a common fix in messy environmental data. This function
+will only apply if the columns \code{max_temp} and \code{min_temp} are present, and will only apply to the
+interpolated fields. By default this is enabled, and automatic fixes to interpolated data will be done;
+supplied data where the max temp is less than min temp will not be fixed unless fix_base_temp is enabled.
+
+The distance calculation, estimating the distance between stations, is performed using the \code{\link{rvn_dist_lonlat}}
+function, which is based on the \code{geosphere} package.
 }
 \examples{
 
@@ -70,8 +82,9 @@ all_stns <- weathercan::stations_search(coords=c(stn$lat, stn$lon), dist=40,
 weather_data <- weather_dl(station_ids = all_stns$station_id, start = "2002-10-01", interval="day")
 dl_stn <- all_stns[c(1,3,4,6,7),]
 
-new_wd <- rvn_met_spatial_interpolation(weather_data = weather_data, key_stn_ids = dl_stn$station_id)
+new_wd <- rvn_met_interpolate(weather_data = weather_data, key_stn_ids = dl_stn$station_id)
 
+# check if any values are still missing
 new_wd[new_wd$station_name == "GLEN ALLAN" & is.na(new_wd$total_precip),]
 new_wd[new_wd$station_name == "GLEN ALLAN" & is.na(new_wd$max_temp),]
 new_wd[new_wd$station_name == "GLEN ALLAN" & is.na(new_wd$min_temp),]
