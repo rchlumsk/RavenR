@@ -4,10 +4,35 @@
 \alias{rvn_rvi_process_ggplot}
 \title{Plot Raven hydrologic process network}
 \usage{
-rvn_rvi_process_ggplot(connections, pdfout = NULL)
+rvn_rvi_process_ggplot(
+  rvi_conn,
+  sv_omit = c("SNOW_DEPTH", "COLD_CONTENT", "PONDED_WATER/SNOW_LIQ", "NEW_SNOW",
+    "SNOW_DEFICIT"),
+  repel_force = 0.001,
+  repel_iter = 2000,
+  lbl_size = 0.5,
+  lbl_fill = "lightblue",
+  arrow_size = 0.25,
+  arrow_adj = 0.25,
+  pdfout = NULL
+)
 }
 \arguments{
-\item{connections}{a dataframe of from-to connections generated using rvn_rvi_connections()}
+\item{rvi_conn}{a list of connections and AliasTable, provided by \code{rvn_rvi_connections}}
+
+\item{sv_omit}{character vector of state variables to omit from the plot}
+
+\item{repel_force}{numeric value indicating the 'force' with which the repel function will move labels}
+
+\item{repel_iter}{the maximum number of iterations for the repel algorithm}
+
+\item{lbl_size}{estimated height of labels, used in repel algorithm}
+
+\item{lbl_fill}{fill colour for labels (default 'lightblue')}
+
+\item{arrow_size}{size of plotted arrows (default 0.25)}
+
+\item{arrow_adj}{adjustment in line length reduction for arrows (default 0.25)}
 
 \item{pdfout}{name of pdf file to save the network plot to, if null no PDF is generated}
 }
@@ -15,27 +40,53 @@ rvn_rvi_process_ggplot(connections, pdfout = NULL)
 {p1}{returns ggplot object. Also generates a .pdf file in working directory if pdfplot argument is not NULL.}
 }
 \description{
-This routine takes a connections data from generated using rvn_rvi_connections()
+This routine takes a connections data from generated using \code{rvn_rvi_connections}
 and returns the connections information as a network graph ggplot object.
 }
 \details{
 Uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot.
+
+\code{sv_omit} is used to reduce the clutter in the process plot of state variables that
+one may wish to omit from the plot.
+
+The function uses the functionality from \code{ggrepel} to repel labels from one another.
+The degree of separation in the labels can be controlled by the \code{repel_force} and
+\code{lbl_size} parameters (increasing either will increase the separation between labels).
+The \code{repel_force} may range from approximately 1 to 1e-6. The \code{lbl_size} is a
+relative estimate of the label height (default 0.5), which is used in estimating the label
+height in the repel functionality. Providing a larger number will increase the perceived size
+of the label in the repel functionality and tend towards more separation between labels, and
+vice-versa. Both of these parameters may need to change depending on the plot size and number
+of labels.
+
+\code{arrow_adj} is the amount that each line segment is reduced in length to accomodate the
+arrow. Increasing this value will decrease the length of the line segment, and place the arrow
+further from the box. This value should generally be similar to the \code{arrow_size} parameter.
 }
 \note{
 tries to follow basic network structure, accommodates unrecognized state variables on LHS of plot
 }
 \examples{
-rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
-conn <- rvn_rvi_connections(rvi)
 
-rvn_rvi_process_ggplot(conn)
+library(ggplot2)
+
+p1 <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR")) \%>\%
+  rvn_rvi_connections() \%>\%
+    rvn_rvi_process_ggplot()
+p1 ## plot to screen
+
+## change the colour of the background
+p1 + theme(panel.background = element_rect(fill = 'lightgrey', colour = 'purple'))
+
+## adjust line/arrow colours (no conditional lines shown in Nith example)
+p1 + scale_colour_manual(values=c('FALSE'='purple', 'TRUE'='red'))
+
+## adjust line/arrow types (no conditional lines shown in Nith example)
+p1 + scale_linetype_manual(values=c('FALSE'='longdash', 'TRUE'='twodash'))
 
 }
 \seealso{
 \code{\link{rvn_rvi_connections}} to generate connections table from an rvi object
 
 See also the \href{http://raven.uwaterloo.ca/}{Raven page}
-}
-\author{
-James R. Craig, University of Waterloo
 }

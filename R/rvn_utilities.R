@@ -810,3 +810,137 @@ rvn_dist_lonlat <- function(p1, p2, method="haversine", r=6378137) {
 
   return(dist)
 }
+
+#' Estimate text grob length
+#'
+#' Estimate the printed length of `resizingTextGrob` text
+#'
+#' @param text \code{character} The text to be printed
+#' @param rot The rotation in radians
+#'
+#' @return The estimated length of the printed text as a multiple of its text size (height)
+#'
+#' @noRd
+#' @keywords internal
+text_grob_length <- function(text, rot = 0) {
+  do_one <- function(text) {
+    as.numeric(grid::widthDetails(grid::textGrob(text, rot = rot * 180 / pi))) / as.numeric(grid::heightDetails(grid::textGrob(text))) * .8
+  }
+  vapply(text, do_one, numeric(1))
+}
+
+#' Bounding box coords for labels
+#'
+#' Given a position, size, rotation, and justification of a label, calculate the bounding box coordinates
+#'
+#' @param label character text of each label
+#' @param x Horizontal position of center of text grob
+#' @param y Vertical position of center of text grob
+#' @param height Height of text grob
+#' @param rotation Rotation in radians
+#' @param just Justification. e.g. "left-top"
+#'
+#' @note Code modified from metacoder package on Github (heat_tree.R)
+#'
+#' @noRd
+#' @keywords internal
+label_bounds <- function(label, x, y, height, rotation, just) {
+
+  process_one <- function(label, x, y, height, rotation, just) {
+    # Deal with newlines
+    if (grepl(label, pattern = "\n")) {
+      split_label <- strsplit(label, split = "\n", fixed = TRUE)[[1]]
+    } else {
+      split_label <- label
+    }
+    block_height <- height * length(split_label)
+
+    # Calculate some handy values used later
+    width <- height * text_grob_length(split_label[which.max(vapply(split_label, nchar, numeric(1)))]) # The length of the text
+    from_center_to_corner <- sqrt(block_height ^ 2 + width ^ 2) * 0.5 # The length between the center of the text box and a corner
+    angle_to_corner <- atan2(block_height, width) # The angle between the center of the text box and a corner
+
+    # Find the coordinates for the four corners, assuming a central justification
+    coords <- data.frame(stringsAsFactors = FALSE,
+                         x = c(- cos(rotation - angle_to_corner),  # top left
+                               cos(rotation + angle_to_corner),  # top right
+                               cos(rotation - angle_to_corner), # bottom right
+                               - cos(rotation + angle_to_corner)),  # bottom left
+                         y = c(- sin(rotation - angle_to_corner),  # top left
+                               sin(rotation + angle_to_corner),  # top right
+                               sin(rotation - angle_to_corner), # bottom right
+                               - sin(rotation + angle_to_corner))  # bottom left
+    ) * from_center_to_corner
+
+    # Offset based on justification if not centered
+    if        (just == "left-top") {
+      coords$x <- coords$x - coords$x[1]
+      coords$y <- coords$y - coords$y[1]
+    } else if (just == "center-top") {
+      coords$x <- coords$x - cos(rotation + pi * 0.5) * height * 0.5
+      coords$y <- coords$y - sin(rotation + pi * 0.5) * height * 0.5
+    } else if (just == "right-top") {
+      coords$x <- coords$x - coords$x[2]
+      coords$y <- coords$y - coords$y[2]
+    } else if (just == "left-center" || just == "left") {
+      coords$x <- coords$x + cos(rotation) * width * 0.5
+      coords$y <- coords$y + sin(rotation) * width * 0.5
+    } else if (just == "right-center" || just == "right") {
+      coords$x <- coords$x - cos(rotation) * width * 0.5
+      coords$y <- coords$y - sin(rotation) * width * 0.5
+    } else if (just == "left-bottom") {
+      coords$x <- coords$x - coords$x[4]
+      coords$y <- coords$y - coords$y[4]
+    } else if (just == "center-bottom") {
+      coords$x <- coords$x + cos(rotation + pi * 0.5) * height * 0.5
+      coords$y <- coords$y + sin(rotation + pi * 0.5) * height * 0.5
+    } else if (just == "right-bottom") {
+      coords$x <- coords$x - coords$x[3]
+      coords$y <- coords$y - coords$y[3]
+    }
+
+    # Adjust for input coordinates
+    coords$x <- coords$x + x
+    coords$y <- coords$y + y
+
+    # Add input label and return
+    cbind(data.frame(label = label, stringsAsFactors = FALSE),  coords)
+  }
+
+  output <- do.call(rbind, mapply(FUN = process_one, SIMPLIFY = FALSE,
+                                  label, x, y, height, rotation, just))
+  rownames(output) <- NULL
+  return(output)
+}
+
+#' Reformat bounding box coords for labels
+#'
+#' Reformat the bounding box coordinates object to have columns for label, xmin, xmax, ymin, ymax.
+#'
+#' @param bounds object returned by \code{label_bounds}
+#'
+#' @note Code modified from metacoder package on Github (heat_tree.R)
+#'
+#' @noRd
+#' @keywords internal
+reformat_bounds <- function(bounds) {
+  if (is.null(bounds)) {
+    return(NULL)
+  }
+  lbls <- unique(bounds$label)
+  nn <- length(unique(bounds$label))
+  # bounds$label <- factor(bounds$label, levels=unique(bounds$label)) # keep order when split
+  x_coords <- split(bounds$x, rep(seq_len(nn), each = 4))
+  y_coords <- split(bounds$y, rep(seq_len(nn), each = 4))
+  output <- data.frame(label = lbls,
+             # color = text_data$color,
+             # rotation = rad_to_deg(text_data$rotation),
+             # group = text_data$group,
+             xmin = vapply(x_coords, min, numeric(1)),
+             xmax = vapply(x_coords, max, numeric(1)),
+             ymin = vapply(y_coords, min, numeric(1)),
+             ymax = vapply(y_coords, max, numeric(1)),
+             stringsAsFactors = FALSE)
+  return(output)
+}
+

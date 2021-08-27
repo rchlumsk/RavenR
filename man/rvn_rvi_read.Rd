@@ -14,7 +14,7 @@ to the working directory or absolute.}
 Returns a list with two items:
 \item{HydProcTable}{a data table of hydrologic processes. Includes the following data columns:
 process type, algorithm, 'from' compartment, 'to' compartment, conditional (logical), and condition (character)}
-\item{AliasTable}{a table of aliases read from the rvi file}
+\item{AliasTable}{a table of aliases read from the rvi file, NULL if no aliases are included}
 }
 \description{
 This routine reads in a valid Raven main input (.rvi) file and returns the

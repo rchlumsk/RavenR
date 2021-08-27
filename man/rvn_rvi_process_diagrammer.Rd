@@ -7,8 +7,7 @@
 rvn_rvi_process_diagrammer(
   connections,
   AliasTable = NULL,
-  sv_omit = c("SNOW_DEPTH", "COLD_CONTENT", "PONDED_WATER/SNOW_LIQ", "SOIL/AQUIFER",
-    "NEW_SNOW"),
+  sv_omit = c("SNOW_DEPTH", "COLD_CONTENT", "PONDED_WATER/SNOW_LIQ", "NEW_SNOW"),
   pdfout = NULL
 )
 }
@@ -45,6 +44,10 @@ conn <- rvn_rvi_connections(rvi)
 library(DiagrammeR)
 
 rvn_rvi_process_diagrammer(conn) \%>\%
+render_graph()
+
+# provide with AliasTable
+rvn_rvi_process_diagrammer(conn, AliasTable=rvi$AliasTable) \%>\%
 render_graph()
 
 }

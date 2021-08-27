@@ -5,7 +5,7 @@ Version: 2.1.1
 Date: 2021-06-14
 Authors@R: c(
     person("Robert", "Chlumsky", email = "rchlumsk@uwaterloo.ca", role = c("cre","aut"), comment = c(ORCID = "0000-0002-1303-5064")),
-    person("James", "Craig", email = "jrcraig@uwaterloo.ca", role = "ctb", comment = c(ORCID = "0000-0003-2715-7166")),
+    person("James", "Craig", email = "jrcraig@uwaterloo.ca", role = c("ctb","aut"), comment = c(ORCID = "0000-0003-2715-7166")),
     person("Genevieve", "Brown", email = "genevieve.wbrown@gmail.com", role = "ctb"),
     person("Leland", "Scantlebury", email = "lscantlebury@uwaterloo.ca", role = "ctb"),
     person("Sarah", "Grass", email = "sgrass@nhcweb.com", role = "ctb"),
@@ -32,6 +32,7 @@ Imports:
     lubridate,
     magrittr,
     purrr,
+    Rcpp,
     RCurl,
     rsvg,
     scales,
@@ -54,3 +55,4 @@ Encoding: UTF-8
 LazyData: TRUE
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
+LinkingTo: Rcpp

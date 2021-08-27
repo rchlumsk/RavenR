@@ -206,13 +206,13 @@ RavenR::rvn_apply_wyearly(myhyd$hyd$Sub36, mean, na.rm=TRUE)
 
 ## RVI File Utilities
 
-The RavenR package can read the rvi file and generate a network plot of the model connections, which is helpful in understanding the model configuration. This can be done as follows, again using the Nith rvi file as an example. The network plot may be directly written to file by supplying a file name to the `pdfout` argument, which is NULL by default. The `rvn_rvi_process_diagrammer` function may also be used.
+The RavenR package can read the rvi file and generate a network plot of the model connections, which is helpful in understanding the model configuration. This can be done as follows, again using the Nith rvi file as an example. The network plot may be directly written to file by supplying a file name to the `pdfout` argument, which is NULL by default. Similar functionality is also available with the `rvn_rvi_process_diagrammer` function, which uses the `DiagrammeR` library.
 
 ```{r rvi connection plot example}
 rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
 
 rvn_rvi_connections(rvi) %>% 
-rvn_rvi_process_ggplot(., pdfout = NULL)
+  rvn_rvi_process_ggplot()
 ```
 
 The Raven User's Manual (Appendix D) provides a number of model templates that can be used to emulate existing model structures or act as starting points for modellers to then adapt to their applications. The `rvn_rvi_write_template` function allows these templates to be written directly to an rvi file, which reduces the effort in creating these initial template files. The `:CreateRVPTemplate` command is also included with these written files, with the presumption that the next step for the modeller would be to create a template RVP file for the model.

@@ -3,6 +3,8 @@
 #' @description Contains functions to perform pre- and post-processing of RavenR files.
 #' @docType package
 #' @name RavenR-package
+#' @importFrom Rcpp sourceCpp
+#' @useDynLib RavenR
 #' @details This package provides a number of types of useful functions, including:
 #' \itemize{
 #' \item{reading in \strong{Raven output files} (including ForcingFunctions, Hydrographs, etc.)}

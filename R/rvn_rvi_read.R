@@ -11,7 +11,7 @@
 #' Returns a list with two items:
 #' \item{HydProcTable}{a data table of hydrologic processes. Includes the following data columns:
 #' process type, algorithm, 'from' compartment, 'to' compartment, conditional (logical), and condition (character)}
-#' \item{AliasTable}{a table of aliases read from the rvi file}
+#' \item{AliasTable}{a table of aliases read from the rvi file, NULL if no aliases are included}
 #'
 #' @author James R. Craig, University of Waterloo
 #'
@@ -157,6 +157,8 @@ rvn_rvi_read<-function(filename)
     temp <- temp[temp != ""]
     alias_df <- rbind(alias_df, data.frame(t(temp[2:3])))
   }
+  names(alias_df) <- c("alias","basename")
+  if (nrow(alias_df) == 0) {alias_df <- NULL}
 
   return (list(HydProcTable=HPTable, AliasTable=alias_df))
 }

@@ -18,6 +18,11 @@ rvn_rvi_connections(
 \value{
 Returns a dataframe of all of the process connections Includes the following data columns:
 process type, algorithm, 'from' compartment, 'to' compartment, and conditional.
+
+Returns a list with two items:
+\item{connections}{a a dataframe of all of the process connections Includes the following data columns:
+process type, algorithm, 'from' compartment, 'to' compartment, and conditional}
+\item{AliasTable}{a table of aliases (unchanged from the supplied \code{rvi$AliasTable})}
 }
 \description{
 This routine reads in a hydrologic process list from rvn_rvi_read() and generates
@@ -31,11 +36,9 @@ may be overrided by a more recent file if provided manually.
 \examples{
 rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
 
-# get number of Hydrologic processes
-nrow(rvi$HydProcTable)
-
-conn <- rvn_rvi_connections(rvi)
-head(conn)
+rvi_conn <- rvn_rvi_connections(rvi)
+head(rvi_conn$connections)
+head(rvi_conn$AliasTable)
 
 }
 \seealso{

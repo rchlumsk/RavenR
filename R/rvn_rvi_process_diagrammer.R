@@ -35,28 +35,56 @@
 #' rvn_rvi_process_diagrammer(conn) %>%
 #' render_graph()
 #'
+#' # provide with AliasTable
+#' rvn_rvi_process_diagrammer(conn, AliasTable=rvi$AliasTable) %>%
+#' render_graph()
+#'
 #' @importFrom igraph get.data.frame graph_from_data_frame vertex.attributes
 #' @importFrom DiagrammeR get_node_df set_node_position create_graph add_node add_edge edge_aes export_graph
 #'
 #' @export rvn_rvi_process_diagrammer
 #'
 rvn_rvi_process_diagrammer <- function(connections, AliasTable=NULL,
-                                       sv_omit=c("SNOW_DEPTH","COLD_CONTENT","PONDED_WATER/SNOW_LIQ","SOIL/AQUIFER","NEW_SNOW"),
+                                       sv_omit=c("SNOW_DEPTH","COLD_CONTENT","PONDED_WATER/SNOW_LIQ","NEW_SNOW"),
                                        pdfout=NULL)
 {
+
+  # nchar_per_inch <- 8 # number of characters per inch in box widths of each state variable
+
+  # replace all aliased names by their basename for plotting
+  if (!is.null(AliasTable)) {
+    if (all(c("alias","basename") %in% names(AliasTable))) {
+      if (any(AliasTable$alias %in% connections$From)) {
+        connections$From[which(connections$From %in% AliasTable$alias)] <-
+          AliasTable$basename[match(connections$From[which(connections$From %in% AliasTable$alias)],
+                                    table=AliasTable$alias)]
+      }
+      if (any(AliasTable$alias %in% connections$To)) {
+        connections$To[which(connections$To %in% AliasTable$alias)] <-
+          AliasTable$basename[match(connections$To[which(connections$To %in% AliasTable$alias)],
+                                 table=AliasTable$alias)]
+      }
+
+    } else {
+      warning("rvn_rvi_process_diagrammer: alias and basename should be included in AliasTable. AliasTable will not be used")
+      AliasTable <- NULL
+    }
+  }
 
   # build vertices from connections data
   verts <- unique( c(connections$From,connections$To) )
 
+  # remove any verts in sv_omit
   if (!is.null(sv_omit)) {
     verts <- verts[verts %notin% sv_omit]
   }
 
+  # build layout for all nodes (to be one by rvn_rvi_process_layout)
   nverts<-length(verts)
   layout<-matrix(1:nverts*2,nrow=nverts,ncol=2)
   count=1
-  for (i in 1:nverts)
-  {
+
+  for (i in 1:nverts) {
     if      (verts[i]=="ATMOSPHERE"){layout[i,1]=5; layout[i,2]=6;}
     else if (verts[i]=="ATMOS_PRECIP"){layout[i,1]=1; layout[i,2]=6.2;}
 
@@ -69,21 +97,51 @@ rvn_rvi_process_diagrammer <- function(connections, AliasTable=NULL,
     else if (verts[i]=="DEPRESSION" ){layout[i,1]=2; layout[i,2]=4.9;}
     else if (verts[i]=="WETLAND" ){layout[i,1]=3; layout[i,2]=5.2;}
 
-    else if (verts[i]=="SOIL[0]"    ){layout[i,1]=2; layout[i,2]=3;}
+    else if (verts[i]=="SOIL[0]"){layout[i,1]=2; layout[i,2]=3;}
     else if (verts[i]=="SURFACE_WATER"    ){layout[i,1]=6; layout[i,2]=3;}
 
     else if (verts[i]=="SOIL[1]"    ){layout[i,1]=2; layout[i,2]=2;}
     else if (verts[i]=="FAST_RESERVOIR"    ){layout[i,1]=2; layout[i,2]=2;}
 
     else if (verts[i]=="SOIL[2]"    ){layout[i,1]=2; layout[i,2]=1;}
-    else if (verts[i]=="SLOW_RESERVOIR"){layout[i,1]=2; layout[i,2]=1;
-    }
+    else if (verts[i]=="SLOW_RESERVOIR"){layout[i,1]=2; layout[i,2]=1;}
+
+    else if (verts[i]=="SOIL[3]"    ){layout[i,1]=2; layout[i,2]=0;}
+
     else { layout[i,2]=count; count=count+1;layout[i,1]=-2;}
   }
-
-  #Convert Layout to Dataframe
   layout <- as.data.frame(layout)
   layout$Label <- verts
+
+
+  # convert base names in verts back to alias (if provided)
+  if (!is.null(AliasTable)) {
+    if (any(verts %in% AliasTable$basename)) {
+      verts[which(verts %in% AliasTable$basename)] <-
+        AliasTable$alias[match(verts[which(verts %in% AliasTable$basename)],
+                                  table=AliasTable$basename)]
+    }
+
+    if (any(AliasTable$basename %in% connections$From)) {
+      connections$From[which(connections$From %in% AliasTable$basename)] <-
+        AliasTable$alias[match(connections$From[which(connections$From %in% AliasTable$basename)],
+                                  table=AliasTable$basename)]
+    }
+    if (any(AliasTable$basename %in% connections$To)) {
+      connections$To[which(connections$To %in% AliasTable$basename)] <-
+        AliasTable$alias[match(connections$To[which(connections$To %in% AliasTable$basename)],
+                                  table=AliasTable$basename)]
+    }
+  }
+
+
+
+  # oldlayout <- layout
+
+
+  # adjust spacing in plot
+  # layout <- oldlayout
+  # layout[,c(1,2)] <- space(layout$V1, layout$V2, s=c(max(nchar(verts))/nchar_per_inch/4,1/4), direction='xy')
 
 
   # build diagrammer graph and start building, add vertices, add edges, then update positions
@@ -91,7 +149,11 @@ rvn_rvi_process_diagrammer <- function(connections, AliasTable=NULL,
 
   for (i in 1:length(verts)) {
     d1 <- d1 %>% add_node(label=verts[i],
-                          node_aes=node_aes(shape='rectangle'))
+                          node_aes=node_aes(shape='rectangle',
+                                            fontname='Helvetica',
+                                            fontsize=12,
+                                            width=nchar(verts[i])/nchar_per_inch, # 1 inch width per 8 characters
+                                            style='filled'))
   }
 
   for (i in 1:nrow(connections)) {
@@ -101,7 +163,8 @@ rvn_rvi_process_diagrammer <- function(connections, AliasTable=NULL,
         d1 <- d1 %>% add_edge(from=connections$From[i],
                               to=connections$To[i],
                               edge_aes = edge_aes(
-                                color = "red"
+                                color = "red",
+                                arrowsize = 0.5
                               ),
                               edge_data=list("algorithm"=connections$Algorithm[i],
                                              "processtype"=connections$ProcessType[i],
@@ -109,6 +172,10 @@ rvn_rvi_process_diagrammer <- function(connections, AliasTable=NULL,
       } else {
         d1 <- d1 %>% add_edge(from=connections$From[i],
                               to=connections$To[i],
+                              edge_aes = edge_aes(
+                                color = "grey20",
+                                arrowsize = 0.5
+                              ),
                               edge_data=list("algorithm"=connections$Algorithm[i],
                                              "processtype"=connections$ProcessType[i],
                                              "conditional"=connections$Conditional[i]))
