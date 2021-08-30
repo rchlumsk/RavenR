@@ -130,40 +130,6 @@ rvn_rvi_process_ggplot <- function(rvi_conn,
   # build layout for all nodes (to be one by rvn_rvi_process_layout)
   layout <- rvn_rvi_process_layout(verts)
 
-  # nverts<-length(verts)
-  # layout<-matrix(1:nverts*2,nrow=nverts,ncol=2)
-  # count=1
-  #
-  # for (i in 1:nverts) {
-  #   if      (verts[i]=="ATMOSPHERE"){layout[i,1]=5; layout[i,2]=6;}
-  #   else if (verts[i]=="ATMOS_PRECIP"){layout[i,1]=1; layout[i,2]=6.2;}
-  #
-  #   else if (verts[i]=="CANOPY_SNOW"){layout[i,1]=0; layout[i,2]=5;}
-  #   else if (verts[i]=="CANOPY"     ){layout[i,1]=1; layout[i,2]=5.3;}
-  #
-  #   else if (verts[i]=="SNOW_LIQ"         ){layout[i,1]=-1; layout[i,2]=4;}
-  #   else if (verts[i]=="SNOW"         ){layout[i,1]=0; layout[i,2]=4.3;}
-  #   else if (verts[i]=="PONDED_WATER" ){layout[i,1]=1; layout[i,2]=4.6;}
-  #   else if (verts[i]=="DEPRESSION" ){layout[i,1]=2; layout[i,2]=4.9;}
-  #   else if (verts[i]=="WETLAND" ){layout[i,1]=3; layout[i,2]=5.2;}
-  #
-  #   else if (verts[i]=="SOIL[0]"){layout[i,1]=2; layout[i,2]=3;}
-  #   else if (verts[i]=="SURFACE_WATER"    ){layout[i,1]=6; layout[i,2]=3;}
-  #
-  #   else if (verts[i]=="SOIL[1]"    ){layout[i,1]=2; layout[i,2]=2;}
-  #   else if (verts[i]=="FAST_RESERVOIR"    ){layout[i,1]=2; layout[i,2]=2;}
-  #
-  #   else if (verts[i]=="SOIL[2]"    ){layout[i,1]=2; layout[i,2]=1;}
-  #   else if (verts[i]=="SLOW_RESERVOIR"){layout[i,1]=2; layout[i,2]=1;}
-  #
-  #   else if (verts[i]=="SOIL[3]"    ){layout[i,1]=2; layout[i,2]=0;}
-  #
-  #   else { layout[i,2]=count; count=count+1;layout[i,1]=-2;}
-  # }
-  # layout <- as.data.frame(layout)
-  # names(layout) <- c("x","y")
-  # layout$Label <- verts
-
   # convert base names in verts back to alias (if provided)
   if (!is.null(AliasTable)) {
     # convert verts back to alias
