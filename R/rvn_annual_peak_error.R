@@ -62,7 +62,7 @@
 #' @export rvn_annual_peak_error
 #' @importFrom stats lm
 #' @importFrom lubridate year date
-#' @importFrom ggplot2 ggplot aes geom_point geom_hline geom_text scale_x_discrete scale_y_continuous
+#' @importFrom ggplot2 ggplot aes geom_point geom_hline annotate scale_x_discrete scale_y_continuous
 rvn_annual_peak_error <- function(sim, obs, mm=9, dd=30, add_line = TRUE, add_labels = TRUE) {
 
   df.peak <- rvn_annual_peak(sim, obs, mm=mm, dd=dd)$df_peak

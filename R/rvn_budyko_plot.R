@@ -18,6 +18,7 @@
 #' @param x extensible time series object of PET, AET, and PRECIP (optional)
 #' @param x_indices extensible time series object of annual ARIDITY and EVAPORATION indices (optional)
 #' @param limiting_labels boolean whether to vertical line at x=1 and labels for 'Energy Limited' and 'Water Limited' to plot
+#' @param budyko_curve boolean whether to add curve to plot
 #' @param mm month of water year ending (default 9)
 #' @param dd day of water year ending (default 30)
 #' @return \item{p1}{returns Budyko plot as ggplot object}
@@ -51,13 +52,13 @@
 #' rvn_budyko_plot(x=x, budyko_curve=TRUE)
 #'
 #' @export rvn_budyko_plot
-#' @importFrom ggplot2 fortify ggplot geom_line scale_x_date xlab ylab theme aes scale_colour_brewer geom_bar
+#' @importFrom ggplot2 fortify ggplot geom_line scale_x_date xlab ylab theme aes scale_colour_brewer geom_bar coord_cartesian geom_vline
 #' @importFrom lubridate year
 rvn_budyko_plot <- function(x=NULL, x_indices=NULL, limiting_labels=FALSE, budyko_curve=FALSE,
                          mm=9, dd=30)
 {
 
-  ARIDITY <- EVAPORATIVE <- NULL
+  y <- ARIDITY <- EVAPORATIVE <- PET.P <- AET.P <- NULL
 
   if (!is.null(x)) {
     if ("xts" %notin% class(x)) {

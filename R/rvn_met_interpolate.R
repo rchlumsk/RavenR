@@ -153,7 +153,7 @@ rvn_met_interpolate <- function(weather_data=NULL,
       if (any(new_wd$max_temp < new_wd$min_temp)) {
         ind_all <- which(new_wd$max_temp < new_wd$min_temp)
 
-        if (length(ind)>0) {
+        if (length(ind_all)>0) {
           warning(sprintf("rvn_met_interpolate: There are %i rows where max_temp < min_temp.",length(ind_all)))
         }
       }

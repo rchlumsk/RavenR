@@ -5,7 +5,8 @@
 #' and returns the connections information as a network graph ggplot object.
 #'
 #' @details
-#' Uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot.
+#' Uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot
+#' with the \code{ggplot2} library..
 #'
 #' \code{sv_omit} is used to reduce the clutter in the process plot of state variables that
 #' one may wish to omit from the plot.
@@ -24,6 +25,9 @@
 #' arrow. Increasing this value will decrease the length of the line segment, and place the arrow
 #' further from the box. This value should generally be similar to the \code{arrow_size} parameter.
 #'
+#' The basic model structure outline is followed, but unrecognized state variables are plotted
+#' on the left hand side of the plot (determined with internal RavenR function \code{rvn_rvi_process_layout}).
+#'
 #' @param rvi_conn a list of connections and AliasTable, provided by \code{rvn_rvi_connections}
 #' @param sv_omit character vector of state variables to omit from the plot
 #' @param repel_force numeric value indicating the 'force' with which the repel function will move labels
@@ -36,9 +40,8 @@
 #'
 #' @return {p1}{returns ggplot object. Also generates a .pdf file in working directory if pdfplot argument is not NULL.}
 #'
-#' @note tries to follow basic network structure, accommodates unrecognized state variables on LHS of plot
-#'
 #' @seealso \code{\link{rvn_rvi_connections}} to generate connections table from an rvi object
+#' @seealso \code{\link{rvn_rvi_process_diagrammer}} to generate the structure plot using DiagrammeR.
 #'
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
@@ -62,13 +65,15 @@
 #'
 #' @export rvn_rvi_process_ggplot
 #' @importFrom igraph get.data.frame graph_from_data_frame vertex.attributes
-#' @importFrom ggplot2 ggplot geom_segment geom_label xlim theme aes arrow unit ggsave
+#' @importFrom ggplot2 ggplot geom_segment geom_label xlim theme aes arrow unit ggsave scale_colour_manual scale_linetype_manual
 rvn_rvi_process_ggplot <- function(rvi_conn,
                                    sv_omit=c("SNOW_DEPTH","COLD_CONTENT","PONDED_WATER/SNOW_LIQ","NEW_SNOW","SNOW_DEFICIT"),
                                    repel_force=1e-3, repel_iter=2000, lbl_size=0.5,
                                    lbl_fill="lightblue", arrow_size=0.25, arrow_adj=0.25,
                                    pdfout=NULL)
 {
+
+  x <- y <- NULL
 
   if (is.null(rvi_conn)) {
     stop("rvn_rvi_process_ggplot: rvi_conn is required")
@@ -123,39 +128,41 @@ rvn_rvi_process_ggplot <- function(rvi_conn,
   }
 
   # build layout for all nodes (to be one by rvn_rvi_process_layout)
-  nverts<-length(verts)
-  layout<-matrix(1:nverts*2,nrow=nverts,ncol=2)
-  count=1
+  layout <- rvn_rvi_process_layout(verts)
 
-  for (i in 1:nverts) {
-    if      (verts[i]=="ATMOSPHERE"){layout[i,1]=5; layout[i,2]=6;}
-    else if (verts[i]=="ATMOS_PRECIP"){layout[i,1]=1; layout[i,2]=6.2;}
-
-    else if (verts[i]=="CANOPY_SNOW"){layout[i,1]=0; layout[i,2]=5;}
-    else if (verts[i]=="CANOPY"     ){layout[i,1]=1; layout[i,2]=5.3;}
-
-    else if (verts[i]=="SNOW_LIQ"         ){layout[i,1]=-1; layout[i,2]=4;}
-    else if (verts[i]=="SNOW"         ){layout[i,1]=0; layout[i,2]=4.3;}
-    else if (verts[i]=="PONDED_WATER" ){layout[i,1]=1; layout[i,2]=4.6;}
-    else if (verts[i]=="DEPRESSION" ){layout[i,1]=2; layout[i,2]=4.9;}
-    else if (verts[i]=="WETLAND" ){layout[i,1]=3; layout[i,2]=5.2;}
-
-    else if (verts[i]=="SOIL[0]"){layout[i,1]=2; layout[i,2]=3;}
-    else if (verts[i]=="SURFACE_WATER"    ){layout[i,1]=6; layout[i,2]=3;}
-
-    else if (verts[i]=="SOIL[1]"    ){layout[i,1]=2; layout[i,2]=2;}
-    else if (verts[i]=="FAST_RESERVOIR"    ){layout[i,1]=2; layout[i,2]=2;}
-
-    else if (verts[i]=="SOIL[2]"    ){layout[i,1]=2; layout[i,2]=1;}
-    else if (verts[i]=="SLOW_RESERVOIR"){layout[i,1]=2; layout[i,2]=1;}
-
-    else if (verts[i]=="SOIL[3]"    ){layout[i,1]=2; layout[i,2]=0;}
-
-    else { layout[i,2]=count; count=count+1;layout[i,1]=-2;}
-  }
-  layout <- as.data.frame(layout)
-  names(layout) <- c("x","y")
-  layout$Label <- verts
+  # nverts<-length(verts)
+  # layout<-matrix(1:nverts*2,nrow=nverts,ncol=2)
+  # count=1
+  #
+  # for (i in 1:nverts) {
+  #   if      (verts[i]=="ATMOSPHERE"){layout[i,1]=5; layout[i,2]=6;}
+  #   else if (verts[i]=="ATMOS_PRECIP"){layout[i,1]=1; layout[i,2]=6.2;}
+  #
+  #   else if (verts[i]=="CANOPY_SNOW"){layout[i,1]=0; layout[i,2]=5;}
+  #   else if (verts[i]=="CANOPY"     ){layout[i,1]=1; layout[i,2]=5.3;}
+  #
+  #   else if (verts[i]=="SNOW_LIQ"         ){layout[i,1]=-1; layout[i,2]=4;}
+  #   else if (verts[i]=="SNOW"         ){layout[i,1]=0; layout[i,2]=4.3;}
+  #   else if (verts[i]=="PONDED_WATER" ){layout[i,1]=1; layout[i,2]=4.6;}
+  #   else if (verts[i]=="DEPRESSION" ){layout[i,1]=2; layout[i,2]=4.9;}
+  #   else if (verts[i]=="WETLAND" ){layout[i,1]=3; layout[i,2]=5.2;}
+  #
+  #   else if (verts[i]=="SOIL[0]"){layout[i,1]=2; layout[i,2]=3;}
+  #   else if (verts[i]=="SURFACE_WATER"    ){layout[i,1]=6; layout[i,2]=3;}
+  #
+  #   else if (verts[i]=="SOIL[1]"    ){layout[i,1]=2; layout[i,2]=2;}
+  #   else if (verts[i]=="FAST_RESERVOIR"    ){layout[i,1]=2; layout[i,2]=2;}
+  #
+  #   else if (verts[i]=="SOIL[2]"    ){layout[i,1]=2; layout[i,2]=1;}
+  #   else if (verts[i]=="SLOW_RESERVOIR"){layout[i,1]=2; layout[i,2]=1;}
+  #
+  #   else if (verts[i]=="SOIL[3]"    ){layout[i,1]=2; layout[i,2]=0;}
+  #
+  #   else { layout[i,2]=count; count=count+1;layout[i,1]=-2;}
+  # }
+  # layout <- as.data.frame(layout)
+  # names(layout) <- c("x","y")
+  # layout$Label <- verts
 
   # convert base names in verts back to alias (if provided)
   if (!is.null(AliasTable)) {
@@ -190,8 +197,6 @@ rvn_rvi_process_ggplot <- function(rvi_conn,
   network<-graph_from_data_frame(d=nodes,directed=TRUE)
 
   # shift points using repel_boxes
-  ##
-  # need to update boxes here to get their actual sizes
   bounds <- label_bounds(label=layout$Label,
                          x=layout$x,
                          y=layout$y,

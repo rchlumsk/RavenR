@@ -9,9 +9,9 @@ rvn_download(version = NA, NetCDF = FALSE, check = FALSE)
 \arguments{
 \item{version}{(optional) Character: The version of Raven to be downloaded. If not provided, the latest version will be downloaded.}
 
-\item{check}{(logical) if \code{TRUE}, function will only check whether 'Raven.exe' has been downloaded to the RavenR folder}
+\item{NetCDF}{(logical) whether to download the NetCDF-enabled version of Raven (default \code{FALSE})}
 
-\item{netCDF}{(logical) whether to download the NetCDF-enabled version of Raven (default \code{FALSE})}
+\item{check}{(logical) if \code{TRUE}, function will only check whether 'Raven.exe' has been downloaded to the RavenR folder}
 }
 \value{
 Returns \code{TRUE} if executed successfully

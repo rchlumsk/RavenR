@@ -5,16 +5,31 @@
 \title{Plot Raven hydrologic process network using DiagrammeR}
 \usage{
 rvn_rvi_process_diagrammer(
-  connections,
-  AliasTable = NULL,
-  sv_omit = c("SNOW_DEPTH", "COLD_CONTENT", "PONDED_WATER/SNOW_LIQ", "NEW_SNOW"),
+  rvi_conn,
+  sv_omit = c("SNOW_DEPTH", "COLD_CONTENT", "PONDED_WATER/SNOW_LIQ", "NEW_SNOW",
+    "SNOW_DEFICIT"),
+  repel_force = 0.001,
+  repel_iter = 2000,
+  lbl_size = 0.5,
+  lbl_height = 0.3,
+  lbl_width = 1,
   pdfout = NULL
 )
 }
 \arguments{
-\item{connections}{a dataframe of from-to connections generated using rvn_rvi_connections()}
+\item{rvi_conn}{a list of connections and AliasTable, provided by \code{rvn_rvi_connections}}
 
-\item{AliasTable}{a dataframe of state variable aliases, such as the one returned by \code{\link{rvn_rvi_read}}}
+\item{sv_omit}{character vector of state variables to omit from the plot}
+
+\item{repel_force}{numeric value indicating the 'force' with which the repel function will move labels}
+
+\item{repel_iter}{the maximum number of iterations for the repel algorithm}
+
+\item{lbl_size}{estimated height of labels, used in repel algorithm}
+
+\item{lbl_height}{actual height of the labels (in inches)}
+
+\item{lbl_width}{relative width of the labels (multiplier)}
 
 \item{pdfout}{name of pdf file to save the network plot to, if null no PDF is generated}
 }
@@ -26,33 +41,59 @@ This routine takes a connections data from generated using rvn_rvi_connections()
 and returns the connections information as a DiagrammeR object.
 }
 \details{
-Uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot.
+Uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot
+with the \code{DiagrammeR} library.
 
-Note that the output can be also be plotted using the \code{\link{render_graph}} function
-in the DiagrammeR library.
+Note that the output can be plotted using the \code{\link{render_graph}} function
+in the DiagrammeR library. The outputted DiagrammeR object may also have aesthetics modified
+with various commands from the
+same library, if desired, as shown in the examples. The \code{rsvg} and \code{DiagrammeRsvg} packages
+may be required to export to PDF with desired results,
+but are not explicit dependencies of RavenR.
 
-The outputted DiagrammeR object may also have aesthetics modified with various commands from the
-same library, if desired.
-}
-\note{
-tries to follow basic network structure, accommodates unrecognized state variables on LHS of plot
+\code{sv_omit} is used to reduce the clutter in the process plot of state variables that
+one may wish to omit from the plot.
+
+The function uses the functionality from \code{ggrepel} to repel labels from one another.
+The degree of separation in the labels can be controlled by the \code{repel_force} and
+\code{lbl_size} parameters (increasing either will increase the separation between labels).
+The \code{repel_force} may range from approximately 1 to 1e-6. The \code{lbl_size} is a
+relative estimate of the label height (default 0.5), which is used in estimating the label
+size in the repel functionality. Providing a larger number will increase the perceived size
+of the label in the repel functionality and tend towards more separation between labels, and
+vice-versa. Both of these parameters may need to change depending on the plot size and number
+of labels. The \code{lbl_height} and \code{lbl_width} parameters can be changed to affect
+the height and relative width of the actual labels.
+
+The basic model structure outline is followed, but unrecognized state variables are plotted
+on the left hand side of the plot (determined with internal RavenR function \code{rvn_rvi_process_layout}).
 }
 \examples{
-rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
-conn <- rvn_rvi_connections(rvi)
+d1 <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR")) \%>\%
+  rvn_rvi_connections() \%>\%
+    rvn_rvi_process_diagrammer()
 
+# plot diagram using the DiagrammeR package
 library(DiagrammeR)
 
-rvn_rvi_process_diagrammer(conn) \%>\%
-render_graph()
+d1 \%>\%
+  render_graph()
 
-# provide with AliasTable
-rvn_rvi_process_diagrammer(conn, AliasTable=rvi$AliasTable) \%>\%
-render_graph()
+# modify default plot attributes, plot
+d1 \%>\%
+  select_nodes() \%>\%
+  set_node_attrs_ws(node_attr = fillcolor, value = "hotpink") \%>\%
+  select_edges() \%>\%
+  set_edge_attrs_ws(edge_attr = style, value = "dashed") \%>\%
+  set_edge_attrs_ws(edge_attr = penwidth, value = 2) \%>\%
+  render_graph()
 
 }
 \seealso{
 \code{\link{rvn_rvi_connections}} to generate connections table from an rvi object
 
-See also the \href{http://raven.uwaterloo.ca/}{Raven page}
+\code{\link{rvn_rvi_process_ggplot}} to generate the structure plot using ggplot.
+
+See also the \href{http://raven.uwaterloo.ca/}{Raven page}. Additional details on the
+\code{DiagrammeR} package may be found on the \href{https://github.com/rich-iannone/DiagrammeR}{Github page}.
 }

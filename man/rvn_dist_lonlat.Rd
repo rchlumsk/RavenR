@@ -15,6 +15,9 @@ rvn_dist_lonlat(p1, p2, method = "haversine", r = 6378137)
 
 \item{r}{radius of the Earth in metres (default 6378137)}
 }
+\value{
+a vector of calculated distances (length of vector based on input)
+}
 \description{
 Calculates distance between points based on a set of long/lat coordinates.
 }
@@ -29,9 +32,12 @@ scripts for \code{distHaversine} and \code{distVincentySphere}.
 }
 \examples{
 # calculate distance from Engineering 2 (p1) to Graduate House (p2) at the University of Waterloo
-rvn_dist_latlon(p1=c(-80.5402891965711,43.47088594350457), p2=c(-80.54096577853629,43.46976096704924))
+p1 <- c(-80.5402891965711,43.47088594350457)
+p2 <- c(-80.54096577853629,43.46976096704924)
+rvn_dist_lonlat(p1, p2)
 
 # distance from University of Waterloo to Windsor
-rvn_dist_latlon(p1=c(-80.5402891965711,43.47088594350457), p2=c(-83.02099905916948,42.283371378771555))
+p2 <- c(-83.02099905916948,42.283371378771555)
+rvn_dist_lonlat(p1, p2)
 
 }

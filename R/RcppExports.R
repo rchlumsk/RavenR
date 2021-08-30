@@ -98,7 +98,6 @@ intersect_line_rectangle <- function(p1, p2, b) {
 #' @param maxiter Maximum number of iterations to try to resolve overlaps
 #'   (defaults to 2000)
 #' @noRd
-#' @export repel_boxes
 repel_boxes <- function(data_points, point_padding_x, point_padding_y, boxes, xlim, ylim, force = 1e-6, maxiter = 2000L, direction = "both") {
     .Call('_RavenR_repel_boxes', PACKAGE = 'RavenR', data_points, point_padding_x, point_padding_y, boxes, xlim, ylim, force, maxiter, direction)
 }

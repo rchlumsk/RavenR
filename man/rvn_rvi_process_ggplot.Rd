@@ -44,7 +44,8 @@ This routine takes a connections data from generated using \code{rvn_rvi_connect
 and returns the connections information as a network graph ggplot object.
 }
 \details{
-Uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot.
+Uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot
+with the \code{ggplot2} library..
 
 \code{sv_omit} is used to reduce the clutter in the process plot of state variables that
 one may wish to omit from the plot.
@@ -62,9 +63,9 @@ of labels.
 \code{arrow_adj} is the amount that each line segment is reduced in length to accomodate the
 arrow. Increasing this value will decrease the length of the line segment, and place the arrow
 further from the box. This value should generally be similar to the \code{arrow_size} parameter.
-}
-\note{
-tries to follow basic network structure, accommodates unrecognized state variables on LHS of plot
+
+The basic model structure outline is followed, but unrecognized state variables are plotted
+on the left hand side of the plot (determined with internal RavenR function \code{rvn_rvi_process_layout}).
 }
 \examples{
 
@@ -87,6 +88,8 @@ p1 + scale_linetype_manual(values=c('FALSE'='longdash', 'TRUE'='twodash'))
 }
 \seealso{
 \code{\link{rvn_rvi_connections}} to generate connections table from an rvi object
+
+\code{\link{rvn_rvi_process_diagrammer}} to generate the structure plot using DiagrammeR.
 
 See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 }

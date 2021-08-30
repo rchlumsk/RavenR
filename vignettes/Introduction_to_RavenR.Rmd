@@ -183,8 +183,6 @@ A fun feature in the RavenR package is the addition of dygraphs, which produces 
 rvn_hyd_dygraph(hy, basins="Sub36")
 ```
 
-<!-- add note about dygraphs? decide whether to include xxx -->
-
 While this tutorial focuses on the forcing functions and hydrograph data, similar routines exist for reading in the reservoir stages output, the watershed mass energy balance files, and other Raven outputs.
 
 ### RavenR Time Series Utilities

@@ -402,7 +402,6 @@ Point spring_force(
 //' @param maxiter Maximum number of iterations to try to resolve overlaps
 //'   (defaults to 2000)
 //' @noRd
-//' @export repel_boxes
 // [[Rcpp::export]]
 DataFrame repel_boxes(
     NumericMatrix data_points,

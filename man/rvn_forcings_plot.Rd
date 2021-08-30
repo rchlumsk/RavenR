@@ -34,12 +34,13 @@ p1$Precipitation
 p1$AllForcings
 
 # plot subset of forcing data for 2002-2003 water year
-prd = "2002-10-01/2003-09-30"
+prd <- "2002-10-01/2003-09-30"
 rvn_forcings_plot(fdata,prd)$AllForcings
 
+# add Legend back to plot (using ggplot2::theme)
+library(ggplot2)
 rvn_forcings_plot(fdata,prd)$Temperature+
 theme(legend.position='top')
-
 
 }
 \seealso{

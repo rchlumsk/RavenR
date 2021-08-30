@@ -20,7 +20,7 @@
 #' Once downloaded, the Raven.exe file can be found with \code{system.file("extdata", "Raven.exe", package="RavenR")}
 #'
 #' @param version (optional) Character: The version of Raven to be downloaded. If not provided, the latest version will be downloaded.
-#' @param netCDF (logical) whether to download the NetCDF-enabled version of Raven (default \code{FALSE})
+#' @param NetCDF (logical) whether to download the NetCDF-enabled version of Raven (default \code{FALSE})
 #' @param check (logical) if \code{TRUE}, function will only check whether 'Raven.exe' has been downloaded to the RavenR folder
 #' @return Returns \code{TRUE} if executed successfully
 #'
@@ -50,6 +50,8 @@ rvn_download<-function(version=NA,NetCDF=FALSE,check=FALSE)
 {
    # path<-paste(.libPaths()[1],"/RavenR/",sep="")
    # path1<-paste(.libPaths()[1],"/RavenR",sep="")
+
+   . <- NULL
 
    download_path <- tempdir()
    save_path <- system.file("extdata",package="RavenR")

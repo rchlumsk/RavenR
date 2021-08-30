@@ -133,18 +133,18 @@ rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
         if (any(difftime_check != difftime_check[1])) {
           # unable to fix with rvn_ts_infill
           stop(sprintf("rvn_rvt_write: Inconsistent timesteps found in data for %s, which were not rectified with rvn_ts_infill.\nPlease review and fix time step issues in time series.",
-                       rvt.name))
+                       filename))
         } else {
           # time series fixed with rvn_ts_infill, replace x and proceed
           x <- x_infilled
-          warning(sprintf("rvn_rvt_write: Time series for %s adjusted with rvn_ts_infill.", rvt.name))
+          warning(sprintf("rvn_rvt_write: Time series for %s adjusted with rvn_ts_infill.", filename))
         }
 
       } else {
         # length longer than expected, likely that some smaller frequency points exist.
         # print(sprintf("error encountered on iteration %i",i))
         stop(sprintf("rvn_rvt_write: Inconsistent timesteps found in data for %s, and series is longer than anticipated.\nConsider reducing temporal resolution to a consistent one with xts::apply* functions and/or infilling with rvn_ts_infill.",
-                     rvt.name))
+                     filename))
       }
     }
     time_interval <- as.numeric(difftime_check[1])

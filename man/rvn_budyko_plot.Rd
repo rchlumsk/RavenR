@@ -20,6 +20,8 @@ rvn_budyko_plot(
 
 \item{limiting_labels}{boolean whether to vertical line at x=1 and labels for 'Energy Limited' and 'Water Limited' to plot}
 
+\item{budyko_curve}{boolean whether to add curve to plot}
+
 \item{mm}{month of water year ending (default 9)}
 
 \item{dd}{day of water year ending (default 30)}

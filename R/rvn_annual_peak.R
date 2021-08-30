@@ -55,7 +55,7 @@
 #' @export rvn_annual_peak
 #' @importFrom stats lm
 #' @importFrom lubridate year date
-#' @importFrom ggplot2 ggplot aes geom_point geom_abline geom_text scale_x_continuous scale_y_continuous
+#' @importFrom ggplot2 ggplot aes geom_point geom_abline annotate scale_x_continuous scale_y_continuous
 rvn_annual_peak <- function(sim, obs, mm=9, dd=30, add_line = TRUE,
                              add_r2 = FALSE, add_eqn = FALSE)
 {

@@ -5,51 +5,104 @@
 #' and returns the connections information as a DiagrammeR object.
 #'
 #' @details
-#' Uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot.
+#' Uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot
+#' with the \code{DiagrammeR} library.
 #'
-#' Note that the output can be also be plotted using the \code{\link{render_graph}} function
-#' in the DiagrammeR library.
+#' Note that the output can be plotted using the \code{\link{render_graph}} function
+#' in the DiagrammeR library. The outputted DiagrammeR object may also have aesthetics modified
+#' with various commands from the
+#' same library, if desired, as shown in the examples. The \code{rsvg} and \code{DiagrammeRsvg} packages
+#' may be required to export to PDF with desired results,
+#' but are not explicit dependencies of RavenR.
 #'
-#' The outputted DiagrammeR object may also have aesthetics modified with various commands from the
-#' same library, if desired.
+#' \code{sv_omit} is used to reduce the clutter in the process plot of state variables that
+#' one may wish to omit from the plot.
 #'
-#' @param connections a dataframe of from-to connections generated using rvn_rvi_connections()
-#' @param AliasTable a dataframe of state variable aliases, such as the one returned by \code{\link{rvn_rvi_read}}
+#' The function uses the functionality from \code{ggrepel} to repel labels from one another.
+#' The degree of separation in the labels can be controlled by the \code{repel_force} and
+#' \code{lbl_size} parameters (increasing either will increase the separation between labels).
+#' The \code{repel_force} may range from approximately 1 to 1e-6. The \code{lbl_size} is a
+#' relative estimate of the label height (default 0.5), which is used in estimating the label
+#' size in the repel functionality. Providing a larger number will increase the perceived size
+#' of the label in the repel functionality and tend towards more separation between labels, and
+#' vice-versa. Both of these parameters may need to change depending on the plot size and number
+#' of labels. The \code{lbl_height} and \code{lbl_width} parameters can be changed to affect
+#' the height and relative width of the actual labels.
+#'
+#' The basic model structure outline is followed, but unrecognized state variables are plotted
+#' on the left hand side of the plot (determined with internal RavenR function \code{rvn_rvi_process_layout}).
+#'
+#' @param rvi_conn a list of connections and AliasTable, provided by \code{rvn_rvi_connections}
+#' @param sv_omit character vector of state variables to omit from the plot
+#' @param repel_force numeric value indicating the 'force' with which the repel function will move labels
+#' @param repel_iter the maximum number of iterations for the repel algorithm
+#' @param lbl_size estimated height of labels, used in repel algorithm
+#' @param lbl_height actual height of the labels (in inches)
+#' @param lbl_width relative width of the labels (multiplier)
 #' @param pdfout name of pdf file to save the network plot to, if null no PDF is generated
 #'
 #' @return \code{d1} returns DiagrammeR object. Also generates a .pdf file in working directory if pdfplot argument is not NULL.
 #'
-#'
-#' @note tries to follow basic network structure, accommodates unrecognized state variables on LHS of plot
-#'
 #' @seealso \code{\link{rvn_rvi_connections}} to generate connections table from an rvi object
+#' @seealso \code{\link{rvn_rvi_process_ggplot}} to generate the structure plot using ggplot.
 #'
-#' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
+#' See also the \href{http://raven.uwaterloo.ca/}{Raven page}. Additional details on the
+#' \code{DiagrammeR} package may be found on the \href{https://github.com/rich-iannone/DiagrammeR}{Github page}.
 #'
 #' @examples
-#' rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
-#' conn <- rvn_rvi_connections(rvi)
+#' d1 <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR")) %>%
+#'   rvn_rvi_connections() %>%
+#'     rvn_rvi_process_diagrammer()
 #'
+#' # plot diagram using the DiagrammeR package
 #' library(DiagrammeR)
 #'
-#' rvn_rvi_process_diagrammer(conn) %>%
-#' render_graph()
+#' d1 %>%
+#'   render_graph()
 #'
-#' # provide with AliasTable
-#' rvn_rvi_process_diagrammer(conn, AliasTable=rvi$AliasTable) %>%
-#' render_graph()
+#' # modify default plot attributes, plot
+#' d1 %>%
+#'   select_nodes() %>%
+#'   set_node_attrs_ws(node_attr = fillcolor, value = "hotpink") %>%
+#'   select_edges() %>%
+#'   set_edge_attrs_ws(edge_attr = style, value = "dashed") %>%
+#'   set_edge_attrs_ws(edge_attr = penwidth, value = 2) %>%
+#'   render_graph()
 #'
 #' @importFrom igraph get.data.frame graph_from_data_frame vertex.attributes
-#' @importFrom DiagrammeR get_node_df set_node_position create_graph add_node add_edge edge_aes export_graph
-#'
+#' @importFrom DiagrammeR get_node_df set_node_position create_graph add_node add_edge edge_aes node_aes export_graph
 #' @export rvn_rvi_process_diagrammer
-#'
-rvn_rvi_process_diagrammer <- function(connections, AliasTable=NULL,
-                                       sv_omit=c("SNOW_DEPTH","COLD_CONTENT","PONDED_WATER/SNOW_LIQ","NEW_SNOW"),
+rvn_rvi_process_diagrammer <- function(rvi_conn,
+                                       sv_omit=c("SNOW_DEPTH","COLD_CONTENT","PONDED_WATER/SNOW_LIQ","NEW_SNOW","SNOW_DEFICIT"),
+                                       repel_force=1e-3, repel_iter=2000, lbl_size=0.5,
+                                       lbl_height=0.3, lbl_width=1.0,
                                        pdfout=NULL)
 {
 
   # nchar_per_inch <- 8 # number of characters per inch in box widths of each state variable
+
+  if (is.null(rvi_conn)) {
+    stop("rvn_rvi_process_diagrammer: rvi_conn is required")
+  } else if (paste(names(rvi_conn),collapse=" ") != "connections AliasTable") {
+    stop("rvn_rvi_process_diagrammer: rvi_conn must be produced by rvn_rvi_connections, and contain connections and AliasTable.")
+  }
+
+  connections <- rvi_conn$connections
+  AliasTable <- rvi_conn$AliasTable
+
+  # internal plotting parameters, not intended to change (can be changed by user in plot object)
+  # arrow_adj <- 0.25
+  # arrow_size <- 0.3
+  # lbl_fill <- "lightblue"
+  lbl_fill="lightblue"
+  arrow_size=1.0
+  line_color_cond <- "orange"
+  line_type_cond <- "dashed"
+  line_color_base <- "lightgrey"
+  line_type_base <- "solid"
+  lbl_fontcolor <- "black"
+  lbl_outline_color <- "black"
+  lbl_outline_width <- 1.0
 
   # replace all aliased names by their basename for plotting
   if (!is.null(AliasTable)) {
@@ -77,71 +130,60 @@ rvn_rvi_process_diagrammer <- function(connections, AliasTable=NULL,
   # remove any verts in sv_omit
   if (!is.null(sv_omit)) {
     verts <- verts[verts %notin% sv_omit]
+
+    # update connections with removed sv_omit
+    connections <-
+      connections[-unique(c(which(connections$From %in% sv_omit), which(connections$To %in% sv_omit))),]
   }
 
   # build layout for all nodes (to be one by rvn_rvi_process_layout)
-  nverts<-length(verts)
-  layout<-matrix(1:nverts*2,nrow=nverts,ncol=2)
-  count=1
-
-  for (i in 1:nverts) {
-    if      (verts[i]=="ATMOSPHERE"){layout[i,1]=5; layout[i,2]=6;}
-    else if (verts[i]=="ATMOS_PRECIP"){layout[i,1]=1; layout[i,2]=6.2;}
-
-    else if (verts[i]=="CANOPY_SNOW"){layout[i,1]=0; layout[i,2]=5;}
-    else if (verts[i]=="CANOPY"     ){layout[i,1]=1; layout[i,2]=5.3;}
-
-    else if (verts[i]=="SNOW_LIQ"         ){layout[i,1]=-1; layout[i,2]=4;}
-    else if (verts[i]=="SNOW"         ){layout[i,1]=0; layout[i,2]=4.3;}
-    else if (verts[i]=="PONDED_WATER" ){layout[i,1]=1; layout[i,2]=4.6;}
-    else if (verts[i]=="DEPRESSION" ){layout[i,1]=2; layout[i,2]=4.9;}
-    else if (verts[i]=="WETLAND" ){layout[i,1]=3; layout[i,2]=5.2;}
-
-    else if (verts[i]=="SOIL[0]"){layout[i,1]=2; layout[i,2]=3;}
-    else if (verts[i]=="SURFACE_WATER"    ){layout[i,1]=6; layout[i,2]=3;}
-
-    else if (verts[i]=="SOIL[1]"    ){layout[i,1]=2; layout[i,2]=2;}
-    else if (verts[i]=="FAST_RESERVOIR"    ){layout[i,1]=2; layout[i,2]=2;}
-
-    else if (verts[i]=="SOIL[2]"    ){layout[i,1]=2; layout[i,2]=1;}
-    else if (verts[i]=="SLOW_RESERVOIR"){layout[i,1]=2; layout[i,2]=1;}
-
-    else if (verts[i]=="SOIL[3]"    ){layout[i,1]=2; layout[i,2]=0;}
-
-    else { layout[i,2]=count; count=count+1;layout[i,1]=-2;}
-  }
-  layout <- as.data.frame(layout)
-  layout$Label <- verts
-
+  layout <- rvn_rvi_process_layout(verts)
 
   # convert base names in verts back to alias (if provided)
   if (!is.null(AliasTable)) {
+    # convert verts back to alias
     if (any(verts %in% AliasTable$basename)) {
       verts[which(verts %in% AliasTable$basename)] <-
         AliasTable$alias[match(verts[which(verts %in% AliasTable$basename)],
-                                  table=AliasTable$basename)]
+                               table=AliasTable$basename)]
     }
 
+    # convert connections back to alias
     if (any(AliasTable$basename %in% connections$From)) {
       connections$From[which(connections$From %in% AliasTable$basename)] <-
         AliasTable$alias[match(connections$From[which(connections$From %in% AliasTable$basename)],
-                                  table=AliasTable$basename)]
+                               table=AliasTable$basename)]
     }
     if (any(AliasTable$basename %in% connections$To)) {
       connections$To[which(connections$To %in% AliasTable$basename)] <-
         AliasTable$alias[match(connections$To[which(connections$To %in% AliasTable$basename)],
-                                  table=AliasTable$basename)]
+                               table=AliasTable$basename)]
     }
+    # update layout with alias names
+    layout$Label <- verts
   }
 
+  # shift points using repel_boxes
+  bounds <- label_bounds(label=layout$Label,
+                         x=layout$x,
+                         y=layout$y,
+                         height=lbl_size, rotation=0,
+                         just="center") %>%
+    reformat_bounds()
 
+  xxlim <- list(x=c(min(layout$x)-2, max(layout$x)+2))
+  yylim <- list(y=c(min(layout$y)-2, max(layout$y)+2))
 
-  # oldlayout <- layout
-
-
-  # adjust spacing in plot
-  # layout <- oldlayout
-  # layout[,c(1,2)] <- space(layout$V1, layout$V2, s=c(max(nchar(verts))/nchar_per_inch/4,1/4), direction='xy')
+  layout[,c("x","y")] <- repel_boxes(data_points=as.matrix(layout[,c("x","y")]),
+                                     boxes=as.matrix(bounds[, c("xmin", "ymin", "xmax", "ymax")]),
+                                     point_padding_x = 0,
+                                     point_padding_y = 0,
+                                     xlim=xxlim$x,
+                                     ylim=yylim$y,
+                                     force=repel_force,
+                                     maxiter=repel_iter,
+                                     direction = "both")
+  ## end of repel_boxes section
 
 
   # build diagrammer graph and start building, add vertices, add edges, then update positions
@@ -152,8 +194,14 @@ rvn_rvi_process_diagrammer <- function(connections, AliasTable=NULL,
                           node_aes=node_aes(shape='rectangle',
                                             fontname='Helvetica',
                                             fontsize=12,
-                                            width=nchar(verts[i])/nchar_per_inch, # 1 inch width per 8 characters
-                                            style='filled'))
+                                            # width=nchar(verts[i])/nchar_per_inch, # 1 inch width per 8 characters
+                                            width=text_grob_length(verts[i])*0.2*lbl_width,
+                                            height=lbl_height,
+                                            style='filled',
+                                            fillcolor=lbl_fill,
+                                            fontcolor=lbl_fontcolor,
+                                            color=lbl_outline_color,
+                                            penwidth=lbl_outline_width))
   }
 
   for (i in 1:nrow(connections)) {
@@ -163,8 +211,9 @@ rvn_rvi_process_diagrammer <- function(connections, AliasTable=NULL,
         d1 <- d1 %>% add_edge(from=connections$From[i],
                               to=connections$To[i],
                               edge_aes = edge_aes(
-                                color = "red",
-                                arrowsize = 0.5
+                                color = line_color_cond,
+                                arrowsize = arrow_size,
+                                style = line_type_cond
                               ),
                               edge_data=list("algorithm"=connections$Algorithm[i],
                                              "processtype"=connections$ProcessType[i],
@@ -173,8 +222,9 @@ rvn_rvi_process_diagrammer <- function(connections, AliasTable=NULL,
         d1 <- d1 %>% add_edge(from=connections$From[i],
                               to=connections$To[i],
                               edge_aes = edge_aes(
-                                color = "grey20",
-                                arrowsize = 0.5
+                                color = line_color_base,
+                                arrowsize = arrow_size,
+                                style = line_type_base
                               ),
                               edge_data=list("algorithm"=connections$Algorithm[i],
                                              "processtype"=connections$ProcessType[i],

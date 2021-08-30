@@ -765,12 +765,17 @@ get_rvt_met_mapping_weathercan <- function() {
 #' @param method calculation method as either \code{haversine} (default) or {vincentysphere}
 #' @param r radius of the Earth in metres (default 6378137)
 #'
+#' @return a vector of calculated distances (length of vector based on input)
+#'
 #' @examples
 #' # calculate distance from Engineering 2 (p1) to Graduate House (p2) at the University of Waterloo
-#' rvn_dist_latlon(p1=c(-80.5402891965711,43.47088594350457), p2=c(-80.54096577853629,43.46976096704924))
+#' p1 <- c(-80.5402891965711,43.47088594350457)
+#' p2 <- c(-80.54096577853629,43.46976096704924)
+#' rvn_dist_lonlat(p1, p2)
 #'
 #' # distance from University of Waterloo to Windsor
-#' rvn_dist_latlon(p1=c(-80.5402891965711,43.47088594350457), p2=c(-83.02099905916948,42.283371378771555))
+#' p2 <- c(-83.02099905916948,42.283371378771555)
+#' rvn_dist_lonlat(p1, p2)
 #'
 #' @export rvn_dist_lonlat
 rvn_dist_lonlat <- function(p1, p2, method="haversine", r=6378137) {
@@ -809,6 +814,64 @@ rvn_dist_lonlat <- function(p1, p2, method="haversine", r=6378137) {
   }
 
   return(dist)
+}
+
+#' @title Determine layout coordinates of labels
+#'
+#' @description Provides the layout data frame based on the supplied vector of named Raven state variables.
+#'
+#' @details
+#' The position is based on the state variable, i.e. soils generally on the bottom, atmosphere at the top, etc.
+#' Unrecognized labels are generally placed on the left hand side of the layout.
+#'
+#' @param verts character vector of state variables to be included in the layout
+#' @return {layout}{a data frame of verts labels and xy coordinates intended for plotting labels}
+#'
+#' @noRd
+#' @keywords internal
+rvn_rvi_process_layout <- function(verts) {
+
+  if (is.null(verts)) {
+    return(NULL)
+  }
+
+  nverts<-length(verts)
+  layout<-matrix(1:nverts*2,nrow=nverts,ncol=2)
+  count=1
+
+  # update with additional
+
+  for (i in 1:nverts) {
+    if      (verts[i]=="ATMOSPHERE"){layout[i,1]=5; layout[i,2]=6;}
+    else if (verts[i]=="ATMOS_PRECIP"){layout[i,1]=1; layout[i,2]=6.2;}
+
+    else if (verts[i]=="CANOPY_SNOW"){layout[i,1]=0; layout[i,2]=5;}
+    else if (verts[i]=="CANOPY"     ){layout[i,1]=1; layout[i,2]=5.3;}
+
+    else if (verts[i]=="SNOW_LIQ"         ){layout[i,1]=-1; layout[i,2]=4;}
+    else if (verts[i]=="SNOW"         ){layout[i,1]=0; layout[i,2]=4.3;}
+    else if (verts[i]=="PONDED_WATER" ){layout[i,1]=1; layout[i,2]=4.6;}
+    else if (verts[i]=="DEPRESSION" ){layout[i,1]=2; layout[i,2]=4.9;}
+    else if (verts[i]=="WETLAND" ){layout[i,1]=3; layout[i,2]=5.2;}
+
+    else if (verts[i]=="SOIL[0]"){layout[i,1]=2; layout[i,2]=3;}
+    else if (verts[i]=="SURFACE_WATER"    ){layout[i,1]=6; layout[i,2]=3;}
+
+    else if (verts[i]=="SOIL[1]"    ){layout[i,1]=2; layout[i,2]=2;}
+    else if (verts[i]=="FAST_RESERVOIR"    ){layout[i,1]=2; layout[i,2]=2;}
+
+    else if (verts[i]=="SOIL[2]"    ){layout[i,1]=2; layout[i,2]=1;}
+    else if (verts[i]=="SLOW_RESERVOIR"){layout[i,1]=2; layout[i,2]=1;}
+
+    else if (verts[i]=="SOIL[3]"    ){layout[i,1]=2; layout[i,2]=0;}
+
+    else { layout[i,2]=count; count=count+1;layout[i,1]=-2;}
+  }
+  layout <- as.data.frame(layout)
+  names(layout) <- c("x","y")
+  layout$Label <- verts
+
+  return(layout)
 }
 
 #' Estimate text grob length
