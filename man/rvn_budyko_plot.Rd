@@ -69,7 +69,7 @@ rvn_budyko_plot(x=x, budyko_curve=TRUE)
 
 }
 \references{
-Budyko, M. I. (1974), Climate and Life, Academic Press, New York.
+Budyko, M.I. (1974), Climate and Life, Academic Press, New York.
 }
 \seealso{
 \code{\link{rvn_watershedmeb_read}} for reading in the WatershedMassEnergyBalance.csv file, and

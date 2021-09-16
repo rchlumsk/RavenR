@@ -13,7 +13,7 @@
 #' - x: an xts object with PRECIP, AET, and PET columns
 #' - x_indices: an xts object with indices calculated for each year, columns named ARIDITY and EVAPORATIVE
 #'
-#' @references Budyko, M. I. (1974), Climate and Life, Academic Press, New York.
+#' @references Budyko, M.I. (1974), Climate and Life, Academic Press, New York.
 #'
 #' @param x extensible time series object of PET, AET, and PRECIP (optional)
 #' @param x_indices extensible time series object of annual ARIDITY and EVAPORATION indices (optional)

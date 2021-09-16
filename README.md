@@ -54,9 +54,9 @@ A BibTeX entry for LaTeX users is:
 
 >  @Manual{RavenRPackage,  
 >      title = {RavenR: Raven Hydrological Modelling Framework R Support and Analysis},  
->      author = {Robert Chlumsky},  
+>      author = {Robert Chlumsky and James Craig and Leland Scantlebury and Simon Lin and Sarah Grass and Genevieve Brown and Rezgar Arabzadeh},  
 >      year = {2021},  
->      note = {R package version 2.1.1},  
+>      note = {R package version 2.1.5},  
 >      url = {https://github.com/rchlumsk/RavenR},  
 >  }
 
