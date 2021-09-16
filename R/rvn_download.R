@@ -45,7 +45,7 @@
 #' @export rvn_download
 #' @importFrom stringr str_match_all str_match
 #' @importFrom RCurl url.exists
-#' @importFrom utils win.version unzip download.file
+#' @importFrom utils osVersion unzip download.file
 rvn_download<-function(version=NA,NetCDF=FALSE,check=FALSE)
 {
    # path<-paste(.libPaths()[1],"/RavenR/",sep="")
@@ -68,24 +68,6 @@ rvn_download<-function(version=NA,NetCDF=FALSE,check=FALSE)
       # stop()
    }
 
-   # path1 <- system.file("extdata",package="RavenR")
-   # path <- sprintf("%s/",path1)
-
-   # rvn_get_os <- function()
-   # {
-   #    sysinf <- Sys.info()
-   #    if (!is.null(sysinf))
-   #    {
-   #       os <- sysinf["sysname"]
-   #       if (os == "Darwin") os <- "osx"
-   #    }else{
-   #       os <- .Platform$OS.type
-   #       if (grepl("^darwin", R.version$os))   os <- "osx"
-   #       if (grepl("linux-gnu", R.version$os)) os <- "linux"
-   #    }
-   #    tolower(os)
-   # }
-   # platform <- rvn_get_os()
    sysinf <- Sys.info()
    if (!is.null(sysinf))
    {
@@ -105,7 +87,7 @@ rvn_download<-function(version=NA,NetCDF=FALSE,check=FALSE)
 
    if(platform=="windows")
    {
-      arch<-win.version()
+      arch<-osVersion
       if (length(grep("x64",arch))==1)
       {
          versions<-matched[grep("Win64",matched)]

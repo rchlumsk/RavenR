@@ -2,15 +2,15 @@ Package: RavenR
 Type: Package
 Title: Raven Hydrological Modelling Framework R Support and Analysis
 Version: 2.1.2
-Date: 2021-08-30
+Date: 2021-09-16
 Authors@R: c(
     person("Robert", "Chlumsky", email = "rchlumsk@uwaterloo.ca", role = c("cre","aut"), comment = c(ORCID = "0000-0002-1303-5064")),
     person("James", "Craig", email = "jrcraig@uwaterloo.ca", role = c("ctb","aut"), comment = c(ORCID = "0000-0003-2715-7166")),
-    person("Leland", "Scantlebury", email = "lscantlebury@uwaterloo.ca", role = "ctb"),
-    person("Simon", "Lin", email = "simon.lin@uwaterloo.ca", role = "ctb"),
-    person("Sarah", "Grass", email = "sgrass@nhcweb.com", role = "ctb"),
-    person("Genevieve", "Brown", email = "genevieve.wbrown@gmail.com", role = "ctb"),
-    person("Rezgar", "Arabzadeh", email = "rezgar.arabzadeh@uwaterloo.ca", role = "ctb"))
+    person("Leland", "Scantlebury", email = "lscantlebury@uwaterloo.ca", role = c("ctb","aut")),
+    person("Simon", "Lin", email = "simon.lin@uwaterloo.ca", role = c("ctb","aut")),
+    person("Sarah", "Grass", email = "sgrass@nhcweb.com", role = c("ctb","aut")),
+    person("Genevieve", "Brown", email = "genevieve.wbrown@gmail.com", role = c("ctb","aut")),
+    person("Rezgar", "Arabzadeh", email = "rezgar.arabzadeh@uwaterloo.ca", role = c("ctb","aut")))
 Maintainer: Robert Chlumsky <rchlumsk@uwaterloo.ca>
 Description: Utilities for processing input and output files associated with the Raven Hydrological Modelling Framework. Includes various plotting functions, model diagnostics, reading output files into extensible time series format, and support for writing Raven input files. 
     The RavenR package is also archived at Chlumsky et al. (2020) <doi:10.5281/zenodo.4248183>.

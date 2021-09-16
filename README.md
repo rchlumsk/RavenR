@@ -3,7 +3,7 @@ README
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/RavenR)](https://cran.r-project.org/package=RavenR)
-[![downloads](http://cranlogs.r-pkg.org/badges/grand-total/RavenR?color=yellowgreen)](http://cranlogs.r-pkg.org/badges/grand-total/RavenR?color=yellowgreen)
+[![downloads](https://cranlogs.r-pkg.org:443/badges/grand-total/RavenR?color=yellowgreen)](https://cranlogs.r-pkg.org:443/badges/grand-total/RavenR?color=yellowgreen)
 ![lifecycle](./man/figures/lifecycle-experimental.svg)
 [![license](https://img.shields.io/badge/license-GPL3-lightgrey.svg)](https://choosealicense.com/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4248183.svg)](https://doi.org/10.5281/zenodo.4248183)
