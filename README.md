@@ -10,7 +10,7 @@ status](https://www.r-pkg.org/badges/version/RavenR)](https://cran.r-project.org
 
 # RavenR <img src="inst/extdata/logo/RavenR_logo_small.png" align="right" />
 
-RavenR is an R package for handling [Raven](http://raven.uwaterloo.ca/) hydrologic modelling framework
+`RavenR` is an R package for handling [Raven](http://raven.uwaterloo.ca/) hydrologic modelling framework
 inputs, outputs, and diagnostics. 
 
 ## Installation
@@ -20,7 +20,7 @@ The CRAN version of the package may also installed with:
 install.packages("RavenR")
 ```
 
-You can also install the latest RavenR version from github with:
+You can also install the latest `RavenR` version from github with:
 
 ``` r
 if (!require(devtools)) install.packages("devtools")
@@ -30,12 +30,12 @@ devtools::install_github("rchlumsk/RavenR")
 
 ## Tutorials and Quick Start Guide
 
-Please see the package vignette for an overview of the RavenR package. 
+Please see the package vignette for an overview of the `RavenR` package. 
 Sample data is included in the package, so you need only
-to install the RavenR library and follow along in the guide documents to
+to install the `RavenR` library and follow along in the guide documents to
 get started.
 
-The RavenR vignette can be accessed with the `browseVignettes` function.
+The `RavenR` vignette can be accessed with the `browseVignettes` function.
 ``` r
 browseVignettes("RavenR")
 ```
@@ -47,8 +47,10 @@ citation("RavenR")
 
 To cite `RavenR` in publications, use:
 
-> Robert Chlumsky (2021). RavenR: Raven Hydrological Modelling Framework R Support and Analysis. R
-  package version 2.1.1. https://github.com/rchlumsk/RavenR
+> Robert Chlumsky, James Craig, Leland Scantlebury, Simon
+  Lin, Sarah Grass, Genevieve Brown and Rezgar Arabzadeh
+  (2021). RavenR: Raven Hydrological Modelling Framework R Support and Analysis. R
+  package version 2.1.3. https://github.com/rchlumsk/RavenR
   
 A BibTeX entry for LaTeX users is:
 
@@ -56,16 +58,33 @@ A BibTeX entry for LaTeX users is:
 >      title = {RavenR: Raven Hydrological Modelling Framework R Support and Analysis},  
 >      author = {Robert Chlumsky and James Craig and Leland Scantlebury and Simon Lin and Sarah Grass and Genevieve Brown and Rezgar Arabzadeh},  
 >      year = {2021},  
->      note = {R package version 2.1.5},  
+>      note = {R package version 2.1.3},  
 >      url = {https://github.com/rchlumsk/RavenR},  
 >  }
 
 
 ## RavenR Wishlist
 
-Any issues or feature requests can be submitted on the [Github Issues page](https://github.com/rchlumsk/RavenR/issues). 
+Any issues or feature requests can be submitted on the [Github Issues page](https://github.com/rchlumsk/RavenR/issues) as an issue, or 
+discussed more openly on the new [Github Discussions page](https://github.com/rchlumsk/RavenR/discussions).
 
 ## Version Update Notes
+
+### 2.1.3
+
+Updates to a number of functions and new features implemented, including:
+
+  - removal of all dependencies on spatial packages (e.g. sf, raster),
+    and removal of the netcdf-related functions; 
+  - `rvn_download` and `rvn_run` to enable downloading and running Raven.exe within R;    
+  - `rvn_rvi_write_template` to write model rvi files from templates in the Raven manual;
+  - `rvn_budyko_plot` to generate a budyko curve from model precip, AET, and PET;
+  - updates to rvi mapping, including improvements to add functionality from `ggrepel` library
+    in spacing labels, and addition of the `DiagrammeR` library to support `rvn_rvi_process_diagrammer`;
+  - `rvn_budyko_plot` to generate a budyko curve from model precip, AET, and PET;
+  - updates to handling rvt reading and writing, which is now generic for all rvt types; and
+  - `rvn_met_interpolate` for performing inverse distance weighting interpolation to fill 
+    missing data values in meteorological data (works immediately with `weathercan` downloads).
 
 ### 2.0.0
 
