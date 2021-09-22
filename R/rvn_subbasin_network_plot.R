@@ -12,7 +12,7 @@
 #' @param SBtable a valid table of Raven subbasins, obtained from \code{\link{rvn_rvh_read}}
 #' @param labeled TRUE if the nodes are labeled with the SubBasin ID, SBID
 #'
-#' @return {p1}{ggplot object of subbasin network plot}
+#' @return \item{p1}{ggplot object of subbasin network plot}
 #'
 #' @author James R. Craig, University of Waterloo
 #'

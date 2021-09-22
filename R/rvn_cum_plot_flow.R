@@ -27,7 +27,7 @@
 #' @param inflow optionally supply an inflow series to plot as well
 #' @param mm month of water year ending (default 9)
 #' @param dd day of water year ending (default 30)
-#' @return \item{TRUE}{return TRUE if the function is executed properly}
+#' @return \item{TRUE}{return \code{TRUE} if the function is executed properly}
 #' @seealso \code{\link{rvn_flow_scatterplot}} for creating flow scatterplots
 #' @seealso \code{\link{rvn_cum_plot_flow}} for creating generic cumulative function plotting
 #'

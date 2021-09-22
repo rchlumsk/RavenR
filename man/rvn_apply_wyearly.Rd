@@ -45,7 +45,6 @@ rvn_apply_wyearly(rvn_forcing_data$forcings,cmax,na.rm=TRUE)
 # apply to Australian water year (July 1)
 rvn_apply_wyearly(rvn_forcing_data$forcings,cmax,na.rm=TRUE, mm=6, dd=30)
 
-
 }
 \seealso{
 \code{\link{rvn_wyear_indices}} for obtaining endpoints in the water year

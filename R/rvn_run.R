@@ -38,7 +38,7 @@
 #' unzip(zipfile=destfile,exdir=destdir)
 #' file.remove(destfile)
 #'
-#' ###### Irond
+#' # Irondeqoiut example
 #' indir<-paste(destdir,"/Irond",sep="")
 #' rvn_run(indir=indir,  showoutput=TRUE)
 #' }
@@ -70,11 +70,6 @@ rvn_run <- function(fileprefix=NULL, indir=getwd(), ravenexe=NULL,
    if (!file.exists(file.path(indir,paste0(fileprefix,".rvi")))) {
       stop(sprintf("rvi file not found: %s",file.path(indir,paste0(fileprefix,".rvi")) ))
    }
-
-   # create output directory if supplied and does not exist
-   ## Raven will do this already
-   # if(!is.null(outdir) & !dir.exists(outdir)) dir.create(outdir)
-
 
    # build up RavenCMD
    RavenCMD <- sprintf("%s %s",

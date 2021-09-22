@@ -1,21 +1,16 @@
 #' @title Generate Hydrological process connections list
 #'
 #' @description
-#' This routine reads in a hydrologic process list from rvn_rvi_read() and generates
+#' This routine reads in a hydrologic process list from \code{\link{rvn_rvi_read}} and generates
 #' the list of hydrologic process connections.
 #'
 #' @details
 #' Relies on a valid and up-to-date RavenProcessConnections.dat file.
 #' This file is provided with the RavenR package, but
-#' may be overrided by a more recent file if provided manually.
+#' may be overridden by a more recent file if provided manually.
 #'
 #' @param rvi data object generated from the \code{\link{rvn_rvi_read}} routine
 #' @param ProcConDataFile (optional) path to RavenProcesConnections.dat file
-#'
-#' @return
-#' Returns a dataframe of all of the process connections Includes the following data columns:
-#' process type, algorithm, 'from' compartment, 'to' compartment, and conditional.
-#'
 #'
 #' @return
 #' Returns a list with two items:

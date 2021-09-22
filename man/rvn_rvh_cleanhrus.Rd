@@ -27,11 +27,11 @@ default value of 0.01 would indicate anything smaller than 1 percent of watershe
 
 \item{merge}{TRUE if similar HRUs are to be merged (this can be slow for large models)}
 
-\item{elev_tol}{elevation difference (in metres) considered similar. only used if merge=TRUE.}
+\item{elev_tol}{elevation difference (in metres) considered similar. only used if \code{merge=TRUE}}
 
-\item{slope_tol}{slope difference (in degrees) considered similar. only used if merge=TRUE.}
+\item{slope_tol}{slope difference (in degrees) considered similar. only used if \code{merge=TRUE}}
 
-\item{aspect_tol}{slope difference (in degrees) considered similar. only used if merge=TRUE.}
+\item{aspect_tol}{slope difference (in degrees) considered similar. only used if \code{merge=TRUE}}
 
 \item{ProtectedHRUs}{vector of HRU IDs that are sacrosanct (not to be removed, but may still increase in area)}
 
@@ -47,7 +47,7 @@ Takes \code{\link{rvn_rvh_read}}-generated HRUtable and SBTable and returns clea
 with (hopefully) fewer HRUs
 }
 \details{
-rvn_rvh_cleanhrus removes HRUs in two ways:
+\code{rvn_rvh_cleanhrus} removes HRUs in two ways:
 
   1. it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
 subbasin are expanded by the lost area to keep the same relative coverage.

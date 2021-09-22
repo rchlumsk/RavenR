@@ -4,19 +4,20 @@
 #' This routine reads in a valid Raven main input (.rvi) file and returns the
 #' information about hydrological processes as a data table.
 #'
-#' @param filename the name of the .rvi file (with .rvi extension included ), either relative
+#' @param filename the name of the .rvi file (with .rvi extension included), either relative
 #' to the working directory or absolute.
 #'
 #' @return
 #' Returns a list with two items:
 #' \item{HydProcTable}{a data table of hydrologic processes. Includes the following data columns:
 #' process type, algorithm, 'from' compartment, 'to' compartment, conditional (logical), and condition (character)}
-#' \item{AliasTable}{a table of aliases read from the rvi file, NULL if no aliases are included}
+#' \item{AliasTable}{a table of aliases read from the rvi file, \code{NULL} if no aliases are included}
 #'
 #' @author James R. Craig, University of Waterloo
 #'
 #' @details
-#' This function does not like tabs in the .rvi file - it should be untabified first. Comma-delimited tables with a trailing comma are also problematic.
+#' This function does not like tabs in the .rvi file - it should be untabified first.
+#' Comma-delimited tables with a trailing comma are also problematic.
 #' The .rvi file can have arbitrary contents outside of the :HydrologicProcesses-
 #' :EndHydrologicProcesses block and :SubBasins-:EndSubBasins command blocks.
 #'

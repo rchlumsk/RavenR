@@ -1,7 +1,7 @@
 #' @title Interpolate meteorological data using IDW
 #'
 #' @description
-#' rvn_met_interpolate interpolates/infills missing meteorological data by
+#' Interpolates/infills missing meteorological data by
 #' using an inverse-distance weighting scheme to infill using data from nearby
 #' meteorological stations; issues where maximum temperature is less than minimum
 #' temperature can also be resolved.
@@ -10,8 +10,8 @@
 #' This function takes a meteorological data set with multiple station data in one data frame and
 #' interpolates the missing values for key stations, for the specified meteorological variables to interpolate.
 #'
-#' The format of the weather_data input is consistent with that from the weathercan::weather_dl function, which
-#' is the recommended tool to gather this input (see the examples).
+#' The format of the weather_data input is consistent with that from the \code{weathercan::weather_dl}
+#' function, which is the recommended tool to gather this input (see the examples).
 #'
 #' This function does not guarantee to infill all missing values, since this depends on the availability of data
 #' at other locations when it lacks at a given station, although a warning is issued if
@@ -35,8 +35,8 @@
 #' interpolated fields. By default this is enabled, and automatic fixes to interpolated data will be done;
 #' supplied data where the max temp is less than min temp will not be fixed unless fix_base_temp is enabled.
 #'
-#' The distance calculation, estimating the distance between stations, is performed using the \code{\link{rvn_dist_lonlat}}
-#' function, which is based on the \code{geosphere} package.
+#' The distance calculation, estimating the distance between stations, is performed using the
+#' \code{\link{rvn_dist_lonlat}} function, which is based on the \code{geosphere} package.
 #'
 #' @param weather_data data frame of input meteorological data from multiple stations
 #' @param cc columns from weather_data to infill missing values in
@@ -162,4 +162,3 @@ rvn_met_interpolate <- function(weather_data=NULL,
 
   return(new_wd)
 }
-

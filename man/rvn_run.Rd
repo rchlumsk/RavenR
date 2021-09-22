@@ -62,7 +62,7 @@ dir.create(destdir)
 unzip(zipfile=destfile,exdir=destdir)
 file.remove(destfile)
 
-###### Irond
+# Irondeqoiut example
 indir<-paste(destdir,"/Irond",sep="")
 rvn_run(indir=indir,  showoutput=TRUE)
 }

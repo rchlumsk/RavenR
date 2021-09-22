@@ -12,7 +12,7 @@ rvn_subbasin_network_plot(SBtable, labeled = FALSE)
 \item{labeled}{TRUE if the nodes are labeled with the SubBasin ID, SBID}
 }
 \value{
-{p1}{ggplot object of subbasin network plot}
+\item{p1}{ggplot object of subbasin network plot}
 }
 \description{
 Generates a plot of the subbasin network from rvh file information.

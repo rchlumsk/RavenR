@@ -13,7 +13,7 @@ rvn_month_names(short = TRUE)
 {character array of month names}
 }
 \description{
-rvn_month_names is used to return a character vector of months in the year
+Return a character vector of months in the year
 }
 \examples{
 rvn_month_names()

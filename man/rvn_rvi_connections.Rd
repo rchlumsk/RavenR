@@ -16,22 +16,19 @@ rvn_rvi_connections(
 \item{ProcConDataFile}{(optional) path to RavenProcesConnections.dat file}
 }
 \value{
-Returns a dataframe of all of the process connections Includes the following data columns:
-process type, algorithm, 'from' compartment, 'to' compartment, and conditional.
-
 Returns a list with two items:
 \item{connections}{a a dataframe of all of the process connections Includes the following data columns:
 process type, algorithm, 'from' compartment, 'to' compartment, and conditional}
 \item{AliasTable}{a table of aliases (unchanged from the supplied \code{rvi$AliasTable})}
 }
 \description{
-This routine reads in a hydrologic process list from rvn_rvi_read() and generates
+This routine reads in a hydrologic process list from \code{\link{rvn_rvi_read}} and generates
 the list of hydrologic process connections.
 }
 \details{
 Relies on a valid and up-to-date RavenProcessConnections.dat file.
 This file is provided with the RavenR package, but
-may be overrided by a more recent file if provided manually.
+may be overridden by a more recent file if provided manually.
 }
 \examples{
 rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))

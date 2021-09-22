@@ -10,7 +10,7 @@ rvn_exhaustive_mb_read(ff = NA, join_categories = TRUE, tzone = NULL)
 \item{ff}{full file path to the ExhaustiveMassBalance.csv file}
 
 \item{join_categories}{boolean whether add to the category tag as a column
-name prefix in exhaustivemb output (default TRUE)}
+name prefix in exhaustivemb output (default \code{TRUE})}
 
 \item{tzone}{string indicating the timezone of the data in ff}
 }

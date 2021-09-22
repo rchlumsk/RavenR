@@ -23,7 +23,7 @@ columns, which is advantageous for calculating the max within a column
 rather than the max of the whole data frame. The default base::max will not work
 properly for data frames and other structures in applying over columns or different periods.
 
-This function was included for usage with the apply.<period> and rvn_apply_wyearly
+This function was included for usage with the apply.<period> and \code{\link{rvn_apply_wyearly}}
 function, as the base::max function does not work properly across columns.
 }
 \examples{

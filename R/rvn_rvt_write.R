@@ -1,7 +1,7 @@
 #' @title Write Raven rvt file from Time Series
 #'
 #' @description
-#' rvn_rvt_write generates a Raven rvt file of the specified type from an xts time series.
+#' Generates a Raven rvt file of the specified type from an xts time series.
 #'
 #' @details
 #' Writes the rvt file for a given time series dataset. The type of rvt file to write is

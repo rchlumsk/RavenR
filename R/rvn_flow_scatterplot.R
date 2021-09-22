@@ -19,10 +19,10 @@
 #'
 #' @param sim time series object of simulated flows
 #' @param obs time series object of observed flows
-#' @param add_line optionally adds a 1:1 line to the plot for reference (default TRUE)
-#' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
-#' @param add_eqn optionally adds the equation for a linear regression line (default FALSE)
-#' @return \item{TRUE}{return TRUE if the function is executed properly}
+#' @param add_line optionally adds a 1:1 line to the plot for reference (default \code{TRUE})
+#' @param add_r2 optionally computes the R2 and adds to plot (default \code{FALSE})
+#' @param add_eqn optionally adds the equation for a linear regression line (default \code{FALSE})
+#' @return \item{TRUE}{return \code{TRUE} if the function is executed properly}
 #'
 #' @seealso \code{\link{rvn_forcings_read}} for reading in the ForcingFunctions
 #' file

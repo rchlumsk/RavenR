@@ -30,7 +30,7 @@ rvn_rvt_write(
 \code{TRUE} if the function executed successfully
 }
 \description{
-rvn_rvt_write generates a Raven rvt file of the specified type from an xts time series.
+Generates a Raven rvt file of the specified type from an xts time series.
 }
 \details{
 Writes the rvt file for a given time series dataset. The type of rvt file to write is

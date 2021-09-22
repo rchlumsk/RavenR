@@ -17,7 +17,7 @@ rvn_apply_wyearly_which_max_xts(x, mm = 9, dd = 30)
 {xts object with max values and corresponding dates}
 }
 \description{
-rvn_apply_wyearly_which_max_xts applies the which.max function within each
+Applies the which.max function within each
 water year period, and returns the corresponding max values and dates in an xts format.
 }
 \examples{

@@ -34,7 +34,7 @@ rvn_rvt_tidyhydat(
 
 \item{flip_number}{(optional) put the subID first in the .rvt filename}
 
-\item{rd_file}{(optional) name of the redirect file created (if write_redirect = TRUE)}
+\item{rd_file}{(optional) name of the redirect file created (if \code{write_redirect=TRUE})}
 
 \item{filename}{specified name of file(s) to write to (optional)}
 }

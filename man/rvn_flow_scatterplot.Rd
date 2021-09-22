@@ -17,14 +17,14 @@ rvn_flow_scatterplot(
 
 \item{obs}{time series object of observed flows}
 
-\item{add_line}{optionally adds a 1:1 line to the plot for reference (default TRUE)}
+\item{add_line}{optionally adds a 1:1 line to the plot for reference (default \code{TRUE})}
 
-\item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
+\item{add_r2}{optionally computes the R2 and adds to plot (default \code{FALSE})}
 
-\item{add_eqn}{optionally adds the equation for a linear regression line (default FALSE)}
+\item{add_eqn}{optionally adds the equation for a linear regression line (default \code{FALSE})}
 }
 \value{
-\item{TRUE}{return TRUE if the function is executed properly}
+\item{TRUE}{return \code{TRUE} if the function is executed properly}
 }
 \description{
 rvn_flow_scatterplot creates a scatterplot of the simulated and observed flows.

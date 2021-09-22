@@ -41,7 +41,8 @@
 #' @param lbl_width relative width of the labels (multiplier)
 #' @param pdfout name of pdf file to save the network plot to, if null no PDF is generated
 #'
-#' @return \code{d1} returns DiagrammeR object. Also generates a .pdf file in working directory if pdfplot argument is not NULL.
+#' @return \code{d1} returns DiagrammeR object. Also generates a .pdf file in working directory if
+#' pdfplot argument is not \code{NULL}.
 #'
 #' @seealso \code{\link{rvn_rvi_connections}} to generate connections table from an rvi object
 #' @seealso \code{\link{rvn_rvi_process_ggplot}} to generate the structure plot using ggplot.

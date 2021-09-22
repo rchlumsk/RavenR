@@ -28,9 +28,9 @@
 #' @param ma_smooth optional length of rolling average to smooth residuals with
 #' (default 3)
 #' @param add_line optionally adds a horizontal line to the plot for reference
-#' (default FALSE)
+#' (default \code{FALSE})
 #' @param winter_shading optionally adds a light blue shading to winter months
-#' (default FALSE)
+#' (default \code{FALSE})
 #' @param wsdates integer vector of winter shading period dates (see details)
 #' @return \item{resids}{residual time series}
 #'

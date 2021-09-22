@@ -1,6 +1,6 @@
 #' @title substring from the Left
 #'
-#' @description rvn_substrLeft returns n characters from the left side of the supplied string x.
+#' @description Returns n characters from the left side of the supplied string x.
 #'
 #' @param x a string to manipulate
 #' @param n number of characters to remove from the left side of the string
@@ -23,7 +23,7 @@ rvn_substrLeft <- function(x, n)
 #' @title substring minus characters from the Left
 #'
 #' @description
-#' rvn_substrMLeft returns a string x with n characters removed from the left side
+#' Returns a string x with n characters removed from the left side
 #' of the string.
 #'
 #' @param x a string to manipulate
@@ -51,7 +51,7 @@ rvn_substrMLeft <- function(x, n)
 #' @title substring minus characters from the Right
 #'
 #' @description
-#' rvn_substrMRight returns a string x with n characters removed from the right
+#' Returns a string x with n characters removed from the right
 #' side of the string.
 #'
 #' @param x a string to manipulate
@@ -79,7 +79,7 @@ rvn_substrMRight <- function(x, n)
 #' @title substring from the Right
 #'
 #' @description
-#' rvn_substrRight returns n characters from the right side of the supplied string
+#' Returns n characters from the right side of the supplied string
 #' x.
 #'
 #' @param x a string to manipulate
@@ -106,7 +106,7 @@ rvn_substrRight <- function(x, n)
 #' @title Months in the Year vector
 #'
 #' @description
-#' rvn_month_names is used to return a character vector of months in the year
+#' Return a character vector of months in the year
 #'
 #' @param short boolean to return shortened form of months
 #' @return {character array of month names}
@@ -132,7 +132,7 @@ rvn_month_names <- function(short=TRUE)
 #' @title Number of Days between two dates
 #'
 #' @description
-#' rvn_num_days is used to calculate the number of days between two provided dates.
+#' Calculate the number of days between two provided dates.
 #'
 #' @details
 #' This method handles leap years if they exist between the specified dates.
@@ -161,7 +161,7 @@ rvn_num_days <- function(date1,date2)
 #' @title Number of Days in Month
 #'
 #' @description
-#' rvn_num_days_month is used to calculate the number of days in the month
+#' Calculates the number of days in the month
 #'
 #' @details
 #' This method includes leap years if they exist in the specified month.
@@ -203,7 +203,7 @@ rvn_num_days_month <- function(date)
 #' rather than the max of the whole data frame. The default base::max will not work
 #' properly for data frames and other structures in applying over columns or different periods.
 #'
-#' This function was included for usage with the apply.<period> and rvn_apply_wyearly
+#' This function was included for usage with the apply.<period> and \code{\link{rvn_apply_wyearly}}
 #' function, as the base::max function does not work properly across columns.
 #'
 #' @param x object to apply the max function to
@@ -229,7 +229,7 @@ cmax <- function(x, na.rm = FALSE)
 #' @title which.max for xts objects
 #'
 #' @description
-#' rvn_which_max_xts applies the which.max function and returns an xts object
+#' Applies the which.max function and returns an xts object
 #' with the maximum value and associated date.
 #'
 #' @details
@@ -238,8 +238,8 @@ cmax <- function(x, na.rm = FALSE)
 #'
 #' Note that when deploying the rvn_apply_wyearly function, the dates are overwritten
 #' and the dates of the water year ending periods are displayed rather than the event dates.
-#' In order to obtain the corresponding dates when using the rvn_apply_wyearly function, please use
-#' \code{\link{rvn_apply_wyearly_which_max_xts}}.
+#' In order to obtain the corresponding dates when using the \code{\link{rvn_apply_wyearly}}
+#' function, please use \code{\link{rvn_apply_wyearly_which_max_xts}}.
 #'
 #' @param x xts object to apply which.max to
 #' @return {xts object with max value and corresponding date}
@@ -273,11 +273,10 @@ rvn_which_max_xts <- function(x)
 }
 
 
-
 #' @title which.max over water year periods
 #'
 #' @description
-#' rvn_apply_wyearly_which_max_xts applies the which.max function within each
+#' Applies the which.max function within each
 #' water year period, and returns the corresponding max values and dates in an xts format.
 #'
 #' @param x xts object
@@ -324,7 +323,7 @@ rvn_apply_wyearly_which_max_xts <- function(x, mm=9, dd=30)
 #' @title Check period input
 #'
 #' @description
-#' rvn_get_prd is a robust function used to check a period argument either as
+#' Checks a period argument either as
 #' a character or against an xts object.
 #'
 #' @details
@@ -825,7 +824,7 @@ rvn_dist_lonlat <- function(p1, p2, method="haversine", r=6378137) {
 #' Unrecognized labels are generally placed on the left hand side of the layout.
 #'
 #' @param verts character vector of state variables to be included in the layout
-#' @return {layout}{a data frame of verts labels and xy coordinates intended for plotting labels}
+#' @return \item{layout}{a data frame of verts labels and xy coordinates intended for plotting labels}
 #'
 #' @noRd
 #' @keywords internal
@@ -874,11 +873,11 @@ rvn_rvi_process_layout <- function(verts) {
   return(layout)
 }
 
-#' Estimate text grob length
+#' @title Estimate text grob length
 #'
 #' Estimate the printed length of `resizingTextGrob` text
 #'
-#' @param text \code{character} The text to be printed
+#' @param text The text to be printed (character)
 #' @param rot The rotation in radians
 #'
 #' @return The estimated length of the printed text as a multiple of its text size (height)
@@ -892,7 +891,7 @@ text_grob_length <- function(text, rot = 0) {
   vapply(text, do_one, numeric(1))
 }
 
-#' Bounding box coords for labels
+#' @title Bounding box coords for labels
 #'
 #' Given a position, size, rotation, and justification of a label, calculate the bounding box coordinates
 #'
@@ -976,7 +975,7 @@ label_bounds <- function(label, x, y, height, rotation, just) {
   return(output)
 }
 
-#' Reformat bounding box coords for labels
+#' @title Reformat bounding box coords for labels
 #'
 #' Reformat the bounding box coordinates object to have columns for label, xmin, xmax, ymin, ymax.
 #'

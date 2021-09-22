@@ -15,7 +15,7 @@ rvn_get_prd(x = NULL, prd = NULL)
 {prd argument with warnings provided if needed}
 }
 \description{
-rvn_get_prd is a robust function used to check a period argument either as
+Checks a period argument either as
 a character or against an xts object.
 }
 \details{

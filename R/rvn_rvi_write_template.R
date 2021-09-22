@@ -5,13 +5,13 @@
 #'
 #' @param modelname name of the model template to be written (default 'UBCWM')
 #' @param filename Name of the rvi file, with extension (optional)
-#' @param overwrite boolean whether to overwrite file if it already exists (default FALSE)
-#' @param writeheader boolean whether to write a header to the rvi file (default TRUE)
+#' @param overwrite boolean whether to overwrite file if it already exists (default \code{FALSE})
+#' @param writeheader boolean whether to write a header to the rvi file (default \code{TRUE})
 #' @param filetype File extension, Encoding, Raven version (e.g. "rvp ASCII Raven 2.9.1") (optional)
 #' @param author Name of file author (optional)
 #' @param description File Description for header (e.g., Basin or project information, R script name) (optional)
 #'
-#' @return TRUE returns TRUE if executed successfully
+#' @return \item{TRUE}{returns \code{TRUE} if executed successfully}
 #'
 #' @details
 #' Raven has the capability of emulating a number of existing model configurations, and a number of additional
@@ -25,7 +25,7 @@
 #' wish to create an rvp template file following the creation of the rvi file.
 #'
 #' The \code{\link{rvn_write_Raven_newfile}} is used to write a header in the rvi file. Writing of a header
-#' can be disabled with writeheader=FALSE.
+#' can be disabled with \code{writeheader=FALSE}.
 #'
 #' @examples
 #'

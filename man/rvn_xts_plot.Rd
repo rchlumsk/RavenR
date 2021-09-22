@@ -16,7 +16,7 @@ rvn_xts_plot(
 
 \item{prd}{period to use in plotting}
 
-\item{winter_shading}{optionally adds shading for winter months (default FALSE)}
+\item{winter_shading}{optionally adds shading for winter months (default \code{FALSE})}
 
 \item{wsdates}{integer vector of winter shading period dates (see details)}
 }
@@ -24,7 +24,7 @@ rvn_xts_plot(
 \item{p1}{returns ggplot plot object}
 }
 \description{
-rvn_xts_plot is a generic function for plotting data from an xts format
+Generic function for plotting data from an xts format
 using the ggplot2 function.
 }
 \details{

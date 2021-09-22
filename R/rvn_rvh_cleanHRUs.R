@@ -9,15 +9,15 @@
 #' @param area_tol percentage of watershed area beneath which HRUs should be removed (e.g.,
 #' default value of 0.01 would indicate anything smaller than 1 percent of watershed extent should be removed)
 #' @param merge TRUE if similar HRUs are to be merged (this can be slow for large models)
-#' @param elev_tol elevation difference (in metres) considered similar. only used if merge=TRUE.
-#' @param slope_tol slope difference (in degrees) considered similar. only used if merge=TRUE.
-#' @param aspect_tol slope difference (in degrees) considered similar. only used if merge=TRUE.
+#' @param elev_tol elevation difference (in metres) considered similar. only used if \code{merge=TRUE}
+#' @param slope_tol slope difference (in degrees) considered similar. only used if \code{merge=TRUE}
+#' @param aspect_tol slope difference (in degrees) considered similar. only used if \code{merge=TRUE}
 #' @param ProtectedHRUs vector of HRU IDs that are sacrosanct (not to be removed, but may still increase in area)
 #' @param LockedHRUs vector of HRU IDs that are locked (not to be modified)
 #' @param LockedSubbasins vector of subbasin IDs that are locked (not to be modified).
 #'
 #' @details
-#' rvn_rvh_cleanhrus removes HRUs in two ways:
+#' \code{rvn_rvh_cleanhrus} removes HRUs in two ways:
 #'
 #'   1. it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
 #' subbasin are expanded by the lost area to keep the same relative coverage.

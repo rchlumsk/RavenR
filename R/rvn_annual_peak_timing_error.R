@@ -31,9 +31,9 @@
 #' @param mm month of water year (default 9)
 #' @param dd day of water year (default 30)
 #' @param add_line optionally adds a 1:1 line to the plot for reference
-#' (default TRUE)
+#' (default \code{TRUE})
 #' @param add_labels optionally adds labels for early peak/late peaks on right
-#' side axis (default TRUE)
+#' side axis (default \code{TRUE})
 #'
 #' @return returns a list with peak timing errors in a data frame, and a ggplot object
 #'  \item{df_peak_timing_error}{data frame of the calculated peak timing errors}

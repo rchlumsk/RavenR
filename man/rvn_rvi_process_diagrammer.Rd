@@ -34,7 +34,8 @@ rvn_rvi_process_diagrammer(
 \item{pdfout}{name of pdf file to save the network plot to, if null no PDF is generated}
 }
 \value{
-\code{d1} returns DiagrammeR object. Also generates a .pdf file in working directory if pdfplot argument is not NULL.
+\code{d1} returns DiagrammeR object. Also generates a .pdf file in working directory if
+pdfplot argument is not \code{NULL}.
 }
 \description{
 This routine takes a connections data from generated using rvn_rvi_connections()

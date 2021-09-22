@@ -1,7 +1,7 @@
 #' @title EC Climate Station File Conversion
 #'
 #' @description
-#' rvn_rvt_write_met converts meteorological data for a given station into the
+#' Converts meteorological data for a given station into the
 #' Raven .rvt format.
 #'
 #' @details
@@ -77,9 +77,9 @@
 #' @param write_stndata (optional) write the gauge data to a separate .rvt file
 #' @param write_redirect (optional) write the :RedirectToFile commands in a
 #' separate .rvt file
-#' @param filename_stndata (optional) name of the station data file created (if write_stndata = TRUE)
+#' @param filename_stndata (optional) name of the station data file created (if \code{write_stndata=TRUE})
 #' @param NA_value (optional) value to use for NA values in rvt file (default -1.2345 for Raven format)
-#' @return \item{TRUE}{return TRUE if the function is executed properly}
+#' @return \item{TRUE}{return \code{TRUE} if the function is executed properly}
 #'
 #' @seealso \code{\link{rvn_rvt_write}} to write non-forcing time series data to Raven rvt format.
 #'

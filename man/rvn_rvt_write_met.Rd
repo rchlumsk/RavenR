@@ -32,15 +32,15 @@ rvn_rvt_write_met(
 \item{write_redirect}{(optional) write the :RedirectToFile commands in a
 separate .rvt file}
 
-\item{filename_stndata}{(optional) name of the station data file created (if write_stndata = TRUE)}
+\item{filename_stndata}{(optional) name of the station data file created (if \code{write_stndata=TRUE})}
 
 \item{NA_value}{(optional) value to use for NA values in rvt file (default -1.2345 for Raven format)}
 }
 \value{
-\item{TRUE}{return TRUE if the function is executed properly}
+\item{TRUE}{return \code{TRUE} if the function is executed properly}
 }
 \description{
-rvn_rvt_write_met converts meteorological data for a given station into the
+Converts meteorological data for a given station into the
 Raven .rvt format.
 }
 \details{

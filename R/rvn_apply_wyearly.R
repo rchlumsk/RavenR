@@ -35,7 +35,6 @@
 #' # apply to Australian water year (July 1)
 #' rvn_apply_wyearly(rvn_forcing_data$forcings,cmax,na.rm=TRUE, mm=6, dd=30)
 #'
-#'
 #' @export rvn_apply_wyearly
 #' @importFrom xts period.apply
 rvn_apply_wyearly <- function(x,FUN, ..., mm=9,dd=30) {
