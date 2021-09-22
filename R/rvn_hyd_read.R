@@ -5,12 +5,12 @@
 #' modelling Framework Raven.
 #'
 #' @details
-#' This function expects a full file path to the Hydrographs.csv file, then
+#' Expects a full file path to the Hydrographs.csv file, then
 #' reads in the file using fread. The main advantage of this function is
 #' renaming the columns to nicer names and extracting the units into something
 #' much easier to read.
 #'
-#' This function is also built to support the rvn_hyd_extract function, which uses
+#' This function is also built to support the \code{\link{rvn_hyd_extract}} function, which uses
 #' the object created here for extracting by reference to the columns named
 #' here, for example sub24.
 #'

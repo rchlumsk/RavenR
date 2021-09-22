@@ -18,7 +18,7 @@ rvn_cum_plot_flow(sim = NULL, obs = NULL, inflow = NULL, mm = 9, dd = 30)
 \item{dd}{day of water year ending (default 30)}
 }
 \value{
-\item{TRUE}{return TRUE if the function is executed properly}
+\item{TRUE}{return \code{TRUE} if the function is executed properly}
 }
 \description{
 rvn_cum_plot_flow creates a cumulative flow plot of the simulated flows;
@@ -26,7 +26,7 @@ optionally includes an observed and/or inflow series as well. Useful in
 diagnotic analysis of model outputs.
 }
 \details{
-This function will plot the simulated series in all cases, and will include
+Plots the simulated series in all cases, and will include
 the observed and inflow plots if they are supplied.
 
 The sim and obs should be of time series (xts) format. The flow series are

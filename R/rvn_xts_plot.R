@@ -1,11 +1,11 @@
 #' @title Create plot from xts data
 #'
 #' @description
-#' rvn_xts_plot is a generic function for plotting data from an xts format
+#' Generic function for plotting data from an xts format
 #' using the ggplot2 function.
 #'
 #' @details
-#' This function creates a plot using the supplied time series in
+#' Creates a plot using the supplied time series in
 #' xts format. The xts object is converted to a tibble using the \code{\link{rvn_fortify_xts}}
 #' function, and all columns are plotted by their respective names.
 #'
@@ -21,7 +21,7 @@
 #'
 #' @param x time series object (xts) of data to plot
 #' @param prd period to use in plotting
-#' @param winter_shading optionally adds shading for winter months (default FALSE)
+#' @param winter_shading optionally adds shading for winter months (default \code{FALSE})
 #' @param wsdates integer vector of winter shading period dates (see details)
 #' @return \item{p1}{returns ggplot plot object}
 #'
@@ -36,10 +36,10 @@
 #' run1 <- rvn_hyd_read(ff)
 #'
 #' # create a hydrograph with the generic xts plotting function
-#' rvn_xts_plot(run1$hyd)
+#' rvn_xts_plot(run1$hyd[,2:5])
 #'
 #' # add shading for the month of August
-#' rvn_xts_plot(run1$hyd, winter_shading=TRUE, wsdates=c(8,1,8,31))
+#' rvn_xts_plot(run1$hyd[,2:5], winter_shading=TRUE, wsdates=c(8,1,8,31))
 #'
 #' @export rvn_xts_plot
 #' @importFrom ggplot2 fortify ggplot geom_line scale_x_date xlab ylab theme aes scale_colour_brewer geom_bar

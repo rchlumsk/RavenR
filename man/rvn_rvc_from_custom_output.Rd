@@ -15,13 +15,14 @@ rvn_rvc_from_custom_output(filename, custfiles, FUN, init_date = NULL, ...)
 
 \item{init_date}{datetime of model start (optional, can be calculated from Custom Output files)}
 
-\item{...}{optional arguments passed to rvn_rvc_write (e.g. author, description)}
+\item{...}{optional arguments passed to \code{\link{rvn_rvc_write}} (e.g. author, description)}
 }
 \value{
-TRUE upon success
+\item{TRUE}{if executed successfully}
 }
 \description{
-Generate RVC file from Custom Output CSVs
+Creates an initial conditions rvc file that specifies the initial state
+using the information from the supplied custom output file.
 }
 \examples{
 # Create array of custom output file(s)

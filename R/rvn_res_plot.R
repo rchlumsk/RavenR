@@ -1,10 +1,10 @@
 #' @title Plot Reservoir Stage
 #'
 #' @description
-#' rvn_res_plot creates a reservoir stage plot for the supplied stage series.
+#' Creates a reservoir stage plot for the supplied stage series.
 #'
 #' @details
-#' This function creates a reservoir stage plot using the supplied time series;
+#' Creates a reservoir stage plot using the supplied time series;
 #' any series not supplied will not be plotted. If the precip time series is
 #' supplied, the secondary y axis will be used to plot the precip time series.
 #'
@@ -13,7 +13,7 @@
 #' calculated from the first available stage series will be used to determine
 #' the plotting limits in time. If the data is used directly from Raven output,
 #' this is not a concern. The supplied time series should be in xts format,
-#' which again can be obtained directly by using the rvn_res_extract function.
+#' which again can be obtained directly by using the \code{\link{rvn_res_extract}} function.
 #'
 #' The winter_shading argument will add a transparent grey shading for the
 #' December 1st to March 31st period in each year that is plotted (or other
@@ -25,7 +25,7 @@
 #' @param obs time series object of observed stage
 #' @param precip time series object of precipitation
 #' @param prd period to use in plotting
-#' @param winter_shading optionally adds shading for winter months (default FALSE)
+#' @param winter_shading optionally adds shading for winter months (default \code{FALSE})
 #' @param wsdates integer vector of winter shading period dates (see details)
 #' @return \item{p1}{returns ggplot plot object}
 #'

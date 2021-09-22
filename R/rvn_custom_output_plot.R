@@ -12,7 +12,7 @@
 #' @param IDs (optional) array of HRU IDs, subbasin IDs, HRU Group names/IDs to
 #' include in plots
 #' @param prd (optional) period to use in plotting
-#' @return \item{TRUE}{return TRUE if the function is executed properly}
+#' @return \item{TRUE}{return \code{TRUE} if the function is executed properly}
 #' @seealso \code{\link{rvn_custom_output_plot}} for plotting custom output
 #'
 #' @examples
@@ -25,9 +25,9 @@
 #' rvn_custom_output_plot(mycustomdata, IDs=seq(1,10), prd="2002-10-01/2003-06-01")
 #'
 #' @export rvn_custom_output_plot
-#' @importFrom ggplot2 fortify ggplot aes geom_line ylab xlab scale_colour_brewer scale_x_datetime geom_step ggtitle
-#' @importFrom reshape2 melt
 #' @importFrom xts xtsAttributes
+#' @importFrom ggplot2 fortify ggplot aes geom_line ylab xlab scale_colour_brewer scale_x_datetime geom_step ggtitle
+#' @importFrom tidyr pivot_longer
 rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL)
 {
 
@@ -40,7 +40,7 @@ rvn_custom_output_plot <-function(cust, IDs=NULL, prd=NULL)
 
   # Put into approrpiate format
   df.plot <- fortify(cust[,IDs])
-  df.plot <- reshape2::melt(df.plot, id.vars = "Index")
+  df.plot <- pivot_longer(df.plot, !Index, names_to = "variable",values_to = "value")
 
   # Break down xts attributes to get title
   xtsAttributes(cust) %>% data.frame() -> xdf

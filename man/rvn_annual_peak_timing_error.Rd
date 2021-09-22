@@ -23,10 +23,10 @@ rvn_annual_peak_timing_error(
 \item{dd}{day of water year (default 30)}
 
 \item{add_line}{optionally adds a 1:1 line to the plot for reference
-(default TRUE)}
+(default \code{TRUE})}
 
 \item{add_labels}{optionally adds labels for early peak/late peaks on right
-side axis (default TRUE)}
+side axis (default \code{TRUE})}
 }
 \value{
 returns a list with peak timing errors in a data frame, and a ggplot object
@@ -38,7 +38,7 @@ rvn_annual_peak_timing_error creates a plot of the annual observed and simulated
 peak timing errors, based on the water year.
 }
 \details{
-This function creates a plot of the peak timing errors in simulated peaks
+Creates a plot of the peak timing errors in simulated peaks
 for each water year. The difference in days between the simulated peak and
 observed peak are plotted (and/or returned in the data frame) for the water
 year. This diagnostic is useful in determining how accurate the timing of

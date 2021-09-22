@@ -4,7 +4,7 @@
 #' rvn_flow_spaghetti creates a spaghetti plot of the flow series provided.
 #'
 #' @details
-#' This function creates a spaghetti plot of the annual flow series in each
+#' Creates a spaghetti plot of the annual flow series in each
 #' year of data provided. The flows are plotted for each water year of data
 #' available, set as October 1st.
 #'
@@ -20,7 +20,7 @@
 #' generation of plot titles.
 #'
 #' @param flow time series object of simulated flows
-#' @return \item{TRUE}{return TRUE if the function is executed properly}
+#' @return \item{TRUE}{return \code{TRUE} if the function is executed properly}
 #'
 #' @seealso \code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow
 #' values

@@ -6,7 +6,7 @@
 #' example apply.daily, apply.monthly, etc.
 #'
 #' @details
-#' This is a function especially helpful to hydrology data or results. The default water year start is
+#' The default water year start is
 #' October 1st, but may be adjusted with the mm and dd arguments. The values for
 #' mm and dd indicate the end of the water year period (i.e. mm=9 and dd=30 indicates
 #' a new water year on Oct 1).
@@ -34,7 +34,6 @@
 #'
 #' # apply to Australian water year (July 1)
 #' rvn_apply_wyearly(rvn_forcing_data$forcings,cmax,na.rm=TRUE, mm=6, dd=30)
-#'
 #'
 #' @export rvn_apply_wyearly
 #' @importFrom xts period.apply

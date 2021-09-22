@@ -4,7 +4,7 @@
 #' rvn_annual_peak creates a plot of the annual observed and simulated peaks, based on the water year.
 #'
 #' @details
-#' This function creates a scatterplot of the annual observed and simulated
+#' Creates a scatterplot of the annual observed and simulated
 #' peaks, calculated for each available water year of data
 #' within the two series provided. The default start of the water year
 #' is October 1st, but may be adjusted through function parameters. Note that the
@@ -25,9 +25,9 @@
 #' @param obs time series object of observed flows
 #' @param mm month of water year ending (default 9)
 #' @param dd day of water year ending (default 30)
-#' @param add_line optionally adds a 1:1 line to the plot for reference (default TRUE)
-#' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
-#' @param add_eqn optionally adds the equation for a linear regression line through the origin (default FALSE)
+#' @param add_line optionally adds a 1:1 line to the plot for reference (default \code{TRUE})
+#' @param add_r2 optionally computes the R2 and adds to plot (default \code{FALSE})
+#' @param add_eqn optionally adds the equation for a linear regression line through the origin (default \code{FALSE})
 #' @return returns a list with peak data in a data frame, and a ggplot object
 #'  \item{df_peak}{data frame of the calculated peaks}
 #'  \item{p1}{ggplot object with plotted annual peaks}
@@ -55,7 +55,7 @@
 #' @export rvn_annual_peak
 #' @importFrom stats lm
 #' @importFrom lubridate year date
-#' @importFrom ggplot2 ggplot aes geom_point geom_abline geom_text scale_x_continuous scale_y_continuous
+#' @importFrom ggplot2 ggplot aes geom_point geom_abline annotate scale_x_continuous scale_y_continuous
 rvn_annual_peak <- function(sim, obs, mm=9, dd=30, add_line = TRUE,
                              add_r2 = FALSE, add_eqn = FALSE)
 {

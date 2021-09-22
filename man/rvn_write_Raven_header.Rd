@@ -19,12 +19,12 @@ rvn_write_Raven_header(
 
 \item{author}{Name of file author (optional)}
 
-\item{creationDate}{Bool of whether creation date should be added to header. (default TRUE)}
+\item{creationDate}{Bool of whether creation date should be added to header. (default \code{TRUE})}
 
 \item{textlen}{Length of lines (default: 40, used to right-align text)}
 }
 \value{
-TRUE returns TRUE if executed successfully
+\item{TRUE}{returns \code{TRUE} if executed successfully}
 }
 \description{
 Writes the common Raven file header to file. All lines are Appended.

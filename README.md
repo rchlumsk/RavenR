@@ -3,18 +3,15 @@ README
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/RavenR)](https://cran.r-project.org/package=RavenR)
-[![downloads](http://cranlogs.r-pkg.org/badges/grand-total/RavenR?color=yellowgreen)](http://cranlogs.r-pkg.org/badges/grand-total/RavenR?color=yellowgreen)
+[![downloads](https://cranlogs.r-pkg.org:443/badges/grand-total/RavenR?color=yellowgreen)](https://cranlogs.r-pkg.org:443/badges/grand-total/RavenR?color=yellowgreen)
 ![lifecycle](./man/figures/lifecycle-experimental.svg)
 [![license](https://img.shields.io/badge/license-GPL3-lightgrey.svg)](https://choosealicense.com/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4248183.svg)](https://doi.org/10.5281/zenodo.4248183)
 
 # RavenR <img src="inst/extdata/logo/RavenR_logo_small.png" align="right" />
 
-RavenR is an R package for handling Raven hydrologic modelling framework
-inputs, outputs, and diagnostics. Please contact Robert Chlumsky
-(<rchlumsk@uwaterloo.ca>) or Dr. James Craig (<jrcraig@uwaterloo.ca>)
-for any troubleshooting, bug fixes, or recommendations on future
-releases.
+RavenR is an R package for handling [Raven](http://raven.uwaterloo.ca/) hydrologic modelling framework
+inputs, outputs, and diagnostics. 
 
 ## Installation
 
@@ -26,7 +23,7 @@ install.packages("RavenR")
 You can also install the latest RavenR version from github with:
 
 ``` r
-# install.packages("devtools")
+if (!require(devtools)) install.packages("devtools")
 library(devtools)
 devtools::install_github("rchlumsk/RavenR")
 ```
@@ -43,18 +40,30 @@ The RavenR vignette can be accessed with the `browseVignettes` function.
 browseVignettes("RavenR")
 ```
 
+## Citation
+```{r}
+citation("RavenR")
+```
+
+To cite `RavenR` in publications, use:
+
+> Robert Chlumsky (2021). RavenR: Raven Hydrological Modelling Framework R Support and Analysis. R
+  package version 2.1.1. https://github.com/rchlumsk/RavenR
+  
+A BibTeX entry for LaTeX users is:
+
+>  @Manual{RavenRPackage,  
+>      title = {RavenR: Raven Hydrological Modelling Framework R Support and Analysis},  
+>      author = {Robert Chlumsky and James Craig and Leland Scantlebury and Simon Lin and Sarah Grass and Genevieve Brown and Rezgar Arabzadeh},  
+>      year = {2021},  
+>      note = {R package version 2.1.5},  
+>      url = {https://github.com/rchlumsk/RavenR},  
+>  }
+
+
 ## RavenR Wishlist
 
-Any issues or feature requests can be submitted on Github via the Issues
-tab. You may also submit feature requests directly to Robert Chlumsky
-(<rchlumsk@uwaterloo.ca>) via email.
-
-## Dependency Installs
-
-Note that some of the package dependencies may require the installation
-of programs outside of R, particularly for Linux users. Refer to
-specific function helps on how to install various package materials,
-such as [ImageMagick](https://www.imagemagick.org/script/download.php).
+Any issues or feature requests can be submitted on the [Github Issues page](https://github.com/rchlumsk/RavenR/issues). 
 
 ## Version Update Notes
 
@@ -78,3 +87,8 @@ plotting. Some of these include:
   - multiple bug fixes and improvements to handling rvi, rvh, and
     writing rvt files.
 
+## See Also
+
+* [RavenR.extras](https://github.com/rchlumsk/RavenR.extras): Additional RavenR utilities.
+
+* [Raven Hydrologic Modelling Framework](http://raven.uwaterloo.ca/): Robust and flexible Hydrologic Modelling Framework developd by Dr. James R. Craig at the University of Waterloo.

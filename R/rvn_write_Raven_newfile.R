@@ -4,11 +4,11 @@
 #' @param description File Description (e.g., Basin or project information, R script name)
 #' @param filetype File extension, Encoding, Raven version (e.g. "rvp ASCII Raven 2.9.1")
 #' @param author Name of file author (optional)
-#' @param creationDate Bool of whether creation date should be added to header. (default TRUE)
+#' @param creationDate Bool of whether creation date should be added to header. (default \code{TRUE})
 #' @param linelen length (width) of header, in text characters (default: 74)
 #' @param textlen Length of textlines (default: 40, used to right-align text)
 #'
-#' @return TRUE returns TRUE if executed successfully
+#' @return \item{TRUE}{returns \code{TRUE} if executed successfully}
 #'
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
 #'

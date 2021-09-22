@@ -13,17 +13,17 @@ rvn_which_max_xts(x)
 {xts object with max value and corresponding date}
 }
 \description{
-rvn_which_max_xts applies the which.max function and returns an xts object
+Applies the which.max function and returns an xts object
 with the maximum value and associated date.
 }
 \details{
-This function is intended to act as the which.max function, applicable
+Acts as the which.max function, applicable
 to xts objects and returning values in an xts format.
 
 Note that when deploying the rvn_apply_wyearly function, the dates are overwritten
 and the dates of the water year ending periods are displayed rather than the event dates.
-In order to obtain the corresponding dates when using the rvn_apply_wyearly function, please use
-\code{\link{rvn_apply_wyearly_which_max_xts}}.
+In order to obtain the corresponding dates when using the \code{\link{rvn_apply_wyearly}}
+function, please use \code{\link{rvn_apply_wyearly_which_max_xts}}.
 }
 \examples{
 data(rvn_hydrograph_data)

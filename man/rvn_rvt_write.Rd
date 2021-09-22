@@ -5,43 +5,54 @@
 \title{Write Raven rvt file from Time Series}
 \usage{
 rvn_rvt_write(
-  ts,
-  params,
-  units,
-  dates = NULL,
-  prd = NULL,
-  tt = "00:00:00",
-  dt = 1,
-  ff = "raven_rvt_write.rvt"
+  x,
+  filename = NULL,
+  rvt_type = "ObservationData",
+  data_type = "HYDROGRAPH",
+  basin_ID = NULL,
+  NA_value = -1.2345
 )
 }
 \arguments{
-\item{ts}{time series to write in xts or dataframe format}
+\item{x}{time series in xts format to write to file}
 
-\item{params}{the full string expression for the parameters line to write to file}
+\item{filename}{name of output file (with rvt extension)}
 
-\item{units}{the full string expression for the units line to write to file}
+\item{rvt_type}{type of rvt file to write (e.g. ObservationData)}
 
-\item{dates}{vector of date objects passed, necessary only if ts is not xts}
+\item{data_type}{type of data in x (e.g. HYDROGRAPH)}
 
-\item{prd}{period to use in writing rvt file, format "YYYY-MM-DD/YYYY-MM-DD"}
+\item{basin_ID}{subbasin (or HRU) ID corresponding to the time series}
 
-\item{tt}{initial start time to file}
-
-\item{dt}{time interval to write to file}
-
-\item{ff}{filename to write to without .rvt extension (added automatically)}
+\item{NA_value}{value to use for NA values in rvt file (default -1.2345 for Raven format)}
 }
 \value{
-\item{flag}{returns TRUE if the function executed successfully}
+\code{TRUE} if the function executed successfully
 }
 \description{
-rvn_rvt_write generates a Raven rvt file from a time series
+Generates a Raven rvt file of the specified type from an xts time series.
 }
 \details{
-This function writes the rvt file for a given time series dataset. The function will write out
-the entirety of the columns provided in the given xts object. Please ensure that the
-parameters supplied in the params and units objects match the xts object supplied.
+Writes the rvt file for a given time series dataset. The type of rvt file to write is
+determined by the rvt_type argument, which must match one of the supported Raven types.
+Note that this function does not support the writing of meteorological data, this is handled
+by the \code{rvn_rvt_write_met} function.
+
+The format of the rvt file, including required fields to write to file, are determined from
+the supplied rvt_type parameter and from the mapping provided by \code{data("rvn_rvt_mappings_data")}. The
+data_type is also checked against the provided mappings to check for valid state variables and
+accompanying units.
+
+If the data is found to have an inconsistent timestep, the function will attempt to correct it
+by infilling missing time steps with \code{\link{rvn_ts_infill}}. If successful, a warning is issued
+to the user and the function will proceed, else an error will be raised.
+
+No other quality control of the data is performed here. Some rvt types, such as ObservationWeights,
+cannot have missing values in the data; it is the responsibility of the user to supply \code{x} with
+no missing values if required. Any missing values in \code{x} are written to file with the
+missing value code provided by \code{NA_value}.
+
+\code{x} should be an xts time series object with multiple rows of data and a single column.
 }
 \examples{
 
@@ -49,11 +60,15 @@ parameters supplied in the params and units objects match the xts object supplie
 system.file('extdata','run1_Hydrographs.csv', package = "RavenR") \%>\%
 rvn_hyd_read() -> mydata
 
-# write time series to rvt file using data from subbasin 36
-rvn_rvt_write(mydata$hyd$Sub36, params = "HYDROGRAPH", units = "m3/s",
-  ff = file.path(tempdir(), 'raven_rvt_write'))
+# write time series to rvt file using data from subbasin 36 as observed data
+rvn_rvt_write(x=mydata$hyd$Sub36,
+  rvt_type = "ObservationData",
+  data_type = "HYDROGRAPH",
+  basin_ID = 36,
+  filename = file.path(tempdir(), 'mydata.rvt'))
 
 }
 \seealso{
-\code{\link{rvn_rvt_wsc}} to create an rvt file from Water Survey Canada (WSC) data
+\code{\link{rvn_rvt_read}} to read in rvt data files,
+and \code{rvn_rvt_write_met} to write meteorological rvt files.
 }

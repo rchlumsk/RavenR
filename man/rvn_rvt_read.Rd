@@ -7,22 +7,27 @@
 rvn_rvt_read(filename, tzone = "UTC")
 }
 \arguments{
-\item{filename}{the name of the .rvt file (with .rvt extension included ), either relative
-to the working directory or absolute.}
+\item{filename}{path/name of the .rvt file (with .rvt extension included)}
 
 \item{tzone}{string indicating the timezone of the data provided in filename (default "UTC")}
 }
 \value{
-Returns an xts time series with at least one dataset (multiple for :MultiData files)
+Returns a list with two objects:
+  \item{rvt_xts}{xts formatted time series with data}
+  \item{rvt_metadata}{data frame with a 'param' and 'value' column providing rvt metadata (number of points, time interval, subbasin ID, etc.)}
 }
 \description{
 This routine reads in a valid Raven time series input (.rvt) file and returns the
-information as an xts time series.
+information as an xts time series and metadata data frame.
 }
 \details{
-It supports :MultiData, :Data, :ObservedData,
-:BasinInflowHydrograph, and most of the other :Data-like time series commands. It does
-NOT support the master .rvt file with :Gauge or :GriddedForcing commands
+All rvt data types available in Raven are supported (e.g. :MultiData, :Data, :ObservedData,
+:BasinInflowHydrograph). This is handled by the mappings provided in the \code{data("rvn_rvt_mappings_data")}
+function, and additional support for other rvt types can likely be included by making updates
+to that function with modifications to the somewhat generic read function here.
+
+It does NOT support the master .rvt file with :Gauge or :GriddedForcing commands, only the
+reading of time-series based .rvt files with a single time series block within the file.
 
 The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by
 the user to the local time zone as needed, based on the model run.
@@ -31,9 +36,6 @@ the user to the local time zone as needed, based on the model run.
 # read in rvt file
 system.file('extdata','GlenAllan.rvt',package="RavenR") \%>\%
 rvn_rvt_read(.) -> rvt
-plot(rvt$TEMP_DAILY_MIN)
+plot(rvt$rvt_xts$TEMP_DAILY_MIN)
 
-}
-\author{
-James R. Craig, University of Waterloo
 }

@@ -10,11 +10,11 @@ rvn_theme_RavenR()
 returns a theme for use in ggplot2 figures
 }
 \description{
-rvn_theme_RavenR makes the general Raven R Theme for all ggplots
+Makes the general Raven R Theme for all ggplots
 }
 \details{
-This function sets up the default theme for all ggplots generated using a
-built in Raven R function. Made by adjusting the built in theme_bw().
+Sets up the default theme for all ggplots generated using a
+built in Raven R function. Made by adjusting the built in \code{theme_bw}.
 }
 \examples{
 # generate a basic ggplot and apply the RavenR theme

@@ -18,23 +18,23 @@ rvn_monthly_vbias(
 \item{obs}{time series object of observed flows}
 
 \item{add_line}{optionally adds a horizontal line to the plot for reference
-(default TRUE)}
+(default \code{TRUE})}
 
 \item{normalize}{option to normalize the biases and report as percent error
-(default TRUE)}
+(default \code{TRUE})}
 
 \item{add_labels}{optionally adds labels for early peak/late peaks on right
-side axis (default TRUE)}
+side axis (default \code{TRUE})}
 }
 \value{
 \item{mvbias}{monthly volume biases}
 }
 \description{
-rvn_monthly_vbias creates a plot of the monthly volume biases in the simulated
+Creates a plot of the monthly volume biases in the simulated
 flow series.
 }
 \details{
-This function calculates the monthly volume biases and optionally creates a
+Calculates the monthly volume biases and optionally creates a
 plot of them. The monthly volume biases are averaged across all years of
 data. If normalized, the biases are calculated as:
 
@@ -48,7 +48,7 @@ flows with units of m3/s. Note that a plot title is purposely omitted in
 order to allow the automatic generation of plot titles.
 
 The add_labels will add the labels of 'overestimated' and 'underestimated'
-to the right hand side axis if set to TRUE. This is useful in interpreting
+to the right hand side axis if set to \code{TRUE}. This is useful in interpreting
 the plots. Note that the biases are calculated as sim_Volume - obs_Volume,
 which means that negative values mean the volume is underestimated, and
 positive values mean the volume is overestimated.

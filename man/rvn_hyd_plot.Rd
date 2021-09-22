@@ -25,7 +25,7 @@ rvn_hyd_plot(
 
 \item{prd}{period to use in plotting}
 
-\item{winter_shading}{optionally adds shading for winter months (default FALSE)}
+\item{winter_shading}{optionally adds shading for winter months (default \code{FALSE})}
 
 \item{wsdates}{integer vector of winter shading period dates (see details)}
 }
@@ -37,7 +37,7 @@ rvn_hyd_plot creates a hydrograph plot object for the supplied flow series, or
 equivalently a stage plot for reservoir stages.
 }
 \details{
-This function creates a hydrograph plot using the supplied time series; any
+Creates a hydrograph plot using the supplied time series; any
 series not supplied will not be plotted. If the precip time series is
 supplied, the secondary y axis will be used to plot the precip time series.
 

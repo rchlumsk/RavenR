@@ -5,7 +5,7 @@
 #' equivalently a stage plot for reservoir stages.
 #'
 #' @details
-#' This function creates a hydrograph plot using the supplied time series; any
+#' Creates a hydrograph plot using the supplied time series; any
 #' series not supplied will not be plotted. If the precip time series is
 #' supplied, the secondary y axis will be used to plot the precip time series.
 #'
@@ -29,7 +29,7 @@
 #' @param inflow time series object of inflows to subbasin
 #' @param precip time series object of precipitation
 #' @param prd period to use in plotting
-#' @param winter_shading optionally adds shading for winter months (default FALSE)
+#' @param winter_shading optionally adds shading for winter months (default \code{FALSE})
 #' @param wsdates integer vector of winter shading period dates (see details)
 #' @return \item{p1}{returns ggplot plot object}
 #'

@@ -4,18 +4,20 @@
 #' This routine reads in a valid Raven main input (.rvi) file and returns the
 #' information about hydrological processes as a data table.
 #'
-#' @param filename the name of the .rvi file (with .rvi extension included ), either relative
+#' @param filename the name of the .rvi file (with .rvi extension included), either relative
 #' to the working directory or absolute.
 #'
 #' @return
-#' Returns a list including a lone item:
+#' Returns a list with two items:
 #' \item{HydProcTable}{a data table of hydrologic processes. Includes the following data columns:
-#' process type, algorithm, 'from' compartment, 'to' compartment, and condition}
+#' process type, algorithm, 'from' compartment, 'to' compartment, conditional (logical), and condition (character)}
+#' \item{AliasTable}{a table of aliases read from the rvi file, \code{NULL} if no aliases are included}
 #'
 #' @author James R. Craig, University of Waterloo
 #'
 #' @details
-#' This function does not like tabs in the .rvi file - it should be untabified first. Comma-delimited tables with a trailing comma are also problematic.
+#' This function does not like tabs in the .rvi file - it should be untabified first.
+#' Comma-delimited tables with a trailing comma are also problematic.
 #' The .rvi file can have arbitrary contents outside of the :HydrologicProcesses-
 #' :EndHydrologicProcesses block and :SubBasins-:EndSubBasins command blocks.
 #'
@@ -31,6 +33,7 @@
 #' @importFrom utils read.table
 rvn_rvi_read<-function(filename)
 {
+  # checks and setup ----
   stopifnot(file.exists(filename))
 
   # read subbasins table--------------------------------
@@ -38,58 +41,125 @@ rvn_rvi_read<-function(filename)
   lineend<-grep(":EndHydrologicProcesses", readLines(filename), value = FALSE)
 
   if ((length(lineno)==0) || (length(lineend)==0)){
-    print('warning: filename not a valid .rvi file (no :HydrologicProcesses block)')
+    warning('filename not a valid .rvi file (no :HydrologicProcesses block)')
   }
-  delim=""
+  delim="\\s+"
   if (length(grep(",", readLines(filename)[(lineno+3):(lineend-1)], value = FALSE))>0){
     delim="," # comma delimited
   }
-  cnames<-c("ProcessType","Algorithm","From","To")
-  #print(paste0("read rvi: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
-  HPTable<-read.table(filename,
-                          skip=lineno,
-                          nrows=lineend-lineno-1,
-                          sep=delim,
-                          col.names=cnames,
-                          header=FALSE,
-                          blank.lines.skip=TRUE,
-                          strip.white=TRUE,
-                          stringsAsFactors=FALSE,
-                          fill=TRUE, #fills empty data columns
-                          flush=TRUE, #ignores extra data columns
-                          comment.char = "#")
-  HPTable$ProcessType<-trimws(HPTable$ProcessType)
-  HPTable$Algorithm  <-trimws(HPTable$Algorithm)
-  HPTable$From       <-trimws(HPTable$From)
-  HPTable$To         <-trimws(HPTable$To)
-  #untabify
-  #HPTable <- as.data.frame(sapply(HPTable, function(x) gsub("\t", "", x)))
 
-  # correct rviTable for reading RAVEN_DEFAULT algs
+  cnames<-c("ProcessType","Algorithm","From","To","Conditional","Note")
+  HPTable <- data.frame(matrix(NA, nrow=(lineend-lineno-1), ncol=length(cnames)))
+  colnames(HPTable) <- cnames
+  HPtext <- readLines(filename)[(lineno+1):(lineend-1)]
+
+  # parse text ----
+  for (i in 1:length(HPtext)) {
+
+    temp <- unlist(strsplit(trimws(HPtext[i]),split="\\s+"))
+
+    # take only temp items before a comment char
+    if (any(rvn_substrLeft(temp,1) == "#")) {
+      if (which(rvn_substrLeft(temp,1) == "#")[1] > 1) {
+        temp <- temp[1:(which(rvn_substrLeft(temp,1) == "#")[1]-1)]
+      } else {
+        temp <- NULL
+      }
+    }
+
+    if (!is.null(temp)) {
+      if (temp[1] == ":LateralFlush") {
+
+        if (length(temp) != 7) {
+          warning(sprintf("Incorrect number of entries for :LateralFlush on line %i (expected 7)\n%s",i,HPtext[i]))
+        } else {
+          HPTable[i,1:4] <- temp[c(1,2,4,7)]
+          HPTable[i,6] <- sprintf("LateralFlush from %s (%s) to %s (%s)",temp[3],temp[4], temp[6],temp[7])
+        }
+      } else if (temp[1] == ":Split") {
+        HPTable[i,1:4] <- temp[1:4]
+        HPTable[i,6] <- sprintf("ADD :Split %s %s %s",
+                                temp[2], temp[3], temp[5])
+      } else if (rvn_substrLeft(temp[1],1) == "#") {
+        HPTable[i,] <- NA
+      } else if (length(temp) == 4) {
+        HPTable[i,1:4] <- temp
+      }
+    }
+  }
+
+  # remove NA rows
+  HPTable <- HPTable[!is.na(HPTable$ProcessType), ]
+
+  # handle conditionals ----
+  HPTable$Conditional <- ""
+  HPTable$Note <- ""
+
+  i <- 1
+  while (i <= nrow(HPTable)) {
+
+    if (i <= (nrow(HPTable)-1) & HPTable$ProcessType[i+1]==":-->Conditional") {
+
+      cond_index <- i
+      condname<-paste0(HPTable$Algorithm[i+1]," ",HPTable$From[i+1]," ",HPTable$To[i+1])
+      i <- i+1
+
+      if (HPTable$ProcessType[i+1]==":-->Conditional") {
+        for (j in (i+1):nrow(HPTable)) {
+          if (HPTable$ProcessType[j]==":-->Conditional") {
+            condname <- sprintf("%s; %s",condname, paste0(HPTable$Algorithm[j]," ",HPTable$From[j]," ",HPTable$To[j]))
+          } else {
+            i <- j-1
+            break
+          }
+        }
+      }
+      HPTable$Conditional[cond_index]<-condname
+    }
+
+    i <- i+1
+  }
+
+  # split separations ----
+  while (length(grep("\\bADD :Split",x=HPTable$Note)) > 0) {
+
+    i <- grep("\\bADD :Split",x=HPTable$Note)[1]
+
+    temp <- data.frame(matrix(NA,nrow=1,ncol=length(cnames)))
+    colnames(temp) <- cnames
+    temp[1,1:4] <- unlist(strsplit(HPTable[i,"Note"], split=" "))[2:5]
+    temp[1,5] <- HPTable[i,5] # carry over any conditional information
+    # temp[1,6] <-
+    HPTable[i,"Note"] <- ""
+    HPTable <- rbind(HPTable[1:i,],
+                     temp,
+                     HPTable[(i+1):(nrow(HPTable)),])
+  }
+
+  # correct rviTable for reading RAVEN_DEFAULT algs ----
   for (i in 1:nrow(HPTable)){
     if (HPTable$Algorithm[i]=="RAVEN_DEFAULT") { # not unique
       if (HPTable$ProcessType[i]==":-->Overflow"       ){HPTable$Algorithm[i]="OVERFLOW_RAVEN"}
       else if (HPTable$ProcessType[i]==":Split"        ){HPTable$Algorithm[i]="SPLIT_RAVEN"}
       else if (HPTable$ProcessType[i]==":Precipitation"){HPTable$Algorithm[i]="PRECIP_RAVEN"}
       else if (HPTable$ProcessType[i]==":Flush"        ){HPTable$Algorithm[i]="FLUSH_RAVEN"}
+      # else if (HPTable$ProcessType[i]==":LateralFlush"        ){HPTable$Algorithm[i]="LATERALFLUSH_RAVEN"} # leave as RAVEN_DEFAULT
     }
   }
 
-  #add conditionals column
-  HPTable$Conditional<-NA
-  for (i in 1:nrow(HPTable))
-  {
-    is_cond=(HPTable$ProcessType[i]==":-->Conditional")
-    #print(paste0("reading row ",i,": ",HPTable$Algorithm[i]))
-    if (is_cond)
-    {
-      condname<-paste0(HPTable$Algorithm[i]," ",HPTable$From[i]," ",HPTable$To[i])
-     # print(paste0("Conditional! ",condname))
-      HPTable$Conditional[i-1]<-condname
-    }
-  }
   #delete conditionals rows
   HPTable<-HPTable[(HPTable$ProcessType!=":-->Conditional"),]
 
-  return (list(HydProcTable=HPTable))
+  # read aliases ----
+  alias_df <- data.frame(matrix(NA,nrow=0,ncol=2))
+  colnames(alias_df) <- c("Alias","Basename")
+  for (ind in grep(":Alias", readLines(filename), value = FALSE)) {
+    temp <- unlist(strsplit(readLines(filename)[ind],split=" "))
+    temp <- temp[temp != ""]
+    alias_df <- rbind(alias_df, data.frame(t(temp[2:3])))
+  }
+  names(alias_df) <- c("alias","basename")
+  if (nrow(alias_df) == 0) {alias_df <- NULL}
+
+  return (list(HydProcTable=HPTable, AliasTable=alias_df))
 }

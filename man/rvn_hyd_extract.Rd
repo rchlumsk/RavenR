@@ -25,10 +25,11 @@ returns an xts object with sim, obs, inflow, and obs_inflow time series (if avai
 }
 \description{
 rvn_hyd_extract is used for extracting data from the Raven hydrograph object.
-Works for objects passed from rvn_hyd_read function (which reads the Hydrographs.csv file produced by the modelling framework Raven).
+Works for objects passed from rvn_hyd_read function (which reads the
+Hydrographs.csv file produced by the modelling framework Raven).
 }
 \details{
-rvn_hyd_extract is used to extract the modelled and observed data from a Raven
+Extracts the modelled and observed data from a Raven
 hydrograph object by name reference. It is also easy to create plots of
 modelled and observed data using this function. The simulated and observed
 files are outputted regardless of whether a plot is created, for the

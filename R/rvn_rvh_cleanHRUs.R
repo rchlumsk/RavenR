@@ -9,13 +9,15 @@
 #' @param area_tol percentage of watershed area beneath which HRUs should be removed (e.g.,
 #' default value of 0.01 would indicate anything smaller than 1 percent of watershed extent should be removed)
 #' @param merge TRUE if similar HRUs are to be merged (this can be slow for large models)
-#' @param elev_tol elevation difference (in metres) considered similar. only used if merge=TRUE.
-#' @param slope_tol slope difference (in degrees) considered similar. only used if merge=TRUE.
-#' @param aspect_tol slope difference (in degrees) considered similar. only used if merge=TRUE.
-#' @param ProtectedHRUList list of HRU IDs that are sacrosanct (not to be removed)
+#' @param elev_tol elevation difference (in metres) considered similar. only used if \code{merge=TRUE}
+#' @param slope_tol slope difference (in degrees) considered similar. only used if \code{merge=TRUE}
+#' @param aspect_tol slope difference (in degrees) considered similar. only used if \code{merge=TRUE}
+#' @param ProtectedHRUs vector of HRU IDs that are sacrosanct (not to be removed, but may still increase in area)
+#' @param LockedHRUs vector of HRU IDs that are locked (not to be modified)
+#' @param LockedSubbasins vector of subbasin IDs that are locked (not to be modified).
 #'
 #' @details
-#' rvh.clean removes HRUs in two ways:
+#' \code{rvn_rvh_cleanhrus} removes HRUs in two ways:
 #'
 #'   1. it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
 #' subbasin are expanded by the lost area to keep the same relative coverage.
@@ -23,6 +25,18 @@
 #'   2. it consolidates similar HRUs within the same subbasin (those with same land cover,
 #'     vegetation, soil profile and similar slope, aspect, and elevation)
 #'
+#' The ProtectedHRUs allows the specification of HRUs that should not be removed, even if they
+#' would otherwise be merged or removed. These HRUs may still increase in size as other HRUs are
+#' consolidated.
+#'
+#' The LockedHRUs allows for the specification of HRUs that will not change (removed or increase
+#' in size), which may be useful for specific land types such as glaciers or water bodies. It is
+#' possible that locking HRUs may prevent the script from resizing remaining HRUs within a subbasin,
+#' in which case a warning is issued to the user that the area has changed. If this is the case, it
+#' is suggested to reduce the area threshold to try and prevent this issue, or consider simply locking some
+#' subbasins.
+#'
+#' Note that merging can be a computationally expensive process, and for this reason is set as \code{FALSE} by default.
 #'
 #' @return \item{hru_table}{cleaned HRU table as a dataframe}
 #'
@@ -42,17 +56,22 @@
 #' nrow(rvh$HRUtable)
 #'
 #' # clean contents (in this case, remove all HRUs covering less than 5% of the total area)
-#' rvh$HRUtable <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
+#' newHRUs <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
 #'
+#' # clean contents but locking urban areas (two HRUs locked)
+#' newHRUs <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE,
+#'    LockedHRUs=rvh$HRUtable[rvh$HRUtable$LandUse=="URBAN", "ID"])
 #'
 #' @export rvn_rvh_cleanhrus
 #' @importFrom stats aggregate
 #' @importFrom dplyr group_by summarise
 rvn_rvh_cleanhrus <- function(HRUtab, SBtab, area_tol=0.01, merge=FALSE,
-                            elev_tol=50, slope_tol=4, aspect_tol=20, ProtectedHRUList=c()) {
+                            elev_tol=50, slope_tol=4, aspect_tol=20,
+                            ProtectedHRUs=c(), LockedHRUs=c(), LockedSubbasins=c()) {
   #routine:
   init_nHRUs<-nrow(HRUtab)
   init_Area<-sum(HRUtab$Area)
+  init_SubAreas <- stats::aggregate(Area ~ SBID, FUN = sum, data=HRUtab)
   rem1<-0
   rem2<-0
 
@@ -69,19 +88,45 @@ rvn_rvh_cleanhrus <- function(HRUtab, SBtab, area_tol=0.01, merge=FALSE,
   # re-sort HRU dataframe by SBID then by area frac
   HRUtab<-HRUtab[with(HRUtab, order(SBID, areafrac)),]
 
-  # tag to remove if area fraction less than tolerance %
-  HRUtab$remove<-(HRUtab$areafrac<area_tol) & !(HRUtab$ID %in% ProtectedHRUList) # (&& HRUtab$cumareafrac<0.25)
+  # add all HRUs in LockedSubbasins as LockedHRUs
+  if (length(LockedSubbasins) > 0) {
+    LockedHRUs <- unique(c(LockedHRUs, HRUtab$ID[HRUtab$SBID %in% LockedSubbasins]))
+  }
 
-  # calculate area correction factors for all HRUs
-  A<-stats::aggregate(areafrac ~ SBID, FUN = sum, data=HRUtab[HRUtab$remove==FALSE, ])
-  rownames(A)<-A$SBID
+  # add locked HRU property
+  HRUtab$locked <- HRUtab$ID %in% LockedHRUs
+
+  # tag to remove if area fraction less than tolerance %
+  HRUtab$remove<-(HRUtab$areafrac<area_tol) & !(HRUtab$ID %in% ProtectedHRUs) & !(HRUtab$locked) # (&& HRUtab$cumareafrac<0.25) # !(HRUtab$ID %in% LockedHRUs)
+
+  # calculate area correction factors for all HRUs, considering locked HRUs
+  unlocked_SubAreas <- stats::aggregate(Area ~ SBID, FUN = sum, data=HRUtab[HRUtab$locked==FALSE,])
+  newunlocked_SubAreas <- stats::aggregate(Area ~ SBID, FUN = sum, data=HRUtab[HRUtab$remove==FALSE & HRUtab$locked==FALSE,])
+  A <- data.frame("SBID"=unlocked_SubAreas$SBID,
+                  "areafrac"=(newunlocked_SubAreas$Area / unlocked_SubAreas$Area))
+  # add back any subbasin area fracs where all hrus in subbasin are locked with an areafrac (correction) of 1
+  if (any(init_SubAreas$SBID %notin% A$SBID)) {
+    A <- rbind(A, data.frame("SBID"=init_SubAreas[init_SubAreas$SBID %notin% A$SBID, "SBID"],
+                             "areafrac"=rep(1, length(init_SubAreas[init_SubAreas$SBID %notin% A$SBID, "SBID"]))))
+  }
+
+  # A<-stats::aggregate(areafrac ~ SBID, FUN = sum, data=HRUtab[HRUtab$remove==FALSE & HRUtab$locked==FALSE,])
+  # rownames(A)<-A$SBID
   B<-base::merge(HRUtab["SBID"],A[c("SBID","areafrac")],by="SBID")$areafrac
 
   # unremove HRUs which were eradicating an entire SB
   B=ifelse(B==0,1.0,B)
   HRUtab$remove<-ifelse(B==1.0,B!=1.0,HRUtab$remove)
 
-  HRUtab$newarea<-HRUtab$Area / B *as.numeric(!HRUtab$remove)
+  # correct B to 1 for locked HRUs
+  B[which(HRUtab$locked)] <- 1.0
+
+  # calculate new areas (for non-locked HRUs)
+  HRUtab$newarea <- HRUtab$Area / B *as.numeric(!HRUtab$remove)
+
+  if (round(sum(HRUtab$newarea),1) != round(init_Area,1)) {
+    warning("rvn_rvh_cleanhrus: The initial area does not match the resulting area.\nThere may be insufficient unlocked HRUs in one or more subbasins to support merging based on the area threshold.")
+  }
 
   rem1<-sum(HRUtab$remove==TRUE)
   area1<-sum(HRUtab[HRUtab$remove==TRUE,]$Area)
@@ -93,20 +138,19 @@ rvn_rvh_cleanhrus <- function(HRUtab, SBtab, area_tol=0.01, merge=FALSE,
 
     HRUtab$similar <- NA
 
-
     # for (i in 1:nrow(HRUtab))# old line
     for (i in 1:(nrow(HRUtab)-1)) {
       if (i %% 100==0){print(i)}
       for (k in (i+1):nrow(HRUtab)) {  # change to check current row against all upcoming rows, and ensure that k != i for all i
         if (HRUtab$SBID[i]==HRUtab$SBID[k]){ # kept separate for speed
           if (HRUtab$LandUse[i]==HRUtab$LandUse[k])  {
-            if ((HRUtab$remove[i]!=TRUE) & (HRUtab$remove[k]!=TRUE)){
+            if ((HRUtab$remove[i]!=TRUE) & (HRUtab$remove[k]!=TRUE) & (HRUtab$locked[i]!=TRUE) & (HRUtab$locked[k]!=TRUE) ){
               if  ((HRUtab$Vegetation[i]==HRUtab$Vegetation[k]) &
                    (HRUtab$SoilProfile[i]==HRUtab$SoilProfile[k]) &
                    (HRUtab$Terrain[i]==HRUtab$Terrain[k]) &
                    (HRUtab$Aquifer[i]==HRUtab$Aquifer[k]) &
-                   !(HRUtab$ID[i] %in% ProtectedHRUList) &
-                   !(HRUtab$ID[k] %in% ProtectedHRUList) &
+                   !(HRUtab$ID[i] %in% ProtectedHRUs) &
+                   !(HRUtab$ID[k] %in% ProtectedHRUs) &
                    (abs(HRUtab$Elevation[i]-HRUtab$Elevation[k])<elev_tol) &
                    (abs(HRUtab$Slope[i]-HRUtab$Slope[k])<slope_tol) &
                    ((abs(HRUtab$Aspect[i]-HRUtab$Aspect[k])<aspect_tol) |
@@ -147,13 +191,15 @@ rvn_rvh_cleanhrus <- function(HRUtab, SBtab, area_tol=0.01, merge=FALSE,
   # delete removed HRUs
   HRUtab<-HRUtab[ HRUtab$remove==FALSE, ]
   # remove temporary columns
-  HRUtab<-HRUtab[ , !(names(HRUtab) %in% c("areafrac","newarea","remove","similar","AreaSB"))]
+  HRUtab<-HRUtab[ , !(names(HRUtab) %in% c("areafrac","newarea","remove","locked","similar","AreaSB"))]
   # return to order by HRUID
   HRUtab<-HRUtab[with(HRUtab, order(ID)),]
 
   #report results
   #-----------------------------------------------------------
-  print(paste0("HRU table Cleaned. #HRUs reduced from ",toString(init_nHRUs)," to ",toString(nrow(HRUtab)) ))
+  print(sprintf("HRU table Cleaned. #HRUs reduced from %i to %i; %i HRUs protected and %i HRUs locked",
+                init_nHRUs,nrow(HRUtab), length(ProtectedHRUs), length(LockedHRUs)))
+  # print(paste0("HRU table Cleaned. #HRUs reduced from ",toString(init_nHRUs)," to ",toString(nrow(HRUtab)) ))
   print(paste0(toString(rem1)," HRUs failed area tolerance test (",toString(area1)," km2 (",toString(round(area1/init_Area*100,1)),"%) recategorized)"))
   if (merge==TRUE){
     print(paste0(toString(rem2)," HRUs failed similarity tolerance test"))

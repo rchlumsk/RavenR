@@ -22,10 +22,10 @@ rvn_flow_residuals(
 (default 3)}
 
 \item{add_line}{optionally adds a horizontal line to the plot for reference
-(default FALSE)}
+(default \code{FALSE})}
 
 \item{winter_shading}{optionally adds a light blue shading to winter months
-(default FALSE)}
+(default \code{FALSE})}
 
 \item{wsdates}{integer vector of winter shading period dates (see details)}
 }
@@ -37,7 +37,7 @@ rvn_flow_residuals creates a residuals time series for flow values. Useful in
 diagnotic analysis of model outputs.
 }
 \details{
-This function creates a residuals time series plot for flow values, with the
+Creates a residuals time series plot for flow values, with the
 option to smooth out the values using the rollmean function in zoo. The
 winter months are optionally shaded in the time series; winter period is
 defined as December 1st to March 31st.

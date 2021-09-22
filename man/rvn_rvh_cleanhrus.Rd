@@ -12,7 +12,9 @@ rvn_rvh_cleanhrus(
   elev_tol = 50,
   slope_tol = 4,
   aspect_tol = 20,
-  ProtectedHRUList = c()
+  ProtectedHRUs = c(),
+  LockedHRUs = c(),
+  LockedSubbasins = c()
 )
 }
 \arguments{
@@ -25,13 +27,17 @@ default value of 0.01 would indicate anything smaller than 1 percent of watershe
 
 \item{merge}{TRUE if similar HRUs are to be merged (this can be slow for large models)}
 
-\item{elev_tol}{elevation difference (in metres) considered similar. only used if merge=TRUE.}
+\item{elev_tol}{elevation difference (in metres) considered similar. only used if \code{merge=TRUE}}
 
-\item{slope_tol}{slope difference (in degrees) considered similar. only used if merge=TRUE.}
+\item{slope_tol}{slope difference (in degrees) considered similar. only used if \code{merge=TRUE}}
 
-\item{aspect_tol}{slope difference (in degrees) considered similar. only used if merge=TRUE.}
+\item{aspect_tol}{slope difference (in degrees) considered similar. only used if \code{merge=TRUE}}
 
-\item{ProtectedHRUList}{list of HRU IDs that are sacrosanct (not to be removed)}
+\item{ProtectedHRUs}{vector of HRU IDs that are sacrosanct (not to be removed, but may still increase in area)}
+
+\item{LockedHRUs}{vector of HRU IDs that are locked (not to be modified)}
+
+\item{LockedSubbasins}{vector of subbasin IDs that are locked (not to be modified).}
 }
 \value{
 \item{hru_table}{cleaned HRU table as a dataframe}
@@ -41,13 +47,26 @@ Takes \code{\link{rvn_rvh_read}}-generated HRUtable and SBTable and returns clea
 with (hopefully) fewer HRUs
 }
 \details{
-rvh.clean removes HRUs in two ways:
+\code{rvn_rvh_cleanhrus} removes HRUs in two ways:
 
   1. it removes all HRUs smaller than the area_tol percentage of total area. Adjacent HRUs in the
 subbasin are expanded by the lost area to keep the same relative coverage.
 
   2. it consolidates similar HRUs within the same subbasin (those with same land cover,
     vegetation, soil profile and similar slope, aspect, and elevation)
+
+The ProtectedHRUs allows the specification of HRUs that should not be removed, even if they
+would otherwise be merged or removed. These HRUs may still increase in size as other HRUs are
+consolidated.
+
+The LockedHRUs allows for the specification of HRUs that will not change (removed or increase
+in size), which may be useful for specific land types such as glaciers or water bodies. It is
+possible that locking HRUs may prevent the script from resizing remaining HRUs within a subbasin,
+in which case a warning is issued to the user that the area has changed. If this is the case, it
+is suggested to reduce the area threshold to try and prevent this issue, or consider simply locking some
+subbasins.
+
+Note that merging can be a computationally expensive process, and for this reason is set as \code{FALSE} by default.
 }
 \examples{
 
@@ -59,8 +78,11 @@ rvh <- rvn_rvh_read(nith)
 nrow(rvh$HRUtable)
 
 # clean contents (in this case, remove all HRUs covering less than 5\% of the total area)
-rvh$HRUtable <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
+newHRUs <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE)
 
+# clean contents but locking urban areas (two HRUs locked)
+newHRUs <- rvn_rvh_cleanhrus(rvh$HRUtable,rvh$SBtable,area_tol = 0.05, merge=TRUE,
+   LockedHRUs=rvh$HRUtable[rvh$HRUtable$LandUse=="URBAN", "ID"])
 
 }
 \seealso{

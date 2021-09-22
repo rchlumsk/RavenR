@@ -11,7 +11,7 @@ rvn_df_to_Raven_table(attributes, units, df, id_col = TRUE, parameters = FALSE)
 
 \item{units}{array of strings with the corresponding units}
 
-\item{df}{Dataframe of values corresponding to attributes/parameters}
+\item{df}{data frame of values corresponding to attributes/parameters}
 
 \item{id_col}{True/False of whether an numeric id column is the first column in the table
 and, in common Raven fashion, does not have a corresponding attribute (default: True)}
@@ -19,7 +19,7 @@ and, in common Raven fashion, does not have a corresponding attribute (default: 
 \item{parameters}{bool, when adding attribues/parameter tag, should ':Parameters' be used instead of ':Attributes'?}
 }
 \value{
-outdf data.frame object
+\item{outdf}{data.frame object}
 }
 \description{
 Sets up tables for writing to Raven input files

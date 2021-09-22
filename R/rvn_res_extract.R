@@ -6,7 +6,7 @@
 #' file).
 #'
 #' @details
-#' rvn_res_extract is used to extract the modelled and observed data from a Raven
+#' Extracts the modelled and observed data from a Raven
 #' reservoir object by name reference. It is also easy to create plots of
 #' modelled and observed data using this function. The simulated and observed
 #' files are outputted regardless of whether a plot is created, for the
@@ -65,7 +65,6 @@ rvn_res_extract <- function(subs=NA, res=NA, prd=NULL) {
 
   mysub <- NULL
 
-  # extract random pair
   reservoirs <- res$res
   units <- res$units
   mycols <- colnames(reservoirs)
@@ -74,25 +73,12 @@ rvn_res_extract <- function(subs=NA, res=NA, prd=NULL) {
   mysub.sim <- sprintf("\\b%s\\b",subs) # sim does not have a sim
   mysub.obs <- sprintf("\\b%s_obs\\b",subs)
   mysub.inflow <- sprintf("\\b%s_inflow\\b",subs)
-  # ind.base <- grep(mysub,mycols)
-  # ind.sim <- ind.base[1]  # assume sim is always there and first
-  # ind.inflow <- ind.base[grep(mysub.inflow,mycols[ind.base])]
-  # ind.obs <- ind.base[grep(mysub.obs,mycols[ind.base])]
 
   ind.sim <- grep(mysub.sim,mycols)
   ind.obs <- grep(mysub.obs,mycols)
   ind.inflow <- grep(mysub.inflow,mycols)
 
   ind <- c(ind.sim,ind.inflow,ind.obs)
-
-  # mysub <- subs # sprintf("\\b%s\\b",subs)
-  # mysub.obs <- "obs"
-  # mysub.inflow <- "inflow"
-  # ind.base <- grep(mysub,mycols)
-  # ind.sim <- ind.base[1]  # assume sim is always there and first
-  # ind.inflow <- ind.base[grep(mysub.inflow,mycols[ind.base])]
-  # ind.obs <- ind.base[grep(mysub.obs,mycols[ind.base])]
-  # ind <- c(ind.sim,ind.inflow,ind.obs)
 
   if (length(ind)==0) {
     stop(sprintf("%s not found in the columns, check the supplied subs argument.",mysub))
@@ -115,29 +101,6 @@ rvn_res_extract <- function(subs=NA, res=NA, prd=NULL) {
   if (length(ind.inflow) == 1) {
     myinflow <- reservoirs[,ind.inflow]
   }
-
-  # # determine the period to use
-  # if (!(is.null(prd))) {
-  #
-  #   # period is supplied; check that it makes sense
-  #   firstsplit <- unlist(strsplit(prd,"/"))
-  #   if (length(firstsplit) != 2) {
-  #     stop("Check the format of supplied period argument prd; should be two dates separated by '/'.")
-  #   }
-  #   if (length(unlist(strsplit(firstsplit[1],"-"))) != 3 || length(unlist(strsplit(firstsplit[2],"-"))) != 3
-  #       || nchar(firstsplit[1])!= 10 || nchar(firstsplit[2]) != 10) {
-  #     stop("Check the format of supplied period argument prd; two dates should be in YYYY-MM-DD format.")
-  #   }
-  #   # add conversion to date with xts format check ?
-  #
-  # } else {
-  #   # period is not supplied
-  #
-  #   # not using smart.period function and no period supplied; use whole range
-  #   N <- nrow(reservoirs)
-  #   prd <- sprintf("%d-%02d-%02d/%i-%02d-%02d",year(reservoirs[1,1]),month(reservoirs[1,1]),day(reservoirs[1,1]),
-  #                     year(reservoirs[N,1]),month(reservoirs[N,1]),day(reservoirs[N,1]) )
-  # }
 
   prd <- rvn_get_prd(mysim, prd)
 

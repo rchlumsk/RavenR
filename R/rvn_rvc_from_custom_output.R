@@ -1,14 +1,17 @@
-#' Generate RVC file from Custom Output CSVs
+#' @title Generate RVC file from Custom Output CSVs
+#'
+#' @description
+#' Creates an initial conditions rvc file that specifies the initial state
+#' using the information from the supplied custom output file.
 #'
 #' @param filename filepath of rvc file to be created (with .rvc extension)
 #' @param custfiles array of filepaths to Raven Custom Output files (must be ByHRU)
 #' @param FUN the aggregation function to be applied to state variables (e.g. mean, passed to sapply)
 #' @param init_date datetime of model start (optional, can be calculated from Custom Output files)
-#' @param ... optional arguments passed to rvn_rvc_write (e.g. author, description)
+#' @param ... optional arguments passed to \code{\link{rvn_rvc_write}} (e.g. author, description)
 #'
-#' @return TRUE upon success
+#' @return \item{TRUE}{if executed successfully}
 #' @author Leland Scantlebury
-#' @export rvn_rvc_from_custom_output
 #'
 #' @examples
 #' # Create array of custom output file(s)
@@ -19,6 +22,7 @@
 #'                            custfiles = custout,
 #'                            FUN = mean)
 #' @importFrom zoo index
+#' @export rvn_rvc_from_custom_output
 rvn_rvc_from_custom_output <- function(filename, custfiles, FUN, init_date=NULL,...){
 
   #-- ValiDate init_date

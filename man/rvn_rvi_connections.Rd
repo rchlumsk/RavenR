@@ -11,36 +11,36 @@ rvn_rvi_connections(
 )
 }
 \arguments{
-\item{rvi}{data object generated from the rvn_rvi_read() routine}
+\item{rvi}{data object generated from the \code{\link{rvn_rvi_read}} routine}
 
 \item{ProcConDataFile}{(optional) path to RavenProcesConnections.dat file}
 }
 \value{
-Returns a dataframe of all of the process connections Includes the following data columns:
-process type, algorithm, 'from' compartment, 'to' compartment, and conditional.
+Returns a list with two items:
+\item{connections}{a a dataframe of all of the process connections Includes the following data columns:
+process type, algorithm, 'from' compartment, 'to' compartment, and conditional}
+\item{AliasTable}{a table of aliases (unchanged from the supplied \code{rvi$AliasTable})}
 }
 \description{
-This routine reads in a hydrologic process list from rvn_rvi_read() and generates
+This routine reads in a hydrologic process list from \code{\link{rvn_rvi_read}} and generates
 the list of hydrologic process connections.
 }
 \details{
-This function relies on a valid and up-to-date RavenProcessConnections.dat file.
+Relies on a valid and up-to-date RavenProcessConnections.dat file.
 This file is provided with the RavenR package, but
-may be overrided by a more recent file if provided manually.
+may be overridden by a more recent file if provided manually.
 }
 \examples{
 rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR"))
 
-# get number of Hydrologic processes
-nrow(rvi$HydProcTable)
-
-conn <- rvn_rvi_connections(rvi)
-head(conn)
+rvi_conn <- rvn_rvi_connections(rvi)
+head(rvi_conn$connections)
+head(rvi_conn$AliasTable)
 
 }
 \seealso{
 \code{\link{rvn_rvi_read}} to read a .rvi file and generate an rvi object, and
-\code{\link{rvn_rvi_process_plot}} to plot the process network produced in this function.
+\code{\link{rvn_rvi_process_ggplot}} or \code{\link{rvn_rvi_process_diagrammer}} to plot the process network produced in this function.
 
 See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 }

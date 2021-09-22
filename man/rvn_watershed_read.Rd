@@ -16,18 +16,13 @@ rvn_watershed_read(ff = NA, tzone = "UTC")
 names} \item{units}{vector corresponding to units of each column}
 }
 \description{
-rvn_watershed_read is used to read in the WatershedStorage.csv file produced by
-Raven.
+Read in the WatershedStorage.csv file produced by Raven.
 }
 \details{
-This function expects a full file path to the WatershedStorage.csv file,
+Expects a full file path to the WatershedStorage.csv file,
 then reads in the file using read.csv. The main advantage of this functon is
 renaming the columns to nicer names and extracting the units into something
 much easier to read.
-
-This function is also built to support the wshd.animate function, which uses
-the object created here for creating an animation of the watershed storage
-containers.
 
 ff is the full file path of the WatershedStorage.csv file. If the file is
 located in the current working directory, then simply the name of the file

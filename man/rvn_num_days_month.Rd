@@ -13,7 +13,7 @@ rvn_num_days_month(date)
 \item{int}{number of days in the month}
 }
 \description{
-rvn_num_days_month is used to calculate the number of days in the month
+Calculates the number of days in the month
 }
 \details{
 This method includes leap years if they exist in the specified month.

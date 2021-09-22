@@ -15,16 +15,15 @@ rvn_res_read(ff = NA, tzone = "UTC")
 \item{res}{data frame from the file with standardized names}
 }
 \description{
-rvn_res_read is used to read in the ReservoirStages.csv file produced by the
-modelling Framework Raven.
+Reads in the ReservoirStages.csv file produced by Raven.
 }
 \details{
-This function expects a full file path to the ReservoirStages.csv file, then
+Expects a full file path to the ReservoirStages.csv file, then
 reads in the file using read.csv. The main advantage of this function is
 renaming the columns to nicer names and extracting the units into something
 much easier to read.
 
-This function is also built to support the rvn_res_extract function, which uses
+This function is also built to support the \code{\link{rvn_res_extract}} function, which uses
 the object created here for extracting by reference to the columns named
 here, for example sub24.
 

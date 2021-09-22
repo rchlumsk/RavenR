@@ -7,6 +7,9 @@
 \format{
 rvn_weathercan_sample is a tibble with 1095 rows, and 37 columns.
 }
+\source{
+Historical Climate Data from Environment Canada (climate.weather.gc.ca) via `weathercan` package
+}
 \usage{
 rvn_weathercan_sample
 }
@@ -20,8 +23,6 @@ Note that this sample is provided to avoid loading the weathercan package while 
 Additional information on data provided by Environment Canada can be found on the Historical Data portal.
 }
 \seealso{
-\code{\link{rvn_rvt_ECmet}} for writing rvt files from weathercan data
-
- @source Historical Climate Data from Environment Canada (climate.weather.gc.ca) via `weathercan` package
+\code{\link{rvn_rvt_write_met}} for writing rvt files from meteorological data (including weathercan data).
 }
 \keyword{datasets}

@@ -12,7 +12,7 @@ rvn_substrMRight(x, n)
 \item{n}{number of characters to remove from the right side of the string}
 }
 \description{
-rvn_substrMRight returns a string x with n characters removed from the right
+Returns a string x with n characters removed from the right
 side of the string.
 }
 \examples{

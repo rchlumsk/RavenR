@@ -5,10 +5,10 @@
 #' the modelling Framework Raven.
 #'
 #' @details
-#' This function expects a full file path to the ExhaustiveMassBalance.csv file,
-#' then reads in the file using read.csv. The main advantage of this functon is
+#' Expects a full file path to the ExhaustiveMassBalance.csv file,
+#' then reads in the file using read.csv. The main advantage of this function is
 #' renaming the columns to nicer names and extracting the units into something
-#' much easier to read.
+#' that is much easier to read.
 #'
 #' ff is the full file path of the ExhaustiveMassBalance.csv file. If the file is
 #' located in the current working directory, then simply the name of the file
@@ -21,7 +21,7 @@
 #'
 #' @param ff full file path to the ExhaustiveMassBalance.csv file
 #' @param join_categories boolean whether add to the category tag as a column
-#' name prefix in exhaustivemb output (default TRUE)
+#' name prefix in exhaustivemb output (default \code{TRUE})
 #' @param tzone string indicating the timezone of the data in ff
 #' @return \item{exhaustivemb}{data frame from the file with standardized
 #' names} \item{units}{vector corresponding to units of each column}

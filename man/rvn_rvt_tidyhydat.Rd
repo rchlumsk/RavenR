@@ -6,6 +6,8 @@
 \usage{
 rvn_rvt_tidyhydat(
   indata,
+  rvt_type = "ObservationData",
+  data_type = "HYDROGRAPH",
   subIDs,
   prd = NULL,
   stnNames = NULL,
@@ -18,6 +20,10 @@ rvn_rvt_tidyhydat(
 \arguments{
 \item{indata}{tibble of WSC flow data from tidyhydat's hy_daily_flows() function}
 
+\item{rvt_type}{type of rvt file to write (e.g. ObservationData, BasinInflowHydrograph, etc.)}
+
+\item{data_type}{Raven-syntax data type for flow data (default 'HYDROGRAPH')}
+
 \item{subIDs}{vector of subbasin IDs to correspond to the stations in indata}
 
 \item{prd}{(optional) data period to use in .rvt file}
@@ -28,7 +34,7 @@ rvn_rvt_tidyhydat(
 
 \item{flip_number}{(optional) put the subID first in the .rvt filename}
 
-\item{rd_file}{(optional) name of the redirect file created (if write_redirect = TRUE)}
+\item{rd_file}{(optional) name of the redirect file created (if \code{write_redirect=TRUE})}
 
 \item{filename}{specified name of file(s) to write to (optional)}
 }
@@ -41,9 +47,22 @@ accessed via the tidyhydat package, into .rvt format files usable in
 Raven.
 }
 \details{
-This function takes a single flow tibble generated from tidyhydat and converts the flow data for
+Takes a single flow tibble generated from tidyhydat and converts the flow data for
 each station in the file into .rvt formatted files for a Raven model. If
-multiple stations exist in the .csv file, multiple observation files are created
+multiple stations exist in indata, multiple observation files are created. This function
+is a wrapper for \code{rvn_rvt_write}, with the benefit of automatically parsing the
+tidyhydat download for possibly multiple stations in xts formats before passing
+to the rvt writing function.
+
+rvt_type is the specified rvt file type to write to (see the Raven User's Manual
+or the \code{rvn_rvt_mappings} function for more rvt types). This should be a flow-based
+rvt type, such as ObservationData, BasinInflowHydrograph, ReservoirExtraction, etc.
+Most applications of this will likely write the tidyhydat observations as
+ObservedData for use in model evaluation to historic records.
+
+data_type is the type of Raven input data type, likely 'HYDROGRAPH', for the corresponding
+flow data. If the flow is used as a reservoir-related flow, the data_type may be
+RESERVOIR_INFLOW or RESERVOIR_NETINFLOW.
 
 subIDs is required and should correspond to the subID to be used in the .rvt
 file for each station in the ff file, in the order in which it will be read
@@ -67,13 +86,25 @@ the main model's .rvt file to redirect to the produced time series files.
 
 flip_number is a useful option to place the subID first in the filename.
 This is often cleaner for organizing files in a folder, since the
-alphabeticized order is not dependent on the station name, and the observed
+alphabetized order is not dependent on the station name, and the observed
 files will be in one set.
 
 The function will write to name generated from the station name(s), otherwise
 the .rvt filename may be specified with the filename argument (full path to
 the filename, including .rvt extension). If multiple stations are provided,
 the filename argument may be a vector of filenames.
+
+Note that the function uses
+\code{sort(unique(indata$STATION_NUMBER))} to determine the order of stations,
+thus the filenames and stnNames should correspond to the sorted vector of station numbers as well.
+
+Note that only daily flow data is supported, as tidyhydat only allows for the
+download of daily (or coarser resolution) flow data. Hourly data that is obtained
+must be first processed into xts format and then written with \code{\link{rvn_rvt_write}}.
+
+If the data is found to have an inconsistent timestep, the function will attempt to correct it
+by infilling missing time steps with \code{\link{rvn_ts_infill}}. If successful, a warning is issued
+to the user and the function will proceed, else an error will be raised.
 }
 \examples{
 

@@ -5,7 +5,7 @@
 #' the modelling Framework Raven.
 #'
 #' @details
-#' This function expects a full file path to the ForcingFunctions.csv file,
+#' Expects a full file path to the ForcingFunctions.csv file,
 #' then reads in the file using read.csv. The main advantage of this functon is
 #' renaming the columns to nicer names and extracting the units into something
 #' much easier to read.
@@ -22,7 +22,6 @@
 #' @return
 #'  \item{forcings}{data frame from the file with standardized names}
 #'  \item{units}{vector corresponding to units of each column}
-#'
 #'
 #' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file
 #'

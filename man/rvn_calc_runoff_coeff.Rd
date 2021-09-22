@@ -18,7 +18,7 @@ rvn_calc_runoff_coeff(
 
 \item{hydfile}{file path to Raven-generated hydrographs file}
 
-\item{correct}{(optional) if TRUE, tries to correct runoff coefficient for missing data (assumes missing~0 flow)}
+\item{correct}{(optional) if \code{TRUE}, tries to correct runoff coefficient for missing data (assumes missing~0 flow)}
 }
 \value{
 {data frame with runoff coefficients of gauged basins}

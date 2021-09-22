@@ -6,10 +6,10 @@
 #' @param filename Name of the file, with extension
 #' @param filetype File extension, Encoding, Raven version (e.g. "rvp ASCII Raven 2.9.1")
 #' @param author Name of file author (optional)
-#' @param creationDate Bool of whether creation date should be added to header. (default TRUE)
+#' @param creationDate Bool of whether creation date should be added to header. (default \code{TRUE})
 #' @param textlen Length of lines (default: 40, used to right-align text)
 #'
-#' @return TRUE returns TRUE if executed successfully
+#' @return \item{TRUE}{returns \code{TRUE} if executed successfully}
 #'
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
 #'

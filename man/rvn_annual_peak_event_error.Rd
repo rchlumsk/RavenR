@@ -23,10 +23,10 @@ rvn_annual_peak_event_error(
 \item{dd}{day of water year (default 30)}
 
 \item{add_line}{optionally adds a 1:1 line to the plot for reference
-(default TRUE)}
+(default \code{TRUE})}
 
 \item{add_labels}{optionally adds labels for overpredict/underpredict on
-right side axis (default TRUE)}
+right side axis (default \code{TRUE})}
 }
 \value{
 returns a list with peak event error data in a data frame, and a ggplot object
@@ -38,7 +38,7 @@ rvn_annual_peak_event_error creates a plot of the annual observed and simulated
 peak event errors.
 }
 \details{
-This function creates a plot of the percent errors in simulated peak events
+Creates a plot of the percent errors in simulated peak events
 for each water year. The peaks are calculated as using flows from the same
 day as the peak event in the observed series, i.e. the timing of the peak is
 considered here. Note that the rvn_annual_peak_event function is first used to

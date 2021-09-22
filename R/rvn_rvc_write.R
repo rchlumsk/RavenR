@@ -4,12 +4,12 @@
 #'
 #' @param filename filepath of rvc file to write to (with .rvc extension)
 #' @param initHRU dataframe of initial conditions for state variables (columns) for each HRU (rows).
-#' columns must be valid SV names and there must be an explcit column of HRU ids named 'HRU'.
+#' columns must be valid SV names and there must be an explicit column of HRU ids named 'HRU'.
 #' @param init_date datetime of model start
 #' @param description (optional) Description added after file header
 #' @param author (optional) Name of author, to be printed in file header.
 #'
-#' @return TRUE returns TRUE if function runs properly
+#' @return \item{TRUE}{return \code{TRUE} if the function is executed properly}
 #' @author Leland Scantlebury
 #' @export rvn_rvc_write
 #' @seealso

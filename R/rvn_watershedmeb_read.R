@@ -1,13 +1,13 @@
 #' @title Read in Raven WatershedMassEnergyBalance file
 #'
 #' @description
-#' rvn_watershedmeb_read is used to read in the WatershedMassEnergyBalance.csv file
+#' Used to read in the WatershedMassEnergyBalance.csv file
 #' produced by the modelling Framework Raven.
 #'
 #' @details
-#' This function expects a full file path to the WatershedMassEnergyBalance.csv
+#' Expects a full file path to the WatershedMassEnergyBalance.csv
 #' file, then reads in the file using read.csv. The main advantage of this
-#' functon is renaming the columns to nicer names and extracting the units into
+#' function is renaming the columns to nicer names and extracting the units into
 #' something much easier to read. The from and to rows are also properly
 #' handled, which is not as straightforward as some of the other Raven files.
 #'

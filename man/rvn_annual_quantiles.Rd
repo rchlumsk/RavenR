@@ -22,7 +22,7 @@ rvn_annual_quantiles(
 
 \item{Qupper}{Decimal percentage of upper quantile value (default 0.9)}
 
-\item{water_year}{booolean on whether to sort quantiles by water year start date (default TRUE)}
+\item{water_year}{boolean on whether to sort quantiles by water year start date (default \code{TRUE})}
 
 \item{mm}{month of water year ending (default 9)}
 }

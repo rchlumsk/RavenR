@@ -7,7 +7,7 @@
 #' @param prd time period for subset in character format "YYYY-MM-DD/YYYY-MM-DD"
 #' @param Qlower Decimal percentage of lower quantile value (default 0.1)
 #' @param Qupper Decimal percentage of upper quantile value (default 0.9)
-#' @param water_year booolean on whether to sort quantiles by water year start date (default TRUE)
+#' @param water_year boolean on whether to sort quantiles by water year start date (default \code{TRUE})
 #' @param mm month of water year ending (default 9)
 #' @return \item{qdat}{Time series object of monthly median and quantile values}
 #'

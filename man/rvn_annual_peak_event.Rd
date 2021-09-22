@@ -24,11 +24,11 @@ rvn_annual_peak_event(
 \item{dd}{day of water year (default 30)}
 
 \item{add_line}{optionally adds a 1:1 line to the plot for reference
-(default TRUE)}
+(default \code{TRUE})}
 
-\item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
+\item{add_r2}{optionally computes the R2 and adds to plot (default \code{FALSE})}
 
-\item{add_eqn}{optionally adds the equation for a linear regression line through the origin (default FALSE)}
+\item{add_eqn}{optionally adds the equation for a linear regression line through the origin (default \code{FALSE})}
 }
 \value{
 returns a list with peak data in a data frame, and a ggplot object
@@ -40,7 +40,7 @@ rvn_annual_peak_event creates a plot of the annual observed and simulated peaks,
 based on the water year.
 }
 \details{
-This function creates a scatterplot of the annual observed and simulated
+Creates a scatterplot of the annual observed and simulated
 peaks, calculated for each available water year of data
 within the two series provided; note that the difference between this and
 the annual.peak function is that here the peak event simulated for the same
