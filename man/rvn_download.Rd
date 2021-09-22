@@ -41,6 +41,8 @@ Once downloaded, the Raven.exe file can be found with \code{system.file("extdata
 rvn_download(check=TRUE)
 
 \dontrun{
+## NOT RUN (downloads executable)
+
 # download latest without netcdf support
 rvn_download()
 

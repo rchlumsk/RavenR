@@ -70,6 +70,7 @@ The distance calculation, estimating the distance between stations, is performed
 \examples{
 
 \dontrun{
+## NOT RUN (downloads data + long runtime)
 
 # example to create infilled data sets
 

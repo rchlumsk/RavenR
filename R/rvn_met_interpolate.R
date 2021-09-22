@@ -52,6 +52,7 @@
 #' @examples
 #'
 #' \dontrun{
+#' ## NOT RUN (downloads data + long runtime)
 #'
 #' # example to create infilled data sets
 #'

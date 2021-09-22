@@ -32,6 +32,8 @@
 #' rvn_download(check=TRUE)
 #'
 #' \dontrun{
+#' ## NOT RUN (downloads executable)
+#'
 #' # download latest without netcdf support
 #' rvn_download()
 #'
@@ -48,9 +50,6 @@
 #' @importFrom utils osVersion unzip download.file
 rvn_download<-function(version=NA,NetCDF=FALSE,check=FALSE)
 {
-   # path<-paste(.libPaths()[1],"/RavenR/",sep="")
-   # path1<-paste(.libPaths()[1],"/RavenR",sep="")
-
    . <- NULL
 
    download_path <- tempdir()
@@ -228,7 +227,5 @@ rvn_download<-function(version=NA,NetCDF=FALSE,check=FALSE)
              to=paste(save_path,"/","Raven.exe",sep=""),
              overwrite=TRUE)
 
-   # if(NetCDF)  file.rename(paste(path,"Raven.exe",sep=""),paste(path,"Raven_NetCDF.exe",sep=""))
-   # if(!NetCDF) file.rename(paste(path,"Raven.exe",sep=""),paste(path,"Raven_.exe",sep=""))
    return(res)
 }

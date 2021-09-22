@@ -44,27 +44,29 @@ Invokes shell to execute a Raven model.
 \details{
 Uses the \code{\link{shell}} command to run the Raven.exe command.
 
-The only required parameter is the fileprefix of the model names (i.e. the file prefix of all main
-Raven input files, .rvi, .rvp, etc.).
+If the \code{fileprefix} is not supplied, the function will detect the rvi file automatically and
+use that in the run (if exactly one rvi file exists in the directory).
 
-The indir path must point to the main Raven input files, if they are not in the working directory.
+The \code{indir} path must point to the main Raven input files, if they are not in the working directory.
 
-The ravenexe must point to the Raven.exe file; if not supplied it will look for it in the RavenR/extdata
+The \code{ravenexe} must point to the Raven.exe file; if not supplied it will look for it in the RavenR/extdata
 path that is saved to when using \code{\link{rvn_download}}.
 }
 \examples{
 \dontrun{
+## NOT RUN (data download + runs Raven.exe)
 url<-"http://raven.uwaterloo.ca/files/RavenTutorialFiles.zip"
-destfile<-paste(.libPaths()[1],"/RavenR/RavenTutorialFiles.zip",sep="")
+temploc <- tempdir()
+destfile<-paste(temploc,"/RavenTutorialFiles.zip",sep="")
 download.file(url,destfile)
-destdir<-paste(.libPaths()[1],"/RavenR/RavenTutorialFiles",sep="")
+destdir<-paste(temploc,"/RavenTutorialFiles",sep="")
 dir.create(destdir)
 unzip(zipfile=destfile,exdir=destdir)
 file.remove(destfile)
 
 # Irondeqoiut example
-indir<-paste(destdir,"/Irond",sep="")
-rvn_run(indir=indir,  showoutput=TRUE)
+rvn_run(indir=paste(destdir,"/Irond",sep=""),
+        showoutput=TRUE)
 }
 
 }
