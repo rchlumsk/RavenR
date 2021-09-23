@@ -116,7 +116,8 @@ kam <- rvn_weathercan_sample
 
 # basic use, override filename to temporary file
 rvn_rvt_write_met(metdata = kam,
-  filenames = file.path(tempdir(), "rvn_rvt_metfile.rvt"))
+  filenames = file.path(tempdir(), "rvn_rvt_metfile.rvt"),
+  filename_stndata = file.path(tempdir(), "met_stndata.rvt"))
 
 }
 \seealso{
