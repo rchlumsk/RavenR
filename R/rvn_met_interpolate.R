@@ -15,9 +15,9 @@
 #'
 #' This function does not guarantee to infill all missing values, since this depends on the availability of data
 #' at other locations when it lacks at a given station, although a warning is issued if
-#' missing values remain following the interpolation. It may be possible to infill missing
-#' values through repeated uses of this function, although the information will be less robust and
-#' more reliant on fewer stations with repeated calls of this function.
+#' missing values remain following the interpolation. If this is encountered, it may be prudent to consider
+#' including additional stations in the available data for interpolation and/or applying alternative
+#' interpolation schemes in conjunction with \code{rvn_met_interpolate}.
 #'
 #' This function does not (currently) perform checks for the quality of the supplied or infilled data,
 #' such as checking for maximum temperature less than minimum temperature, unreasonable precipitation values, etc.
@@ -36,7 +36,10 @@
 #' supplied data where the max temp is less than min temp will not be fixed unless fix_base_temp is enabled.
 #'
 #' The distance calculation, estimating the distance between stations, is performed using the
-#' \code{\link{rvn_dist_lonlat}} function, which is based on the \code{geosphere} package.
+#' \code{\link{rvn_dist_lonlat}} function, which is based on the \code{geosphere} package. The min_dist is
+#' included to provide a minimum distance used in IDW, and avoid issues with stations of different names and IDs but
+#' the same coordinates. This can occur when stations upgrade or are reinstated at a later time in the same location,
+#' which would otherwise result in a div/0 error in the IDW calculation.
 #'
 #' @param weather_data data frame of input meteorological data from multiple stations
 #' @param cc columns from weather_data to infill missing values in
@@ -44,6 +47,7 @@
 #' @param ppexp exponent to use in inverse distance weighting calculation (default 2)
 #' @param fix_interp_temp function will swap interpolated min and max temp if appropriate
 #' @param fix_base_temp function will swap any min and max temp if appropriate
+#' @param min_dist minimum distance used in IDW to avoid issues with stations of different IDs but exact same coordinates (default 100m)
 #'
 #' @return \item{new_wd}{infilled meteorological data set}
 #'
@@ -63,13 +67,26 @@
 #'           interval="day", starts_latest = 2002,
 #'           ends_earliest = 2010)
 #'
-#' weather_data <- weather_dl(station_ids = all_stns$station_id, start = "2002-10-01", interval="day")
-#' dl_stn <- all_stns[c(1,3,4,6,7),]
+#' # download data with weathercan::weather_dl()
+#' weather_data <- weather_dl(station_ids = all_stns$station_id,
+#'                             start = "2002-10-01",
+#'                             end = "2005-10-01",
+#'                             interval="day")
 #'
-#' new_wd <- rvn_met_interpolate(weather_data = weather_data, key_stn_ids = dl_stn$station_id)
+#' # define first three as key stations of interest for infilling
+#' dl_stn <- all_stns[1:3,]
 #'
-#' # some missing values still exist - could re-run the script to infill these values again
-#' new_wd2 <- rvn_met_interpolate(weather_data = new_wd, key_stn_ids = dl_stn$station_id)
+#' # confirm missing data in key columns
+#' key_cols <- c("min_temp","max_temp","total_precip")
+#' length(which(is.na(weather_data[,key_cols])))
+#'
+#' # perform interpolation for key stns (3) using all stations downloaded (5)
+#' new_wd <- rvn_met_interpolate(weather_data = weather_data,
+#'                                key_stn_ids = dl_stn$station_id,
+#'                                cc = key_cols)
+#'
+#' # no warning - confirm no missing values in key columns
+#' length(which(is.na(new_wd[,key_cols])))
 #' }
 #'
 #' @export rvn_met_interpolate
@@ -78,7 +95,8 @@ rvn_met_interpolate <- function(weather_data=NULL,
                                 key_stn_ids=NULL,
                                 ppexp=2,
                                 fix_interp_temp=TRUE,
-                                fix_base_temp=FALSE) {
+                                fix_base_temp=FALSE,
+                                min_dist=100) {
 
   wd <- weather_data
 
@@ -102,13 +120,18 @@ rvn_met_interpolate <- function(weather_data=NULL,
         temp <- wd[which(wd$date == currentdate & !(is.na(wd[,item]))),]
 
         if (nrow(temp) == 0) {
-          warning("missing data for %s, more stations may be required: ", currentdate)
+          warning(sprintf("missing data for variable %s on %s, more stations may be required: ", item, currentdate))
         } else if (nrow(temp) == 1) {
           new_wd[i, item] <- temp[1, item]
         } else {
 
           temp$dists <- rvn_dist_lonlat(matrix(c(temp$lon,temp$lat), nrow=nrow(temp), ncol=2),
                                 t(matrix(c(wd$lon[i], wd$lat[i]), nrow=2, ncol=nrow(temp))))
+
+          # adjust any zero distances
+          if (any(temp$dists <= min_dist)) {
+            temp$dists[temp$dists < min_dist] <- min_dist
+          }
 
           numer <- 0
           denom <- 0
@@ -127,12 +150,12 @@ rvn_met_interpolate <- function(weather_data=NULL,
 
   # check for NA values in key columns
   if (any(is.na(new_wd[,cc]))) {
-    warning("rvn_met_interpolate: Some key columns still contain NA values, additional data, interpolation or re-application of rvn_met_interpolate may required.")
+    warning("rvn_met_interpolate: Some key columns still contain NA values, additional data or alternative interpolation may be required.")
   }
 
   # check for and fix max_temp < min_temp if permitted
   if ("max_temp" %in% cc & "min_temp" %in% cc) {
-    if (any(new_wd$max_temp < new_wd$min_temp)) {
+    if (length(which(new_wd$max_temp < new_wd$min_temp)) > 0) {
 
       # determine indices of rows where max temp < min temp
       ind_base <- which(wd$max_temp < wd$min_temp)
@@ -151,7 +174,7 @@ rvn_met_interpolate <- function(weather_data=NULL,
         print(sprintf("rvn_met_interpolate: Fixed %i base rows where max_temp < min_temp",length(ind_base)))
       }
 
-      if (any(new_wd$max_temp < new_wd$min_temp)) {
+      if (length(which(new_wd$max_temp < new_wd$min_temp)) > 0) {
         ind_all <- which(new_wd$max_temp < new_wd$min_temp)
 
         if (length(ind_all)>0) {
