@@ -46,8 +46,8 @@
 #'
 #' @export rvn_download
 #' @importFrom stringr str_match_all str_match
-#' @importFrom RCurl url.exists
 #' @importFrom utils osVersion unzip download.file
+#' @importFrom RCurl url.exists
 rvn_download<-function(version=NA,NetCDF=FALSE,check=FALSE)
 {
    . <- NULL
@@ -214,9 +214,9 @@ rvn_download<-function(version=NA,NetCDF=FALSE,check=FALSE)
       }
       fileName<-paste("RavenExecutableLinux_",selectedVersion,".zip",sep="")
    }
-
    downloadLink<-paste("http://raven.uwaterloo.ca/files/",gsub("n","",selectedVersion),"/",fileName,sep="")
-   if(!url.exists(downloadLink)) stop("Bad file url. Check the repository!")
+   urlExistanceCondition<-url.exists(downloadLink)
+   if(!urlExistanceCondition) stop("Bad file url. Check the repository!")
 
    # save to download_path (from tempdir()), then copy to RavenR/extdata folder
    download.file(downloadLink,paste(download_path,"/",fileName,sep=""))
