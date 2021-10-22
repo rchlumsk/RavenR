@@ -73,6 +73,14 @@ rvn_run <- function(fileprefix=NULL, indir=getwd(), ravenexe=NULL,
       stop(sprintf("rvi file not found: %s",file.path(indir,paste0(fileprefix,".rvi")) ))
    }
 
+   # shell/system functions are vulnerable to paths with many characters or spaces
+   # here these paths are shortened: inputdir/ravenexe
+   if(Sys.info()["sysname"]=="windows")
+   {
+     ravenexe<-shortPathName(ravenexe)
+     indir<-shortPathName(indir)
+   }
+
    # build up RavenCMD
    RavenCMD <- sprintf("%s %s",
                        ravenexe, file.path(indir,fileprefix))
@@ -100,7 +108,11 @@ rvn_run <- function(fileprefix=NULL, indir=getwd(), ravenexe=NULL,
       if (!file.exists(rvh)) stop("Supplied rvh file does not exist")
       RavenCMD <- sprintf("%s -h %s", RavenCMD, rvh)
    }
-
-   res <- invisible(system(RavenCMD, show.output.on.console = showoutput))
+   if(Sys.info()["sysname"]=="windows")
+   {
+     res <- invisible(system(RavenCMD, show.output.on.console = showoutput))
+   }else{
+     res <- invisible(system(RavenCMD))
+   }
    return(res)
 }
