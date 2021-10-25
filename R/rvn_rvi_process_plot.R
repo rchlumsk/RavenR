@@ -5,9 +5,10 @@
 #' and returns the connections information as a network graph.
 #'
 #' @param rvi_conn a list of connections and AliasTable, provided by \code{rvn_rvi_connections}
-#' @param custom_label a two columns matrix/data.frame in which the first and the second columns are  equal the hydrologic compartment labels in the \code{rvi_conn} and their corresponding replacement labels respectively
+#' @param custom_label (optional) a two-columns matrix/data.frame in which the first and the second columns are  equal the hydrologic compartment labels in the \code{rvi_conn} and their corresponding replacement labels respectively provided that \code{default_label = FALSE}
+#' @param default_label (optional) logical. if \code{TRUE} an internal default labels are used as the compartments names given that \code{custom_label = NULL}
 #'
-#' @return {p1}{returns GGally plot}
+#' @return {p1}{returns visNetwork plot}
 #'
 #' @seealso \code{\link{rvn_rvi_connections}} to generate connections table from an rvi object
 #'
@@ -19,27 +20,23 @@
 #'
 #'   rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR")) %>%
 #'   rvn_rvi_connections() %>%
-#'   rvn_rvi_process_plot()
-#'
+#'   rvn_rvi_process_plot(.,default_label=TRUE)
 #'
 #' @export rvn_rvi_process_plot
-#' @importFrom network network set.vertex.attribute
-#' @importFrom ggnet2 GGally
+#' @importFrom visNetwork visNetwork visInteraction visOptions
 
-rvn_rvi_process_plot<-function(rvi_conn,custom_label)
+rvn_rvi_process_plot<-function(rvi_conn,custom_label=NULL,default_label=FALSE)
 {
    if(missing(rvi_conn)) stop("connection matrix required! Use rvn_rvi_connections function.")
+   AliasTable<-rvi_conn$AliasTable
+   rvi_conn<-rvi_conn$connections
 
-   # assigning custom labels
-   if(!missing(custom_label))
+   # handling a missing connection
+   if(any(rvi_conn$From=="SNOW_TEMP"))
    {
-     if(ncol(custom_label)!=2) stop ("custom_label must be a two collumn matrix/data.frame.")
-     for(i in 1:nrow(custom_label))
+     if(rvi_conn$To[rvi_conn$From=="SNOW_TEMP"]=="")
      {
-       idFrom<-which(!is.na(match(rvi_conn$From,custom_label[i,1])))
-       idTo <-which(!is.na(match(rvi_conn$To,   custom_label[i,1])))
-       if(length(idFrom)>0) rvi_conn$From[idFrom]<-custom_label[i,2]
-       if(length(idTo)>0)   rvi_conn$To[idTo]    <-custom_label[i,2]
+       rvi_conn$To[rvi_conn$From=="SNOW_TEMP"]<-"ATMOSPHERE"
      }
    }
 
@@ -49,34 +46,62 @@ rvn_rvi_process_plot<-function(rvi_conn,custom_label)
    colnames(con)<-rownames(con)<-storages
    for(i in 1:length(storages))
    {
-      for(j in 1:length(storages))
-      {
-         for(k in 1:nrow(rvi_conn))
+     for(j in 1:length(storages))
+     {
+       for(k in 1:nrow(rvi_conn))
+       {
+         if(rownames(con)[i]==rvi_conn$From[k] &
+            colnames(con)[j]==rvi_conn$To[k])
          {
-            if(rownames(con)[i]==rvi_conn$From[k] &
-               colnames(con)[j]==rvi_conn$To[k])
-            {
-               con[i,j]<-1
-            }
+           con[i,j]<-1
          }
+       }
+     }
+   }
+
+   # assigning custom labels/labels handling
+   c.names<-colnames(con)
+   if(!is.null(AliasTable))
+   {
+      for(i in 1:nrow(AliasTable))
+      {
+         c.names[c.names==AliasTable$alias[i]]<-AliasTable$basename[i]
       }
    }
-   types<-storages
-   color.palette<-1:length(types)
-   shape.palette<-10:(10+length(types)-1)
-   size.palette<-rep(5,length(types))
-   names(size.palette)<-types
-   names(shape.palette)<-types
-   names(color.palette)<-types
 
-   # making a network using the connection matrix
-   net<-network(con)
-   set.vertex.attribute(net,"type",types)
-   ggnet2(net,color='type',size='type',
-          shape='type',
-          color.palette=color.palette,
-          shape.palette=shape.palette,
-          size.palette=size.palette,
-          arrow.size = 5, arrow.gap = 0.025) +
-          guides(size = FALSE)
+   if(!is.null(custom_label) & !default_label)
+   {
+      if(ncol(custom_label)!=2) stop ("custom_label must be a two collumn matrix/data.frame.")
+      idReplacements<-match(c.names,custom_label[,1])
+      c.names<-custom_label[idReplacements[!is.na(idReplacements)],2]
+   }
+   if(missing(custom_label) & default_label)
+   {
+      ProcConDataFile<-system.file("extdata","processesLabels.dat", package="RavenR")
+      stopifnot(file.exists(ProcConDataFile))
+      load(ProcConDataFile)
+      idReplacements<-match(c.names,labels$name)
+      c.names<-labels$replacement[idReplacements[!is.na(idReplacements)]]
+   }
+   colnames(con)<-rownames(con)<-c.names
+
+   # network nodes and edges creation
+   nodes<-data.frame(id=1:nrow(con),label=colnames(con),shape="square")
+   relations<-apply(con==1,1,which)
+   edges<-data.frame(row.names=c("from","to"))
+   for(i in 1:length(relations))
+   {
+      if(length(relations[[i]])>0)
+      {
+        currentEdges<-cbind(i,relations[[i]])
+        colnames(currentEdges)<-c("from","to")
+        edges<-rbind(edges,currentEdges)
+      }
+   }
+   rownames(edges)<-1:nrow(edges)
+
+   p1<-visNetwork(nodes,edges)                 %>%
+       visInteraction(navigationButtons = TRUE)%>%
+       visOptions(manipulation = TRUE)
+   return(p1)
 }
