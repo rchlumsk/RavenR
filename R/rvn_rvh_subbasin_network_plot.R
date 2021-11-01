@@ -1,4 +1,4 @@
-#' @title Plot Raven subbasin network.
+#' @title Basic Raven subbasin network plot
 #'
 #' @description
 #' Generates a plot of the subbasin network from rvh file information.
@@ -8,6 +8,9 @@
 #' generates a plot object of the subbasin network,
 #' where nodes are located at SubBasin lat-long centroids, and
 #' edge widths of the network correspond to contributing upstream area.
+#'
+#' The plot is generated using the ggplot2 library, with dependencies on igraph for handling
+#' network information.
 #'
 #' @param SBtable a valid table of Raven subbasins, obtained from \code{\link{rvn_rvh_read}}
 #' @param labeled TRUE if the nodes are labeled with the SubBasin ID, SBID
@@ -21,16 +24,17 @@
 #' rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package="RavenR"))
 #'
 #' # create network plot of watershed structure from rvh file
-#' rvn_subbasin_network_plot(rvh$SBtable)
+#' rvn_rvh_subbasin_network_plot(rvh$SBtable)
 #'
 #' # include labels
-#' rvn_subbasin_network_plot(rvh$SBtable, labeled=TRUE)
+#' rvn_rvh_subbasin_network_plot(rvh$SBtable, labeled=TRUE)
 #'
-#' @export rvn_subbasin_network_plot
 #' @importFrom ggplot2 ggplot geom_segment geom_point theme aes geom_text geom_label
 #' @importFrom igraph graph_from_data_frame get.data.frame
 #' @importFrom colorspace coords
-rvn_subbasin_network_plot <- function(SBtable,labeled=FALSE)
+#' @export rvn_rvh_subbasin_network_plot
+#'
+rvn_rvh_subbasin_network_plot <- function(SBtable,labeled=FALSE)
 {
 
   downID <- from.x <- to.x <- from.y <- to.y <- width <- long <- lat <- SB <- NULL
