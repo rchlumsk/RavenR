@@ -33,7 +33,7 @@
 #' head(rvi_conn$AliasTable)
 #'
 #' @export rvn_rvi_connections
-rvn_rvi_connections<-function(rvi,ProcConDataFile=NA)
+rvn_rvi_connections<-function(rvi,ProcConDataFile=system.file("extdata","RavenProcessConnections.dat", package="RavenR"))
 {
    HPTable <- rvi$HydProcTable
    AliasTable <- rvi$AliasTable
@@ -51,27 +51,19 @@ rvn_rvi_connections<-function(rvi,ProcConDataFile=NA)
       #  & ncol(HPTable)!=6
       stop("(rvn_rvi_connections): improper hydrological process table data frame format")
    }
-   if(is.na(ProcConDataFile))
-   {
-      ProcConDataFile<-system.file("extdata","RavenProcessConnections.dat", package="RavenR")
-      stopifnot(file.exists(ProcConDataFile))
-      load(ProcConDataFile)
-      ProcConnTable[ProcConnTable=="NA"]<-""
-   }else{
-      stopifnot(file.exists(ProcConDataFile))
-      delim=""
-      cnames<-c("Algorithm","ProcessType","From","To")
-      print(paste0("about to read ",ProcConDataFile))
-      ProcConnTable<-read.table(ProcConDataFile,
-                                sep=delim,
-                                col.names=cnames,
-                                header=FALSE,
-                                blank.lines.skip=TRUE,
-                                strip.white=TRUE,
-                                stringsAsFactors=FALSE,
-                                flush=TRUE,
-                                comment.char = "#")
-   }
+   stopifnot(file.exists(ProcConDataFile))
+   delim=""
+   cnames<-c("Algorithm","ProcessType","From","To")
+   print(paste0("about to read ",ProcConDataFile))
+   ProcConnTable<-read.table(ProcConDataFile,
+                             sep=delim,
+                             col.names=cnames,
+                             header=TRUE,
+                             blank.lines.skip=TRUE,
+                             strip.white=TRUE,
+                             stringsAsFactors=FALSE,
+                             flush=TRUE,
+                             comment.char = "#")
 
    # to generate process list, select all rows from ProcConnTable where algorithm
    # is present in HPTable$Algorithm
