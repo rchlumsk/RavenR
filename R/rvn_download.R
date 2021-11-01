@@ -248,6 +248,5 @@ rvn_download<-function(version=NA,NetCDF=FALSE,check=FALSE,copy_path=NULL)
                    overwrite-TRUE)
       }
    }
-
    return(res)
 }

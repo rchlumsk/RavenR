@@ -81,8 +81,8 @@ rvn_rvh_read<-function(ff)
   downID <- NULL
 
   # read subbasins table--------------------------------
-  lineno<-grep(":SubBasins", readLines(ff), value = FALSE)
-  lineend<-grep(":EndSubBasins", readLines(ff), value = FALSE)
+  lineno<-grep(":SubBasins", readLines(ff,warn=FALSE), value = FALSE)
+  lineend<-grep(":EndSubBasins", readLines(ff,warn=FALSE), value = FALSE)
 
   if ((length(lineno)==0) || (length(lineend)==0)){
     print('warning: ff not a valid .rvh file (no :SubBasins block)')
@@ -94,7 +94,7 @@ rvn_rvh_read<-function(ff)
   cnames<-c("SBID","Name","Downstream_ID","Profile","ReachLength","Gauged")
 
   #print(paste0("read sbs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
-  SubBasinTab<-read.table(text=gsub(",", "\t", readLines(ff)),
+  SubBasinTab<-read.table(text=gsub(",", "\t", readLines(ff,warn=FALSE)),
                           skip=lineno+2, nrows=lineend-lineno-3, sep="",fill=TRUE,
                           col.names=cnames,header=FALSE,blank.lines.skip=TRUE, strip.white=TRUE,
                           stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
@@ -105,10 +105,9 @@ rvn_rvh_read<-function(ff)
   SubBasinTab <- as.data.frame(sapply(SubBasinTab, function(x) gsub("\t", "", x)))
   # SubBasinTab <- SubBasinTab[,1:length(cnames)]
 
-
   # read HRUs table ------------------------------------
-  lineno<-grep(":HRUs", readLines(ff), value = FALSE)
-  lineend<-grep(":EndHRUs", readLines(ff), value = FALSE)
+  lineno<-grep(":HRUs", readLines(ff,warn=FALSE), value = FALSE)
+  lineend<-grep(":EndHRUs", readLines(ff,warn=FALSE), value = FALSE)
   if ((length(lineno)==0) || (length(lineend)==0)){
     print('warning: ff not a valid .rvh file (no :HRUs block)')
   }
@@ -119,7 +118,7 @@ rvn_rvh_read<-function(ff)
   cnames<-c("ID","Area","Elevation","Latitude","Longitude","SBID","LandUse","Vegetation","SoilProfile","Terrain","Aquifer","Slope","Aspect")
 
   #print(paste0("read HRUs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
-  HRUtab<-read.table(text=gsub(",", "\t", readLines(ff)),
+  HRUtab<-read.table(text=gsub(",", "\t", readLines(ff,warn=FALSE)),
                      skip=lineno+2, nrows=lineend-lineno-3, sep="",col.names=cnames,
                      header=FALSE,blank.lines.skip=TRUE,strip.white=TRUE,
                      stringsAsFactors=FALSE,flush=TRUE,comment.char = "#",
