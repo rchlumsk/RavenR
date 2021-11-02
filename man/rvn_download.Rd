@@ -4,7 +4,7 @@
 \alias{rvn_download}
 \title{Downloads Raven}
 \usage{
-rvn_download(version = NA, NetCDF = FALSE, check = FALSE)
+rvn_download(version = NA, NetCDF = FALSE, check = FALSE, copy_path = NULL)
 }
 \arguments{
 \item{version}{(optional) Character: The version of Raven to be downloaded. If not provided, the latest version will be downloaded.}
@@ -12,6 +12,8 @@ rvn_download(version = NA, NetCDF = FALSE, check = FALSE)
 \item{NetCDF}{(logical) whether to download the NetCDF-enabled version of Raven (default \code{FALSE})}
 
 \item{check}{(logical) if \code{TRUE}, function will only check whether 'Raven.exe' has been downloaded to the RavenR folder}
+
+\item{copy_path}{(character) path to an existing 'Raven.exe' file. If provided, this file will be copied to the appropriate folder and the download will be skipped.}
 }
 \value{
 Returns \code{TRUE} if executed successfully
@@ -29,6 +31,11 @@ Note that if you are not on a Windows operating system, you may need to compile 
 
 Any existing Raven.exe file in your RavenR/extdata folder will be overwritten with a newly downloaded executable w
 with this function.
+
+The `copy_path` argument may be useful for non-Windows users that are not able to use the pre-compiled Raven downloads.
+If the path to an existing Raven.exe file (i.e. one compiled locally) is provided, this will copy the specified file to the
+appropriate location and skip the download, which will allow the user to use the locally compiled Raven.exe with the `rvn_run`
+function.
 
 Reinstalling the RavenR package removes the previous files in the RavenR/ folder on your system, so this command
 will need to be re-run if RavenR is re-installed.
