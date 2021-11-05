@@ -1,8 +1,8 @@
-#' @title Plot catchments network
+#' @title Plot subbasins network
 #'
 #' @description
 #' This routine takes an \code{rvh} object generated using \code{rvn_rvh_read}
-#' and returns the connections information of sub-watersheds as network graph.
+#' and returns the connections information of sub-watersheds as a network graph.
 #'
 #' @param rvh an \code{rvh} object, provided by \code{rvn_rvh_read}
 #' @param groupBy a character referring to one of the sub-basins attributes in the \code{rvh}
@@ -14,6 +14,7 @@
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
+#' \dontrun{
 #'   path <- dirname(tempfile())
 #'   dir.create(paste(path,"/tmp",sep=""))
 #'   url<-"http://raven.uwaterloo.ca/files/RavenOstrichTutorialFiles.zip"
@@ -21,14 +22,15 @@
 #'   unzip(zipfile = paste(path,"/tmp/example.zip",sep=""),
 #'         exdir = paste(path,"/tmp",sep=""))
 #'   rvh<-rvn_rvh_read(paste(path,"/tmp/Demo_C4/model/LOWRL.rvh",sep=""))
-#'   rvn_rvh_catchments_plot(rvh,groupBy="Gauged")
-#'   rvn_rvh_catchments_plot(rvh,groupBy="DomLU")
-#'   rvn_rvh_catchments_plot(rvh,groupBy="Elevation")
+#'   rvn_rvh_subbasin_visnetwork_plot(rvh,groupBy="Gauged")
+#'   rvn_rvh_subbasin_visnetwork_plot(rvh,groupBy="DomLU")
+#'   rvn_rvh_subbasin_visnetwork_plot(rvh,groupBy="Elevation")
+#'   }
 #'
-#' @export rvn_rvh_catchments_plot
+#' @export rvn_rvh_subbasin_visnetwork_plot
 #' @importFrom visNetwork visNetwork visInteraction visOptions visHierarchicalLayout visEdges
 
-rvn_rvh_catchments_plot<-function(rvh,groupBy="Gauged")
+rvn_rvh_subbasin_visnetwork_plot<-function(rvh,groupBy="Gauged")
 {
   if(missing(rvh)) stop("rvh file missing. See rvn_rvh_read function!")
   if(is.null(rvh$SBtable)) stop("no subcatchments network to show!")

@@ -20,12 +20,12 @@
 #'
 #'   rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR")) %>%
 #'   rvn_rvi_connections() %>%
-#'   rvn_rvi_process_plot(.,default_label=TRUE)
+#'   rvn_rvi_process_visplot(.,default_label=TRUE)
 #'
-#' @export rvn_rvi_process_plot
+#' @export rvn_rvi_process_visplot
 #' @importFrom visNetwork visNetwork visInteraction visOptions
 
-rvn_rvi_process_plot<-function(rvi_conn,custom_label=NULL,default_label=FALSE)
+rvn_rvi_process_visplot<-function(rvi_conn,custom_label=NULL,default_label=FALSE)
 {
    if(missing(rvi_conn)) stop("connection matrix required! Use rvn_rvi_connections function.")
    AliasTable<-rvi_conn$AliasTable
