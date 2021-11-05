@@ -1,4 +1,4 @@
-#' @title Plot Raven hydrologic network
+#' @title Plot Raven hydrologic process network using visNetwork
 #'
 #' @description
 #' This routine takes a connections data from generated using \code{rvn_rvi_connections}
@@ -16,7 +16,8 @@
 #'
 #' @examples
 #'
-#' library(GGally)
+#' ## library(GGally)
+#' ## to adjust handling of ProcCondDataFile in function
 #'
 #'   rvn_rvi_read(system.file("extdata","Nith.rvi", package="RavenR")) %>%
 #'   rvn_rvi_connections() %>%
@@ -24,7 +25,7 @@
 #'
 #' @export rvn_rvi_process_visplot
 #' @importFrom visNetwork visNetwork visInteraction visOptions
-
+#'
 rvn_rvi_process_visplot<-function(rvi_conn,custom_label=NULL,default_label=FALSE)
 {
    if(missing(rvi_conn)) stop("connection matrix required! Use rvn_rvi_connections function.")

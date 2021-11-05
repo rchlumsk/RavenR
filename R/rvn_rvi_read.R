@@ -67,7 +67,7 @@ rvn_rvi_read<-function(filename)
       }
     }
 
-    if (!is.null(temp)) {
+    if (!is.null(temp) & length(temp)>0 ) {
       if (temp[1] == ":LateralFlush") {
 
         if (length(temp) != 7) {

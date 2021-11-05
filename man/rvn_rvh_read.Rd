@@ -75,7 +75,7 @@ headerwater subbasins will have a total upstream area equal to their own subbasi
 }
 \seealso{
 \code{\link{rvn_rvh_write}} to write contents of the generated (and usually modified HRU and SubBasin tables)
-\code{\link{rvn_subbasin_network_plot}} to plot the subbasin network
+\code{\link{rvn_rvh_subbasin_network_plot}} to plot the subbasin network
 }
 \author{
 James R. Craig, University of Waterloo

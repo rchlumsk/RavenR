@@ -1,19 +1,20 @@
-#' @title Plot subbasins network
+#' @title Plot subbasin network using visNetwork
 #'
 #' @description
-#' This routine takes an \code{rvh} object generated using \code{rvn_rvh_read}
-#' and returns the connections information of sub-watersheds as a network graph.
+#' Takes an \code{rvh} object generated using \code{rvn_rvh_read}
+#' and returns the connections information of subbasins as an interactive visNetwork graph.
 #'
 #' @param rvh an \code{rvh} object, provided by \code{rvn_rvh_read}
 #' @param groupBy a character referring to one of the sub-basins attributes in the \code{rvh}
 #'
-#' @return {p1}{returns visNetwork plot}
+#' @return {p1}{returns visNetwork plot object}
 #'
 #' @seealso \code{\link{rvn_rvh_read}} to import an watershed network table from an \code{rvh} file.
 #'
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
+#' ## additional example from tutorial files (not run)
 #' \dontrun{
 #'   path <- dirname(tempfile())
 #'   dir.create(paste(path,"/tmp",sep=""))
@@ -27,10 +28,14 @@
 #'   rvn_rvh_subbasin_visnetwork_plot(rvh,groupBy="Elevation")
 #'   }
 #'
+#' rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package="RavenR"))
+#' rvn_rvh_subbasin_visnetwork_plot(rvh,groupBy="Gauged")
+#' rvn_rvh_subbasin_visnetwork_plot(rvh,groupBy="Elevation")
+#'
 #' @export rvn_rvh_subbasin_visnetwork_plot
 #' @importFrom visNetwork visNetwork visInteraction visOptions visHierarchicalLayout visEdges
-
-rvn_rvh_subbasin_visnetwork_plot<-function(rvh,groupBy="Gauged")
+#'
+rvn_rvh_subbasin_visnetwork_plot<-function(rvh, groupBy="Gauged")
 {
   if(missing(rvh)) stop("rvh file missing. See rvn_rvh_read function!")
   if(is.null(rvh$SBtable)) stop("no subcatchments network to show!")
@@ -114,6 +119,5 @@ rvn_rvh_subbasin_visnetwork_plot<-function(rvh,groupBy="Gauged")
     visOptions(manipulation = TRUE,selectedBy ="group") %>%
     visHierarchicalLayout(direction = "RL")             %>%
     visEdges(arrows = "to")
-  p1
   return(p1)
 }
