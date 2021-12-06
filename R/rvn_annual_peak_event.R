@@ -29,9 +29,9 @@
 #' @param mm month of water year (default 9)
 #' @param dd day of water year (default 30)
 #' @param add_line optionally adds a 1:1 line to the plot for reference
-#' (default TRUE)
-#' @param add_r2 optionally computes the R2 and adds to plot (default FALSE)
-#' @param add_eqn optionally adds the equation for a linear regression line through the origin (default FALSE)
+#' (default \code{TRUE})
+#' @param add_r2 optionally computes the R2 and adds to plot (default \code{FALSE})
+#' @param add_eqn optionally adds the equation for a linear regression line through the origin (default \code{FALSE})
 #' @return returns a list with peak data in a data frame, and a ggplot object
 #'  \item{df_peak_event}{data frame of the calculated peak events}
 #'  \item{p1}{ggplot object with plotted annual peaks}

@@ -31,16 +31,16 @@ rvn_rvh_write(
 \item{author}{(optional) Name of author, to be printed in file header.}
 }
 \value{
-TRUE returns TRUE if function runs properly
+\item{TRUE}{returns \code{TRUE} if function runs properly}
 }
 \description{
 Given an HRU and SubBasin dataframe, writes to the specified .rvh file. In the case of rvn_rvh_overwrite,
 just the :SubBasins-:EndSubBasins and :HRUs-:EndHRUs blocks are re-written, retaining all other content.
 }
 \details{
-rvn_rvh_write is typically used to create a 'clean' .rvh file.
+\code{rvn_rvh_write} is typically used to create a 'clean' .rvh file.
 
-rvn_rvh_overwrite is usually used after reading an original .rvh file and
+\code{\link{rvn_rvh_overwrite}} is usually used after reading an original .rvh file and
   processing the HRU and SubBasin tables, using (e.g., \code{\link{rvn_rvh_cleanhrus}}). This may also be used
   to preserve commands in the rvh file such as reservoir information, comments outside of the
   subbasin and HRU blocks, RedirectToFile commands, etc.

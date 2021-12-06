@@ -25,7 +25,7 @@ rvn_hyd_plot(
 
 \item{prd}{period to use in plotting}
 
-\item{winter_shading}{optionally adds shading for winter months (default FALSE)}
+\item{winter_shading}{optionally adds shading for winter months (default \code{FALSE})}
 
 \item{wsdates}{integer vector of winter shading period dates (see details)}
 }

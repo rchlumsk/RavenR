@@ -4,13 +4,13 @@
 #' @param units array of strings with the corresponding units
 #' @param df Dataframe of values corresponding to attributes/parameters
 #' @param filename Name of the file, with extension, to append the table to
-#' @param id_col True/False of whether an numeric id column is the first column in the table
-#' and, in common Raven fashion, does not have a corresponding attribute (default: True)
+#' @param id_col \code{TRUE/FALSE} of whether an numeric id column is the first column in the table
+#' and, in common Raven fashion, does not have a corresponding attribute (default \code{TRUE})
 #' @param justify alignment of character columns (default 'right'). See \code{\link{format}}
 #' @param sep character(s) used to seperate columns (default ', ')
 #' @param ... Extra arguments for \code{\link{write.fwf}}
 #'
-#' @return TRUE returns TRUE if executed successfully
+#' @return \item{TRUE}{returns \code{TRUE} if executed successfully}
 #'
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
 #'

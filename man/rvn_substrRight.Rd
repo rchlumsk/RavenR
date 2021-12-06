@@ -12,7 +12,7 @@ rvn_substrRight(x, n)
 \item{n}{number of characters to use from the right side of the string}
 }
 \description{
-rvn_substrRight returns n characters from the right side of the supplied string
+Returns n characters from the right side of the supplied string
 x.
 }
 \examples{

@@ -18,7 +18,7 @@ rvn_wyear_indices(x, mm = 9, dd = 30)
 water years}
 }
 \description{
-rvn_wyear_indices returns the indices of the provided time series for the
+Returns the indices of the provided time series for the
 start/end of the water year. The month/day of the water year defaults to September 30 for
 an October 1 water year cycle. However, this may be supplied as other values,
 for example as June 30th for a July 1 water year (i.e. the Australian water year).

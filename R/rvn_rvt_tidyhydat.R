@@ -72,7 +72,7 @@
 #' @param prd (optional) data period to use in .rvt file
 #' @param stnNames (optional) character vector of alternative station names to use
 #' @param write_redirect (optional) write the :RedirectToFile commands in a separate .rvt file
-#' @param rd_file (optional) name of the redirect file created (if write_redirect = TRUE)
+#' @param rd_file (optional) name of the redirect file created (if \code{write_redirect=TRUE})
 #' @param flip_number (optional) put the subID first in the .rvt filename
 #' @param filename specified name of file(s) to write to (optional)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}

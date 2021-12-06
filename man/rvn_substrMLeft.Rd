@@ -12,7 +12,7 @@ rvn_substrMLeft(x, n)
 \item{n}{number of characters to remove from the left side of the string}
 }
 \description{
-rvn_substrMLeft returns a string x with n characters removed from the left side
+Returns a string x with n characters removed from the left side
 of the string.
 }
 \examples{

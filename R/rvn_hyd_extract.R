@@ -2,7 +2,8 @@
 #'
 #' @description
 #' rvn_hyd_extract is used for extracting data from the Raven hydrograph object.
-#' Works for objects passed from rvn_hyd_read function (which reads the Hydrographs.csv file produced by the modelling framework Raven).
+#' Works for objects passed from rvn_hyd_read function (which reads the
+#' Hydrographs.csv file produced by the modelling framework Raven).
 #'
 #' @details
 #' Extracts the modelled and observed data from a Raven
@@ -36,7 +37,6 @@
 #'  \item{obs}{observed data for specified column and period}
 #'  \item{inflow}{inflow simulation for specified column and period}
 #'  \item{obs_inflow}{observed inflow simulation for specified column and period}
-#'
 #'
 #' @seealso \code{\link{rvn_hyd_read}} for reading in the Hydrographs.csv file and
 #' creating the object required in this function.

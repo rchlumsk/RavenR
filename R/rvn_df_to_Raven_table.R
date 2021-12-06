@@ -2,12 +2,12 @@
 #'
 #' @param attributes array of strings containing attribute/parameter names
 #' @param units array of strings with the corresponding units
-#' @param df Dataframe of values corresponding to attributes/parameters
+#' @param df data frame of values corresponding to attributes/parameters
 #' @param id_col True/False of whether an numeric id column is the first column in the table
 #' and, in common Raven fashion, does not have a corresponding attribute (default: True)
 #' @param parameters bool, when adding attribues/parameter tag, should ':Parameters' be used instead of ':Attributes'?
 #'
-#' @return outdf data.frame object
+#' @return \item{outdf}{data.frame object}
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
 #'
 #' @examples

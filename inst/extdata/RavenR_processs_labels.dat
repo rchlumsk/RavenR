@@ -1,0 +1,31 @@
+name,replacement
+ATMOS_PRECIP,Atmosphere
+ATMOSPHERE,Atmosphere
+CANOPY,Canopy
+CANOPY_SNOW,Snow Canopy
+COLD_CONTENT,Cold Content
+COLD_CONTENT[0],Top soil cold content
+COLD_CONTENT[1],1st soil layer cold content
+CONVOLUTION[0],Top soil layer convolution
+CONVOLUTION[1],1st soil layer convolution
+CROP_HEAT_UNIT,Crop heat units
+DEPRESSION,Depression
+ENERGY_LOSSES,Energy losses
+GA_MOISTURE_INIT,Green Ampt initial moisture
+GLACIER,Glacier
+GLACIER_ICE,Glacier water storage
+NEW_SNOW,New snow pack
+PONDED_WATER,Pounded water
+SNOW,Snow
+SNOW_ALBEDO,Snow albedo
+SNOW_LIQ,Snow liquid
+SNOW_TEMP,Snow transition
+SOIL,Soil
+SOIL[0],Top soil
+SOIL[1],1st soil layer
+SOIL[2],2nd soil layer
+SOIL[3],3rd soil layer
+SURFACE_WATER,Surface water
+USER_SPECIFIED,USER_SPECIFIED
+WETLAND,Wetland
+MULTIPLE,Multiple resources

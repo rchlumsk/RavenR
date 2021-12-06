@@ -12,7 +12,7 @@
 #' @param rvhfile file path to Raven rvh file
 #' @param custfile file path to Raven-generated custom output precip-by-subbasin file
 #' @param hydfile file path to Raven-generated hydrographs file
-#' @param correct (optional) if TRUE, tries to correct runoff coefficient for missing data (assumes missing~0 flow)
+#' @param correct (optional) if \code{TRUE}, tries to correct runoff coefficient for missing data (assumes missing~0 flow)
 #' @return {data frame with runoff coefficients of gauged basins}
 #'
 #' @seealso \code{\link{rvn_rvh_read}} for reading and processing Raven rvh file

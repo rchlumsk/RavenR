@@ -6,7 +6,7 @@
 #' @param digits Number of digits to round value to (optional)
 #' @param indent_level Adds two spaces before label for every one level (default = 0)
 #'
-#' @return TRUE returns TRUE if executed successfully
+#' @return \item{TRUE}{returns \code{TRUE} if executed successfully}
 #'
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
 #'

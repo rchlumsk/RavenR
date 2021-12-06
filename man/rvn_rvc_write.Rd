@@ -16,7 +16,7 @@ rvn_rvc_write(
 \item{filename}{filepath of rvc file to write to (with .rvc extension)}
 
 \item{initHRU}{dataframe of initial conditions for state variables (columns) for each HRU (rows).
-columns must be valid SV names and there must be an explcit column of HRU ids named 'HRU'.}
+columns must be valid SV names and there must be an explicit column of HRU ids named 'HRU'.}
 
 \item{init_date}{datetime of model start}
 
@@ -25,7 +25,7 @@ columns must be valid SV names and there must be an explcit column of HRU ids na
 \item{author}{(optional) Name of author, to be printed in file header.}
 }
 \value{
-TRUE returns TRUE if function runs properly
+\item{TRUE}{return \code{TRUE} if the function is executed properly}
 }
 \description{
 Given initial conditions for state variables at HRUs, generates a rvc file

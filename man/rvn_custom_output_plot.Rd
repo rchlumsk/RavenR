@@ -15,7 +15,7 @@ include in plots}
 \item{prd}{(optional) period to use in plotting}
 }
 \value{
-\item{TRUE}{return TRUE if the function is executed properly}
+\item{TRUE}{return \code{TRUE} if the function is executed properly}
 }
 \description{
 rvn_custom_output_plot is used to plot the custom output from Raven

@@ -10,7 +10,7 @@ rvn_flow_spaghetti(flow)
 \item{flow}{time series object of simulated flows}
 }
 \value{
-\item{TRUE}{return TRUE if the function is executed properly}
+\item{TRUE}{return \code{TRUE} if the function is executed properly}
 }
 \description{
 rvn_flow_spaghetti creates a spaghetti plot of the flow series provided.

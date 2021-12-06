@@ -24,8 +24,8 @@ rvn_write_Raven_table(
 
 \item{filename}{Name of the file, with extension, to append the table to}
 
-\item{id_col}{True/False of whether an numeric id column is the first column in the table
-and, in common Raven fashion, does not have a corresponding attribute (default: True)}
+\item{id_col}{\code{TRUE/FALSE} of whether an numeric id column is the first column in the table
+and, in common Raven fashion, does not have a corresponding attribute (default \code{TRUE})}
 
 \item{justify}{alignment of character columns (default 'right'). See \code{\link{format}}}
 
@@ -34,7 +34,7 @@ and, in common Raven fashion, does not have a corresponding attribute (default: 
 \item{...}{Extra arguments for \code{\link{write.fwf}}}
 }
 \value{
-TRUE returns TRUE if executed successfully
+\item{TRUE}{returns \code{TRUE} if executed successfully}
 }
 \description{
 Writes a nicely formatted tables of Raven attributes/parameters

@@ -23,14 +23,14 @@ rvn_write_Raven_newfile(
 
 \item{author}{Name of file author (optional)}
 
-\item{creationDate}{Bool of whether creation date should be added to header. (default TRUE)}
+\item{creationDate}{Bool of whether creation date should be added to header. (default \code{TRUE})}
 
 \item{linelen}{length (width) of header, in text characters (default: 74)}
 
 \item{textlen}{Length of textlines (default: 40, used to right-align text)}
 }
 \value{
-TRUE returns TRUE if executed successfully
+\item{TRUE}{returns \code{TRUE} if executed successfully}
 }
 \description{
 Opens/Creates a new file, writes common file header.
