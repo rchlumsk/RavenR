@@ -32,6 +32,7 @@ dyplots <- rvn_res_dygraph(resdata)
 dyplots[[1]]
 dyplots[[2]]
 
+
 }
 \seealso{
 \code{\link{rvn_hyd_dygraph}} to generate dygraphs for hydrograph series

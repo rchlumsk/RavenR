@@ -9,7 +9,7 @@
 #' @details
 #' The supplied file should not be comma-delimited with a trailing comma. The function also
 #' does not like tabs in the rvh file, the file should be untabified first.
-#' This function uses the igraph library to build the networks and compute the total upstream area.
+#' This function uses the igraph library t0o build the networks and compute the total upstream area.
 #' The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :SubBasins-:EndSubBasins
 #' command blocks.
 #'
@@ -40,9 +40,10 @@
 #'
 #' @author James R. Craig, University of Waterloo
 #'
+#'
 #' @seealso
 #' \code{\link{rvn_rvh_write}} to write contents of the generated (and usually modified HRU and SubBasin tables)
-#' \code{\link{rvn_rvh_subbasin_network_plot}} to plot the subbasin network
+#' \code{\link{rvn_subbasin_network_plot}} to plot the subbasin network
 #'
 #' @examples
 #'   # load example rvh file
@@ -81,8 +82,8 @@ rvn_rvh_read<-function(ff)
   downID <- NULL
 
   # read subbasins table--------------------------------
-  lineno<-grep(":SubBasins", readLines(ff,warn=FALSE), value = FALSE)
-  lineend<-grep(":EndSubBasins", readLines(ff,warn=FALSE), value = FALSE)
+  lineno<-grep(":SubBasins", readLines(ff), value = FALSE)
+  lineend<-grep(":EndSubBasins", readLines(ff), value = FALSE)
 
   if ((length(lineno)==0) || (length(lineend)==0)){
     print('warning: ff not a valid .rvh file (no :SubBasins block)')
@@ -94,7 +95,7 @@ rvn_rvh_read<-function(ff)
   cnames<-c("SBID","Name","Downstream_ID","Profile","ReachLength","Gauged")
 
   #print(paste0("read sbs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
-  SubBasinTab<-read.table(text=gsub(",", "\t", readLines(ff,warn=FALSE)),
+  SubBasinTab<-read.table(text=gsub(",", "\t", readLines(ff)),
                           skip=lineno+2, nrows=lineend-lineno-3, sep="",fill=TRUE,
                           col.names=cnames,header=FALSE,blank.lines.skip=TRUE, strip.white=TRUE,
                           stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
@@ -105,9 +106,10 @@ rvn_rvh_read<-function(ff)
   SubBasinTab <- as.data.frame(sapply(SubBasinTab, function(x) gsub("\t", "", x)))
   # SubBasinTab <- SubBasinTab[,1:length(cnames)]
 
+
   # read HRUs table ------------------------------------
-  lineno<-grep(":HRUs", readLines(ff,warn=FALSE), value = FALSE)
-  lineend<-grep(":EndHRUs", readLines(ff,warn=FALSE), value = FALSE)
+  lineno<-grep(":HRUs", readLines(ff), value = FALSE)
+  lineend<-grep(":EndHRUs", readLines(ff), value = FALSE)
   if ((length(lineno)==0) || (length(lineend)==0)){
     print('warning: ff not a valid .rvh file (no :HRUs block)')
   }
@@ -118,7 +120,7 @@ rvn_rvh_read<-function(ff)
   cnames<-c("ID","Area","Elevation","Latitude","Longitude","SBID","LandUse","Vegetation","SoilProfile","Terrain","Aquifer","Slope","Aspect")
 
   #print(paste0("read HRUs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
-  HRUtab<-read.table(text=gsub(",", "\t", readLines(ff,warn=FALSE)),
+  HRUtab<-read.table(text=gsub(",", "\t", readLines(ff)),
                      skip=lineno+2, nrows=lineend-lineno-3, sep="",col.names=cnames,
                      header=FALSE,blank.lines.skip=TRUE,strip.white=TRUE,
                      stringsAsFactors=FALSE,flush=TRUE,comment.char = "#",

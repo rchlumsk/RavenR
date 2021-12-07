@@ -24,7 +24,7 @@ rvn_write_Raven_label(
 \item{indent_level}{Adds two spaces before label for every one level (default = 0)}
 }
 \value{
-\item{TRUE}{returns \code{TRUE} if executed successfully}
+TRUE returns TRUE if executed successfully
 }
 \description{
 Writes common Raven labeled line to file, with optional value (appends)

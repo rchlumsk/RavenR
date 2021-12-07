@@ -1,7 +1,8 @@
 #' @title Read in Raven ReservoirStages file
 #'
 #' @description
-#' Reads in the ReservoirStages.csv file produced by Raven.
+#' rvn_res_read is used to read in the ReservoirStages.csv file produced by the
+#' modelling Framework Raven.
 #'
 #' @details
 #' Expects a full file path to the ReservoirStages.csv file, then
@@ -9,7 +10,7 @@
 #' renaming the columns to nicer names and extracting the units into something
 #' much easier to read.
 #'
-#' This function is also built to support the \code{\link{rvn_res_extract}} function, which uses
+#' This function is also built to support the rvn_res_extract function, which uses
 #' the object created here for extracting by reference to the columns named
 #' here, for example sub24.
 #'

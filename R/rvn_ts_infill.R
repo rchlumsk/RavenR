@@ -5,7 +5,7 @@
 #'
 #' @details
 #' Takes xts dataset, finds minimum interval between time stamps and
-#' returns a new regular interval xts with same data content, but \code{NA} values in between known
+#' returns a new regular interval xts with same data content, but NA values inbetween known
 #' data values
 #'
 #' Only handles data with minimum time interval of 1 day; 1,2,3,4,6,8, or 12 hrs.
@@ -18,7 +18,7 @@
 #'
 #' @param ts valid xts time series
 #'
-#' @return \item{ts}{continuous xts time series}
+#' @return {ts}{ continuous xts time series}
 #'
 #' @author James R. Craig, University of Waterloo
 #'
@@ -70,5 +70,5 @@ rvn_ts_infill <- function(ts)
     out <- merge(all.times, ts, all=TRUE)
     return (out)
   }
-  return(ts)
+  return (ts)
 }

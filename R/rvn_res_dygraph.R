@@ -23,6 +23,7 @@
 #' dyplots[[1]]
 #' dyplots[[2]]
 #'
+#'
 #' @export rvn_res_dygraph
 #' @importFrom purrr map
 #' @importFrom dygraphs dygraph dyRangeSelector

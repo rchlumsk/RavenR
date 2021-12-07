@@ -23,10 +23,10 @@ rvn_annual_peak_error(
 \item{dd}{day of water year (default 30)}
 
 \item{add_line}{optionally adds a 1:1 line to the plot for reference
-(default \code{TRUE})}
+(default TRUE)}
 
 \item{add_labels}{optionally adds labels for overpredict/underpredict on
-right side axis (default \code{TRUE})}
+right side axis (default TRUE)}
 }
 \value{
 returns a list with peak errors in a data frame, and a ggplot object

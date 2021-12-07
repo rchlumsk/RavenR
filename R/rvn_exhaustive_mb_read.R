@@ -21,7 +21,7 @@
 #'
 #' @param ff full file path to the ExhaustiveMassBalance.csv file
 #' @param join_categories boolean whether add to the category tag as a column
-#' name prefix in exhaustivemb output (default \code{TRUE})
+#' name prefix in exhaustivemb output (default TRUE)
 #' @param tzone string indicating the timezone of the data in ff
 #' @return \item{exhaustivemb}{data frame from the file with standardized
 #' names} \item{units}{vector corresponding to units of each column}

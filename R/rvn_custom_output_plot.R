@@ -12,7 +12,7 @@
 #' @param IDs (optional) array of HRU IDs, subbasin IDs, HRU Group names/IDs to
 #' include in plots
 #' @param prd (optional) period to use in plotting
-#' @return \item{TRUE}{return \code{TRUE} if the function is executed properly}
+#' @return \item{TRUE}{return TRUE if the function is executed properly}
 #' @seealso \code{\link{rvn_custom_output_plot}} for plotting custom output
 #'
 #' @examples

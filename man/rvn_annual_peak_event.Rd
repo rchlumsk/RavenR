@@ -24,11 +24,11 @@ rvn_annual_peak_event(
 \item{dd}{day of water year (default 30)}
 
 \item{add_line}{optionally adds a 1:1 line to the plot for reference
-(default \code{TRUE})}
+(default TRUE)}
 
-\item{add_r2}{optionally computes the R2 and adds to plot (default \code{FALSE})}
+\item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
 
-\item{add_eqn}{optionally adds the equation for a linear regression line through the origin (default \code{FALSE})}
+\item{add_eqn}{optionally adds the equation for a linear regression line through the origin (default FALSE)}
 }
 \value{
 returns a list with peak data in a data frame, and a ggplot object

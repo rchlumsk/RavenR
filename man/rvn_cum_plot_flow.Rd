@@ -18,7 +18,7 @@ rvn_cum_plot_flow(sim = NULL, obs = NULL, inflow = NULL, mm = 9, dd = 30)
 \item{dd}{day of water year ending (default 30)}
 }
 \value{
-\item{TRUE}{return \code{TRUE} if the function is executed properly}
+\item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
 rvn_cum_plot_flow creates a cumulative flow plot of the simulated flows;

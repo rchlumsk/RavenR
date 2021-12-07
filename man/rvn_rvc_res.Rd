@@ -15,10 +15,10 @@ use as initial condition; default 0.0}
 \item{output}{file rvc lines are written to (default: initial_res_conditions.rvc)}
 }
 \value{
-\item{TRUE}{return \code{TRUE} if the function is executed properly}
+\item{TRUE}{return TRUE if the function is executed properly}
 }
 \description{
-Write an initial conditions (rvc) format file for Raven,
+rvn_rvc_res is used to write an initial conditions (rvc) format file for Raven,
 with the calculated reservoir stages written in.
 }
 \details{

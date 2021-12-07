@@ -1,7 +1,7 @@
 #' @title Create plot from xts data
 #'
 #' @description
-#' Generic function for plotting data from an xts format
+#' rvn_xts_plot is a generic function for plotting data from an xts format
 #' using the ggplot2 function.
 #'
 #' @details
@@ -21,7 +21,7 @@
 #'
 #' @param x time series object (xts) of data to plot
 #' @param prd period to use in plotting
-#' @param winter_shading optionally adds shading for winter months (default \code{FALSE})
+#' @param winter_shading optionally adds shading for winter months (default FALSE)
 #' @param wsdates integer vector of winter shading period dates (see details)
 #' @return \item{p1}{returns ggplot plot object}
 #'

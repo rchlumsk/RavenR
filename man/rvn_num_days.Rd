@@ -15,7 +15,7 @@ rvn_num_days(date1, date2)
 \item{int}{number of days between the two days}
 }
 \description{
-Calculate the number of days between two provided dates.
+rvn_num_days is used to calculate the number of days between two provided dates.
 }
 \details{
 This method handles leap years if they exist between the specified dates.

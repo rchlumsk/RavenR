@@ -3,6 +3,8 @@ Anyone interested is encouraged to contribute to the repository by **forking and
 
 (If you are new to GitHub, you might start with a [basic tutorial](https://help.github.com/articles/set-up-git) and  check out a more detailed guide to [pull requests](https://help.github.com/articles/using-pull-requests/).)
 
+
+
 ### Feature request
 
 * Submit an issue on the [Issues page](https://github.com/rchlumsk/RavenR/issues) or;
@@ -16,6 +18,8 @@ Anyone interested is encouraged to contribute to the repository by **forking and
 * Make your changes (bonus points for making changes on a new feature branch)
 * Push up to your account
 * Submit a pull request to home base (likely master branch, but check to make sure) at `rchlumsk/RavenR`
+
+Note that we are currently working towards a v2.0, please use the `dev_RC` branch for submitting pull requests as the most recent version of the package.
 
 ### Prefer to Email? Email the person listed as maintainer in the `DESCRIPTION` file of this repo.
 

@@ -22,10 +22,10 @@ rvn_flow_residuals(
 (default 3)}
 
 \item{add_line}{optionally adds a horizontal line to the plot for reference
-(default \code{FALSE})}
+(default FALSE)}
 
 \item{winter_shading}{optionally adds a light blue shading to winter months
-(default \code{FALSE})}
+(default FALSE)}
 
 \item{wsdates}{integer vector of winter shading period dates (see details)}
 }

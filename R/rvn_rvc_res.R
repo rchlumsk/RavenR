@@ -1,7 +1,7 @@
 #' @title Create initial conditions file for Reservoirs
 #'
 #' @description
-#' Write an initial conditions (rvc) format file for Raven,
+#' rvn_rvc_res is used to write an initial conditions (rvc) format file for Raven,
 #' with the calculated reservoir stages written in.
 #'
 #' @details
@@ -22,7 +22,7 @@
 #' @param initial_percent an optional double for percentage of maximum stage to
 #' use as initial condition; default 0.0
 #' @param output file rvc lines are written to (default: initial_res_conditions.rvc)
-#' @return \item{TRUE}{return \code{TRUE} if the function is executed properly}
+#' @return \item{TRUE}{return TRUE if the function is executed properly}
 #'
 #' @seealso \code{\link{rvn_res_read}} for reading in the ReservoirStages.csv file
 #'

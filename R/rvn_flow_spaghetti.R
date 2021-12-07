@@ -20,7 +20,7 @@
 #' generation of plot titles.
 #'
 #' @param flow time series object of simulated flows
-#' @return \item{TRUE}{return \code{TRUE} if the function is executed properly}
+#' @return \item{TRUE}{return TRUE if the function is executed properly}
 #'
 #' @seealso \code{\link{rvn_flow_scatterplot}} to create a scatterplot of flow
 #' values

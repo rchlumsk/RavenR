@@ -24,13 +24,13 @@ rvn_annual_volume(
 
 \item{dd}{day of water year ending (default 30)}
 
-\item{add_line}{optionally adds a 1:1 line to the plot for reference (default \code{TRUE})}
+\item{add_line}{optionally adds a 1:1 line to the plot for reference (default TRUE)}
 
-\item{add_r2}{optionally computes the R2 and adds to plot (default \code{FALSE})}
+\item{add_r2}{optionally computes the R2 and adds to plot (default FALSE)}
 
-\item{add_eqn}{optionally adds the equation for a linear regression line through the origin (default \code{FALSE})}
+\item{add_eqn}{optionally adds the equation for a linear regression line through the origin (default FALSE)}
 
-\item{add_labels}{optionally adds year-ending labels to each point on plot using geom_text (default \code{FALSE})}
+\item{add_labels}{optionally adds year-ending labels to each point on plot using geom_text (default FALSE)}
 }
 \value{
 returns a list with annual volume data in a data frame, and a ggplot object
@@ -38,7 +38,7 @@ returns a list with annual volume data in a data frame, and a ggplot object
  \item{p1}{ggplot object with plotted annual volumes}
 }
 \description{
-Creates a plot of the annual observed and simulated volumes.
+rvn_annual_volume creates a plot of the annual observed and simulated volumes.
 }
 \details{
 Creates a scatterplot of the annual observed and simulated
