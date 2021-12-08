@@ -28,6 +28,14 @@ library(devtools)
 devtools::install_github("rchlumsk/RavenR")
 ```
 
+The developmental version can be installed from the `dev` branch with:
+
+``` r
+if (!require(devtools)) install.packages("devtools")
+library(devtools)
+devtools::install_github("rchlumsk/RavenR", ref="dev")
+```
+
 ## Tutorials and Quick Start Guide
 
 Please see the package vignette for an overview of the `RavenR` package. 
