@@ -14,6 +14,19 @@
 #' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
+#' ## additional example from tutorial files (not run)
+#' \dontrun{
+#'   path <- dirname(tempfile())
+#'   dir.create(paste(path,"/tmp",sep=""))
+#'   url<-"http://raven.uwaterloo.ca/files/RavenOstrichTutorialFiles.zip"
+#'   download.file(url,dest=paste(path,"/tmp/example.zip",sep=""))
+#'   unzip(zipfile = paste(path,"/tmp/example.zip",sep=""),
+#'         exdir = paste(path,"/tmp",sep=""))
+#'   rvh<-rvn_rvh_read(paste(path,"/tmp/Demo_C4/model/LOWRL.rvh",sep=""))
+#'   rvn_rvh_subbasin_visnetwork_plot(rvh,groupBy="Gauged")
+#'   rvn_rvh_subbasin_visnetwork_plot(rvh,groupBy="DomLU")
+#'   rvn_rvh_subbasin_visnetwork_plot(rvh,groupBy="Elevation")
+#'   }
 #'
 #' rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package="RavenR"))
 #' rvn_rvh_subbasin_visnetwork_plot(rvh,groupBy="Gauged")
