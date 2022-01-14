@@ -94,7 +94,7 @@ rvn_rvt_read<-function(filename, tzone="UTC") {
 
     while (j < (endfile-startfile)) {
 
-      temp <- unlist(strsplit(trimws(ff[j]),split="\\s+"))
+      temp <- unlist(strsplit(trimws(ff[j]),split="\\,|\\s+|\\,\\s+|\\s+\\,\\s+"))
 
       # take only temp items before a comment char
       if (any(rvn_substrLeft(temp,1) == "#")) {
@@ -165,7 +165,7 @@ rvn_rvt_read<-function(filename, tzone="UTC") {
             # check mult_units against Raven rvt list
             # to be added - check units for each parameter against those in the rvt mapping
             if (any(tolower(mult_units) != tolower(unlist(rvn_met_raven_mapping[mult_params])))) {
-              warning(sprintf("rvn_rvt_read: Issue in reading rvt file, some units on line %i found that are not consistent with the associated parameters, please verify that all data is in the correct units for Raven:\n%s.",j,
+              warning(sprintf("rvn_rvt_read: Issue in reading rvt file, some units on line %i found that are not consistent with the associated parameters, please verify that all data is in the correct units for Raven:\n%s",j,
                            paste(mult_units[which(tolower(mult_units) != tolower(unlist(rvn_met_raven_mapping[mult_params])))],collapse=" ")))
             }
 
@@ -184,7 +184,7 @@ rvn_rvt_read<-function(filename, tzone="UTC") {
           colnames(dd) <- mult_params
 
           for (i in j:(endfile-1)) {
-            temp <- unlist(strsplit(trimws(ff[i]),split="\\s+"))
+            temp <- unlist(strsplit(trimws(ff[i]),split="\\,|\\s+|\\,\\s+|\\s+\\,\\s+"))
 
             # take only temp items before a comment char
             if (any(rvn_substrLeft(temp,1) == "#")) {
@@ -235,7 +235,7 @@ rvn_rvt_read<-function(filename, tzone="UTC") {
 
     while (j < (endfile-startfile)) {
 
-      temp <- unlist(strsplit(trimws(ff[j]),split="\\s+"))
+      temp <- unlist(strsplit(trimws(ff[j]),split="\\,|\\s+|\\,\\s+|\\s+\\,\\s+"))
 
       # take only temp items before a comment char
       if (any(rvn_substrLeft(temp,1) == "#")) {
@@ -269,7 +269,7 @@ rvn_rvt_read<-function(filename, tzone="UTC") {
           colnames(dd) <- c("DATE","TIME","VALUE")
 
           for (i in j:(endfile-1)) {
-            temp <- unlist(strsplit(trimws(ff[i]),split="\\s+"))
+            temp <- unlist(strsplit(trimws(ff[i]),split="\\,|\\s+|\\,\\s+|\\s+\\,\\s+"))
 
             # take only temp items before a comment char
             if (any(rvn_substrLeft(temp,1) == "#")) {
@@ -324,7 +324,7 @@ rvn_rvt_read<-function(filename, tzone="UTC") {
 
     while (j < (endfile-startfile)) {
 
-      temp <- unlist(strsplit(trimws(ff[j]),split="\\s+"))
+      temp <- unlist(strsplit(trimws(ff[j]),split="\\,|\\s+|\\,\\s+|\\s+\\,\\s+"))
 
       # take only temp items before a comment char
       if (any(rvn_substrLeft(temp,1) == "#")) {
@@ -369,7 +369,7 @@ rvn_rvt_read<-function(filename, tzone="UTC") {
 
           # print(sprintf("linecount is now %i", linecount))
 
-          temp_all <- unlist(strsplit(trimws(ff[j:(endfile-1)]),split="\\s+"))
+          temp_all <- unlist(strsplit(trimws(ff[j:(endfile-1)]),split="\\,|\\s+|\\,\\s+|\\s+\\,\\s+"))
 
           # check temp outputs for single entries only, once comments removed
           for (i in length(temp_all)) {
