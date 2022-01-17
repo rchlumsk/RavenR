@@ -104,10 +104,10 @@ rvn_rvh_read <- function(ff)
                             col.names=cnames,header=FALSE,blank.lines.skip=TRUE, strip.white=TRUE,
                             stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
 
-    SubBasinTab$Name<-trimws(SubBasinTab$Name)
-    #print('done reading sbs')
-    #untabify
-    SubBasinTab <- as.data.frame(sapply(SubBasinTab, function(x) gsub("\t", "", x)))
+    ## I believe this section is redundant and handled by the read.table function already
+    # clean up names and entries - 'untabify'
+    # SubBasinTab$Name<-trimws(SubBasinTab$Name)
+    # SubBasinTab <- as.data.frame(sapply(SubBasinTab, function(x) gsub("\t", "", x), simplify=FALSE))
     # SubBasinTab <- SubBasinTab[,1:length(cnames)]
   }
 
@@ -130,8 +130,8 @@ rvn_rvh_read <- function(ff)
     HRUtab <- HRUtab[!is.na(HRUtab$ID),]
 
     #print('done reading HRUs')
-    #untabify
-    #HRUtab <- as.data.frame(sapply(HRUtab, function(x) gsub("\t", "", x)))
+    # clean up names and entries - 'untabify'
+    # HRUtab <- as.data.frame(sapply(HRUtab, function(x) gsub("\t", "", x), simplify=FALSE))
   }
 
   # additional operations if both SBtab and HRUtab are present
