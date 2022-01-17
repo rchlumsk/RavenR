@@ -54,7 +54,7 @@ rvn_rvi_connections<-function(rvi,ProcConDataFile=system.file("extdata","RavenPr
    stopifnot(file.exists(ProcConDataFile))
    delim=""
    cnames<-c("Algorithm","ProcessType","From","To")
-   print(paste0("about to read ",ProcConDataFile))
+   # print(paste0("about to read ",ProcConDataFile))
    ProcConnTable<-read.table(ProcConDataFile,
                              sep=delim,
                              col.names=cnames,

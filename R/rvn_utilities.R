@@ -516,6 +516,37 @@ rvn_fortify_xts <- function(x)
 }
 
 
+#' @title Provide known options for Raven rvi options
+#'
+#' @description
+#' Provides a vector of recognized Raven rvi options for \code{\link{rvn_run}} to compare against.
+#'
+#' @return string vector of recognized rvi_options
+#'
+#' @examples
+#' get_rvi_options()
+#'
+#' @keywords internal
+get_rvi_options <- function() {
+  rvi_options <- c(
+    ":SilentMode",
+    ":DebugMode",
+    ":WriteForcingFunctions",
+    ":CreateRVPTemplate",
+    ":WriteMassBalanceFile",
+    ":WriteEnergyStorage",
+    ":WriteDemandFile",
+    ":WriteEnsimFormat",
+    "WriteExhaustiveMB",
+    # ":EndPause", # don't really want people writing this with RavenR
+    ":SuppressOutput",
+    ":SnapshotHydrograph",
+    ":UseStopFile"
+  )
+  return(rvi_options)
+}
+
+
 #' @title Provide mappings for rvt functions
 #'
 #' @description

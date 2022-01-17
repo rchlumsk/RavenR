@@ -13,7 +13,8 @@ rvn_run(
   rvt = NULL,
   rvp = NULL,
   rvh = NULL,
-  showoutput = FALSE
+  showoutput = FALSE,
+  rvi_options = NULL
 )
 }
 \arguments{
@@ -64,9 +65,17 @@ dir.create(destdir)
 unzip(zipfile=destfile,exdir=destdir)
 file.remove(destfile)
 
+## check that Raven.exe is downloaded
+if (!rvn_download(check=TRUE)) {rvn_download()}
+
 # Irondeqoiut example
 rvn_run(indir=paste(destdir,"/Irond",sep=""),
         showoutput=TRUE)
+
+# run in Silent Mode (rvi option)
+rvn_run(indir=paste(destdir,"/Irond",sep=""),
+        showoutput=TRUE,
+        rvi_options=c(":SilentMode"))
 }
 
 }

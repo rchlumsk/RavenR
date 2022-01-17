@@ -22,9 +22,9 @@ rvn_met_recordplot(
 "dist" (distance from coordinates of interest) if supplying \code{weathercan::stations_search} results.}
 }
 \value{
-returns a 2x1 plot object containing 2 ggplot objects:
-  \item{A chronological horizontal bar plot depicting each station's record period}
-  \item{A vertical bar plot depicting the number of station records available each year}
+returns a 2x1 plot object containing 2 ggplot objects
+  \item{}{A chronological horizontal bar plot depicting each station's record period}
+  \item{}{A vertical bar plot depicting the number of station records available each year}
 }
 \description{
 This function plots the length of Environment Canada climate station records,

@@ -40,16 +40,24 @@
 #' unzip(zipfile=destfile,exdir=destdir)
 #' file.remove(destfile)
 #'
+#' ## check that Raven.exe is downloaded
+#' if (!rvn_download(check=TRUE)) {rvn_download()}
+#'
 #' # Irondeqoiut example
 #' rvn_run(indir=paste(destdir,"/Irond",sep=""),
 #'         showoutput=TRUE)
+#'
+#' # run in Silent Mode (rvi option)
+#' rvn_run(indir=paste(destdir,"/Irond",sep=""),
+#'         showoutput=TRUE,
+#'         rvi_options=c(":SilentMode"))
 #' }
 #'
 #' @export rvn_run
 rvn_run <- function(fileprefix=NULL, indir=getwd(), ravenexe=NULL,
                   outdir=NULL,
                   rvc=NULL, rvt=NULL, rvp=NULL, rvh=NULL,
-                  showoutput=FALSE) {
+                  showoutput=FALSE, rvi_options=NULL) {
 
    if (is.null(fileprefix)) {
       fileprefix<-gsub(".rvi","",list.files(indir,pattern=".rvi"))
@@ -108,11 +116,46 @@ rvn_run <- function(fileprefix=NULL, indir=getwd(), ravenexe=NULL,
       if (!file.exists(rvh)) stop("Supplied rvh file does not exist")
       RavenCMD <- sprintf("%s -h %s", RavenCMD, rvh)
    }
-   if(Sys.info()["sysname"]=="Windows")
-   {
+
+   ## check rvi options and store rvi / update rvi if valid options exist
+   if (!is.null(rvi_options)) {
+
+      # check options against known ones
+      known_rvi_options <- get_rvi_options()
+
+      if (any(rvi_options %notin% known_rvi_options)) {
+         warning(sprintf("rvn_run: Some provided rvi options not recognized, and may result in warnings/errors in the Raven call:\n%s",
+                         paste0(rvi_options[which(rvi_options %notin% known_rvi_options)],collapse="\n")  ))
+      }
+
+      # read in and backup rvi file
+      rvi <- readLines(file.path(indir,paste0(fileprefix,".rvi")))
+      backup_rvi_path <- paste0(file.path(indir,paste0(fileprefix,".rvi")),"__backup.rvi")
+      writeLines(rvi, con=backup_rvi_path)
+
+      # write options to rvi file
+      writeLines(text=append(rvi, values=c(rvi_options, "")), con=file.path(indir,paste0(fileprefix,".rvi")))
+   }
+
+   if(Sys.info()["sysname"]=="Windows") {
      res <- invisible(system(RavenCMD, show.output.on.console = showoutput))
-   }else{
+   } else {
      res <- system(RavenCMD)
    }
+
+   # clean up rvi file if rvi_options used
+   if (!is.null(rvi_options)) {
+
+      # write back backup rvi
+      writeLines(text=rvi, con=file.path(indir,paste0(fileprefix,".rvi")))
+
+      if (file.exists(backup_rvi_path)) {
+         unlink(backup_rvi_path)
+      } else {
+         warning(sprintf("rvn_run: rvi_options used and backup rvi file created, but cannot be located.\nPlease manually inspect your rvi file for new commands at the end of file:\n%s",
+                         file.path(indir,paste0(fileprefix,".rvi"))  ))
+      }
+   }
+
    return(res)
 }
