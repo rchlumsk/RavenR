@@ -89,13 +89,23 @@ rvn_rvh_read <- function(ff)
   SBtab <- HRUtab <- net <- NULL # define outputs as NULL to start
 
   # read subbasins table--------------------------------
-  lineno<-grep(":SubBasins", readLines(ff,warn=FALSE), value = FALSE)
-  lineend<-grep(":EndSubBasins", readLines(ff,warn=FALSE), value = FALSE)
+  lineno<-grep("^\\s*\\t*:SubBasins", readLines(ff,warn=FALSE), value = FALSE)
+  lineend<-grep("^\\s*\\t*:EndSubBasins", readLines(ff,warn=FALSE), value = FALSE)
 
   if ((length(lineno)==0) || (length(lineend)==0)){
     warning('rvn_rvh_read: no :SubBasins block found; SBtable and SBnetwork will be returned as NULL')
     SubBasinTab <- NULL
   } else {
+
+    if (length(lineno) >= 2) {
+      warning("rvn_rvh_read: multiple lines matching :SubBasins found; using first matching line in reading file")
+      lineno <- lineno[1]
+    }
+    if (length(lineend) >=2 ) {
+      warning("rvn_rvh_read: multipe lines matching :EndSubBasins found; using first matching line in reading file.")
+      lineend <- lineend[1]
+    }
+
     cnames<-c("SBID","Name","Downstream_ID","Profile","ReachLength","Gauged")
 
     #print(paste0("read sbs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
@@ -113,12 +123,22 @@ rvn_rvh_read <- function(ff)
 
 
   # read HRUs table ------------------------------------
-  lineno<-grep(":HRUs", readLines(ff,warn=FALSE), value = FALSE)
-  lineend<-grep(":EndHRUs", readLines(ff,warn=FALSE), value = FALSE)
-  if ((length(lineno)==0) || (length(lineend)==0)){
+  lineno<-grep("^\\s*\\t*:HRUs", readLines(ff,warn=FALSE), value = FALSE)
+  lineend<-grep("^\\s*\\t*:EndHRUs", readLines(ff,warn=FALSE), value = FALSE)
+  if ((length(lineno)==0) | (length(lineend)==0)){
     warning('rvn_rvh_read: no :HRUs block found; HRUtable and SBnetwork will be returned as NULL')
     HRUtab <- NULL
   } else {
+
+    if (length(lineno) >= 2) {
+      warning("rvn_rvh_read: multiple lines matching :HRUs found; using first matching line in reading file")
+      lineno <- lineno[1]
+    }
+    if (length(lineend) >=2 ) {
+      warning("rvn_rvh_read: multipe lines matching :EndHRUs found; using first matching line in reading file.")
+      lineend <- lineend[1]
+    }
+
     cnames<-c("ID","Area","Elevation","Latitude","Longitude","SBID","LandUse","Vegetation","SoilProfile","Aquifer","Terrain","Slope","Aspect")
 
     #print(paste0("read HRUs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
