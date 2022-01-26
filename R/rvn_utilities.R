@@ -149,12 +149,12 @@ rvn_month_names <- function(short=TRUE)
 #' # 7
 #'
 #' @export rvn_num_days
-rvn_num_days <- function(date1,date2)
+rvn_num_days <- function(date1, date2)
 {
   # alternate method
   # as.numeric(difftime(index(date1) ,index(date2) , units = c("days")))
 
-  return( length(seq.Date(from=date1,to=date2,by=1))-1 )
+  return( length(seq.Date(from = date1, to = date2, by = 1)) -1 )
 }
 
 

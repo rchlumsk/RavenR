@@ -60,12 +60,15 @@ missing value code provided by \code{NA_value}.
 system.file('extdata','run1_Hydrographs.csv', package = "RavenR") \%>\%
 rvn_hyd_read() -> mydata
 
+# temporary filename
+tf <- file.path(tempdir(), 'mydata.rvt')
+
 # write time series to rvt file using data from subbasin 36 as observed data
 rvn_rvt_write(x=mydata$hyd$Sub36,
   rvt_type = "ObservationData",
   data_type = "HYDROGRAPH",
   basin_ID = 36,
-  filename = file.path(tempdir(), 'mydata.rvt'))
+  filename = tf)
 
 }
 \seealso{

@@ -42,12 +42,15 @@
 #' system.file('extdata','run1_Hydrographs.csv', package = "RavenR") %>%
 #' rvn_hyd_read() -> mydata
 #'
+#' # temporary filename
+#' tf <- file.path(tempdir(), 'mydata.rvt')
+#'
 #' # write time series to rvt file using data from subbasin 36 as observed data
 #' rvn_rvt_write(x=mydata$hyd$Sub36,
 #'   rvt_type = "ObservationData",
 #'   data_type = "HYDROGRAPH",
 #'   basin_ID = 36,
-#'   filename = file.path(tempdir(), 'mydata.rvt'))
+#'   filename = tf)
 #'
 #' @export rvn_rvt_write
 #' @importFrom xts is.xts timeBased
@@ -148,7 +151,7 @@ rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
       }
     }
     time_interval <- as.numeric(difftime_check[1])
-    start_datetime <- format(as_datetime(x[1]), "%Y-%M-%d %H:%M:%S")
+    start_datetime <- format(as_datetime(x[1]), "%Y-%m-%d %H:%M:%S")
 
   } else {
     time_interval <- NA
@@ -204,7 +207,7 @@ rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
     writeLines(ss1,fc)
 
     for (j in 1:num_points) {
-      writeLines(sprintf('  %s %g', format(as_datetime(x[j]), "%Y-%M-%d %H:%M:%S"),xx[j]),fc)
+      writeLines(sprintf('  %s %g', format(as_datetime(x[j]), "%Y-%m-%d %H:%M:%S"),xx[j]),fc)
     }
   }
 
