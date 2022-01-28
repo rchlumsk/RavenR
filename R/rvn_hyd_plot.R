@@ -162,7 +162,7 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
       geom_bar(data=df.precip.plot, aes(x=Date,y=precip), stat="identity", color = "blue")+
       # scale_x_date(limits = c(x.min,x.max))+
       scale_x_date()+
-      ylab("Precip (mm)")+
+      ylab("Precip (mm/d)")+
       xlab("")+
       rvn_theme_RavenR()
 

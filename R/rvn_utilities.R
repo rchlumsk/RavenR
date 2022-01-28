@@ -149,12 +149,12 @@ rvn_month_names <- function(short=TRUE)
 #' # 7
 #'
 #' @export rvn_num_days
-rvn_num_days <- function(date1,date2)
+rvn_num_days <- function(date1, date2)
 {
   # alternate method
   # as.numeric(difftime(index(date1) ,index(date2) , units = c("days")))
 
-  return( length(seq.Date(from=date1,to=date2,by=1))-1 )
+  return( length(seq.Date(from = date1, to = date2, by = 1)) -1 )
 }
 
 
@@ -516,6 +516,37 @@ rvn_fortify_xts <- function(x)
 }
 
 
+#' @title Provide known options for Raven rvi options
+#'
+#' @description
+#' Provides a vector of recognized Raven rvi options for \code{\link{rvn_run}} to compare against.
+#'
+#' @return string vector of recognized rvi_options
+#'
+#' @examples
+#' get_rvi_options()
+#'
+#' @noRd
+get_rvi_options <- function() {
+  rvi_options <- c(
+    ":SilentMode",
+    ":DebugMode",
+    ":WriteForcingFunctions",
+    ":CreateRVPTemplate",
+    ":WriteMassBalanceFile",
+    ":WriteEnergyStorage",
+    ":WriteDemandFile",
+    ":WriteEnsimFormat",
+    "WriteExhaustiveMB",
+    # ":EndPause", # don't really want people writing this with RavenR
+    ":SuppressOutput",
+    ":SnapshotHydrograph",
+    ":UseStopFile"
+  )
+  return(rvi_options)
+}
+
+
 #' @title Provide mappings for rvt functions
 #'
 #' @description
@@ -526,8 +557,7 @@ rvn_fortify_xts <- function(x)
 #' @examples
 #' get_rvt_mapping()
 #'
-#' @keywords internal
-#' @export get_rvt_mapping
+#' @noRd
 get_rvt_mapping <- function() {
 
   # generates globally accessible variables for rvt_mapping and rvt_data_type_mapping
@@ -654,8 +684,7 @@ get_rvt_mapping <- function() {
 #' @examples
 #' get_rvt_data_type_mapping()
 #'
-#' @keywords internal
-#' @export get_rvt_data_type_mapping
+#' @noRd
 get_rvt_data_type_mapping <- function() {
 
   # update this based on table C.1 in Raven Manual?
@@ -687,8 +716,7 @@ get_rvt_data_type_mapping <- function() {
 #' @examples
 #' get_rvn_met_raven_mapping()
 #'
-#' @keywords internal
-#' @export get_rvn_met_raven_mapping
+#' @noRd
 get_rvn_met_raven_mapping <- function() {
 
   ## add TEMP_DAILY_MIN, TEMP_DAILY_MAX?
@@ -725,8 +753,7 @@ get_rvn_met_raven_mapping <- function() {
 #' @examples
 #' get_rvt_met_mapping_weathercan()
 #'
-#' @keywords internal
-#' @export get_rvt_met_mapping_weathercan
+#' @noRd
 get_rvt_met_mapping_weathercan <- function() {
 
   # weathercan mapping to standard Raven names

@@ -71,13 +71,13 @@ To locate the raw data from the RavenR package, we will use a syntax to find the
 
 ```{r Raw sample data}
 # read in hydrograph sample csv data from RavenR package
-ff <- system.file("extdata","run1_Hydrographs.csv", package="RavenR")
+ff <- system.file("extdata","run1_Hydrographs.csv", package = "RavenR")
 
 # ff is a simple string, which can be substituted with any file location
 ff
 
 # read in sample rvi file from the RavenR package
-rvi_file <- system.file("extdata", "Nith.rvi", package="RavenR")
+rvi_file <- system.file("extdata", "Nith.rvi", package = "RavenR")
 
 # show first 6 lines of the file
 readLines(rvi_file) %>% head()
@@ -94,7 +94,7 @@ Now you are ready to start using RavenR to directly visualize and manipulate mod
 Start by finding the raw **run1_ForcingFunctions.csv** file with the `system.file` command. Note that this can be replaced with your own forcing functions file location if preferred. We will store the forcing functions data into an object called ff (and obtain just the subobject using the '$' operator), and then view the first few rows using the **head** function. We will show only the first six columns of the data for brevity.
 
 ```{r Read forcing data}
-ff <- system.file("extdata","run1_ForcingFunctions.csv",package="RavenR")
+ff <- system.file("extdata","run1_ForcingFunctions.csv", package = "RavenR")
 # ff <- "C:/TEMP/Nith/output/ForcingFunctions.csv" # replace with your own file
 ff_data <- RavenR::rvn_forcings_read(ff)
 head(ff_data$forcings[,1:6])
@@ -120,7 +120,7 @@ library(ggplot2)
 
 myplots <- rvn_forcings_plot(ff_data$forcings)
 myplots$Radiation +
-  theme(legend.position="bottom")
+  theme(legend.position = "bottom")
 ```
 
 
@@ -129,7 +129,7 @@ myplots$Radiation +
 We can similarly access the hydrograph fit. Here the hydrograph sample data is located with the usual `system.file` command, then read into R with the `rvn_hyd_read` function intended for reading Hydrographs file. The flows from a specific subbasin can be extracted using the `rvn_hyd_extract` function, which is done here for subbasin 36. The precipitation can be extracted similarly.
 
 ```{r Extract hydrograph data, fig.height=5, fig.width=6}
-ff <- system.file("extdata","run1_Hydrographs.csv",package="RavenR")
+ff <- system.file("extdata","run1_Hydrographs.csv", package = "RavenR")
 # ff <- "mydirectory/Hydrographs.csv" # replace with your own file
 hy <- rvn_hyd_read(ff)
 head(hy$hyd)
@@ -148,7 +148,7 @@ lines(lubridate::date(flow36$obs), flow36$obs,col='black')
 A ggplot format plot can also be created using the `rvn_hyd_plot` function in the RavenR library. This function can save some of the trouble of plotting the precipitation on the secondary axis.
 
 ```{r Create hydrograph, fig.height=5, fig.width=6, message=FALSE, warning=FALSE}
-rvn_hyd_plot(sim=flow36$sim, obs=flow36$obs, precip=precip)
+rvn_hyd_plot(sim=flow36$sim, obs=flow36$obs, precip = precip)
 ```
 
 There are some other helpful functions in RavenR for understanding our hydrographs. For example, the 'spaghetti' plot overlays the hydrographs from the supplied series and plots them against day of year on the x-axis, facilitating a comparison across multiple years.
@@ -160,20 +160,20 @@ rvn_flow_spaghetti(flow36$sim)
 The annual quantiles function compute the flow quantiles for a given time series for each day of the year, and plot those quantiles with the corresponding plot function. This provides a similar look to the spaghetti plot, but with smooth quantiles instead of overlaying time series.
 ```{r Annual quantiles, fig.height=5, fig.width=6}
 rvn_annual_quantiles(flow36$sim) %>% 
-  rvn_annual_quantiles_plot(., ribboncolor='magenta')
+  rvn_annual_quantiles_plot(., ribboncolor = 'magenta')
 ```
 
 Other plots indicate the agreement between peak flows in the modelled and observed.
 ```{r Annual peak flows, fig.height=5, fig.width=6}
-rvn_annual_peak(flow36$sim, obs=flow36$obs) 
-rvn_annual_peak_event(flow36$sim, obs=flow36$obs)
+rvn_annual_peak(flow36$sim, obs = flow36$obs) 
+rvn_annual_peak_event(flow36$sim, obs = flow36$obs)
 ```
 
 We can also use some of the Raven plots to get some diagnostics and comparisons on the simulated and observed hydrographs. For example, the plots below compare the annual cumulative flow and the monthly volume bias, respectively.
 
 ```{r Cumulative flow plot and monthly bias, fig.height=5, fig.width=6, message=FALSE, warning=FALSE}
-rvn_cum_plot_flow(flow36$sim, obs=flow36$obs) 
-rvn_monthly_vbias(flow36$sim, obs=flow36$obs)
+rvn_cum_plot_flow(flow36$sim, obs = flow36$obs) 
+rvn_monthly_vbias(flow36$sim, obs = flow36$obs)
 ```
 
 ### Flow DyGraphs
@@ -190,16 +190,16 @@ While this tutorial focuses on the forcing functions and hydrograph data, simila
 One utility that does not exist in the `xts` package, but is nonetheless useful in hydrology, is the application of functions to the water year period rather than the calendar year. In the RavenR package, the `rvn_apply_wyearly` function accomplishes this. The water year is by default set to index by the October 1st water year (specifying the period ending September 30th), but this may be provided as an argument to the function for different water years. Here, we apply the mean function to the water year using sample hydrograph data in RavenR.
 
 ```{r rvn_apply_wyearly function example, message=FALSE, warning=FALSE}
-myhyd <- system.file("extdata","run1_Hydrographs.csv", package="RavenR") %>% 
+myhyd <- system.file("extdata","run1_Hydrographs.csv", package = "RavenR") %>% 
   rvn_hyd_read()
 
 library(xts)
 
 # apply mean to calendar year in hydrograph data
-xts::apply.yearly(myhyd$hyd$Sub36, mean, na.rm=TRUE)
+xts::apply.yearly(myhyd$hyd$Sub36, mean, na.rm = TRUE)
 
 # apply mean as FUN to daily average temperature
-RavenR::rvn_apply_wyearly(myhyd$hyd$Sub36, mean, na.rm=TRUE)
+RavenR::rvn_apply_wyearly(myhyd$hyd$Sub36, mean, na.rm = TRUE)
 ```
 
 ## RVI File Utilities
@@ -207,7 +207,7 @@ RavenR::rvn_apply_wyearly(myhyd$hyd$Sub36, mean, na.rm=TRUE)
 The RavenR package can read the rvi file and generate a network plot of the model connections, which is helpful in understanding the model configuration. This can be done as follows, again using the Nith rvi file as an example. The network plot may be directly written to file by supplying a file name to the `pdfout` argument, which is NULL by default. Similar functionality is also avaialble with the `rvn_rvi_process_diagrammer` function, which uses the `DiagrammeR` library.
 
 ```{r}
-rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi",package="RavenR"))
+rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package = "RavenR"))
 
 rvn_rvi_connections(rvi) %>% 
   rvn_rvi_process_ggplot()
@@ -220,7 +220,7 @@ The Raven User's Manual (Appendix D) provides a number of model templates that c
 Although tools to explicitly read or write rvp files is not currently available in RavenR, a useful function in calibration of Raven parameters is the `rvn_rvi_getparams` function. This will provide a data frame of paramter information (default, min, max, etc.) of parameters that are required in the model based on the provided rvi file. This can be a useful function in setting up parameter ranges and initial values for calibration.
 
 ```{r rvp getparams example}
-system.file("extdata","Nith.rvi", package="RavenR") %>%
+system.file("extdata","Nith.rvi", package = "RavenR") %>%
   rvn_rvi_read() %>% 
   rvn_rvi_getparams() %>% 
   head() # preview of parameter data frame
@@ -233,12 +233,12 @@ The discretization file, rvh, may be read in and modified using the RavenR packa
 
 ```{r Read rvh file}
 # read in rvh file
-rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package="RavenR"))
+rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package = "RavenR"))
 
 rvh$SBtable[, c("SBID","Downstream_ID","Area","TotalUpstreamArea")]
 ```
 
-Similar to the rvi functionality, the subbasin connections from the rvh file may be plotted using one of two ways. The `rvn_rvh_read` function has built-in functionality to build a network plot, which may be plotted directly. The `rvn_subbasin_network_plot` function uses the subbasin table to plot the network from the lat/long coordinates, generating a more spatially accurate plot.
+Similar to the rvi functionality, the subbasin connections from the rvh file may be plotted using one of two ways. The `rvn_rvh_read` function has built-in functionality to build a network plot, which may be plotted directly. The `rvn_rvh_subbasin_network_plot` function uses the subbasin table to plot the network from the lat/long coordinates, generating a more spatially accurate plot.
 
 Compare these two plots to the map of the Nith basin from Tutorial #2.
 ```{r Discretization network plot example}
@@ -246,7 +246,7 @@ Compare these two plots to the map of the Nith basin from Tutorial #2.
 plot(rvh$SBnetwork)
 
 # create network plot of watershed structure from rvh file
-rvn_subbasin_network_plot(rvh$SBtable, labeled=TRUE)
+rvn_rvh_subbasin_network_plot(rvh$SBtable, labeled = TRUE)
 ```
 
 One more useful rvh functionality is the simplification of an HRU file. Often in the initial HRU discretization, many HRUs with similar properties and/or very small areas exist that are worthwhile consolidating for the purpose of modelling. The `rvn_rvh_cleanrhus` function accomplishes this.
@@ -301,7 +301,7 @@ fpath2 <- file.path(tempdir(), "met_gauges.rvt")
 ## filter for particular columns to write to file
 result <- kam[,c("station_name","date","lat","lon","elev","max_temp","min_temp","total_precip")] %>% 
             rvn_rvt_write_met(metdata = ., 
-                        filenames=fpath1,
+                        filenames = fpath1,
                         filename_stndata = fpath2)
 
 # preview files

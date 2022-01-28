@@ -40,11 +40,10 @@ Raven has the capability of emulating a number of existing model configurations,
 novel model configurations are provided which may be helpful to the user. These can be written with this function
 for ease of getting started with a model using Raven.
 
-The modelname parameter should be one of "UBCWM", "HBV-EC", "GR4J", "CdnShield", "MOHYSE", "HMETS", or "HYPR".
+The modelname parameter should be one of "UBCWM", "HBV-EC", "HBV-Light", "GR4J",
+ "CdnShield", "MOHYSE", "HMETS", "HYPR", or "HYMOD".
 
 This function uses the same model template files that are provided in the Raven User's manual, Appendix D.
-The :CreateRVPTemplate command is included in each rvi file on the assumption that the user will
-wish to create an rvp template file following the creation of the rvi file.
 
 The \code{\link{rvn_write_Raven_newfile}} is used to write a header in the rvi file. Writing of a header
 can be disabled with \code{writeheader=FALSE}.

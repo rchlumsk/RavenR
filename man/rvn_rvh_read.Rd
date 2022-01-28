@@ -21,7 +21,7 @@ dominant land use and DomLUArea is the percentage of the basin covered with DomL
 
 \item{HRUtable}{a data table of HRU characteristics, with land use and vegetation classes as factors.
 Contains identical information as found in the :HRUs-:EndHRUs block of the .rvh file: ID, Area,
-Elevation, Latitude, Longitude, SBID, LandUse,Vegetation, SoilProfile, Terrain, Aquifer, Slope,
+Elevation, Latitude, Longitude, SBID, LandUse,Vegetation, SoilProfile, Aquifer, Terrain, Slope,
 and Aspect.}
 
 \item{SBnetwork}{an igraph network graph network describing subbasin stream network connectivity,
@@ -39,6 +39,11 @@ does not like tabs in the rvh file, the file should be untabified first.
 This function uses the igraph library to build the networks and compute the total upstream area.
 The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :SubBasins-:EndSubBasins
 command blocks.
+
+Partial rvh files may be provided to this function (i.e. with only :SubBasin or :HRUs blocks but not the other),
+however, some calculations and the calculation of the \code{SBnetwork} output will not be completed. Omitted
+structures (e.g. \code{SBtable}) will be returned as \code{NULL} if the section is not found in the rvh file directly.
+Note that this function does not look for additional files specified with \code{:RedirectToFile} commands.
 
 The ff argument can be a relative path name or absolute one.
 
@@ -75,7 +80,7 @@ headerwater subbasins will have a total upstream area equal to their own subbasi
 }
 \seealso{
 \code{\link{rvn_rvh_write}} to write contents of the generated (and usually modified HRU and SubBasin tables)
-\code{\link{rvn_subbasin_network_plot}} to plot the subbasin network
+\code{\link{rvn_rvh_subbasin_network_plot}} to plot the subbasin network
 }
 \author{
 James R. Craig, University of Waterloo

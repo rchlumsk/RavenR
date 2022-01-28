@@ -245,9 +245,8 @@ rvn_download<-function(version=NA,NetCDF=FALSE,check=FALSE,copy_path=NULL)
 
          res <- file.copy(from=copy_path,
                    to=paste(save_path,"/","Raven.exe",sep=""),
-                   overwrite-TRUE)
+                   overwrite=TRUE)
       }
    }
-
    return(res)
 }

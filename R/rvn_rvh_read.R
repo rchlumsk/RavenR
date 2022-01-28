@@ -13,6 +13,11 @@
 #' The .rvh file can have arbitrary contents outside of the :HRUs-:EndHRUs and :SubBasins-:EndSubBasins
 #' command blocks.
 #'
+#' Partial rvh files may be provided to this function (i.e. with only :SubBasin or :HRUs blocks but not the other),
+#' however, some calculations and the calculation of the \code{SBnetwork} output will not be completed. Omitted
+#' structures (e.g. \code{SBtable}) will be returned as \code{NULL} if the section is not found in the rvh file directly.
+#' Note that this function does not look for additional files specified with \code{:RedirectToFile} commands.
+#'
 #' The ff argument can be a relative path name or absolute one.
 #'
 #' The TotalUpstreamArea is the total drainage area upstream of the given subbasin outlet. With this calculation,
@@ -32,7 +37,7 @@
 #'
 #' \item{HRUtable}{a data table of HRU characteristics, with land use and vegetation classes as factors.
 #' Contains identical information as found in the :HRUs-:EndHRUs block of the .rvh file: ID, Area,
-#' Elevation, Latitude, Longitude, SBID, LandUse,Vegetation, SoilProfile, Terrain, Aquifer, Slope,
+#' Elevation, Latitude, Longitude, SBID, LandUse,Vegetation, SoilProfile, Aquifer, Terrain, Slope,
 #' and Aspect.}
 #'
 #' \item{SBnetwork}{an igraph network graph network describing subbasin stream network connectivity,
@@ -42,7 +47,7 @@
 #'
 #' @seealso
 #' \code{\link{rvn_rvh_write}} to write contents of the generated (and usually modified HRU and SubBasin tables)
-#' \code{\link{rvn_subbasin_network_plot}} to plot the subbasin network
+#' \code{\link{rvn_rvh_subbasin_network_plot}} to plot the subbasin network
 #'
 #' @examples
 #'   # load example rvh file
@@ -72,136 +77,161 @@
 #'   igraph::plot.igraph(rvh$SBnetwork)
 #'
 #' @export rvn_rvh_read
-#' @importFrom igraph graph_from_data_frame ego ego_size V as_ids
+#' @importFrom igraph graph_from_data_frame ego V as_ids
 #' @importFrom utils read.table
-rvn_rvh_read<-function(ff)
+rvn_rvh_read <- function(ff)
 {
   stopifnot(file.exists(ff))
 
+  # ego_size removed from importFrom
+
   downID <- NULL
+  SBtab <- HRUtab <- net <- NULL # define outputs as NULL to start
 
   # read subbasins table--------------------------------
-  lineno<-grep(":SubBasins", readLines(ff), value = FALSE)
-  lineend<-grep(":EndSubBasins", readLines(ff), value = FALSE)
+  lineno<-grep("^\\s*\\t*:SubBasins", readLines(ff,warn=FALSE), value = FALSE)
+  lineend<-grep("^\\s*\\t*:EndSubBasins", readLines(ff,warn=FALSE), value = FALSE)
 
   if ((length(lineno)==0) || (length(lineend)==0)){
-    print('warning: ff not a valid .rvh file (no :SubBasins block)')
+    warning('rvn_rvh_read: no :SubBasins block found; SBtable and SBnetwork will be returned as NULL')
+    SubBasinTab <- NULL
+  } else {
+
+    if (length(lineno) >= 2) {
+      warning("rvn_rvh_read: multiple lines matching :SubBasins found; using first matching line in reading file")
+      lineno <- lineno[1]
+    }
+    if (length(lineend) >=2 ) {
+      warning("rvn_rvh_read: multipe lines matching :EndSubBasins found; using first matching line in reading file.")
+      lineend <- lineend[1]
+    }
+
+    cnames<-c("SBID","Name","Downstream_ID","Profile","ReachLength","Gauged")
+
+    #print(paste0("read sbs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
+    SubBasinTab<-read.table(text=gsub(",", "\t", readLines(ff,warn=FALSE)),
+                            skip=lineno+2, nrows=lineend-lineno-3, sep="",fill=TRUE,
+                            col.names=cnames,header=FALSE,blank.lines.skip=TRUE, strip.white=TRUE,
+                            stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
+
+    ## I believe this section is redundant and handled by the read.table function already
+    # clean up names and entries - 'untabify'
+    # SubBasinTab$Name<-trimws(SubBasinTab$Name)
+    # SubBasinTab <- as.data.frame(sapply(SubBasinTab, function(x) gsub("\t", "", x), simplify=FALSE))
+    # SubBasinTab <- SubBasinTab[,1:length(cnames)]
   }
-  # delim=""
-  # if (length(grep(",", readLines(ff)[(lineno+3):(lineend-1)], value = FALSE))>0){
-  #   delim=","
-  # }
-  cnames<-c("SBID","Name","Downstream_ID","Profile","ReachLength","Gauged")
-
-  #print(paste0("read sbs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
-  SubBasinTab<-read.table(text=gsub(",", "\t", readLines(ff)),
-                          skip=lineno+2, nrows=lineend-lineno-3, sep="",fill=TRUE,
-                          col.names=cnames,header=FALSE,blank.lines.skip=TRUE, strip.white=TRUE,
-                          stringsAsFactors=FALSE,flush=TRUE,comment.char = "#")
-
-  SubBasinTab$Name<-trimws(SubBasinTab$Name)
-  #print('done reading sbs')
-  #untabify
-  SubBasinTab <- as.data.frame(sapply(SubBasinTab, function(x) gsub("\t", "", x)))
-  # SubBasinTab <- SubBasinTab[,1:length(cnames)]
 
 
   # read HRUs table ------------------------------------
-  lineno<-grep(":HRUs", readLines(ff), value = FALSE)
-  lineend<-grep(":EndHRUs", readLines(ff), value = FALSE)
-  if ((length(lineno)==0) || (length(lineend)==0)){
-    print('warning: ff not a valid .rvh file (no :HRUs block)')
-  }
-  # delim=""
-  # if (length(grep(",", readLines(ff)[(lineno+3):(lineend-1)], value = FALSE))>0){
-  #   delim=","
-  # }
-  cnames<-c("ID","Area","Elevation","Latitude","Longitude","SBID","LandUse","Vegetation","SoilProfile","Terrain","Aquifer","Slope","Aspect")
+  lineno<-grep("^\\s*\\t*:HRUs", readLines(ff,warn=FALSE), value = FALSE)
+  lineend<-grep("^\\s*\\t*:EndHRUs", readLines(ff,warn=FALSE), value = FALSE)
+  if ((length(lineno)==0) | (length(lineend)==0)){
+    warning('rvn_rvh_read: no :HRUs block found; HRUtable and SBnetwork will be returned as NULL')
+    HRUtab <- NULL
+  } else {
 
-  #print(paste0("read HRUs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
-  HRUtab<-read.table(text=gsub(",", "\t", readLines(ff)),
-                     skip=lineno+2, nrows=lineend-lineno-3, sep="",col.names=cnames,
-                     header=FALSE,blank.lines.skip=TRUE,strip.white=TRUE,
-                     stringsAsFactors=FALSE,flush=TRUE,comment.char = "#",
-                     fill=TRUE)
-  #print('done reading HRUs')
-  #untabify
-  #HRUtab <- as.data.frame(sapply(HRUtab, function(x) gsub("\t", "", x)))
+    if (length(lineno) >= 2) {
+      warning("rvn_rvh_read: multiple lines matching :HRUs found; using first matching line in reading file")
+      lineno <- lineno[1]
+    }
+    if (length(lineend) >=2 ) {
+      warning("rvn_rvh_read: multipe lines matching :EndHRUs found; using first matching line in reading file.")
+      lineend <- lineend[1]
+    }
 
+    cnames<-c("ID","Area","Elevation","Latitude","Longitude","SBID","LandUse","Vegetation","SoilProfile","Aquifer","Terrain","Slope","Aspect")
 
-  # sum area-------------------------------------------
-  A<-aggregate(Area ~ SBID, FUN = sum, data=HRUtab)
-  out<-A
-  Elev<-aggregate(Elevation ~ SBID, FUN = mean, data=HRUtab)
-  out<-merge(out, round(Elev,1),by="SBID")
+    #print(paste0("read HRUs: |",delim,"| ",lineno," ",lineend," ",lineend-lineno-3 ))
+    HRUtab<-read.table(text=gsub(",", "\t", readLines(ff,warn=FALSE)),
+                       skip=lineno+2, nrows=lineend-lineno-3, sep="",col.names=cnames,
+                       header=FALSE,blank.lines.skip=FALSE,strip.white=TRUE,
+                       stringsAsFactors=FALSE,flush=TRUE,comment.char = "#",
+                       fill=TRUE)
+    HRUtab <- HRUtab[!is.na(HRUtab$ID),]
 
-  # area-weighted lat and long--------------------------
-  HRUtab$tmpA=HRUtab$Latitude*HRUtab$Area;
-  test<-aggregate(tmpA ~ SBID, FUN=sum,data=HRUtab)
-  temp<-merge(test,A,by="SBID")
-  out$AvgLatit<-temp$tmpA/temp$Area
-
-  HRUtab$tmpA=HRUtab$Longitude*HRUtab$Area;
-  test<-aggregate(tmpA ~ SBID, FUN=sum,data=HRUtab)
-  temp<-merge(test,A,by="SBID")
-  out$AvgLongit<-temp$tmpA/temp$Area
-
-  # mean slope, aspect (area-weighted)
-  HRUtab$tmpA=HRUtab$Slope*HRUtab$Area;
-  test<-aggregate(tmpA ~ SBID, FUN=sum,data=HRUtab)
-  temp<-merge(test,A,by="SBID")
-  out$AvgSlope<-temp$tmpA/temp$Area
-
-  HRUtab$tmpA=HRUtab$Aspect*HRUtab$Area;
-  test<-aggregate(tmpA ~ SBID, FUN=sum,data=HRUtab)
-  temp<-merge(test,A,by="SBID")
-  out$AvgAspect<-temp$tmpA/temp$Area
-
-  # delete tmpA
-  HRUtab<-HRUtab[ , !(names(HRUtab) %in% c("tmpA"))]
-
-  #dominant land use, vegetation,
-  LU<-aggregate(HRUtab$Area,list(HRUtab$LandUse,HRUtab$SBID),FUN=sum)
-  colnames(LU)<-c("LandUse","SBID","Area")
-  LU<-LU[with(LU, order(SBID, -Area)),]# sort by area cover
-  maxlist<-aggregate(LU$Area,list(LU$SBID),FUN=max)
-  colnames(maxlist)<-c("SBID","Area")
-  newdata<-LU[which(LU$Area %in% maxlist$Area),]
-  colnames(newdata)<-c("DomLU","SBID","DomLUArea")
-  newdata <- newdata[ !duplicated(newdata$SBID), ]
-  out<-merge(out,newdata,by="SBID") # something wrong with this merge
-  out$DomLUFrac<-round(out$DomLUArea/out$Area*100,2)
-
-  Veg<-aggregate(HRUtab$Area,list(HRUtab$Vegetation,HRUtab$SBID),FUN=sum)
-  colnames(Veg)<-c("LandUse","SBID","Area")
-  Veg<-Veg[with(Veg, order(SBID, -Area)),]# sort by area cover
-  maxlist<-aggregate(Veg$Area,list(Veg$SBID),FUN=max)
-  colnames(maxlist)<-c("SBID","Area")
-  newdata<-Veg[which(Veg$Area %in% maxlist$Area),]
-  colnames(newdata)<-c("DomVeg","SBID","DomVegArea")
-  newdata <- newdata[ !duplicated(newdata$SBID), ]
-  out<-merge(out,newdata,by="SBID")
-  out$DomVegFrac<-round(out$DomVegArea/out$Area*100,2)
-
-  out<-merge(SubBasinTab,out,by="SBID")
-
-  row.names(out)<-out$SBID
-
-  #calculate total upstream area
-  links<-data.frame(SBID=out$SBID,downID=out$Downstream_ID)
-  links<-subset.data.frame(links,downID>=0) # get rid of -1
-
-  #create network graph structure
-  net <- graph_from_data_frame(d=links, vertices=out, directed=TRUE)
-  egon <- ego(net,order=100, nodes=V(net),mode="in")
-  size<- ego_size(net,order=100, nodes=V(net),mode="in")
-  count=1
-  for (i in 1:nrow(out)){
-    SBID=out$SBID[i]
-    up<-subset.data.frame(out, SBID %in% as_ids(egon[[i]]))
-    out$TotalUpstreamArea[i]<-sum(up$Area)
-    count=count+1
+    #print('done reading HRUs')
+    # clean up names and entries - 'untabify'
+    # HRUtab <- as.data.frame(sapply(HRUtab, function(x) gsub("\t", "", x), simplify=FALSE))
   }
 
-  return (list(SBtable=out,HRUtable=HRUtab,SBnetwork=net))
+  # additional operations if both SBtab and HRUtab are present
+  if (!is.null(SubBasinTab) & !is.null(HRUtab)) {
+    # sum area-------------------------------------------
+    A<-aggregate(Area ~ SBID, FUN = sum, data=HRUtab)
+    SBtab<-A
+    Elev<-aggregate(Elevation ~ SBID, FUN = mean, data=HRUtab)
+    SBtab<-merge(SBtab, round(Elev,1),by="SBID")
+
+    # area-weighted lat and long--------------------------
+    HRUtab$tmpA=HRUtab$Latitude*HRUtab$Area;
+    test<-aggregate(tmpA ~ SBID, FUN=sum,data=HRUtab)
+    temp<-merge(test,A,by="SBID")
+    SBtab$AvgLatit<-temp$tmpA/temp$Area
+
+    HRUtab$tmpA=HRUtab$Longitude*HRUtab$Area;
+    test<-aggregate(tmpA ~ SBID, FUN=sum,data=HRUtab)
+    temp<-merge(test,A,by="SBID")
+    SBtab$AvgLongit<-temp$tmpA/temp$Area
+
+    # mean slope, aspect (area-weighted)
+    HRUtab$tmpA=HRUtab$Slope*HRUtab$Area;
+    test<-aggregate(tmpA ~ SBID, FUN=sum,data=HRUtab)
+    temp<-merge(test,A,by="SBID")
+    SBtab$AvgSlope<-temp$tmpA/temp$Area
+
+    HRUtab$tmpA=HRUtab$Aspect*HRUtab$Area;
+    test<-aggregate(tmpA ~ SBID, FUN=sum,data=HRUtab)
+    temp<-merge(test,A,by="SBID")
+    SBtab$AvgAspect<-temp$tmpA/temp$Area
+
+    # delete tmpA
+    HRUtab<-HRUtab[ , !(names(HRUtab) %in% c("tmpA"))]
+
+    #dominant land use, vegetation,
+    LU<-aggregate(HRUtab$Area,list(HRUtab$LandUse,HRUtab$SBID),FUN=sum)
+    colnames(LU)<-c("LandUse","SBID","Area")
+    LU<-LU[with(LU, order(SBID, -Area)),]# sort by area cover
+    maxlist<-aggregate(LU$Area,list(LU$SBID),FUN=max)
+    colnames(maxlist)<-c("SBID","Area")
+    newdata<-LU[which(LU$Area %in% maxlist$Area),]
+    colnames(newdata)<-c("DomLU","SBID","DomLUArea")
+    newdata <- newdata[ !duplicated(newdata$SBID), ]
+    SBtab<-merge(SBtab,newdata,by="SBID") # something wrong with this merge
+    SBtab$DomLUFrac<-round(SBtab$DomLUArea/SBtab$Area*100,2)
+
+    Veg<-aggregate(HRUtab$Area,list(HRUtab$Vegetation,HRUtab$SBID),FUN=sum)
+    colnames(Veg)<-c("LandUse","SBID","Area")
+    Veg<-Veg[with(Veg, order(SBID, -Area)),]# sort by area cover
+    maxlist<-aggregate(Veg$Area,list(Veg$SBID),FUN=max)
+    colnames(maxlist)<-c("SBID","Area")
+    newdata<-Veg[which(Veg$Area %in% maxlist$Area),]
+    colnames(newdata)<-c("DomVeg","SBID","DomVegArea")
+    newdata <- newdata[ !duplicated(newdata$SBID), ]
+    SBtab<-merge(SBtab,newdata,by="SBID")
+    SBtab$DomVegFrac<-round(SBtab$DomVegArea/SBtab$Area*100,2)
+
+    SBtab<-merge(SubBasinTab,SBtab,by="SBID")
+
+    row.names(SBtab)<-SBtab$SBID
+
+    #calculate total upstream area
+    links<-data.frame(SBID=SBtab$SBID,downID=SBtab$Downstream_ID)
+    links<-subset.data.frame(links,downID>=0) # get rid of -1
+
+    #create network graph structure
+    net <- graph_from_data_frame(d=links, vertices=SBtab, directed=TRUE)
+    egon <- ego(net,order=100, nodes=V(net),mode="in")
+    # size <- ego_size(net,order=100, nodes=V(net),mode="in")
+    count=1
+    for (i in 1:nrow(SBtab)){
+      SBID = SBtab$SBID[i]
+      up <- subset.data.frame(SBtab, SBID %in% as_ids(egon[[i]]))
+      SBtab$TotalUpstreamArea[i] <- sum(up$Area)
+      count=count+1
+    }
+  } else if (!is.null(SubBasinTab) & is.null(HRUtab)) {
+    SBtab <- SubBasinTab
+  }
+
+  return(list(SBtable = SBtab, HRUtable = HRUtab, SBnetwork = net))
 }

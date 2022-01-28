@@ -79,9 +79,9 @@ rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_fil
 
   ## attempt to find all required files if fileprefix provided
   if (!is.null(fileprefix)) {
-    rvi_file <- paste0(fileprefix,".rvi")
-    rvh_file <- paste0(fileprefix,".rvh")
-    rvp_template_file <- paste0(fileprefix,".rvp_temp.rvp")
+    if (is.null(rvi_file)) {rvi_file <- paste0(fileprefix,".rvi")}
+    if (is.null(rvh_file)) {rvh_file <- paste0(fileprefix,".rvh")}
+    if (is.null(rvp_template_file)) {rvp_template_file <- paste0(fileprefix,".rvp_temp.rvp")}
   }
 
   ## check provided file inputs
@@ -116,12 +116,20 @@ rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_fil
 
   ## get number of soil layers
   rvi_lines <- readLines(rvi_file)
-  num_soil_classes <- rvi_lines[grep(pattern=":SoilModel",rvi_lines)] %>%
+  soil_model_string <- rvi_lines[grep(pattern=":SoilModel",rvi_lines)] %>%
     trimws() %>%
     strsplit(split="\\s+") %>%
-    unlist() %>%
-    nth(3) %>%
-    as.numeric()
+    unlist()
+
+  if (length(soil_model_string) ==3 ) {
+    num_soil_classes <- as.numeric(soil_model_string[3])
+  } else if (soil_model_string[2] == "SOIL_ONE_LAYER") {
+    num_soil_classes <- 1
+  } else if (soil_model_string[2] == "SOIL_TWO_LAYER") {
+    num_soil_classes <- 2
+  } else {
+    stop("Unrecognized :SoilModel command.")
+  }
 
   ## set rvp_out
   if (is.null(rvp_out)) {
