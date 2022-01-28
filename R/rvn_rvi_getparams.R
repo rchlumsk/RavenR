@@ -5,11 +5,12 @@
 #' associated with processes in the rvi object.
 #'
 #' @details
-#' Uses the Raven master information in the /extdata folder to (1) associate parameters with particular algorithms,
-#' and (2) subset the master parameter list based on the information in the rvi file.
+#' Uses the Raven database files in the /extdata folder to (1) associate parameters with particular algorithms,
+#' and (2) subset the database parameter list based on the information in the rvi file.
 #'
-#' These files are stored with the RavenR package and retrived with this function by default,
-#' but a separate link may be provided to a modified file if desired.
+#' These files are stored with the RavenR package and retrieved with this function by default,
+#' but a separate link may be provided to a modified file if desired. Note that the database files held in the RavenR
+#' package are unofficial copies of those in the official Raven SVN, and any discrepancies should defer to the Raven SVN versions.
 #'
 #' @param rvi data object generated from the \code{\link{rvn_rvi_read}} routine
 #' @param RavenAlgParamsFile (optional) path to RavenAlgParams.dat file
@@ -78,5 +79,5 @@ rvn_rvi_getparams <- function(rvi,
   subset_AlgParams <- RavenAlgParamsTable[RavenAlgParamsTable$Algorithm %in% HPTable$Algorithm,]
   param_df <- RavenParamsTable[RavenParamsTable$param %in% subset_AlgParams$ParameterName,]
 
-  return (param_df)
+  return(param_df)
 }

@@ -16,7 +16,10 @@
 #' with the suffix "_ravenr_generated.rvp".
 #'
 #' The default parameter values come from the RavenParameters.dat file included with RavenR in the extdata folder. The
-#' user may provide their own file with updated values if preferred. Any parameters not found in this file will be written
+#' user may provide their own file with updated values if preferred. Note that the database files held in the RavenR
+#' package are unofficial copies of those in the official Raven SVN, and any discrepancies should defer to the Raven SVN versions.
+#'
+#' Any parameters not found in this file will be written
 #' with the value provided by \code{default_param_value}. The default soil thickness for the :SoilProfiles block is provided
 #' by the \code{default_soil_thickness} function parameter, which is applied for all soil classes.
 #'
@@ -70,8 +73,9 @@
 #'                       rvp_template_file=nithmodel_template_file,
 #'                       rvp_out=rvp_out_file)
 #'
+#'
+#' @importFrom dplyr left_join
 #' @export rvn_rvp_fill_template
-#' @importFrom dplyr left_join nth
 rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_file=NULL, fileprefix=NULL,
                                   rvp_out=NULL, overwrite=FALSE,
                                   default_param_value=0.12345, default_soil_thickness=0.5,
