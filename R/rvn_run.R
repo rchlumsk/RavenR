@@ -14,6 +14,14 @@
 #' The \code{ravenexe} must point to the Raven.exe file; if not supplied it will look for it in the RavenR/extdata
 #' path that is saved to when using \code{\link{rvn_download}}.
 #'
+#' \code{rvi_options} can include a vector of any additional commands to add to the rvi file prior to execution. Any
+#' commands are added temporarily, and the rvi file is restored following the Raven run. The original rvi file
+#' is backed up as a copy in case of an interruption of the function or other error to prevent loss of data.
+#' The rvi commands provided are checked against a list of known rvi commands and a warning is issued
+#' if an unrecognized command is provided, but all commands provided are nonetheless written to the temporary
+#' rvi file as provided. All rvi commands should include the colon prefix to the command (e.g. ":SilentMode" not "SilentMode"),
+#'  as this is not added automatically.
+#'
 #' @param fileprefix file prefix for main Raven input files.
 #' @param indir string path for Raven input files
 #' @param ravenexe file path to Raven executable
@@ -23,6 +31,7 @@
 #' @param rvp file path to specific rvp file (optional)
 #' @param rvh file path to specific rvh file (optional)
 #' @param showoutput boolean whether to show output in console (passed to show.output.on.console within system) (default FALSE)
+#' @param rvi_options string vector of additional options to add to rvi file temporarily for run
 #'
 #' @return Returns output code from the system command when running Raven
 #'
@@ -53,6 +62,7 @@
 #'         rvi_options=c(":SilentMode"))
 #' }
 #'
+#' @importFrom utils shortPathName
 #' @export rvn_run
 rvn_run <- function(fileprefix=NULL, indir=getwd(), ravenexe=NULL,
                   outdir=NULL,
@@ -85,8 +95,8 @@ rvn_run <- function(fileprefix=NULL, indir=getwd(), ravenexe=NULL,
    # here these paths are shortened: inputdir/ravenexe
    if(Sys.info()["sysname"]=="Windows")
    {
-     ravenexe<-shortPathName(ravenexe)
-     indir<-shortPathName(indir)
+     ravenexe <- shortPathName(ravenexe)
+     indir <- shortPathName(indir)
    }
 
    # build up RavenCMD

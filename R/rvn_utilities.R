@@ -526,7 +526,7 @@ rvn_fortify_xts <- function(x)
 #' @examples
 #' get_rvi_options()
 #'
-#' @keywords internal
+#' @noRd
 get_rvi_options <- function() {
   rvi_options <- c(
     ":SilentMode",
@@ -557,8 +557,7 @@ get_rvi_options <- function() {
 #' @examples
 #' get_rvt_mapping()
 #'
-#' @keywords internal
-#' @export get_rvt_mapping
+#' @noRd
 get_rvt_mapping <- function() {
 
   # generates globally accessible variables for rvt_mapping and rvt_data_type_mapping
@@ -685,8 +684,7 @@ get_rvt_mapping <- function() {
 #' @examples
 #' get_rvt_data_type_mapping()
 #'
-#' @keywords internal
-#' @export get_rvt_data_type_mapping
+#' @noRd
 get_rvt_data_type_mapping <- function() {
 
   # update this based on table C.1 in Raven Manual?
@@ -718,8 +716,7 @@ get_rvt_data_type_mapping <- function() {
 #' @examples
 #' get_rvn_met_raven_mapping()
 #'
-#' @keywords internal
-#' @export get_rvn_met_raven_mapping
+#' @noRd
 get_rvn_met_raven_mapping <- function() {
 
   ## add TEMP_DAILY_MIN, TEMP_DAILY_MAX?
@@ -756,8 +753,7 @@ get_rvn_met_raven_mapping <- function() {
 #' @examples
 #' get_rvt_met_mapping_weathercan()
 #'
-#' @keywords internal
-#' @export get_rvt_met_mapping_weathercan
+#' @noRd
 get_rvt_met_mapping_weathercan <- function() {
 
   # weathercan mapping to standard Raven names

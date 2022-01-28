@@ -35,6 +35,8 @@ rvn_run(
 \item{rvh}{file path to specific rvh file (optional)}
 
 \item{showoutput}{boolean whether to show output in console (passed to show.output.on.console within system) (default FALSE)}
+
+\item{rvi_options}{string vector of additional options to add to rvi file temporarily for run}
 }
 \value{
 Returns output code from the system command when running Raven
@@ -52,6 +54,14 @@ The \code{indir} path must point to the main Raven input files, if they are not 
 
 The \code{ravenexe} must point to the Raven.exe file; if not supplied it will look for it in the RavenR/extdata
 path that is saved to when using \code{\link{rvn_download}}.
+
+\code{rvi_options} can include a vector of any additional commands to add to the rvi file prior to execution. Any
+commands are added temporarily, and the rvi file is restored following the Raven run. The original rvi file
+is backed up as a copy in case of an interruption of the function or other error to prevent loss of data.
+The rvi commands provided are checked against a list of known rvi commands and a warning is issued
+if an unrecognized command is provided, but all commands provided are nonetheless written to the temporary
+rvi file as provided. All rvi commands should include the colon prefix to the command (e.g. ":SilentMode" not "SilentMode"),
+ as this is not added automatically.
 }
 \examples{
 \dontrun{

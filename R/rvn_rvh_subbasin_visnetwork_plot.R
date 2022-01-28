@@ -32,9 +32,9 @@
 #' rvn_rvh_subbasin_visnetwork_plot(rvh,groupBy="Gauged")
 #' rvn_rvh_subbasin_visnetwork_plot(rvh,groupBy="Elevation")
 #'
-#' @export rvn_rvh_subbasin_visnetwork_plot
 #' @importFrom visNetwork visNetwork visInteraction visOptions visHierarchicalLayout visEdges
-#'
+#' @importFrom grDevices colorRampPalette
+#' @export rvn_rvh_subbasin_visnetwork_plot
 rvn_rvh_subbasin_visnetwork_plot<-function(rvh, groupBy="Gauged")
 {
   if(missing(rvh)) stop("rvh file missing. See rvn_rvh_read function!")

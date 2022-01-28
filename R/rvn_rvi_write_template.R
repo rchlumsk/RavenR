@@ -18,11 +18,10 @@
 #' novel model configurations are provided which may be helpful to the user. These can be written with this function
 #' for ease of getting started with a model using Raven.
 #'
-#' The modelname parameter should be one of "UBCWM", "HBV-EC", "GR4J", "CdnShield", "MOHYSE", "HMETS", or "HYPR".
+#' The modelname parameter should be one of "UBCWM", "HBV-EC", "HBV-Light", "GR4J",
+#'  "CdnShield", "MOHYSE", "HMETS", "HYPR", or "HYMOD".
 #'
 #' This function uses the same model template files that are provided in the Raven User's manual, Appendix D.
-#' The :CreateRVPTemplate command is included in each rvi file on the assumption that the user will
-#' wish to create an rvp template file following the creation of the rvi file.
 #'
 #' The \code{\link{rvn_write_Raven_newfile}} is used to write a header in the rvi file. Writing of a header
 #' can be disabled with \code{writeheader=FALSE}.
@@ -45,7 +44,7 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
                                    filetype="rvi ASCII Raven", author="RavenR",
                                    description=NULL) {
 
-  known_templates  <- c("UBCWM", "HBV-EC", "GR4J", "CdnShield", "MOHYSE", "HMETS", "HYPR")
+  known_templates  <- c("UBCWM", "HBV-EC", "HBV-Light", "GR4J", "CdnShield", "MOHYSE", "HMETS", "HYPR", "HYMOD")
 
   if (is.null(modelname) | modelname %notin% known_templates) {
     stop("modelname must be one of the available model templates, see function details")
@@ -133,7 +132,6 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
    :GlacierRelease    GRELEASE_LINEAR  GLACIER       SURFACE_WATER
 :EndHydrologicProcesses
 
-:CreateRVPTemplate
 #
 
 ",
@@ -198,10 +196,54 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
 :AggregatedVariable FAST_RESERVOIR AllHRUs
 :AggregatedVariable SLOW_RESERVOIR AllHRUs
 
-:CreateRVPTemplate
 #
 
-", "GR4J"="
+",
+
+    "HBV-Light"="
+:StartDate    2000-01-01 00:00:00
+:Duration     365
+:TimeStep     1.0
+#
+# --Model Details -------------------------------
+:Method         ORDERED_SERIES
+:SoilModel      SOIL_MULTILAYER 3
+:Routing        ROUTE_NONE
+:CatchmentRoute ROUTE_TRI_CONVOLUTION
+:Evaporation    PET_DATA
+:RainSnowFraction RAINSNOW_HBV
+:PotentialMeltMethod POTMELT_DEGREE_DAY
+:OroTempCorrect OROCORR_HBV
+:OroPrecipCorrect OROCORR_HBV
+:OroPETCorrect OROCORR_HBV
+:CloudCoverMethod CLOUDCOV_NONE
+:PrecipIceptFract PRECIP_ICEPT_USER
+
+# --Hydrologic Processes-------------------------
+:Alias TOPSOIL SOIL[0]
+:Alias FAST_RESERVOIR SOIL[1]
+:Alias SLOW_RESERVOIR SOIL[2]
+
+:HydrologicProcesses
+  :SnowRefreeze   FREEZE_DEGREE_DAY   SNOW_LIQ        SNOW
+  :Precipitation  PRECIP_RAVEN        ATMOS_PRECIP    MULTIPLE
+  :SnowBalance    SNOBAL_SIMPLE_MELT  SNOW            SNOW_LIQ
+  :-->Overflow    RAVEN_DEFAULT       SNOW_LIQ        PONDED_WATER
+  :Infiltration   INF_HBV             PONDED_WATER    MULTIPLE
+  :Flush          RAVEN_DEFAULT       SURFACE_WATER   FAST_RESERVOIR
+  :SoilEvaporation SOILEVAP_HBV       TOPSOIL         ATMOSPHERE
+  :CapillaryRise  RISE_HBV            FAST_RESERVOIR  TOPSOIL
+  :Percolation    PERC_CONSTANT       FAST_RESERVOIR  SLOW_RESERVOIR
+  :Baseflow       BASE_POWER_LAW      FAST_RESERVOIR  SURFACE_WATER
+  :Baseflow       BASE_THRESH_POWER   FAST_RESERVOIR  SURFACE_WATER
+  :Baseflow       BASE_LINEAR         SLOW_RESERVOIR  SURFACE_WATER
+:EndHydrologicProcesses
+
+#
+
+",
+
+"GR4J"="
 :StartDate    2000-01-01 00:00:00
 :Duration     365
 :TimeStep     1.0
@@ -243,7 +285,6 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
  :Baseflow              BASE_GR4J          ROUTING_STORE   SURFACE_WATER
 :EndHydrologicProcesses
 
-:CreateRVPTemplate
 #
 
     ", "CdnShield"="
@@ -291,7 +332,6 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
     :SoilEvaporation    SOILEVAP_ROOT     SOIL0         ATMOSPHERE
 :EndHydrologicProcesses
 
-:CreateRVPTemplate
 #
 
 ", "MOHYSE"="
@@ -321,7 +361,6 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
   :Baseflow         BASE_LINEAR        SOIL[1]       SURFACE_WATER
 :EndHydrologicProcesses
 
-:CreateRVPTemplate
 #
 
 ", "HMETS"="
@@ -352,10 +391,11 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
  :Baseflow        BASE_LINEAR    SOIL[1]      SURFACE_WATER
 :EndHydrologicProcesses
 
-:CreateRVPTemplate
 #
 
-", "HYPR"="
+",
+
+"HYPR"="
 :StartDate    2000-01-01 00:00:00
 :Duration     365
 :TimeStep     1.0
@@ -397,7 +437,44 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
   :Baseflow          BASE_THRESH_STOR   FAST_RESERVOIR  SURFACE_WATER
 :EndHydrologicProcesses
 
-:CreateRVPTemplate
+#
+
+",
+
+"HYMOD"="
+:StartDate    2000-01-01 00:00:00
+:Duration     365
+:TimeStep     1.0
+
+# Model options for HYMOD emulation
+#------------------------------------------------------------------------
+:Routing             ROUTE_NONE
+:CatchmentRoute      ROUTE_RESERVOIR_SERIES
+
+:Evaporation         PET_HAMON
+:OW_Evaporation      PET_HAMON
+:SWRadiationMethod   SW_RAD_NONE
+:LWRadiationMethod   LW_RAD_NONE
+:CloudCoverMethod    CLOUDCOV_NONE
+:RainSnowFraction    RAINSNOW_THRESHOLD
+:PotentialMeltMethod POTMELT_DEGREE_DAY
+:PrecipIceptFract    PRECIP_ICEPT_NONE
+
+:SoilModel           SOIL_MULTILAYER 2
+
+#------------------------------------------------------------------------
+# Hydrologic process order for HYMOD Emulation
+#
+:HydrologicProcesses
+  :Precipitation     PRECIP_RAVEN       ATMOS_PRECIP    MULTIPLE
+  :SnowBalance       SNOBAL_SIMPLE_MELT SNOW            PONDED_WATER
+  :Infiltration      INF_PDM            PONDED_WATER    MULTIPLE
+  #0.5 is the  HYMOD_ALPHA parameter
+  :Flush             RAVEN_DEFAULT      SURFACE_WATER   SOIL[1]          0.5
+  :SoilEvaporation   SOILEVAP_PDM       SOIL[0]         ATMOSPHERE
+  :Baseflow          BASE_LINEAR        SOIL[1]         SURFACE_WATER
+:EndHydrologicProcesses
+
 #
 
 "

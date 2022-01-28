@@ -51,17 +51,21 @@
 #' # plot line colours by distance to specified co-ordinates
 #' rvn_met_recordplot(metadata=rvn_weathercan_metadata_sample, colorby='distance')
 #'
-#' ## load sample weathercan::weather_dl() downloaded data with a single station for a basic analysis of period of record
+#' ## load sample weathercan::weather_dl() with single station
 #' data(rvn_weathercan_sample)
 #'
 #' # compare records for a specific variable
-#' rvn_met_recordplot(stndata=rvn_weathercan_sample,variables = "total_precip")
+#' rvn_met_recordplot(stndata=rvn_weathercan_sample, variables = "total_precip")
 #'
 #' @importFrom ggplot2 geom_point geom_rect geom_col xlab ylab ggtitle scale_x_continuous scale_color_continuous theme_bw theme
 #' @importFrom cowplot plot_grid
 #' @export rvn_met_recordplot
 #'
-rvn_met_recordplot <- function(metadata=NULL,stndata=NULL,variables=NULL,colorby=NULL){
+rvn_met_recordplot <- function(metadata=NULL,stndata=NULL,variables=NULL,colorby=NULL)
+{
+
+  start <- station_name <- nstations <- NA
+
   if(!is.null(metadata) & !is.null(stndata)){
     stop('Please supply either one of the outputs from weathercan::weather_dl() OR weathercan::stations_search(), not both')}
 
