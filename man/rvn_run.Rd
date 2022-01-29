@@ -14,7 +14,8 @@ rvn_run(
   rvp = NULL,
   rvh = NULL,
   showoutput = FALSE,
-  rvi_options = NULL
+  rvi_options = NULL,
+  run_chmod = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ rvn_run(
 \item{showoutput}{boolean whether to show output in console (passed to show.output.on.console within system) (default FALSE)}
 
 \item{rvi_options}{string vector of additional options to add to rvi file temporarily for run}
+
+\item{run_chmod}{runs a chmod system call to the provided executable ('chmod +x') (default \code{FALSE})}
 }
 \value{
 Returns output code from the system command when running Raven
@@ -62,6 +65,10 @@ The rvi commands provided are checked against a list of known rvi commands and a
 if an unrecognized command is provided, but all commands provided are nonetheless written to the temporary
 rvi file as provided. All rvi commands should include the colon prefix to the command (e.g. ":SilentMode" not "SilentMode"),
  as this is not added automatically.
+
+Note that this function may not work in all servers, as some more specific setups when invoking the \code{system}
+command may be required. In addition, errors may occur if the Raven.exe file does not have permission to execute. This
+can be rectified with the \code{run_chmod} parameter set to \code{TRUE}
 }
 \examples{
 \dontrun{

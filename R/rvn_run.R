@@ -22,6 +22,10 @@
 #' rvi file as provided. All rvi commands should include the colon prefix to the command (e.g. ":SilentMode" not "SilentMode"),
 #'  as this is not added automatically.
 #'
+#' Note that this function may not work in all servers, as some more specific setups when invoking the \code{system}
+#' command may be required. In addition, errors may occur if the Raven.exe file does not have permission to execute. This
+#' can be rectified with the \code{run_chmod} parameter set to \code{TRUE}
+#'
 #' @param fileprefix file prefix for main Raven input files.
 #' @param indir string path for Raven input files
 #' @param ravenexe file path to Raven executable
@@ -32,6 +36,7 @@
 #' @param rvh file path to specific rvh file (optional)
 #' @param showoutput boolean whether to show output in console (passed to show.output.on.console within system) (default FALSE)
 #' @param rvi_options string vector of additional options to add to rvi file temporarily for run
+#' @param run_chmod runs a chmod system call to the provided executable ('chmod +x') (default \code{FALSE})
 #'
 #' @return Returns output code from the system command when running Raven
 #'
@@ -62,12 +67,12 @@
 #'         rvi_options=c(":SilentMode"))
 #' }
 #'
-#' @importFrom utils shortPathName
 #' @export rvn_run
 rvn_run <- function(fileprefix=NULL, indir=getwd(), ravenexe=NULL,
                   outdir=NULL,
                   rvc=NULL, rvt=NULL, rvp=NULL, rvh=NULL,
-                  showoutput=FALSE, rvi_options=NULL) {
+                  showoutput=FALSE, rvi_options=NULL,
+                  run_chmod=FALSE) {
 
    if (is.null(fileprefix)) {
       fileprefix<-gsub(".rvi","",list.files(indir,pattern=".rvi"))
@@ -83,6 +88,11 @@ rvn_run <- function(fileprefix=NULL, indir=getwd(), ravenexe=NULL,
       }
    }
 
+   if (run_chmod) {
+      # run chmod to add execution permissions to ravenexe
+      system(paste("chmod +x",ravenexe))
+   }
+
    if (!dir.exists(indir)) {
       stop(sprintf("indir path of %s does not exist",indir))
    }
@@ -91,13 +101,16 @@ rvn_run <- function(fileprefix=NULL, indir=getwd(), ravenexe=NULL,
       stop(sprintf("rvi file not found: %s",file.path(indir,paste0(fileprefix,".rvi")) ))
    }
 
-   # shell/system functions are vulnerable to paths with many characters or spaces
-   # here these paths are shortened: inputdir/ravenexe
-   if(Sys.info()["sysname"]=="Windows")
-   {
-     ravenexe <- shortPathName(ravenexe)
-     indir <- shortPathName(indir)
-   }
+   # # shell/system functions are vulnerable to paths with many characters or spaces
+   # # here these paths are shortened: inputdir/ravenexe
+   # if(Sys.info()["sysname"]=="Windows")
+   # {
+   #   ravenexe <- shortPathName(ravenexe)
+   #   indir <- shortPathName(indir)
+   # }
+
+   # note: need to use different cross-platform function for sanitizing file paths
+   # seems to work with spaces in paths as is, likely handled in system call
 
    # build up RavenCMD
    RavenCMD <- sprintf("%s %s",
