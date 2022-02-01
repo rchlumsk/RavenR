@@ -27,6 +27,10 @@
 #' 'Nith' for Nith.rvi) may be provided instead. If provided, the function will attempt to find all required input files based on
 #' the provided fileprefix in the current working directory.
 #'
+#' Additional commands can be added to the end of the rvp file with \code{extra_commands}, which are not quality controlled but
+#' simply appended to the rvp file. This can be useful for non-standard commands such as :RedirectToFile for channel properties rvp files
+#' that are not added automatically to base templates rvp files.
+#'
 #' If you find parameters not found by this function, please open an ticket on Github (\url{https://github.com/rchlumsk/RavenR/issues}).
 #'
 #' @param rvi_file path to the model *.rvi file
@@ -37,6 +41,9 @@
 #' @param overwrite logical for whether to rewrite the *.rvp file if it already exists (default FALSE)
 #' @param default_param_value default parameter value to write for any parameters not found in RavenParameters.dat
 #' @param default_soil_thickness default soil layer thickness (m) to provide in :SoilProfile block
+#' @param use_default_flag writes all soil/land use/vegetation classes with [DEFAULT] flag
+#' @param avg_annual_runoff adds a line for :AvgAnnualRunoff if value provided with this parameter and not already in file
+#' @param extra_commands additional commands to add to end of rvp file as character vector
 #' @param RavenParamsFile path to RavenParameters.dat file (default path points to file included with RavenR installation)
 #' @return \code{TRUE} if the function executed successfully
 #'
@@ -79,6 +86,8 @@
 rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_file=NULL, fileprefix=NULL,
                                   rvp_out=NULL, overwrite=FALSE,
                                   default_param_value=0.12345, default_soil_thickness=0.5,
+                                  use_default_flag=FALSE, avg_annual_runoff=NULL,
+                                  extra_commands=NULL,
                                   RavenParamsFile=system.file("extdata","RavenParameters.dat", package="RavenR")) {
 
   ## attempt to find all required files if fileprefix provided
@@ -267,9 +276,9 @@ rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_fil
   }
   atts <- atts[!duplicated(atts[,c('param')]),]
 
-  ## write attribute values for each land use class
-  for (i in 1:length(land_classes)) {
-    writeLines(paste0(sprintf("  %014s,",c(land_classes[i], atts$value)),collapse=" "),fc)
+  ## write attribute values for each vegetation class
+  for (i in 1:length(veg_classes)) {
+    writeLines(paste0(sprintf("  %014s,",c(veg_classes[i], atts$value)),collapse=" "),fc)
   }
   writeLines(":EndVegetationClasses",fc)
   writeLines("",fc)
@@ -298,8 +307,8 @@ rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_fil
   ## write default soil thickness for each layer
   for (i in 1:length(soil_profiles)) {
     if (soil_profiles[i] %notin% existing_profiles) {
-      ss <- sprintf("  %014s,",c(soil_profiles[i]))
-      for (k in 1:length(soil_classes)) {
+      ss <- sprintf("  %014s,%08s,",soil_profiles[i],num_soil_classes)
+      for (k in 1:num_soil_classes) {
         ss <- paste0(ss, sprintf("%014s,%014s,", soil_classes[k], default_soil_thickness ))
       }
       writeLines(ss, fc)
@@ -388,10 +397,19 @@ rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_fil
   }
   atts <- atts[!duplicated(atts[,c('param')]),]
 
-  ## write attribute values for each land use class
-  for (i in 1:length(soil_classes)) {
-    writeLines(paste0(sprintf("  %014s,",c(soil_classes[i], atts$value)),collapse=" "),fc)
+  ## write attribute values for each soil class
+  if (use_default_flag) {
+    writeLines(paste0(sprintf("  %014s,",c("[DEFAULT]", atts$value)),collapse=" "),fc)
+    for (i in 1:length(soil_classes)) {
+      writeLines(paste0(sprintf("#  %014s,",c(soil_classes[i], atts$value)),collapse=" "),fc)
+    }
+
+  } else {
+    for (i in 1:length(soil_classes)) {
+      writeLines(paste0(sprintf("  %014s,",c(soil_classes[i], atts$value)),collapse=" "),fc)
+    }
   }
+
   writeLines(":EndSoilParameterList",fc)
   writeLines("",fc)
 
@@ -430,9 +448,17 @@ rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_fil
   atts <- atts[!duplicated(atts[,c('param')]),]
 
   ## write attribute values for each land use class
-  for (i in 1:length(soil_classes)) {
-    writeLines(paste0(sprintf("  %014s,",c(soil_classes[i], atts$value)),collapse=" "),fc)
+  if (use_default_flag) {
+    writeLines(paste0(sprintf("  %014s,",c("[DEFAULT]", atts$value)),collapse=" "),fc)
+    for (i in 1:length(land_classes)) {
+      writeLines(paste0(sprintf("#  %014s,",c(land_classes[i], atts$value)),collapse=" "),fc)
+    }
+  } else {
+    for (i in 1:length(land_classes)) {
+      writeLines(paste0(sprintf("  %014s,",c(land_classes[i], atts$value)),collapse=" "),fc)
+    }
   }
+
   writeLines(":EndLandUseParameterList",fc)
   writeLines("",fc)
 
@@ -460,7 +486,7 @@ rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_fil
   atts[!is.na(atts$default),]$value <- atts[!is.na(atts$default),]$default
 
   if (any(is.na(atts$value))) {
-    warning(sprintf("Some land use parameters from rvp file not found in RavenParameters.dat:\n%s",
+    warning(sprintf("Some vegetation parameters from rvp file not found in RavenParameters.dat:\n%s",
                     paste0(atts[is.na(atts$default),]$param, collapse="\n")))
     atts[is.na(atts$default),]$value <- default_param_value
   }
@@ -477,10 +503,18 @@ rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_fil
   }
   atts <- atts[!duplicated(atts[,c('param')]),]
 
-  ## write attribute values for each land use class
-  for (i in 1:length(veg_classes)) {
-    writeLines(paste0(sprintf("  %014s,",c(veg_classes[i], atts$value)),collapse=" "),fc)
+  ## write attribute values for each vegetation class
+  if (use_default_flag) {
+    writeLines(paste0(sprintf("  %014s,",c("[DEFAULT]", atts$value)),collapse=" "),fc)
+    for (i in 1:length(veg_classes)) {
+      writeLines(paste0(sprintf("#  %014s,",c(veg_classes[i], atts$value)),collapse=" "),fc)
+    }
+  } else {
+    for (i in 1:length(veg_classes)) {
+      writeLines(paste0(sprintf("  %014s,",c(veg_classes[i], atts$value)),collapse=" "),fc)
+    }
   }
+
   writeLines(":EndVegetationParameterList",fc)
   writeLines("",fc)
 
@@ -495,7 +529,7 @@ rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_fil
   if (length(start) != 0) {
     writeLines(":SeasonalRelativeLAI",fc)
     for (i in 1:length(veg_classes)) {
-      writeLines(sprintf("  %s %s",
+      writeLines(sprintf("  %s,  %s",
                          veg_classes[i],
                          paste0(sprintf(" %.1f,",(rep(1.0,12))),
                                 collapse=" ")),fc)
@@ -510,13 +544,34 @@ rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_fil
   if (length(start) != 0) {
     writeLines(":SeasonalRelativeHeight",fc)
     for (i in 1:length(veg_classes)) {
-      writeLines(sprintf("  %s %s",
+      writeLines(sprintf("  %s,  %s",
                          veg_classes[i],
                          paste0(sprintf(" %.1f,",(rep(1.0,12))),
                                 collapse=" ")),fc)
     }
     writeLines(":EndSeasonalRelativeHeight",fc)
     writeLines("",fc)
+  }
+
+  ## write :AvgAnnualRunoff if provided
+  if (!is.null(avg_annual_runoff)) {
+    start <- grep(pattern=":AvgAnnualRunoff",tt)
+    if (length(start) != 0) {
+      warning("Trying to add :AvgAnnualRunoff but already found in file, will not be written to file with new value")
+    } else if (avg_annual_runoff < 0 | class(avg_annual_runoff) != "numeric") {
+      stop("avg_annual_runoff must be a positive double of type numeric.")
+    } else {
+      writeLines(sprintf(":AvgAnnualRunoff  %.2f",avg_annual_runoff),fc)
+      writeLines("",fc)
+    }
+  }
+
+  ## write extra commands to file
+  if (!is.null(extra_commands)) {
+    for (i in 1:length(extra_commands)) {
+      writeLines(sprintf("%s",extra_commands[i]),fc)
+      writeLines("",fc)
+    }
   }
 
   ##### close out file ----

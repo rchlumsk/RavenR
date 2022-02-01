@@ -13,6 +13,9 @@ rvn_rvp_fill_template(
   overwrite = FALSE,
   default_param_value = 0.12345,
   default_soil_thickness = 0.5,
+  use_default_flag = FALSE,
+  avg_annual_runoff = NULL,
+  extra_commands = NULL,
   RavenParamsFile = system.file("extdata", "RavenParameters.dat", package = "RavenR")
 )
 }
@@ -32,6 +35,12 @@ rvn_rvp_fill_template(
 \item{default_param_value}{default parameter value to write for any parameters not found in RavenParameters.dat}
 
 \item{default_soil_thickness}{default soil layer thickness (m) to provide in :SoilProfile block}
+
+\item{use_default_flag}{writes all soil/land use/vegetation classes with [DEFAULT] flag}
+
+\item{avg_annual_runoff}{adds a line for :AvgAnnualRunoff if value provided with this parameter and not already in file}
+
+\item{extra_commands}{additional commands to add to end of rvp file as character vector}
 
 \item{RavenParamsFile}{path to RavenParameters.dat file (default path points to file included with RavenR installation)}
 }
@@ -64,6 +73,10 @@ by the \code{default_soil_thickness} function parameter, which is applied for al
 As an alternative to specifying the three input files (rvi, rvh, rvp_temp.rvp), the \code{fileprefix} of the model (e.g.
 'Nith' for Nith.rvi) may be provided instead. If provided, the function will attempt to find all required input files based on
 the provided fileprefix in the current working directory.
+
+Additional commands can be added to the end of the rvp file with \code{extra_commands}, which are not quality controlled but
+simply appended to the rvp file. This can be useful for non-standard commands such as :RedirectToFile for channel properties rvp files
+that are not added automatically to base templates rvp files.
 
 If you find parameters not found by this function, please open an ticket on Github (\url{https://github.com/rchlumsk/RavenR/issues}).
 }
