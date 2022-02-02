@@ -58,7 +58,7 @@ To cite `RavenR` in publications, use:
 > Robert Chlumsky, James Craig, Leland Scantlebury, Simon
   Lin, Sarah Grass, Genevieve Brown and Rezgar Arabzadeh
   (2022). RavenR: Raven Hydrological Modelling Framework R Support and Analysis. R
-  package version 2.1.6. https://github.com/rchlumsk/RavenR
+  package version 2.1.7. https://github.com/rchlumsk/RavenR
   
 A BibTeX entry for LaTeX users is:
 
@@ -66,7 +66,7 @@ A BibTeX entry for LaTeX users is:
 >      title = {RavenR: Raven Hydrological Modelling Framework R Support and Analysis},  
 >      author = {Robert Chlumsky and James Craig and Leland Scantlebury and Simon Lin and Sarah Grass and Genevieve Brown and Rezgar Arabzadeh},  
 >      year = {2022},  
->      note = {R package version 2.1.6},  
+>      note = {R package version 2.1.7},  
 >      url = {https://github.com/rchlumsk/RavenR},  
 >  }
 
@@ -78,7 +78,7 @@ discussed more openly on the new [Github Discussions page](https://github.com/rc
 
 ## Version Update Notes
 
-### 2.1.6
+### 2.1.7
 
 Minor updates and bug fixes, including:
 
