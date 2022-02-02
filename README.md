@@ -57,16 +57,16 @@ To cite `RavenR` in publications, use:
 
 > Robert Chlumsky, James Craig, Leland Scantlebury, Simon
   Lin, Sarah Grass, Genevieve Brown and Rezgar Arabzadeh
-  (2021). RavenR: Raven Hydrological Modelling Framework R Support and Analysis. R
-  package version 2.1.4. https://github.com/rchlumsk/RavenR
+  (2022). RavenR: Raven Hydrological Modelling Framework R Support and Analysis. R
+  package version 2.1.7. https://github.com/rchlumsk/RavenR
   
 A BibTeX entry for LaTeX users is:
 
 >  @Manual{RavenRPackage,  
 >      title = {RavenR: Raven Hydrological Modelling Framework R Support and Analysis},  
 >      author = {Robert Chlumsky and James Craig and Leland Scantlebury and Simon Lin and Sarah Grass and Genevieve Brown and Rezgar Arabzadeh},  
->      year = {2021},  
->      note = {R package version 2.1.4},  
+>      year = {2022},  
+>      note = {R package version 2.1.7},  
 >      url = {https://github.com/rchlumsk/RavenR},  
 >  }
 
@@ -77,6 +77,18 @@ Any issues or feature requests can be submitted on the [Github Issues page](http
 discussed more openly on the new [Github Discussions page](https://github.com/rchlumsk/RavenR/discussions).
 
 ## Version Update Notes
+
+### 2.1.7
+
+Minor updates and bug fixes, including:
+
+  - added new functions including `rvn_rvp_fill_template` for filling in rvp template files, `rvn_met_recordplot` to show station record lenghts; 
+  - added function for plotting subbasin network with interactive `visNetwork` library
+  - updated `rvn_run` with additional options, including adding rvi commands to the file before execution;   
+  - added new model templates from Raven Manual v3.5 to `rvn_rvi_write_template`; 
+  - enhancements to `rvn_rvh_read` for splitting subbasin and HRU information in separate files, other minor improvements; and
+  - bug fix in `rvn_rvt_write` for writing initial start date with correct month code;
+
 
 ### 2.1.4
 
