@@ -47,6 +47,9 @@
 #' nith <- system.file("extdata","Nith.rvh",package = "RavenR")
 #' rvh <- rvn_rvh_read(nith)
 #'
+#' # summarize rvh
+#' rvn_rvh_summarize(rvh, return_list=FALSE)
+#'
 #' # query of HRUs upstream of basin 39, then summarize
 #' rvh %>%
 #'   rvn_rvh_query(subbasinID=39, condition="upstream_of") %>%

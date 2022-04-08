@@ -20,6 +20,12 @@ rvn_rvh_query(rvh = NULL, subbasinID = NULL, condition = "upstream_of")
 Queries the RVH object for subbasins or HRUs that are upstream of, downstream of,
 or the opposite of those conditions, for a given subbasin ID.
 }
+\details{
+Based on the definition of subbasins by their outlets in Raven, it is assumed here that 'upstream' includes
+the specified subbasin (i.e. everything upstream of subbasin X includes subbasin X as well), and 'downstream'
+of subbasin X does not include subbasin X. This is different from the default behaviour of \code{igraph}, which
+includes the specified subbasin in either query.
+}
 \note{
 Raven has capabilities for creating subbasin and HRU groups that meet certain criteria as well, consider
 reviewing the `:PopulateSubbasinGroup`, `:PopulateHRUGroup`, and other commands in Section A.3.2 of the

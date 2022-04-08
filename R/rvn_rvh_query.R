@@ -4,6 +4,12 @@
 #' Queries the RVH object for subbasins or HRUs that are upstream of, downstream of,
 #' or the opposite of those conditions, for a given subbasin ID.
 #'
+#' @details
+#' Based on the definition of subbasins by their outlets in Raven, it is assumed here that 'upstream' includes
+#' the specified subbasin (i.e. everything upstream of subbasin X includes subbasin X as well), and 'downstream'
+#' of subbasin X does not include subbasin X. This is different from the default behaviour of \code{igraph}, which
+#' includes the specified subbasin in either query.
+#'
 #' @param rvh rvh object as returned by \code{\link{rvn_rvh_read}}
 #' @param subbasinID subbasinID of basin of interest, as character or integer
 #' @param condition condition applied to the query
@@ -36,7 +42,7 @@
 #' rvn_rvh_query(rvh, subbasinID=39, condition="downstream_of")$SBtable
 #'
 #' @export rvn_rvh_query
-#' @importFrom igraph ego ego_size V as_ids
+#' @importFrom igraph ego V as_ids induced_subgraph
 rvn_rvh_query <- function(rvh=NULL, subbasinID=NULL, condition="upstream_of")
 {
 
@@ -63,38 +69,46 @@ rvn_rvh_query <- function(rvh=NULL, subbasinID=NULL, condition="upstream_of")
   # HRUtable <- rvh$HRUtable
 
   # out <- SBtable
-  egon <- ego(rvh$SBnetwork, order = 100, nodes = V(rvh$SBnetwork), mode = "in") # upstream
+  ego_upstream <- ego(rvh$SBnetwork, order = 100, nodes = V(rvh$SBnetwork), mode = "in") # upstream
   egon_downstream <- ego(rvh$SBnetwork, order = 100, nodes = V(rvh$SBnetwork), mode = "out") # downstream
 
   # size <- ego_size(net, order = 100, nodes = V(net), mode = "in")
   # count = 1
 
   ## check subbasinID and assign?
-  i <- which(out$SBID == as.character(subbasinID))
+  i <- which(rvh$SBtable$SBID == as.character(subbasinID))
   ## SBID <- out[out$SBID == subbasinID,]
   SBID = rvh$SBtable$SBID[i]
 
   # get upstream subbasins (includes given subbasinID)
-  upsubs <- subset.data.frame(rvh$SBtable, SBID %in% as_ids(egon[[i]]))
+  upsubs <- subset.data.frame(rvh$SBtable, SBID %in% as_ids(ego_upstream[[i]]))
 
   # get downstream subbasins
-  downsubs <- subset.data.frame(out, SBID %in% as_ids(egon_downstream[[i]]))
+  downsubs <- subset.data.frame(rvh$SBtable, SBID %in% as_ids(egon_downstream[[i]]))
   # remove same subbasin from downsubs
   downsubs <- downsubs[downsubs$SBID != SBID,]
 
-  # get not upstream subbasins
+  # query subbasins, get indices from network
   if (condition == "upstream_of") {
+    ind <-  match(as.character(upsubs$SBID), rvh$SBtable$SBID)
     rvh$SBtable <- upsubs
   } else if (condition == "downstream_of") {
+    ind <-  match(as.character(downsubs$SBID), rvh$SBtable$SBID)
     rvh$SBtable <- downsubs
   } else if (condition == "not_upstream_of") {
-    rvh$SBtable <- rvh$SBtable[rvh$SBtable$SBID %notin% upsubs$SBID,]
+    ind <-  match(as.character(rvh$SBtable[rvh$SBtable$SBID %notin% upsubs$SBID,]$SBID), rvh$SBtable$SBID)
+    rvh$SBtable <- rvh$SBtable[ind,]
   } else if (condition == "not_downstream_of") {
-    rvh$SBtable <- rvh$SBtable[rvh$SBtable$SBID %notint% downsubs$SBID,]
+    ind <-  match(as.character(rvh$SBtable[rvh$SBtable$SBID %notin% downsubs$SBID,]$SBID), rvh$SBtable$SBID)
+    rvh$SBtable <- rvh$SBtable[ind,]
   }
 
-  rvh$HRUtable <- HRUtable[HRUtable$SBID %in% mysubs$SBID,]
-  rvh$SBnetwork <- induced_subgraph(rvh$SBnetwork, rvh$SBtable$SBID)
+  if (length(ind) == 0) {
+    warning("rvn_rvh_query: query returns zero subbasins, resulting rvh will be empty.")
+  }
+
+  rvh$HRUtable <- rvh$HRUtable[rvh$HRUtable$SBID %in% rvh$SBtable$SBID,]
+  rvh$SBnetwork <- induced_subgraph(graph=rvh$SBnetwork, v=ind)
 
   return(rvh)
 }
