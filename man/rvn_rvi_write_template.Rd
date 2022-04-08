@@ -5,7 +5,7 @@
 \title{Write Raven rvi file based on model configuration templates}
 \usage{
 rvn_rvi_write_template(
-  modelname = "UBCWM",
+  template_name = "UBCWM",
   filename = NULL,
   overwrite = TRUE,
   writeheader = TRUE,
@@ -15,7 +15,7 @@ rvn_rvi_write_template(
 )
 }
 \arguments{
-\item{modelname}{name of the model template to be written (default 'UBCWM')}
+\item{template_name}{name of the model template to be written (default 'UBCWM')}
 
 \item{filename}{Name of the rvi file, with extension (optional)}
 
@@ -40,7 +40,7 @@ Raven has the capability of emulating a number of existing model configurations,
 novel model configurations are provided which may be helpful to the user. These can be written with this function
 for ease of getting started with a model using Raven.
 
-The modelname parameter should be one of "UBCWM", "HBV-EC", "HBV-Light", "GR4J",
+The template_name parameter should be one of "UBCWM", "HBV-EC", "HBV-Light", "GR4J",
  "CdnShield", "MOHYSE", "HMETS", "HYPR", or "HYMOD".
 
 This function uses the same model template files that are provided in the Raven User's manual, Appendix D.
@@ -51,11 +51,11 @@ can be disabled with \code{writeheader=FALSE}.
 \examples{
 
 # write the Canadian Shield configuration to 'mymodel.rvi'
-rvn_rvi_write_template(modelname="CdnShield",
+rvn_rvi_write_template(template_name="CdnShield",
    filename=file.path(tempdir(), "mymodel.rvi"))
 
 # write the HMETS model with some additional details in the description
-rvn_rvi_write_template(modelname="HMETS",
+rvn_rvi_write_template(template_name="HMETS",
    filename=file.path(tempdir(), "mynewmodel.rvi"),
    author="Robert Chlumsky",
    description="RVI file for the HMETS model (Martel, 2017) created by RavenR")

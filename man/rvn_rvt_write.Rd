@@ -10,7 +10,8 @@ rvn_rvt_write(
   rvt_type = "ObservationData",
   data_type = "HYDROGRAPH",
   basin_ID = NULL,
-  NA_value = -1.2345
+  NA_value = -1.2345,
+  tz = NULL
 )
 }
 \arguments{
@@ -46,6 +47,9 @@ accompanying units.
 If the data is found to have an inconsistent timestep, the function will attempt to correct it
 by infilling missing time steps with \code{\link{rvn_ts_infill}}. If successful, a warning is issued
 to the user and the function will proceed, else an error will be raised.
+
+The timezone of the xts object is used as supplied to write to file, no assumption on changing the
+time zone is done in this function.
 
 No other quality control of the data is performed here. Some rvt types, such as ObservationWeights,
 cannot have missing values in the data; it is the responsibility of the user to supply \code{x} with
