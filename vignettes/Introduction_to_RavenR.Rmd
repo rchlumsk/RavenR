@@ -1,7 +1,7 @@
 ---
 title: "Introduction to RavenR"
 author: "Robert Chlumsky, Dr. James R. Craig"
-date: "September 16, 2021"
+date: "May 9, 2022"
 output: rmarkdown::html_document
 urlcolor: blue
 vignette: >
@@ -206,26 +206,24 @@ RavenR::rvn_apply_wyearly(myhyd$hyd$Sub36, mean, na.rm = TRUE)
 
 The RavenR package can read the rvi file and generate a network plot of the model connections, which is helpful in understanding the model configuration. This can be done as follows, again using the Nith rvi file as an example. The network plot may be directly written to file by supplying a file name to the `pdfout` argument, which is NULL by default. Similar functionality is also avaialble with the `rvn_rvi_process_diagrammer` function, which uses the `DiagrammeR` library.
 
-```{r}
+```{r RVI connection plot example}
 rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package = "RavenR"))
 
 rvn_rvi_connections(rvi) %>% 
   rvn_rvi_process_ggplot()
 ```
 
-The Raven User's Manual (Appendix D) provides a number of model templates that can be used to emulate existing model structures or act as starting points for modellers to then adapt to their applications. The `rvn_rvi_write_template` function allows these templates to be written directly to an rvi file, which reduces the effort in creating these initial template files. The `:CreateRVPTemplate` command is also included with these written files, with the presumption that the next step for the modeller would be to create a template RVP file for the model.
+The Raven User's Manual (Appendix D) provides a number of model templates that can be used to emulate existing model structures or act as starting points for modellers to then adapt to their applications. The `rvn_rvi_write_template` function allows these templates to be written directly to an rvi file, which reduces the effort in creating these initial template files. 
 
-## RVP Utilities
+We can call this command to create a template rvi file for one of these models as per below.
 
-Although tools to explicitly read or write rvp files is not currently available in RavenR, a useful function in calibration of Raven parameters is the `rvn_rvi_getparams` function. This will provide a data frame of paramter information (default, min, max, etc.) of parameters that are required in the model based on the provided rvi file. This can be a useful function in setting up parameter ranges and initial values for calibration.
-
-```{r rvp getparams example}
-system.file("extdata","Nith.rvi", package = "RavenR") %>%
-  rvn_rvi_read() %>% 
-  rvn_rvi_getparams() %>% 
-  head() # preview of parameter data frame
+```{r RVI write template example}
+rvn_rvi_write_template(template_name="HMETS",
+                       filename="mymodel.rvi",
+                       author="Your Name")
 ```
 
+This file can also be used in the rvp file tools to quickly develop parameter files based on the model structure, discussed in the RVP section.
 
 ## RVH File Utilities
 
@@ -249,9 +247,68 @@ plot(rvh$SBnetwork)
 rvn_rvh_subbasin_network_plot(rvh$SBtable, labeled = TRUE)
 ```
 
-One more useful rvh functionality is the simplification of an HRU file. Often in the initial HRU discretization, many HRUs with similar properties and/or very small areas exist that are worthwhile consolidating for the purpose of modelling. The `rvn_rvh_cleanrhus` function accomplishes this.
+Another useful rvh functionality is the simplification of an HRU file. Often in the initial HRU discretization, many HRUs with similar properties and/or very small areas exist that are worthwhile consolidating for the purpose of modelling. The `rvn_rvh_cleanrhus` function accomplishes this. Try the example in the help file - `?rvn_rvh_cleanhrus`.
 
-Try the example in the help file - `?rvn_rvh_cleanhrus`.
+Finally, we can create basic rvh files using the generic creation tools for rvh subbasin tables and HRUs. For example, if we want to create a simple lumped basin structure with two HRUs and an rvh file for it, we can use the `rvn_rvh_blankSBdf` and `rvn_rvh_blankHRUdf` functions to accomplish this. More complex discretizations would require some manual editing or other discretization tools to first create this network.
+
+```{r create basic rvh file}
+
+# create a basic subbasin table with 1 subbasin
+subdf <- rvn_rvh_blankSBdf(nSubBasins = 1)
+
+subdf$Name <- "sub1"
+
+# create a basic HRU table with 1 HRU
+hrudf <- rvn_rvh_blankHRUdf(nHRUs = 2, subbasinIDs = c(1))
+
+# modify the hrudf properties and classes to placeholder values
+hrudf$Area <- c(100,25)
+hrudf$Elevation <- 500
+hrudf$Latitude <-  -80.540952
+hrudf$Longitude <- 43.469751
+hrudf$LandUse <- "DEFAULT_LANDUSE"
+hrudf$Vegetation <- c("FOREST", "URBAN")
+hrudf$SoilProfile <- "DEFAULT_SOILPROFILE"
+hrudf$Slope <- 0.005
+
+# write the rvh file
+rvn_rvh_write(filename = "mymodel.rvh",
+              SBtable = subdf,
+              HRUtable = hrudf)
+```
+
+## RVP Utilities
+
+A number of useful rvp utilities may be found in the RavenR package by searching for `?rvn_rvp_`. A useful workflow to create initial rvp files based on the Raven templates is available, and demonstrated below. Here, we use our initial model template from rvi file (though this can be from any rvi file), then we run Raven to create the rvp template file, and fill this in with default values based on the RavenR database files. Note that an rvh file is requried to write the template file, as the various class information from the rvh file (e.g. soil profiles, land use classes, etc.) are needed to define parameters for each class. In this example, the basic rvh file we created earlier (mymodel.rvh) is found by its shared model name prefix, "mymodel".
+
+```{r Create and infill basic rvp file, echo=TRUE}
+
+# check that we have a Raven executable ready to use with rvn_run
+rvn_download(check=TRUE)
+
+# run our Raven model with the CreateRVPTemplate option,
+## create the RVP template file
+rvn_run(fileprefix = "mymodel",
+        rvi_options=":CreateRVPTemplate",
+        showoutput = TRUE)
+
+# infill template file with default parameter values
+rvn_rvp_fill_template(fileprefix = "mymodel",
+                      avg_annual_runoff = 123,
+                      extra_commands=":RedirectToFile  channel_properties.rvp")
+
+```
+
+Here, some additional commands may be passed to the `rvn_rvp_fill_template` file, such as the average annual runoff (required for distributed models), and the redirect comamnd to other files. The database files currently do not contain default values for all parameters, so some missing parameter values may be left in files depending on the model structure.
+
+A table of default values and ranges for parameters required in a model may be obtained by use of the `rvn_rvi_getparams` function, which reads the rvi file and uses the database files stored with the RavenR installation to query any required parameters and their information. This is demonstrated for the Nith model file below.
+
+```{r RVP getparams example}
+system.file("extdata","Nith.rvi", package = "RavenR") %>%
+  rvn_rvi_read() %>% 
+  rvn_rvi_getparams() %>% 
+  head() # preview of parameter data frame
+```
 
 ## RVT File Utilities
 
@@ -410,6 +467,61 @@ met_data <- weathercan::weather_dl(station_ids = metstn$station_id,
 rvn_rvt_write_met(met_data)
 ```
 
+# Exercise 3 - Build Additional Raven Input files
+
+Following up from Exercise 2, let's say that we want to continue building model files for Raven River, continuing with an rvi, rvh and rvp file. We can use the `rvn_rvi_write_template` file and the other utilities for rvi/rvp files to create these two files directly with the RavenR package. We can also create a basic rvh file with asasigned properties in R with the RavenR package.
+
+For this exercise, you should do the following. Create any new model files with the prefix "ravenriver", for example, "ravenriver.rvi".
+
+1. Select a model template option for the `rvn_rvi_write_template` function, and create the file ravenriver.rvi with this template.
+2. Create the rvp template file using Raven, called in R or otherwise.
+3. Create a basic rvh file called ravenriver.rvh with 1 subbasin and 2 HRUs.
+4. Create an infilled rvp file called ravenriver.rvp from the rvp template file using RavenR.
+
+
+```{r Exercise 3 solution, eval=FALSE, include=FALSE}
+
+# view model template options, and keyword needed to use in function
+?rvn_rvi_write_template
+
+# from documentation, 
+## The template_name parameter should be one of "UBCWM", "HBV-EC", "HBV-Light", 
+## "GR4J", "CdnShield", "MOHYSE", "HMETS", "HYPR", or "HYMOD".
+
+# write a template rvi file, use the HMETS model configuration again
+rvn_rvi_write_template(template_name = "HMETS",
+                       filename = "ravenriver.rvi",
+                       author = "Robert Chlumsky",
+                       description = "Template file with HMETS model structure, created for Introduction to RavenR, Exercise 3.")
+
+# run Raven to create the template file
+rvn_run(fileprefix = "ravenriver",
+        rvi_options=":CreateRVPTemplate",
+        showoutput = TRUE)
+
+# create a basic rvh file with 1 subbasin 2 hrus
+#########
+subdf <- rvn_rvh_blankSBdf(nSubBasins = 1)
+subdf$Name <- "sub1"
+
+hrudf <- rvn_rvh_blankHRUdf(nHRUs = 2, subbasinIDs = c(1))
+hrudf$Area <- c(100,25)
+hrudf$Elevation <- 500
+hrudf$Latitude <-  -114.604170
+hrudf$Longitude <- 52.072763
+hrudf$LandUse <- "DEFAULT_LANDUSE"
+hrudf$Vegetation <- c("FOREST", "URBAN")
+hrudf$SoilProfile <- "DEFAULT_SOILPROFILE"
+hrudf$Slope <- 0.005
+
+rvn_rvh_write(filename = "ravenriver.rvh",
+              SBtable = subdf,
+              HRUtable = hrudf)
+
+# infill template file with default parameter values
+rvn_rvp_fill_template(fileprefix = "ravenriver",
+                      avg_annual_runoff = 123)
+```
 
 # Conclusion
 
