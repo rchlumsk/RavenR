@@ -59,10 +59,10 @@ rvn_rvh_write_subbasingroup <- function(rvh=NULL, sbgroup_name=NULL, outfile=NUL
   fc <- file(outfile, open = "wt")
   writeLines(sprintf(":SubBasinGroup  %s",sbgroup_name), fc)
   for (i in seq(from=1,to=min(nrow(rvh$SBtable),subs_per_line), by=subs_per_line))  {
-    rvh$SBtable$SBID[i:(min(i+subs_per_line-1,nrow(rvh$SBtable)))] %>%
-      paste0(.,  collapse=", ") %>%
-      sprintf("  %s",.) %>%
-      writeLines(., fc)
+    temp <- rvh$SBtable$SBID[i:(min(i+subs_per_line-1,nrow(rvh$SBtable)))] %>%
+      paste0(collapse=", ")
+    sprintf("  %s",temp) %>%
+      writeLines(fc)
   }
   writeLines(":EndSubBasinGroup", fc)
   close(fc)

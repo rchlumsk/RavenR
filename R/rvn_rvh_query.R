@@ -108,7 +108,7 @@ rvn_rvh_query <- function(rvh=NULL, subbasinID=NULL, condition="upstream_of")
   }
 
   rvh$HRUtable <- rvh$HRUtable[rvh$HRUtable$SBID %in% rvh$SBtable$SBID,]
-  rvh$SBnetwork <- induced_subgraph(graph=rvh$SBnetwork, v=ind)
+  rvh$SBnetwork <- induced_subgraph(graph=rvh$SBnetwork, vids=ind)
 
   return(rvh)
 }

@@ -56,13 +56,12 @@
 #'   filename = tf)
 #'
 #' @export rvn_rvt_write
-#' @importFrom xts is.xts timeBased tzone
+#' @importFrom xts is.xts timeBased
 #' @importFrom lubridate as_datetime
 #' @importFrom zoo index
 rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
                           data_type="HYDROGRAPH",
-                          basin_ID=NULL, NA_value=-1.2345,
-                          tz=NULL) {
+                          basin_ID=NULL, NA_value=-1.2345) {
 
   # pull in rvt mappings within function
   # data("rvn_rvt_mappings_data")

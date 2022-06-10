@@ -56,10 +56,14 @@
 #'   rvn_rvh_summarize(return_list=FALSE)
 #'
 #' @export rvn_rvh_summarize
-#' @importFrom dplyr as_tibble group_by summarise
+#' @importFrom dplyr as_tibble group_by summarise across all_of
 #' @importFrom crayon green
 rvn_rvh_summarize <- function(rvh=NULL, return_list=TRUE)
 {
+
+  # NULL declarations for checks
+  LandUse <- Area <- Elevation <- Slope <- Aspect <- Vegetation <- SoilProfile <- NULL
+  Terrain <- Aquifer <- NULL
 
   # error checking
   if (is.null(rvh) | is.null(rvh$SBtable)| is.null(rvh$HRUtable) | is.null(rvh$SBnetwork) ) {

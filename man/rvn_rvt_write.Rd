@@ -10,8 +10,7 @@ rvn_rvt_write(
   rvt_type = "ObservationData",
   data_type = "HYDROGRAPH",
   basin_ID = NULL,
-  NA_value = -1.2345,
-  tz = NULL
+  NA_value = -1.2345
 )
 }
 \arguments{
