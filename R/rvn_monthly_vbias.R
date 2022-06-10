@@ -52,14 +52,13 @@
 #' @export rvn_monthly_vbias
 #' @importFrom ggplot2 ggplot geom_bar aes scale_y_continuous scale_x_continuous geom_hline geom_text
 #' @importFrom xts apply.monthly
-rvn_monthly_vbias <- function (sim, obs, add_line = TRUE, normalize = TRUE, add_labels = TRUE,
-                               incomplete_month = FALSE)
+rvn_monthly_vbias <- function (sim, obs, add_line = TRUE, normalize = TRUE, add_labels = TRUE)
 {
 
   nmon <- NULL
 
-  obs.monthly <- apply.monthly(obs, sum, na.rm = incomplete_month)
-  sim.monthly <- apply.monthly(sim, sum, na.rm = imcomplete_month)
+  obs.monthly <- apply.monthly(obs, sum, na.rm = TRUE)
+  sim.monthly <- apply.monthly(sim, sum, na.rm = TRUE)
   mvbias <- matrix(NA, nrow = 12, ncol = 1)
   colnames(mvbias) <- c("mvbias")
   rownames(mvbias) <- rvn_month_names(TRUE)
@@ -113,9 +112,5 @@ rvn_monthly_vbias <- function (sim, obs, add_line = TRUE, normalize = TRUE, add_
                   hjust = 0.5)
     }
   }
-  
-  print(sprintf('Number of months excluded: %i', sum(is.na(diff))))
-  print(sprintf('Number of months included: %i', sum(!is.na(diff))))
-  
   return(list(df.mvbias = mvbias,plot=p1))
 }
