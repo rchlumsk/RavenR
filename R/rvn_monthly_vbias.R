@@ -32,6 +32,8 @@
 #' (default \code{TRUE})
 #' @param add_labels optionally adds labels for early peak/late peaks on right
 #' side axis (default \code{TRUE})
+#' @param incomplete_month whether to include months with missing days in the summation
+#' (default \code{FALSE})
 #' @return \item{mvbias}{monthly volume biases}
 #'
 #' @seealso \code{\link{rvn_annual_volume}} to create a scatterplot of annual flow
@@ -44,7 +46,7 @@
 #' obs <- rvn_hydrograph_data$hyd$Sub36_obs
 #'
 #' # check the monthly volume bias; normalizes by default
-#' rvn_monthly_vbias(sim,obs)
+#' rvn_monthly_vbias(sim, obs)
 #'
 #' # check unnormalzied monthly volume biases; see the larger volumes in certain periods
 #' rvn_monthly_vbias(sim,obs,normalize = FALSE)
@@ -52,6 +54,7 @@
 #' @export rvn_monthly_vbias
 #' @importFrom ggplot2 ggplot geom_bar aes scale_y_continuous scale_x_continuous geom_hline geom_text
 #' @importFrom xts apply.monthly
+#' @importFrom lubridate month
 rvn_monthly_vbias <- function (sim, obs, add_line = TRUE, normalize = TRUE, add_labels = TRUE,
                                incomplete_month = FALSE)
 {
@@ -59,15 +62,14 @@ rvn_monthly_vbias <- function (sim, obs, add_line = TRUE, normalize = TRUE, add_
   nmon <- NULL
 
   obs.monthly <- apply.monthly(obs, sum, na.rm = incomplete_month)
-  sim.monthly <- apply.monthly(sim, sum, na.rm = imcomplete_month)
+  sim.monthly <- apply.monthly(sim, sum, na.rm = incomplete_month)
   mvbias <- matrix(NA, nrow = 12, ncol = 1)
   colnames(mvbias) <- c("mvbias")
   rownames(mvbias) <- rvn_month_names(TRUE)
   if (normalize) {
     diff <- (sim.monthly - obs.monthly)/obs.monthly * 100
     y.lab <- "% Flow Volume Bias"
-  }
-  else {
+  } else {
     diff <- (sim.monthly - obs.monthly)
     y.lab <- "Flow Volume Bias (m3/s)"
   }
@@ -84,7 +86,7 @@ rvn_monthly_vbias <- function (sim, obs, add_line = TRUE, normalize = TRUE, add_
 
   p1 <- ggplot(df.plot)+
     geom_bar(aes(x=nmon,y=mvbias),stat="identity",width=0.5)+
-    scale_y_continuous(name=y.lab)+
+    scale_y_continuous(name=y.lab, limits = c(-limit, limit))+
     scale_x_continuous(breaks=df.plot$nmon,labels=df.plot$x.label,name="")+
     rvn_theme_RavenR()
 
@@ -95,7 +97,6 @@ rvn_monthly_vbias <- function (sim, obs, add_line = TRUE, normalize = TRUE, add_
   if (add_labels) {
     if (max(mvbias, na.rm = TRUE)/2 > 0) {
       p1 <- p1+
-        scale_y_continuous(name=y.lab, limits = c(-limit, limit)) +
         geom_text(x= max(as.numeric(df.plot$nmon)+0.5),
                   y= limit/2,
                   label= "Overestimated",
@@ -113,9 +114,11 @@ rvn_monthly_vbias <- function (sim, obs, add_line = TRUE, normalize = TRUE, add_
                   hjust = 0.5)
     }
   }
-  
-  print(sprintf('Number of months excluded: %i', sum(is.na(diff))))
-  print(sprintf('Number of months included: %i', sum(!is.na(diff))))
-  
+
+  if (incomplete_month == FALSE) {
+    message(sprintf('Number of months excluded: %i', sum(is.na(diff))))
+    message(sprintf('Number of months included: %i', sum(!is.na(diff))))
+  }
+
   return(list(df.mvbias = mvbias,plot=p1))
 }
