@@ -58,7 +58,7 @@ To cite `RavenR` in publications, use:
 > Robert Chlumsky, James Craig, Leland Scantlebury, Simon
   Lin, Sarah Grass, Genevieve Brown and Rezgar Arabzadeh
   (2022). RavenR: Raven Hydrological Modelling Framework R Support and Analysis. R
-  package version 2.1.7. https://github.com/rchlumsk/RavenR
+  package version 2.1.8. https://github.com/rchlumsk/RavenR
   
 A BibTeX entry for LaTeX users is:
 
@@ -66,8 +66,9 @@ A BibTeX entry for LaTeX users is:
 >      title = {RavenR: Raven Hydrological Modelling Framework R Support and Analysis},  
 >      author = {Robert Chlumsky and James Craig and Leland Scantlebury and Simon Lin and Sarah Grass and Genevieve Brown and Rezgar Arabzadeh},  
 >      year = {2022},  
->      note = {R package version 2.1.7},  
+>      note = {R package version 2.1.8},  
 >      url = {https://github.com/rchlumsk/RavenR},  
+>      doi = {10.5281/zenodo.3468441}
 >  }
 
 
@@ -77,6 +78,15 @@ Any issues or feature requests can be submitted on the [Github Issues page](http
 discussed more openly on the new [Github Discussions page](https://github.com/rchlumsk/RavenR/discussions).
 
 ## Version Update Notes
+
+### 2.1.8
+
+Minor updates and new functionality, including:
+
+  - added new functions including `rvn_rvh_query` and `rvn_rvh_summarize` for working with RVH files;
+  - updated package vignette with sections on building a basic model files and a model workflow for RVI/RVP files, and a third exercise; and 
+  - fix to `rvn_monthly_vbias` to exclude months with missing days;
+
 
 ### 2.1.7
 
