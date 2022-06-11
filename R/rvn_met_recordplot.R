@@ -28,8 +28,8 @@
 #' "dist" (distance from coordinates of interest) if supplying \code{weathercan::stations_search} results.
 #'
 #' @return returns a 2x1 plot object containing 2 ggplot objects
-#'   \item{}{A chronological horizontal bar plot depicting each station's record period}
-#'   \item{}{A vertical bar plot depicting the number of station records available each year}
+#'   \item{top:}{A chronological horizontal bar plot depicting each station's record period}
+#'   \item{bottom:}{A vertical bar plot depicting the number of station records available each year}
 #'
 #' @examples
 #' # load metadata from RavenR sample data

@@ -23,8 +23,8 @@ rvn_met_recordplot(
 }
 \value{
 returns a 2x1 plot object containing 2 ggplot objects
-  \item{}{A chronological horizontal bar plot depicting each station's record period}
-  \item{}{A vertical bar plot depicting the number of station records available each year}
+  \item{top:}{A chronological horizontal bar plot depicting each station's record period}
+  \item{bottom:}{A vertical bar plot depicting the number of station records available each year}
 }
 \description{
 This function plots the length of Environment Canada climate station records,

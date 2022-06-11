@@ -85,7 +85,7 @@ file.remove(destfile)
 ## check that Raven.exe is downloaded
 if (!rvn_download(check=TRUE)) {rvn_download()}
 
-# Irondeqoiut example
+# Irondequoit example
 rvn_run(indir=paste(destdir,"/Irond",sep=""),
         showoutput=TRUE)
 

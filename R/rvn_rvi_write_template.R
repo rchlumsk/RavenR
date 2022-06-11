@@ -3,7 +3,7 @@
 #' @description
 #' Writes a Raven rvi file based on one of several template model configurations.
 #'
-#' @param modelname name of the model template to be written (default 'UBCWM')
+#' @param template_name name of the model template to be written (default 'UBCWM')
 #' @param filename Name of the rvi file, with extension (optional)
 #' @param overwrite boolean whether to overwrite file if it already exists (default \code{FALSE})
 #' @param writeheader boolean whether to write a header to the rvi file (default \code{TRUE})
@@ -18,7 +18,7 @@
 #' novel model configurations are provided which may be helpful to the user. These can be written with this function
 #' for ease of getting started with a model using Raven.
 #'
-#' The modelname parameter should be one of "UBCWM", "HBV-EC", "HBV-Light", "GR4J",
+#' The template_name parameter should be one of "UBCWM", "HBV-EC", "HBV-Light", "GR4J",
 #'  "CdnShield", "MOHYSE", "HMETS", "HYPR", or "HYMOD".
 #'
 #' This function uses the same model template files that are provided in the Raven User's manual, Appendix D.
@@ -29,29 +29,29 @@
 #' @examples
 #'
 #' # write the Canadian Shield configuration to 'mymodel.rvi'
-#' rvn_rvi_write_template(modelname="CdnShield",
+#' rvn_rvi_write_template(template_name="CdnShield",
 #'    filename=file.path(tempdir(), "mymodel.rvi"))
 #'
 #' # write the HMETS model with some additional details in the description
-#' rvn_rvi_write_template(modelname="HMETS",
+#' rvn_rvi_write_template(template_name="HMETS",
 #'    filename=file.path(tempdir(), "mynewmodel.rvi"),
 #'    author="Robert Chlumsky",
 #'    description="RVI file for the HMETS model (Martel, 2017) created by RavenR")
 #'
 #' @export rvn_rvi_write_template
-rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
+rvn_rvi_write_template <- function(template_name="UBCWM", filename=NULL,
                                    overwrite=TRUE, writeheader=TRUE,
                                    filetype="rvi ASCII Raven", author="RavenR",
                                    description=NULL) {
 
   known_templates  <- c("UBCWM", "HBV-EC", "HBV-Light", "GR4J", "CdnShield", "MOHYSE", "HMETS", "HYPR", "HYMOD")
 
-  if (is.null(modelname) | modelname %notin% known_templates) {
-    stop("modelname must be one of the available model templates, see function details")
+  if (is.null(template_name) | template_name %notin% known_templates) {
+    stop("template_name must be one of the available model templates, see function details")
   }
 
   if (is.null(filename)) {
-    filename  <- sprintf("%s_template.rvi", modelname)
+    filename  <- sprintf("%s_template.rvi", template_name)
   } else if (rvn_substrRight(filename,4) != ".rvi") {
     warning("filename should end in .rvi, extension will be added to filename")
     filename <- sprintf("%s.rvi", filename)
@@ -64,7 +64,7 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
   if (writeheader) {
 
     if (is.null(description)) {
-      description <- sprintf("File template for %s model, written using RavenR::rvn_rvi_write_template", modelname)
+      description <- sprintf("File template for %s model, written using RavenR::rvn_rvi_write_template", template_name)
     }
 
     rvn_write_Raven_newfile(filename=filename, description=description, filetype=filetype, author=author)
@@ -487,7 +487,7 @@ rvn_rvi_write_template <- function(modelname="UBCWM", filename=NULL,
     fc <- file(filename, open="w+")
   }
 
-  writeLines(model_templates[[modelname]], con=fc)
+  writeLines(model_templates[[template_name]], con=fc)
   close(fc)
 
   return (TRUE)

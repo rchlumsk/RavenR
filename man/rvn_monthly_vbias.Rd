@@ -9,7 +9,8 @@ rvn_monthly_vbias(
   obs,
   add_line = TRUE,
   normalize = TRUE,
-  add_labels = TRUE
+  add_labels = TRUE,
+  incomplete_month = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,9 @@ rvn_monthly_vbias(
 
 \item{add_labels}{optionally adds labels for early peak/late peaks on right
 side axis (default \code{TRUE})}
+
+\item{incomplete_month}{whether to include months with missing days in the summation
+(default \code{FALSE})}
 }
 \value{
 \item{mvbias}{monthly volume biases}
@@ -60,7 +64,7 @@ sim <- rvn_hydrograph_data$hyd$Sub36
 obs <- rvn_hydrograph_data$hyd$Sub36_obs
 
 # check the monthly volume bias; normalizes by default
-rvn_monthly_vbias(sim,obs)
+rvn_monthly_vbias(sim, obs)
 
 # check unnormalzied monthly volume biases; see the larger volumes in certain periods
 rvn_monthly_vbias(sim,obs,normalize = FALSE)

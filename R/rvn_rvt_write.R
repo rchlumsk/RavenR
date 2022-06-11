@@ -18,6 +18,9 @@
 #' by infilling missing time steps with \code{\link{rvn_ts_infill}}. If successful, a warning is issued
 #' to the user and the function will proceed, else an error will be raised.
 #'
+#' The timezone of the xts object is used as supplied to write to file, no assumption on changing the
+#' time zone is done in this function.
+#'
 #' No other quality control of the data is performed here. Some rvt types, such as ObservationWeights,
 #' cannot have missing values in the data; it is the responsibility of the user to supply \code{x} with
 #' no missing values if required. Any missing values in \code{x} are written to file with the
@@ -55,6 +58,7 @@
 #' @export rvn_rvt_write
 #' @importFrom xts is.xts timeBased
 #' @importFrom lubridate as_datetime
+#' @importFrom zoo index
 rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
                           data_type="HYDROGRAPH",
                           basin_ID=NULL, NA_value=-1.2345) {
@@ -118,8 +122,6 @@ rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
     warning(sprintf("basin_ID is required but not provided, using default placeholder value of %i",basin_ID))
   }
 
-  ### xts data checks
-
   # check the interval for consistency
   if (length(grep("Irregular", x=rvt_type)) != 1) {
     difftime_check <- difftime(x[2:nrow(x)], x[1:(nrow(x)-1)], units="day")
@@ -151,8 +153,7 @@ rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
       }
     }
     time_interval <- as.numeric(difftime_check[1])
-    start_datetime <- format(as_datetime(x[1]), "%Y-%m-%d %H:%M:%S")
-
+    start_datetime <- format(index(x[1]), "%Y-%m-%d %H:%M:%S")
   } else {
     time_interval <- NA
   }
@@ -207,7 +208,7 @@ rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
     writeLines(ss1,fc)
 
     for (j in 1:num_points) {
-      writeLines(sprintf('  %s %g', format(as_datetime(x[j]), "%Y-%m-%d %H:%M:%S"),xx[j]),fc)
+      writeLines(sprintf('  %s %g', format(index(x[j]), "%Y-%m-%d %H:%M:%S"),xx[j]),fc)
     }
   }
 

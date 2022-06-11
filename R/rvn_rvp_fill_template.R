@@ -80,7 +80,6 @@
 #'                       rvp_template_file=nithmodel_template_file,
 #'                       rvp_out=rvp_out_file)
 #'
-#'
 #' @importFrom dplyr left_join
 #' @export rvn_rvp_fill_template
 rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_file=NULL, fileprefix=NULL,
@@ -558,7 +557,7 @@ rvn_rvp_fill_template <- function(rvi_file=NULL, rvh_file=NULL, rvp_template_fil
     start <- grep(pattern=":AvgAnnualRunoff",tt)
     if (length(start) != 0) {
       warning("Trying to add :AvgAnnualRunoff but already found in file, will not be written to file with new value")
-    } else if (avg_annual_runoff < 0 | class(avg_annual_runoff) != "numeric") {
+    } else if (avg_annual_runoff < 0 | !inherits(avg_annual_runoff,"numeric")) {
       stop("avg_annual_runoff must be a positive double of type numeric.")
     } else {
       writeLines(sprintf(":AvgAnnualRunoff  %.2f",avg_annual_runoff),fc)

@@ -111,7 +111,6 @@ rvn_rvp_fill_template(rvi_file=nith_rvi_file,
                       rvp_template_file=nithmodel_template_file,
                       rvp_out=rvp_out_file)
 
-
 }
 \seealso{
 \code{\link{rvn_rvi_getparams}} to get parameter ranges from rvi.
