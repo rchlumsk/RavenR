@@ -53,12 +53,30 @@ browseVignettes("RavenR")
 citation("RavenR")
 ```
 
-To cite `RavenR` in publications, use:
+To cite `RavenR` in publications, please use the publication reference below.
+
+> Chlumsky, R., Craig, J. R., Lin, S. G. M., Grass, S., Scantlebury, L., Brown, G., and Arabzadeh, R.: RavenR v2.1.4: an open-source R package to support flexible hydrologic modelling, Geosci. Model Dev., 15, 7017–7030, https://doi.org/10.5194/gmd-15-7017-2022, 2022.
+  
+A BibTeX entry for LaTeX users is:
+
+>  @Article{gmd-15-7017-2022,
+>      AUTHOR = {Chlumsky, R. and Craig, J. R. and Lin, S. G. M. and Grass, S. and Scantlebury, L. and Brown, G. and Arabzadeh, R.},
+>      TITLE = {\texttt{RavenR} v2.1.4: an open-source R package to support flexible hydrologic modelling},
+>      JOURNAL = {Geoscientific Model Development},
+>      VOLUME = {15},
+>      YEAR = {2022},
+>      NUMBER = {18},
+>      PAGES = {7017--7030},
+>      URL = {https://gmd.copernicus.org/articles/15/7017/2022/},
+>      DOI = {10.5194/gmd-15-7017-2022}
+}
+
+The `RavenR` software itself can also be cited in publications, use:
 
 > Robert Chlumsky, James Craig, Leland Scantlebury, Simon
   Lin, Sarah Grass, Genevieve Brown and Rezgar Arabzadeh
   (2022). RavenR: Raven Hydrological Modelling Framework R Support and Analysis. R
-  package version 2.1.8. https://github.com/rchlumsk/RavenR
+  package version 2.1.9. https://github.com/rchlumsk/RavenR
   
 A BibTeX entry for LaTeX users is:
 
@@ -66,7 +84,7 @@ A BibTeX entry for LaTeX users is:
 >      title = {RavenR: Raven Hydrological Modelling Framework R Support and Analysis},  
 >      author = {Robert Chlumsky and James Craig and Leland Scantlebury and Simon Lin and Sarah Grass and Genevieve Brown and Rezgar Arabzadeh},  
 >      year = {2022},  
->      note = {R package version 2.1.8},  
+>      note = {R package version 2.1.9},  
 >      url = {https://github.com/rchlumsk/RavenR},  
 >      doi = {10.5281/zenodo.3468441}
 >  }
