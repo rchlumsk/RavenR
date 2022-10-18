@@ -34,6 +34,11 @@ rvn_rvh_blankHRUdf <- function(nHRUs = 1, subbasinIDs=NULL) {
     warning("nHRUs is less than the subbasinIDs specified, table will need to be modified for hydrologic consistency.")
   }
 
+  # if nHRUs is an exact multiple of the number of subbasinIDs, then replicate them with the each argument
+  if (length(subbasinIDs) < nHRUs & nHRUs %% length(subbasinIDs) == 0) {
+    subbasinIDs <- rep(subbasinIDs, each=nHRUs/length(subbasinIDs))
+  }
+
   #-- default is zero for numbers, NA for text
   df <- data.frame('ID'         = 1:nHRUs,
                    'Area'       = 0.0,

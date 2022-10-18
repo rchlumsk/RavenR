@@ -4,7 +4,7 @@
 \alias{rvn_stringpad}
 \title{Pads string with spaces, either right or left justified}
 \usage{
-rvn_stringpad(string, width, just = "r")
+rvn_stringpad(string, width, just = "r", padstring = " ")
 }
 \arguments{
 \item{string}{Text string}
@@ -12,6 +12,8 @@ rvn_stringpad(string, width, just = "r")
 \item{width}{Number of characters total, including desired spaces}
 
 \item{just}{'r' for right, 'l' for left}
+
+\item{padstring}{string to use for padding (default space character)}
 }
 \value{
 {Padded string}
