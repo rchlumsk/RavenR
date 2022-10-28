@@ -26,11 +26,10 @@ rvn_rvh_blankSBdf <- function(nSubBasins = 1) {
     stop("nSubBasins must be greater than zero.")
   }
 
-  subnames <- unlist(lapply(X=as.character(1:nSubBasins),
+  subnames <- sprintf("sub%s",unlist(lapply(X=as.character(1:nSubBasins),
          FUN=rvn_stringpad,
          width = floor(log10(nSubBasins)) + 2,
-         padstring='0')) %>%
-    sprintf("sub%s",.)
+         padstring='0')) )
 
   downstreamid <- (1:nSubBasins)+1
   downstreamid[length(downstreamid)] <- -1
