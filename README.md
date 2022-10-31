@@ -98,6 +98,15 @@ discussed more openly on the new [Github Discussions page](https://github.com/rc
 
 ## Version Update Notes
 
+### 2.2.0
+
+Minor updates and new functionality, including:
+
+  - update to blankHRUdf and blankSBdf functions to make them slightly more intelligent;
+  - update to master database files for HYPR model parameters and connections;
+  - updated package vignette minor deficiency where rvp_out was not writing to a temporary file; and 
+  - minor fixes to `rvn_rvh_query`, `rvn_met_recordplot` documentation.
+
 ### 2.1.8
 
 Minor updates and new functionality, including:
