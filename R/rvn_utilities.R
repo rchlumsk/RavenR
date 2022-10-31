@@ -438,6 +438,7 @@ rvn_get_prd <- function(x=NULL, prd=NULL)
 #' @param string Text string
 #' @param width Number of characters total, including desired spaces
 #' @param just 'r' for right, 'l' for left
+#' @param padstring string to use for padding (default space character)
 #'
 #' @return {Padded string}
 #' @author Leland Scantlebury, \email{leland@@scantle.com}
@@ -449,7 +450,7 @@ rvn_get_prd <- function(x=NULL, prd=NULL)
 #' # Returns "Padded    "
 #' rvn_stringpad('Padded', 10, just='l')
 #' @export rvn_stringpad
-rvn_stringpad <- function(string, width, just='r')
+rvn_stringpad <- function(string, width, just='r', padstring=' ')
 {
   slength <- nchar(string)
   padlength <- width - slength
@@ -459,10 +460,10 @@ rvn_stringpad <- function(string, width, just='r')
   }
   #-- return a padded string
   if (just == 'r') {
-    return(paste0(strrep(' ', padlength), string))
+    return(paste0(strrep(padstring, padlength), string))
   }
   else if (just == 'l') {
-    return(paste0(string, strrep(' ', padlength)))
+    return(paste0(string, strrep(padstring, padlength)))
   }
 }
 
