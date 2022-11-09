@@ -17,7 +17,7 @@
 #' form "subXX", for example "sub24".
 #'
 #' The hyd object is the full hydrograph object (hyd and units in one data
-#' frame) created by the hyd.read function. Both the hyd and units are
+#' frame) created by the rvn_hyd_read function. Both the hyd and units are
 #' required, since the units are placed onto the plots if one is created. This
 #' is useful to at least see the units of the plotted variable, even if the
 #' plot is later modified.
@@ -28,7 +28,7 @@
 #' no period is supplied, the entire time series will be used.
 #'
 #' @param subs column name for plotting/extracting
-#' @param hyd full hydrograph data frame (including units) produced by hyd.read
+#' @param hyd full hydrograph data frame (including units) produced by rvn_hyd_read
 #' @param prd time period for plotting, as string. See details
 #' @param rename_cols boolean for whether to rename columns to generic terms (sim, obs, etc.) or leave
 #' column names as they appear in hyd
@@ -72,7 +72,7 @@ rvn_hyd_extract <- function(subs=NA, hyd=NA, prd=NULL, rename_cols=TRUE) {
     stop("subs is required for this function.")
   }
   if (missing(hyd)) {
-    stop("hyd is required for this function; please supply the full output file from hyd.read.")
+    stop("hyd is required for this function; please supply the full output file from rvn_hyd_read.")
   }
 
   mysub <- ind <- NULL
