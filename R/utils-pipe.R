@@ -1,6 +1,6 @@
 #' @title Pipe operator
 #'
-#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
+#' @description See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
 #'
 #' @name %>%
 #' @rdname pipe
