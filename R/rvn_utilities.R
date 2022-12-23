@@ -845,16 +845,19 @@ rvn_dist_lonlat <- function(p1, p2, method="haversine", r=6378137) {
 
 #' @title Determine layout coordinates of labels
 #'
-#' @description Provides the layout data frame based on the supplied vector of named Raven state variables.
+#' @description Provides the layout data frame based on the supplied vector of
+#' named Raven state variables.
 #'
-#' @details
-#' The position is based on the state variable, i.e. soils generally on the bottom, atmosphere at the top, etc.
-#' Unrecognized labels are generally placed on the left hand side of the layout.
+#' @details The position is based on the state variable, i.e. soils generally on
+#' the bottom, atmosphere at the top, etc. Unrecognized labels are generally
+#' placed on the left hand side of the layout.
 #'
 #' @param verts character vector of state variables to be included in the layout
-#' @return \item{layout}{a data frame of verts labels and xy coordinates intended for plotting labels}
+#' 
+#' @return \item{layout}{a data frame of verts labels and xy coordinates
+#' intended for plotting labels}
 #'
-#' @noRd
+#' @noRd 
 #' @keywords internal
 rvn_rvi_process_layout <- function(verts) {
 
@@ -902,8 +905,8 @@ rvn_rvi_process_layout <- function(verts) {
 }
 
 #' @title Estimate text grob length
-#'
-#' Estimate the printed length of `resizingTextGrob` text
+#' 
+#' @description Estimate the printed length of `resizingTextGrob` text
 #'
 #' @param text The text to be printed (character)
 #' @param rot The rotation in radians
@@ -921,7 +924,8 @@ text_grob_length <- function(text, rot = 0) {
 
 #' @title Bounding box coords for labels
 #'
-#' Given a position, size, rotation, and justification of a label, calculate the bounding box coordinates
+#' @description Given a position, size, rotation, and justification of a label,
+#' calculate the bounding box coordinates
 #'
 #' @param label character text of each label
 #' @param x Horizontal position of center of text grob
@@ -1005,7 +1009,8 @@ label_bounds <- function(label, x, y, height, rotation, just) {
 
 #' @title Reformat bounding box coords for labels
 #'
-#' Reformat the bounding box coordinates object to have columns for label, xmin, xmax, ymin, ymax.
+#' @description Reformat the bounding box coordinates object to have columns for
+#' label, xmin, xmax, ymin, ymax.
 #'
 #' @param bounds object returned by \code{label_bounds}
 #'
