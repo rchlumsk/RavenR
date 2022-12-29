@@ -306,11 +306,16 @@ rvn_apply_wyearly_which_max_xts <- function(x, mm=9, dd=30)
     xx <- rep(NA,length(ep)-1)
 
     for (i in 1:(length(ep)-1)) {
-      dx[i] <- lubridate::date(x[ep[i]:ep[i+1]])[which.max(x[ep[i]:ep[i+1]])]
-      xx[i] <- as.numeric(x[ep[i]:ep[i+1]][which.max(x[ep[i]:ep[i+1]])])
+      if (length(which.max(x[ep[i]:ep[i+1]]))>=1) {
+        dx[i] <- lubridate::date(x[ep[i]:ep[i+1]])[which.max(x[ep[i]:ep[i+1]])]
+        xx[i] <- as.numeric(x[ep[i]:ep[i+1]][which.max(x[ep[i]:ep[i+1]])])
+      }
     }
 
-    myxts <- xts(xx, order.by=dx)
+    df <- data.frame(xx,dx)
+    df[which(is.na(df$xx)),]$dx <- lubridate::date(x[ep[which(is.na(df$xx))+1]])
+
+    myxts <- xts(df$xx, order.by=df$dx)
     colnames(myxts) <- colnames(x)
     return(myxts)
 
@@ -853,11 +858,11 @@ rvn_dist_lonlat <- function(p1, p2, method="haversine", r=6378137) {
 #' placed on the left hand side of the layout.
 #'
 #' @param verts character vector of state variables to be included in the layout
-#' 
+#'
 #' @return \item{layout}{a data frame of verts labels and xy coordinates
 #' intended for plotting labels}
 #'
-#' @noRd 
+#' @noRd
 #' @keywords internal
 rvn_rvi_process_layout <- function(verts) {
 
@@ -905,7 +910,7 @@ rvn_rvi_process_layout <- function(verts) {
 }
 
 #' @title Estimate text grob length
-#' 
+#'
 #' @description Estimate the printed length of `resizingTextGrob` text
 #'
 #' @param text The text to be printed (character)
