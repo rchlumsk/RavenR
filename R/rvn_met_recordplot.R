@@ -10,6 +10,11 @@
 #' from the \pkg{weathercan} package and extracts the start and end dates of the record
 #' from each station for plotting.
 #'
+#' Outputs from \code{stations_search()} indicate when data collection at a station generally
+#' began but do not contain information for specific climate variables and thus should
+#' only be used for a "first look". Plots created with station metadata do not refer to
+#' specific climate variables.
+#'
 #' Station records are plotted chronologically on a timeline, and can be colored
 #' according to either the station's elevation (default, works for both types of inputs)
 #' or the station's distance from a point of interest (works only when supplying
@@ -22,7 +27,7 @@
 #' the effect of lapse rates on climate forcings driving a model response.
 #'
 #' @param metadata tibble of the station meta-data from \code{weathercan::stations_search()}
-#' @param stndata tibble of the station data from \code{weathercan::weather_dl()}
+#' @param stndata tibble of the station data from \code{weathercan::weather_dl()}. Used in conjunction with \code{variables} argument.
 #' @param variables if using \code{weathercan::weather_dl()}, column names for variables of interest (currently only accepts 1 per call)
 #' @param colorby column name by which to color station records. Set to 'elev' (elevation) by default. Can be set to
 #' "dist" (distance from coordinates of interest) if supplying \code{weathercan::stations_search} results.
@@ -66,9 +71,18 @@ rvn_met_recordplot <- function(metadata=NULL,stndata=NULL,variables=NULL,colorby
 
   start <- station_name <- nstations <- NA
 
+  # ensure there is a list of stations to read
   if(!is.null(metadata) & !is.null(stndata)){
     stop('Please supply either one of the outputs from weathercan::weather_dl() OR weathercan::stations_search(), not both')}
 
+  # prevent user from searching climate variable records from stations_search( ) results
+  if(!is.null(metadata) & !is.null(variables)){
+    stop(paste("Metadata argument returns overall station record periods (which may not reflect the record period for a specific climate variable observed at that station).",
+               "If looking for records pertaining to a specific climate variable, please use the 'stndata' and 'variables' arguments together.",sep='\n'
+    ))
+  }
+
+  # restrict user to only plotting a subset of climate variables (not all at once)
   if(!is.null(stndata) & is.null(variables)){
     stop('Please specify which variable you would like to view record lengths for')
   }
@@ -92,8 +106,8 @@ rvn_met_recordplot <- function(metadata=NULL,stndata=NULL,variables=NULL,colorby
     metadata$station_name=factor(metadata$station_name,levels=metadata$station_name[order(-metadata$start)])
 
     # plot records to show overlap
-    xmax = max(metadata$end)
-    xmin = min(metadata$start)
+    xmax = max(na.omit(metadata$end))
+    xmin = min(na.omit(metadata$start))
 
     if(is.null(variables)){variables = 'overall station records'} # plot title
 
@@ -123,13 +137,13 @@ rvn_met_recordplot <- function(metadata=NULL,stndata=NULL,variables=NULL,colorby
       scale_x_continuous(limits=c(xmin,xmax),breaks=seq(xmin,xmax,1))+
       theme_bw()+
       theme(plot.title=element_text(hjust=0.5),plot.subtitle=element_text(hjust = 0.5),
-            legend.position = 'bottom',axis.title.y=element_blank())
+            legend.position = 'bottom',axis.title.y=element_blank(),axis.text.x=element_text(angle=90))
   }
 
   # Count number of station records available for each year
-  year = min(metadata$start):max(metadata$end)
+  year = min(na.omit(metadata$start)):max(na.omit(metadata$end))
   recordsum = do.call('rbind',lapply(year,function(y){
-    n = sum(metadata$start <= y & metadata$end >= y)
+    n = sum(metadata$start <= y & metadata$end >= y,na.rm=T)
     return(data.frame(year=y,nstations=n))
   }))
 
@@ -141,7 +155,7 @@ rvn_met_recordplot <- function(metadata=NULL,stndata=NULL,variables=NULL,colorby
     ylab('stations')+
     scale_x_continuous(breaks=seq(xmin,xmax,1))+
     theme_bw()+
-    theme(plot.title=element_text(hjust = 0.5))
+    theme(plot.title=element_text(hjust = 0.5),axis.text.x=element_text(angle=90))
 
   out <- plot_grid(overlapPlot,stncount,nrow=2 )
   return(out)
