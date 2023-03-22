@@ -472,6 +472,31 @@ rvn_stringpad <- function(string, width, just='r', padstring=' ')
   }
 }
 
+#' @title Convert hours, minutes, seconds to decimal hours
+#'
+#' @description
+#' Converts string format HH:MM:SS to decimal hours
+#'
+#' @param x input as character, format HH:MM:SS
+#'
+#' @return {time in decimal hours}
+#'
+#' @examples
+#' # return hour:minutes:seconds to decimal hours
+#' hhmmss2dec("02:35:58")
+#'
+#' @export hhmmss2dec
+hhmmss2dec <- function(x) {
+  # from Stack Overflow:
+  # https://stackoverflow.com/questions/42516233/converting-time-hhmmss-to-decimal-values-in-r
+  xlist <- strsplit(x,split=":")
+  h <- as.numeric(sapply(xlist,"[",1))
+  m <- as.numeric(sapply(xlist,"[",2))
+  s <- as.numeric(sapply(xlist,"[",3))
+  xdec <- h+(m/60)+(s/60/60)
+  return(xdec)
+}
+
 #' @title \%notin\% operator
 #'
 #' @description

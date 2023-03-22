@@ -3,6 +3,7 @@
 export("%>%")
 export("%notin%")
 export(cmax)
+export(hhmmss2dec)
 export(rvn_annual_peak)
 export(rvn_annual_peak_error)
 export(rvn_annual_peak_event)
