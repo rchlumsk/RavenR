@@ -42,31 +42,28 @@
 #' @export rvn_rvh_write_subbasingroup
 rvn_rvh_write_subbasingroup <- function(rvh=NULL, sbgroup_name=NULL, outfile=NULL, subs_per_line=30, overwrite=TRUE)
 {
-
   # input checking
   if (is.null(rvh) | is.null(rvh$SBtable)) {
-    stop("rvn_rvh_summarize: valid rvh object is required")
-  }
-
-  if (is.null(sbgroup_name)) {
-    sbgroup_name <- "subgroup_RavenR_generated"
-  }
-
-  if (is.null(outfile)) {
-    outfile <- "subbasingroup_RavenR.rvh"
-  }
-
-  fc <- file(outfile, open = "wt")
-  writeLines(sprintf(":SubBasinGroup  %s",sbgroup_name), fc)
-  for (i in seq(from=1,to=min(nrow(rvh$SBtable),subs_per_line), by=subs_per_line))  {
-    temp <- rvh$SBtable$SBID[i:(min(i+subs_per_line-1,nrow(rvh$SBtable)))] %>%
-      paste0(collapse=", ")
-    sprintf("  %s",temp) %>%
-      writeLines(fc)
-  }
-  writeLines(":EndSubBasinGroup", fc)
-  close(fc)
-
-  message(sprintf("Successfully wrote SubBasinGroup '%s' to file %s",sbgroup_name,outfile))
-  return(TRUE)
+        stop("rvn_rvh_write_subbasingroup: valid rvh object is required")
+    }
+    if (is.null(sbgroup_name)) {
+        sbgroup_name <- "subgroup_RavenR_generated"
+    }
+    if (is.null(outfile)) {
+        outfile <- "subbasingroup_RavenR.rvh"
+    }
+    fc <- file(outfile, open = "wt")
+    writeLines(sprintf(":SubBasinGroup  %s", sbgroup_name),
+        fc)
+    iseq <- seq(from = 1, to = nrow(rvh$SBtable),
+        by = (subs_per_line-1))
+    for (i in 1:(length(iseq)-1) ) {
+        temp <- rvh$SBtable$SBID[iseq[i]:iseq[i+1]] %>% paste0(collapse = ", ")
+        sprintf("  %s", temp) %>% writeLines(fc)
+    }
+    writeLines(":EndSubBasinGroup", fc)
+    close(fc)
+    message(sprintf("Successfully wrote SubBasinGroup '%s' to file %s on %i lines",
+        sbgroup_name, outfile, length(iseq)+1))
+    return(TRUE)
 }
