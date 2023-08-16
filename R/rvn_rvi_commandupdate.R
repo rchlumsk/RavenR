@@ -17,7 +17,7 @@
 #' \code{\link{rvn_rvi_read}} to read and process rvi files with RavenR
 #'
 #' @examples
-#'   # load example rvh file
+#'   # load example rvi file
 #'   ff <- system.file("extdata","Nith.rvi", package="RavenR")
 #'   tf <- tempfile(fileext=".rvi")
 #'
