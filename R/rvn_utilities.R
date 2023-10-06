@@ -718,7 +718,7 @@ get_rvt_mapping <- function() {
 #' @noRd
 get_rvt_data_type_mapping <- function() {
 
-  # update this based on table C.1 in Raven Manual?
+  # update this based on table D.1 in Raven Manual?
   rvt_data_type_mapping <- list(
     "HYDROGRAPH"=list(
       "units"="m3/s"
@@ -731,6 +731,9 @@ get_rvt_data_type_mapping <- function() {
     ),
     "RESERVOIR_NETINFLOW"=list(
       "units"="m3/s"
+    ),
+    "SNOW"=list(
+      "units"="mm"
     )
   )
 

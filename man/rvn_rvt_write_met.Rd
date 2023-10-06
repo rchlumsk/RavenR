@@ -11,7 +11,6 @@ rvn_rvt_write_met(
   met_file_prefix = "met_",
   prd = NULL,
   write_stndata = TRUE,
-  write_redirect = TRUE,
   filename_stndata = "met_stndata.rvt",
   NA_value = -1.2345
 )
@@ -28,9 +27,6 @@ rvn_rvt_write_met(
 \item{prd}{(optional) data period to use in .rvt file}
 
 \item{write_stndata}{(optional) write the gauge data to a separate .rvt file}
-
-\item{write_redirect}{(optional) write the :RedirectToFile commands in a
-separate .rvt file}
 
 \item{filename_stndata}{(optional) name of the station data file created (if \code{write_stndata=TRUE})}
 
@@ -85,12 +81,6 @@ filename_stndata parameter) in the .rvt format, which is required to include a
 meterological station in Raven. The function will append to the file if it already exists, meaning
 that this works for iterations of this function. metdata must include the columns
 ELEV, LAT, and LON if station data is to be written, else the meta data file will not be created.
-
-write_redirect will print out the :RedirectToFile commands into the file specified
-by filename_stndata, if write_stndata is \code{TRUE}. These commands can be copied into the main model's
-.rvt file to redirect to the produced time series files. The function will
-append to the file if it already exists, meaning that this works for
-iterations of this function.
 
 The function has several built-in data quality checks. These include:
 

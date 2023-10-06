@@ -125,7 +125,8 @@ rvn_hyd_plot <- function(sim=NULL,obs=NULL,inflow=NULL,precip=NULL,prd=NULL,
     ylab(expression("Flow ("*m^3*"/s)"))+
     rvn_theme_RavenR()+
     theme(legend.position = "bottom") +
-    scale_colour_brewer(type = "qual", palette = 3)
+    # scale_colour_brewer(type = "qual", palette = 3)+
+    scale_colour_manual(name='Legend',values=c("Obs"='black',"Sim"='darkorange',"Inflow"="purple"))
 
   #Shade Winter Months
   if (winter_shading){
