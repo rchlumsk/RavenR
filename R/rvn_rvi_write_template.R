@@ -19,7 +19,7 @@
 #' for ease of getting started with a model using Raven.
 #'
 #' The template_name parameter should be one of "UBCWM", "HBV-EC", "HBV-Light", "GR4J",
-#'  "CdnShield", "MOHYSE", "HMETS", "HYPR", or "HYMOD".
+#'  "CdnShield", "MOHYSE", "HMETS", "HYPR", "HYMOD", or "SAC-SMA".
 #'
 #' This function uses the same model template files that are provided in the Raven User's manual, Appendix D.
 #'
@@ -44,7 +44,7 @@ rvn_rvi_write_template <- function(template_name="UBCWM", filename=NULL,
                                    filetype="rvi ASCII Raven", author="RavenR",
                                    description=NULL) {
 
-  known_templates  <- c("UBCWM", "HBV-EC", "HBV-Light", "GR4J", "CdnShield", "MOHYSE", "HMETS", "HYPR", "HYMOD")
+  known_templates  <- c("UBCWM", "HBV-EC", "HBV-Light", "GR4J", "CdnShield", "MOHYSE", "HMETS", "HYPR", "HYMOD", "SAC-SMA")
 
   if (is.null(template_name) | template_name %notin% known_templates) {
     stop("template_name must be one of the available model templates, see function details")
@@ -473,6 +473,39 @@ rvn_rvi_write_template <- function(template_name="UBCWM", filename=NULL,
   :Flush             RAVEN_DEFAULT      SURFACE_WATER   SOIL[1]          0.5
   :SoilEvaporation   SOILEVAP_PDM       SOIL[0]         ATMOSPHERE
   :Baseflow          BASE_LINEAR        SOIL[1]         SURFACE_WATER
+:EndHydrologicProcesses
+
+#
+
+",
+
+"SAC-SMA"="
+:StartDate    2000-01-01 00:00:00
+:Duration     365
+:TimeStep     1.0
+
+# Model options for SAC-SMA emulation
+#------------------------------------------------------------------------
+:PotentialMeltMethod     POTMELT_DEGREE_DAY
+:RainSnowFraction        RAINSNOW_DATA
+:Evaporation             PET_DATA
+:CatchmentRoute          ROUTE_DUMP
+:Routing                 ROUTE_NONE 
+
+:SoilModel               SOIL_MULTILAYER 7
+
+:Alias UZ_T  SOIL[0]
+:Alias UZ_F  SOIL[1]
+:Alias LZ_T  SOIL[2]
+:Alias LZ_PF SOIL[3]
+:Alias LZ_PS SOIL[4]  
+
+:HydrologicProcesses
+  :SnowBalance           SNOBAL_SIMPLE_MELT   SNOW          PONDED_WATER
+  :Precipitation         RAVEN_DEFAULT        ATMOS_PRECIP  MULTIPLE 
+  :SoilEvaporation       SOILEVAP_SACSMA      MULTIPLE      ATMOSPHERE
+  :SoilBalance           SOILBAL_SACSMA       MULTIPLE      MULTIPLE
+  :OpenWaterEvaporation  OPEN_WATER_RIPARIAN  SURFACE_WATER ATMOSPHERE  
 :EndHydrologicProcesses
 
 #
