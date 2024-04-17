@@ -1,10 +1,10 @@
 #' @title Downloads Raven
 #'
 #' @description
-#' Downloads Raven executable from the \href{http://raven.uwaterloo.ca/Downloads.html}{Raven webpage}.
+#' Downloads Raven executable from the \href{https://raven.uwaterloo.ca/Downloads.html}{Raven webpage}.
 #'
 #' @details
-#' Files are downloaded from the Raven webpage (\url{http://raven.uwaterloo.ca/Downloads.html}) and placed
+#' Files are downloaded from the Raven webpage (\url{https://raven.uwaterloo.ca/Downloads.html}) and placed
 #' in a temporary directory while the executable is extracted. This helps prevent any unwanted files being
 #' saved on your system outside of temporary directories if the function is interrupted. The executable is placed in the
 #' RavenR/extdata directory, wherever RavenR is installed on your system.
@@ -85,7 +85,7 @@ rvn_download<-function(version=NA,NetCDF=FALSE,check=FALSE,copy_path=NULL)
       }
       platform <-  tolower(os)
 
-      url <- "http://raven.uwaterloo.ca/Downloads.html"
+      url <- "https://raven.uwaterloo.ca/Downloads.html"
       html <- paste(readLines(url), collapse="\n")
       matched <- str_match_all(html, "<a href=\"(.*?)\"")[[1]]
       matched<-matched[grep("a href=",matched)]
@@ -220,7 +220,7 @@ rvn_download<-function(version=NA,NetCDF=FALSE,check=FALSE,copy_path=NULL)
          }
          fileName<-paste("RavenExecutableLinux_",selectedVersion,".zip",sep="")
       }
-      downloadLink<-paste("http://raven.uwaterloo.ca/files/",gsub("n","",selectedVersion),"/",fileName,sep="")
+      downloadLink<-paste("https://raven.uwaterloo.ca/files/",gsub("n","",selectedVersion),"/",fileName,sep="")
       if(!RCurl::url.exists(downloadLink)) stop("Bad file url. Check the repository!")
 
       # save to download_path (from tempdir()), then copy to RavenR/extdata folder
