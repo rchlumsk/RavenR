@@ -1,0 +1,57 @@
+ProgramType  DDS
+ObjectiveFunction  GCOP
+
+# Linux version
+# ModelExecutable  ./ost_raven.sh
+# PreserveBestModel ./ost_savebest.sh
+
+# Windows version
+ModelExecutable  ost_raven.bat
+PreserveBestModel ost_savebest.bat
+
+BeginFilePairs   
+# 
+model.rvp.tpl	./model/model.rvp
+#
+EndFilePairs
+
+#Parameter/DV Specification
+BeginParams
+  # parameter      init.    low      high    tx_in  tx_ost  tx_out
+  #
+  # add parameters here
+EndParams
+   
+BeginResponseVars
+#name	filename								keyword		line	col	token	augmented?
+  KGE_calibration	   ./model/output/Diagnostics.csv ;		OST_NULL	1		3	','		yes
+  # PBIAS_calibration	   ./model/output/Diagnostics.csv ;		OST_NULL	1		4	','		yes
+EndResponseVars 
+
+BeginTiedRespVars
+ # NegNSE 1 NSE wsum -1.00
+  NegKGE 1 KGE_calibration wsum -1
+EndTiedRespVars
+
+BeginGCOP
+  CostFunction NegKGE
+  PenaltyFunction APM
+EndGCOP
+
+BeginConstraints
+# not needed when no constraints, but PenaltyFunction statement above is required
+#name     type     penalty    lwr   upr   resp.var
+ # PbiasConst general 0.01 -10.0 10.0 PBias
+ # PBIAS_calibration general 0.01 -10.0 10.0 PBIAS_calibration
+EndConstraints
+
+# Randomseed control added
+#RandomSeed 123456789
+
+BeginDDSAlg
+PerturbationValue 0.20
+MaxIterations 3
+# UseRandomParamValues
+UseInitialParamValues
+EndDDSAlg
+

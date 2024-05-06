@@ -37,7 +37,7 @@ rvn_rvh_blankSBdf <- function(nSubBasins = 1) {
   df <- data.frame('SBID'          = 1:nSubBasins,
                    'Name'          = subnames,
                    'Downstream_ID' = downstreamid,
-                   'Profile'       = "DEFAULT",
+                   'Profile'       = "NONE",
                    'ReachLength'   = 0.0,
                    'Gauged'        = 0)
   return(df)

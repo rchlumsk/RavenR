@@ -14,7 +14,7 @@ rvn_met_recordplot(
 \arguments{
 \item{metadata}{tibble of the station meta-data from \code{weathercan::stations_search()}}
 
-\item{stndata}{tibble of the station data from \code{weathercan::weather_dl()}}
+\item{stndata}{tibble of the station data from \code{weathercan::weather_dl()}. Used in conjunction with \code{variables} argument.}
 
 \item{variables}{if using \code{weathercan::weather_dl()}, column names for variables of interest (currently only accepts 1 per call)}
 
@@ -35,6 +35,11 @@ station records overlap.
 Accepts outputs from either the \code{stations_search()} or \code{weather_dl()} functions
 from the \pkg{weathercan} package and extracts the start and end dates of the record
 from each station for plotting.
+
+Outputs from \code{stations_search()} indicate when data collection at a station generally
+began but do not contain information for specific climate variables and thus should
+only be used for a "first look". Plots created with station metadata do not refer to
+specific climate variables.
 
 Station records are plotted chronologically on a timeline, and can be colored
 according to either the station's elevation (default, works for both types of inputs)

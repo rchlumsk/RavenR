@@ -296,7 +296,6 @@ rvn_rvt_write_met <-  function(metdata, rvt_met_mapping=NULL, filenames=NULL, me
           writeLines(sprintf("  :RedirectToFile %s", md$rvt.name[k]),fc)
           writeLines(":EndGauge\n",fc)
         }
-
         close(fc)
         message(sprintf("rvn_rvt_write_met: Done writing station data to %s", filename_stndata))
       }

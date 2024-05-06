@@ -99,10 +99,10 @@ myhyd <- system.file("extdata","run1_Hydrographs.csv", package = "RavenR") %>%
 library(xts)
 
 # apply mean to calendar year in hydrograph data
-xts::apply.yearly(myhyd$hyd$Sub36, mean, na.rm = TRUE)
+xts::apply.yearly(myhyd$hyd$Sub36, colMeans, na.rm = TRUE)
 
 # apply mean as FUN to daily average temperature
-RavenR::rvn_apply_wyearly(myhyd$hyd$Sub36, mean, na.rm = TRUE)
+RavenR::rvn_apply_wyearly(myhyd$hyd$Sub36, colMeans, na.rm = TRUE)
 
 ## ----RVI connection plot example-------------------------------------------------------------------------------------------------
 rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package = "RavenR"))

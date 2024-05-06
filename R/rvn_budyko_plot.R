@@ -114,7 +114,7 @@ rvn_budyko_plot <- function(x=NULL, x_indices=NULL, limiting_labels=FALSE, budyk
 
   if (!is.null(x)) {
     # convert x into x_indices
-    temp <- rvn_apply_wyearly(x, FUN=mean,na.rm=TRUE,mm=mm,dd=dd)
+    temp <- rvn_apply_wyearly(x, FUN=colMeans,na.rm=TRUE,mm=mm,dd=dd)
 
     if (year(temp[nrow(temp)]) == year(temp[(nrow(temp)-1)])) {
       temp <- temp[1:(nrow(temp)-1),]

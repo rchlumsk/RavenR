@@ -55,7 +55,7 @@
 #' @importFrom ggplot2 ggplot geom_bar aes scale_y_continuous scale_x_continuous geom_hline geom_text
 #' @importFrom xts apply.monthly
 #' @importFrom lubridate month
-rvn_monthly_vbias <- function (sim, obs, add_line = TRUE, normalize = TRUE, add_labels = TRUE,
+rvn_monthly_vbias <- function(sim, obs, add_line = TRUE, normalize = TRUE, add_labels = TRUE,
                                incomplete_month = FALSE)
 {
 

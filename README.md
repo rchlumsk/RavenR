@@ -103,6 +103,8 @@ discussed more openly on the new [Github Discussions page](https://github.com/rc
 Minor updates and new functionality, including:
 
   - new function for generic reading of output csv files, `rvn_csv_read`;
+  - new function for writing Ostrich calibration templates, `rvn_rvp_calib_template`;
+  - new function for updating commands in the rvi file, `rvn_rvi_commandupdate`;
   - update of all http urls to https;
   - update in rvn_rvt_met_write to move the :RedirectToFile within the gauge block; and
   - update to master database files for new connections and infilling some parameter ranges;
