@@ -73,7 +73,7 @@ can be rectified with the \code{run_chmod} parameter set to \code{TRUE}
 \examples{
 \dontrun{
 ## NOT RUN (data download + runs Raven.exe)
-url<-"http://raven.uwaterloo.ca/files/RavenTutorialFiles.zip"
+url<-"https://raven.uwaterloo.ca/files/RavenTutorialFiles.zip"
 temploc <- tempdir()
 destfile<-paste(temploc,"/RavenTutorialFiles.zip",sep="")
 download.file(url,destfile)

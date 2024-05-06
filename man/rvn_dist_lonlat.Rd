@@ -11,7 +11,7 @@ rvn_dist_lonlat(p1, p2, method = "haversine", r = 6378137)
 
 \item{p2}{second point in same format as \code{p1}}
 
-\item{method}{calculation method as either \code{haversine} (default) or {vincentysphere}}
+\item{method}{calculation method as either \code{haversine} (default) or \code{vincentysphere}}
 
 \item{r}{radius of the Earth in metres (default 6378137)}
 }

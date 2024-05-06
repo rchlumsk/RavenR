@@ -47,7 +47,7 @@
 #' @seealso \code{\link{rvn_rvi_connections}} to generate connections table from an rvi object
 #' @seealso \code{\link{rvn_rvi_process_ggplot}} to generate the structure plot using ggplot.
 #'
-#' See also the \href{http://raven.uwaterloo.ca/}{Raven page}. Additional details on the
+#' See also the \href{https://raven.uwaterloo.ca/}{Raven page}. Additional details on the
 #' \code{DiagrammeR} package may be found on the \href{https://github.com/rich-iannone/DiagrammeR}{Github page}.
 #'
 #' @examples

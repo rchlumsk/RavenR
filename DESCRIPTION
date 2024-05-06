@@ -44,10 +44,8 @@ Imports:
     zoo
 Suggests:
     devtools,
-    DiagrammeRsvg,
     knitr,
-    rmarkdown,
-    rsvg
+    rmarkdown
 URL: https://github.com/rchlumsk/RavenR
 License: GPL-3
 Encoding: UTF-8

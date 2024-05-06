@@ -21,13 +21,13 @@ water years}
 Returns the indices of the provided time series for the
 start/end of the water year. The month/day of the water year defaults to September 30 for
 an October 1 water year cycle. However, this may be supplied as other values,
-for example as June 30th for a July 1 water year (i.e. the Australian water year).
+for example as June 30 for a July 1 water year (i.e. the Australian water year).
 This function is useful in supplying endpoints for water year evaluations.
 }
 \details{
 Emulates the \code{\link{endpoints}} function
 for a water year period. The first and last points are included in all supplied endpoints,
-which may introduce partial periods to the analysis.#'
+which may introduce partial periods to the analysis.
 }
 \examples{
 

@@ -40,7 +40,7 @@
 #' }
 #'
 #' The Nith River model can be downloaded from the Raven Tutorials (tutorial #2)
-#' \url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}
+#' \url{https://raven.uwaterloo.ca/Downloads.html}
 #'
 #' @seealso \code{\link{rvn_forcings_read}} for reading in forcing functions output files
 #' @seealso \code{\link{rvn_forcings_plot}} for plotting forcing functions in a convenient way

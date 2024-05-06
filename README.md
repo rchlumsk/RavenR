@@ -10,7 +10,7 @@ status](https://www.r-pkg.org/badges/version/RavenR)](https://cran.r-project.org
 
 # RavenR <img src="inst/extdata/logo/RavenR_logo_small.png" align="right" />
 
-`RavenR` is an R package for handling [Raven](http://raven.uwaterloo.ca/) hydrologic modelling framework
+`RavenR` is an R package for handling [Raven](https://raven.uwaterloo.ca/) hydrologic modelling framework
 inputs, outputs, and diagnostics. 
 
 ## Installation
@@ -98,6 +98,15 @@ discussed more openly on the new [Github Discussions page](https://github.com/rc
 
 ## Version Update Notes
 
+### 2.2.1
+
+Minor updates and new functionality, including:
+
+  - new function for generic reading of output csv files, `rvn_csv_read`;
+  - update of all http urls to https;
+  - update in rvn_rvt_met_write to move the :RedirectToFile within the gauge block; and
+  - update to master database files for new connections and infilling some parameter ranges;
+
 ### 2.2.0
 
 Minor updates and new functionality, including:
@@ -120,7 +129,7 @@ Minor updates and new functionality, including:
 
 Minor updates and bug fixes, including:
 
-  - added new functions including `rvn_rvp_fill_template` for filling in rvp template files, `rvn_met_recordplot` to show station record lenghts; 
+  - added new functions including `rvn_rvp_fill_template` for filling in rvp template files, `rvn_met_recordplot` to show station record lengths; 
   - added function for plotting subbasin network with interactive `visNetwork` library
   - updated `rvn_run` with additional options, including adding rvi commands to the file before execution;   
   - added new model templates from Raven Manual v3.5 to `rvn_rvi_write_template`; 
@@ -168,4 +177,4 @@ plotting. Some of these include:
 
 * [RavenR.extras](https://github.com/rchlumsk/RavenR.extras): Additional RavenR utilities.
 
-* [Raven Hydrologic Modelling Framework](http://raven.uwaterloo.ca/): Robust and flexible Hydrologic Modelling Framework developd by Dr. James R. Craig at the University of Waterloo.
+* [Raven Hydrologic Modelling Framework](https://raven.uwaterloo.ca/): Robust and flexible Hydrologic Modelling Framework developd by Dr. James R. Craig at the University of Waterloo.

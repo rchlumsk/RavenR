@@ -39,7 +39,7 @@
 #' }
 #'
 #' The Nith River model can be downloaded from the Raven Tutorials (tutorial #2)
-#' \url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}
+#' \url{https://raven.uwaterloo.ca/Downloads.html}
 #'
 #' @seealso \code{\link{rvn_watershed_read}} for reading in watershed storage output files
 #' @examples

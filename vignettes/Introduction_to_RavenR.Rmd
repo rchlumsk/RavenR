@@ -16,7 +16,7 @@ editor_options:
 
 This short document is intended to get you started with using `RavenR` to aid your analysis with the Raven Hydrologic Modelling Framework. This tutorial will get you up and running with the `RavenR` package and comfortable running a few commands. Some knowledge or R is presumed in this document. If you are not comfortable with R, take a look at any number of R training and Introductory resources, such as the [tRaining repository](https://github.com/rchlumsk/tRaining)) on Github.
 
-This exercise will use the Nith River modelled output available from within the RavenR package, thus the functions to read in data from csv files are not required. However, it is recommended that you download the Nith river model files, and try to both run the model and read in the output files. The Nith river model can be downloaded from the [Raven Tutorial #2](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html).
+This exercise will use the Nith River modelled output available from within the RavenR package, thus the functions to read in data from csv files are not required. However, it is recommended that you download the Nith river model files, and try to both run the model and read in the output files. The Nith river model can be downloaded from the [Raven Tutorial #2](https://raven.uwaterloo.ca/Downloads.html).
 
 Note that the `RavenR` package is focused on handling Raven input/output files, model diagnostics, and generating plots with the `ggplot2` library. The dependencies required by the package are kept at a relative minimum to preserve stability. An additional package, `RavenR.extras`, is available on [Github](https://github.com/rchlumsk/RavenR.extras) and contains additional functionality.
 
@@ -207,7 +207,7 @@ RavenR::rvn_apply_wyearly(myhyd$hyd$Sub36, mean, na.rm = TRUE)
 
 ## RVI File Utilities
 
-The RavenR package can read the rvi file and generate a network plot of the model connections, which is helpful in understanding the model configuration. This can be done as follows, again using the Nith rvi file as an example. The network plot may be directly written to file by supplying a file name to the `pdfout` argument, which is NULL by default. Similar functionality is also avaialble with the `rvn_rvi_process_diagrammer` function, which uses the `DiagrammeR` library.
+The RavenR package can read the rvi file and generate a network plot of the model connections, which is helpful in understanding the model configuration. This can be done as follows, again using the Nith rvi file as an example. The network plot may be directly written to file by supplying a file name to the `pdfout` argument, which is NULL by default. Similar functionality is also available with the `rvn_rvi_process_diagrammer` function, which uses the `DiagrammeR` library.
 
 ```{r RVI connection plot example}
 rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package = "RavenR"))
@@ -255,7 +255,7 @@ rvn_rvh_subbasin_network_plot(rvh$SBtable, labeled = TRUE)
 
 Another useful rvh functionality is the simplification of an HRU file. Often in the initial HRU discretization, many HRUs with similar properties and/or very small areas exist that are worthwhile consolidating for the purpose of modelling. The `rvn_rvh_cleanrhus` function accomplishes this. Try the example in the help file - `?rvn_rvh_cleanhrus`.
 
-Finally, rvh files can be created with the `rvn_rvh_write` function, and the basic subbasin tabale and hru table can be created with the `rvn_rvh_blankSBdf` and `rvn_rvh_blankHRUdf` functions, respectively. More complex discretizations would require some manual editing or other discretization tools to first create this network.
+Finally, rvh files can be created with the `rvn_rvh_write` function, and the basic subbasin table and hru table can be created with the `rvn_rvh_blankSBdf` and `rvn_rvh_blankHRUdf` functions, respectively. More complex discretizations would require some manual editing or other discretization tools to first create this network.
 
 ## RVP Utilities
 
@@ -455,7 +455,7 @@ rvn_rvt_write_met(met_data)
 
 # Exercise 3 - Build Additional Raven Input files
 
-Following up from Exercise 2, let's say that we want to continue building model files for Raven River, continuing with an rvi, rvh and rvp file. We can use the `rvn_rvi_write_template` file and the other utilities for rvi/rvp files to create these two files directly with the RavenR package. We can also create a basic rvh file with asasigned properties in R with the RavenR package.
+Following up from Exercise 2, let's say that we want to continue building model files for Raven River, continuing with an rvi, rvh and rvp file. We can use the `rvn_rvi_write_template` file and the other utilities for rvi/rvp files to create these two files directly with the RavenR package. We can also create a basic rvh file with assigned properties in R with the RavenR package.
 
 For this exercise, you should do the following. Create any new model files with the prefix "ravenriver", for example, "ravenriver.rvi".
 
@@ -511,6 +511,6 @@ rvn_rvp_fill_template(fileprefix = "ravenriver",
 
 # Conclusion
 
-This tutorial is meant to serve as a brief introduction to the RavenR package. If you have any comments, suggestions or bug reports, please leave a note on the issues page of the Github project ([RavenR Github page](https://github.com/rchlumsk/RavenR)), email the authors of the package, or feel free to let us know on the [Raven forum](http://www.civil.uwaterloo.ca/raven_forum/). 
+This tutorial is meant to serve as a brief introduction to the RavenR package. If you have any comments, suggestions or bug reports, please leave a note on the issues page of the Github project ([RavenR Github page](https://github.com/rchlumsk/RavenR)), email the authors of the package, or feel free to let us know on the [Raven forum](https://www.civil.uwaterloo.ca/raven_forum/). 
 
-Additional Raven materials can be found on the [Raven downloads page](http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html), and additional RavenR vignettes can be found on Github in the [vignettes folder](https://github.com/rchlumsk/RavenR/tree/master/vignettes).
+Additional Raven materials can be found on the [Raven downloads page](https://raven.uwaterloo.ca/Downloads.html), and additional RavenR vignettes can be found on Github in the [vignettes folder](https://github.com/rchlumsk/RavenR/tree/master/vignettes).

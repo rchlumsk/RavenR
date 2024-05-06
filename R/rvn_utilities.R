@@ -172,7 +172,7 @@ rvn_num_days <- function(date1, date2)
 #' two dates
 #'
 #' See original code on post in Stack Overflow
-#' \href{http://stackoverflow.com/questions/6243088/find-out-the-number-of-days-of-a-month-in-rfind}{
+#' \href{https://stackoverflow.com/questions/6243088/find-out-the-number-of-days-of-a-month-in-rfind}{
 #' the number of days in a month}
 #' @examples
 #'
@@ -798,7 +798,7 @@ get_rvt_met_mapping_weathercan <- function() {
 #'
 #' @param p1 longitude/latitude of point(s); can be a vector of two numbers, or a matrix of 2 columns (long/lat).
 #' @param p2 second point in same format as \code{p1}
-#' @param method calculation method as either \code{haversine} (default) or {vincentysphere}
+#' @param method calculation method as either \code{haversine} (default) or \code{vincentysphere}
 #' @param r radius of the Earth in metres (default 6378137)
 #'
 #' @return a vector of calculated distances (length of vector based on input)
@@ -912,6 +912,7 @@ rvn_rvi_process_layout <- function(verts) {
 
 #' @title Estimate text grob length
 #'
+#' @description
 #' Estimate the printed length of `resizingTextGrob` text
 #'
 #' @param text The text to be printed (character)
@@ -930,6 +931,7 @@ text_grob_length <- function(text, rot = 0) {
 
 #' @title Bounding box coords for labels
 #'
+#' @description
 #' Given a position, size, rotation, and justification of a label, calculate the bounding box coordinates
 #'
 #' @param label character text of each label
@@ -1014,6 +1016,7 @@ label_bounds <- function(label, x, y, height, rotation, just) {
 
 #' @title Reformat bounding box coords for labels
 #'
+#' @description
 #' Reformat the bounding box coordinates object to have columns for label, xmin, xmax, ymin, ymax.
 #'
 #' @param bounds object returned by \code{label_bounds}

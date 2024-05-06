@@ -38,7 +38,7 @@ each watershed storage state can be found in the Raven Manual
 }
 
 The Nith River model can be downloaded from the Raven Tutorials (tutorial #2)
-\url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}
+\url{https://raven.uwaterloo.ca/Downloads.html}
 }
 \usage{
 rvn_watershed_data

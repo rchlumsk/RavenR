@@ -32,6 +32,6 @@ rvn_num_days_month(as.Date("2017-01-17"))
 two dates
 
 See original code on post in Stack Overflow
-\href{http://stackoverflow.com/questions/6243088/find-out-the-number-of-days-of-a-month-in-rfind}{
+\href{https://stackoverflow.com/questions/6243088/find-out-the-number-of-days-of-a-month-in-rfind}{
 the number of days in a month}
 }

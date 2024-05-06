@@ -14,7 +14,7 @@ rvn_rvh_query(rvh = NULL, subbasinID = NULL, condition = "upstream_of")
 \item{condition}{condition applied to the query}
 }
 \value{
-{rvh}{rvh object in same format, but queried to condition and all features (SBtable, HRUtable, SBnetwork) updated.}
+rvh object in same format, but queried to condition and all features (SBtable, HRUtable, SBnetwork) updated.
 }
 \description{
 Queries the RVH object for subbasins or HRUs that are upstream of, downstream of,

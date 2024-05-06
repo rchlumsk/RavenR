@@ -21,7 +21,7 @@
 #' vice-versa. Both of these parameters may need to change depending on the plot size and number
 #' of labels.
 #'
-#' \code{arrow_adj} is the amount that each line segment is reduced in length to accomodate the
+#' \code{arrow_adj} is the amount that each line segment is reduced in length to accommodate the
 #' arrow. Increasing this value will decrease the length of the line segment, and place the arrow
 #' further from the box. This value should generally be similar to the \code{arrow_size} parameter.
 #'
@@ -38,12 +38,12 @@
 #' @param arrow_adj adjustment in line length reduction for arrows (default 0.25)
 #' @param pdfout name of pdf file to save the network plot to, if null no PDF is generated
 #'
-#' @return {p1}{returns ggplot object. Also generates a .pdf file in working directory if pdfplot argument is not NULL.}
+#' @return returns ggplot object. Also generates a .pdf file in working directory if pdfplot argument is not NULL.
 #'
 #' @seealso \code{\link{rvn_rvi_connections}} to generate connections table from an rvi object
 #' @seealso \code{\link{rvn_rvi_process_diagrammer}} to generate the structure plot using DiagrammeR.
 #'
-#' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
+#' See also the \href{https://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
 #'

@@ -19,11 +19,18 @@ This package provides a number of types of useful functions, including:
 }
 }
 \seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/rchlumsk/RavenR}
+  \item Report bugs at \url{https://github.com/rchlumsk/RavenR/issues}
+}
+
+
 The package on \href{https://cran.r-project.org/package=RavenR}{CRAN} and
 the development version on \href{https://github.com/rchlumsk/RavenR}{GitHub}.
-See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+See also \href{https://www.civil.uwaterloo.ca/jrcraig/}{James R.
 Craig's research page} for software downloads, including the
-\href{http://raven.uwaterloo.ca/}{Raven webpage}.
+\href{https://raven.uwaterloo.ca/}{Raven webpage}.
 }
 \author{
 \strong{Maintainer}: Robert Chlumsky \email{rchlumsk@uwaterloo.ca} (\href{https://orcid.org/0000-0002-1303-5064}{ORCID})
@@ -39,3 +46,4 @@ Authors:
 }
 
 }
+\keyword{internal}

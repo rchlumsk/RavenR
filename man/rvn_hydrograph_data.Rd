@@ -15,7 +15,7 @@ rvn_hydrograph_data is a data frame with two object
 rvn_hydrograph_data$hyd is an xts (time series) object with 731 rows and
 5 variables, with data from 2002-10-01 to 2004-09-30. More details on
 the Hydrographs.csv output can be found in the Raven manual.
-\itemize{
+\describe{
  \item{precip}{ - precipitation time series}
  \item{Sub36}{ - outflows from subbasin 36 in Nith model}
  \item{Sub36_obs}{ - observed outflows from subbasin 36}
@@ -24,7 +24,7 @@ the Hydrographs.csv output can be found in the Raven manual.
 }
 
 The Nith River model can be downloaded from the Raven Tutorials (tutorial #2)
-\url{http://raven.uwaterloo.ca/Downloads.html}
+\url{https://raven.uwaterloo.ca/Downloads.html}
 }
 \usage{
 rvn_hydrograph_data

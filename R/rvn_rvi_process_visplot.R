@@ -8,11 +8,11 @@
 #' @param custom_label (optional) a two-columns matrix/data.frame in which the first and the second columns are  equal the hydrologic compartment labels in the \code{rvi_conn} and their corresponding replacement labels respectively provided that \code{default_label = FALSE}
 #' @param default_label (optional) logical. if \code{TRUE} an internal default labels are used as the compartments names given that \code{custom_label = NULL}
 #'
-#' @return {p1}{returns visNetwork plot}
+#' @return returns visNetwork plot
 #'
 #' @seealso \code{\link{rvn_rvi_connections}} to generate connections table from an rvi object
 #'
-#' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
+#' See also the \href{https://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
 #'

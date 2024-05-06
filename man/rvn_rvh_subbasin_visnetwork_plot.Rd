@@ -12,7 +12,7 @@ rvn_rvh_subbasin_visnetwork_plot(rvh, groupBy = "Gauged")
 \item{groupBy}{a character referring to one of the sub-basins attributes in the \code{rvh}}
 }
 \value{
-{p1}{returns visNetwork plot object}
+returns visNetwork plot object
 }
 \description{
 Takes an \code{rvh} object generated using \code{rvn_rvh_read}
@@ -23,7 +23,7 @@ and returns the connections information of subbasins as an interactive visNetwor
 \dontrun{
   path <- dirname(tempfile())
   dir.create(paste(path,"/tmp",sep=""))
-  url<-"http://raven.uwaterloo.ca/files/RavenOstrichTutorialFiles.zip"
+  url<-"https://raven.uwaterloo.ca/files/RavenOstrichTutorialFiles.zip"
   download.file(url,dest=paste(path,"/tmp/example.zip",sep=""))
   unzip(zipfile = paste(path,"/tmp/example.zip",sep=""),
         exdir = paste(path,"/tmp",sep=""))
@@ -41,5 +41,5 @@ rvn_rvh_subbasin_visnetwork_plot(rvh,groupBy="Elevation")
 \seealso{
 \code{\link{rvn_rvh_read}} to import an watershed network table from an \code{rvh} file.
 
-See also the \href{http://raven.uwaterloo.ca/}{Raven page}
+See also the \href{https://raven.uwaterloo.ca/}{Raven page}
 }

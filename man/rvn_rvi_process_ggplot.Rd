@@ -37,7 +37,7 @@ rvn_rvi_process_ggplot(
 \item{pdfout}{name of pdf file to save the network plot to, if null no PDF is generated}
 }
 \value{
-{p1}{returns ggplot object. Also generates a .pdf file in working directory if pdfplot argument is not NULL.}
+returns ggplot object. Also generates a .pdf file in working directory if pdfplot argument is not NULL.
 }
 \description{
 This routine takes a connections data from generated using \code{rvn_rvi_connections}
@@ -60,7 +60,7 @@ of the label in the repel functionality and tend towards more separation between
 vice-versa. Both of these parameters may need to change depending on the plot size and number
 of labels.
 
-\code{arrow_adj} is the amount that each line segment is reduced in length to accomodate the
+\code{arrow_adj} is the amount that each line segment is reduced in length to accommodate the
 arrow. Increasing this value will decrease the length of the line segment, and place the arrow
 further from the box. This value should generally be similar to the \code{arrow_size} parameter.
 
@@ -91,5 +91,5 @@ p1 + scale_linetype_manual(values=c('FALSE'='longdash', 'TRUE'='twodash'))
 
 \code{\link{rvn_rvi_process_diagrammer}} to generate the structure plot using DiagrammeR.
 
-See also the \href{http://raven.uwaterloo.ca/}{Raven page}
+See also the \href{https://raven.uwaterloo.ca/}{Raven page}
 }

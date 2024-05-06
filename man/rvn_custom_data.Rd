@@ -20,7 +20,7 @@ information is not available in this data format. Please refer to the example in
 to use the sample data file directly, which includes the filename information.
 
 The Nith River model can be downloaded from the Raven Tutorials (tutorial #2)
-\url{http://www.civil.uwaterloo.ca/jrcraig/Raven/Downloads.html}
+\url{https://raven.uwaterloo.ca/Downloads.html}
 }
 \examples{
 # Preview data

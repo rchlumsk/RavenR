@@ -14,7 +14,7 @@ rvn_csv_read(ff = NA, tzone = "UTC", xtsformat = TRUE)
 \item{xtsformat}{boolean whether to return in xts format (if date and/or hour found)}
 }
 \value{
-\item{data frame (as xts if set with \code{xtsformat}) read from the file}
+data frame (as xts if set with \code{xtsformat}) read from the file
 }
 \description{
 Reads in output csv files produced by Raven.

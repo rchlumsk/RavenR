@@ -12,7 +12,7 @@
 #' @param ff full file path to the csv file
 #' @param tzone string indicating the timezone of the data in ff
 #' @param xtsformat boolean whether to return in xts format (if date and/or hour found)
-#' @return \item{data frame (as xts if set with \code{xtsformat}) read from the file}
+#' @return data frame (as xts if set with \code{xtsformat}) read from the file
 #' @seealso \code{\link{rvn_hyd_read}} for reading Hydrographs output files
 #'
 #' @examples
@@ -26,8 +26,6 @@
 #' head(myres)
 #'
 #' @export rvn_csv_read
-#' @importFrom xts xts
-#' @importFrom dplyr %>%
 #' @importFrom xts xts
 #' @importFrom utils read.csv
 rvn_csv_read <- function(ff=NA, tzone="UTC", xtsformat=TRUE) {
@@ -71,10 +69,8 @@ rvn_csv_read <- function(ff=NA, tzone="UTC", xtsformat=TRUE) {
   }
 
   # change all dots to underscore
-  newcols <- cols %>%
-    gsub("\\.\\.\\.","\\.\\.",x=.) %>%
-    gsub("\\.\\.","\\.",x=.) %>%
-    gsub("\\.","_",x=.)
+  newcols <-
+    gsub("\\.","_",x=gsub("\\.\\.","\\.",x=gsub("\\.\\.\\.","\\.\\.",x=cols)))
 
   # trim all last underscores
   for (i in 1:length(newcols)) {

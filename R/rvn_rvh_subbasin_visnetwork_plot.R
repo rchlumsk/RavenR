@@ -7,18 +7,18 @@
 #' @param rvh an \code{rvh} object, provided by \code{rvn_rvh_read}
 #' @param groupBy a character referring to one of the sub-basins attributes in the \code{rvh}
 #'
-#' @return {p1}{returns visNetwork plot object}
+#' @return returns visNetwork plot object
 #'
 #' @seealso \code{\link{rvn_rvh_read}} to import an watershed network table from an \code{rvh} file.
 #'
-#' See also the \href{http://raven.uwaterloo.ca/}{Raven page}
+#' See also the \href{https://raven.uwaterloo.ca/}{Raven page}
 #'
 #' @examples
 #' ## additional example from tutorial files (not run)
 #' \dontrun{
 #'   path <- dirname(tempfile())
 #'   dir.create(paste(path,"/tmp",sep=""))
-#'   url<-"http://raven.uwaterloo.ca/files/RavenOstrichTutorialFiles.zip"
+#'   url<-"https://raven.uwaterloo.ca/files/RavenOstrichTutorialFiles.zip"
 #'   download.file(url,dest=paste(path,"/tmp/example.zip",sep=""))
 #'   unzip(zipfile = paste(path,"/tmp/example.zip",sep=""),
 #'         exdir = paste(path,"/tmp",sep=""))

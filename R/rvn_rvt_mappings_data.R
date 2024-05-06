@@ -6,7 +6,7 @@
 #' A list of lists that has information for use in the RavenR rvt-related files.
 #'
 #' Additional information on Raven variables can be found in the Raven User's Manual, available from
-#' \url{http://raven.uwaterloo.ca/Downloads.html}
+#' \url{https://raven.uwaterloo.ca/Downloads.html}
 #'
 #' @format \code{rvn_rvt_mappings_data} is a list with four lists.
 #' \describe{

@@ -41,7 +41,7 @@
 #' which may be useful in organizing multiple climate data files. This is ignored
 #' if filenames are specified.
 #'
-#' write_stndata wil print out the gauge(s) metadata to file (specified by
+#' write_stndata will print out the gauge(s) metadata to file (specified by
 #' filename_stndata parameter) in the .rvt format, which is required to include a
 #' meterological station in Raven. The function will append to the file if it already exists, meaning
 #' that this works for iterations of this function. metdata must include the columns

@@ -10,7 +10,7 @@
 #' @param main dygraph title to override the default (applied to all dygraphs)
 #' @param figheight height of figure, in pixels
 #'
-#' @return {res}{ a list of plot handles to dygraph plots}
+#' @return a list of plot handles to dygraph plots
 #'
 #' @examples
 #'

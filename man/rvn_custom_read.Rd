@@ -27,7 +27,7 @@ it is important to use the unmodified file names for this function. The use
 (or not) of a runname is accounted for.
 
 The returned object is a time series object (xts format), which can be used
-to easily plot the time series data. The otpions of the custom output are
+to easily plot the time series data. The options of the custom output are
 included in the rav.obj attributes.
 
 The timezone is provided by the tzone argument as "UTC" by default, and should be adjusted by

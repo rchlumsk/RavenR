@@ -24,7 +24,7 @@ rvn_hyd_dygraph(
 \item{figheight}{height of figure, in pixels}
 }
 \value{
-{res}{ a list of plot handles to dygraph plots}
+a list of plot handles to dygraph plots
 }
 \description{
 rvn_hyd_dygraph plots modeled vs observed hydrographs when supplied with hydrograph data

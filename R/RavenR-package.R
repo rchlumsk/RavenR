@@ -1,7 +1,8 @@
 #'
 #' @title RavenR
 #' @description Contains functions to perform pre- and post-processing of RavenR files.
-#' @docType package
+#' @keywords internal
+"_PACKAGE"
 #' @name RavenR-package
 #' @importFrom Rcpp sourceCpp
 #' @useDynLib RavenR
@@ -16,9 +17,9 @@
 #'
 #' @seealso The package on \href{https://cran.r-project.org/package=RavenR}{CRAN} and
 #' the development version on \href{https://github.com/rchlumsk/RavenR}{GitHub}.
-#' See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
+#' See also \href{https://www.civil.uwaterloo.ca/jrcraig/}{James R.
 #' Craig's research page} for software downloads, including the
-#' \href{http://raven.uwaterloo.ca/}{Raven webpage}.
+#' \href{https://raven.uwaterloo.ca/}{Raven webpage}.
 #'
 #'
 NULL

@@ -26,7 +26,7 @@ the latter case, only the julian day of the startdate matters.}
 the latter case, only the julian day of the enddate matters.}
 }
 \value{
-{wts}{returns numeric vector of weights}
+returns numeric vector of weights
 }
 \description{
 Creates an observation data weights time series based upon dates stored in

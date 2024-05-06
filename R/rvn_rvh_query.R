@@ -14,8 +14,7 @@
 #' @param subbasinID subbasinID of basin of interest, as character or integer
 #' @param condition condition applied to the query
 #'
-#' @return
-#' {rvh}{rvh object in same format, but queried to condition and all features (SBtable, HRUtable, SBnetwork) updated.}
+#' @return rvh object in same format, but queried to condition and all features (SBtable, HRUtable, SBnetwork) updated.
 #'
 #' @seealso
 #' \code{\link{rvn_rvh_write}} to write contents of the generated (and usually modified HRU and SubBasin tables)

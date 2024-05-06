@@ -26,7 +26,7 @@
 #' then the opposite is true, e.g, for startdate="2002-11-01" and enddate "2002-01-31",
 #' only November, December and January timestamps have a weight of 1
 #'
-#' @return {wts}{returns numeric vector of weights}
+#' @return returns numeric vector of weights
 #'
 #' @author James R. Craig, University of Waterloo
 #'

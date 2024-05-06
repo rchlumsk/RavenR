@@ -42,7 +42,7 @@ head(rvi_conn$AliasTable)
 \code{\link{rvn_rvi_read}} to read a .rvi file and generate an rvi object, and
 \code{\link{rvn_rvi_process_ggplot}} or \code{\link{rvn_rvi_process_diagrammer}} to plot the process network produced in this function.
 
-See also the \href{http://raven.uwaterloo.ca/}{Raven page}
+See also the \href{https://raven.uwaterloo.ca/}{Raven page}
 }
 \author{
 James R. Craig, University of Waterloo
