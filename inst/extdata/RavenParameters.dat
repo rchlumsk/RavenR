@@ -1,6 +1,6 @@
 #RavenParameters.dat
-#parameter name, class type, units, autogeneratable, reasonable default, minimum, maximum
-#xxx provided as a missing value placeholder
+#parameter name, class type, units, autogeneratable, reasonable default, (reasonable) minimum, (reasonable) maximum
+#xxx or -9999 provided as a missing value placeholder - Disclaimer: all parameter ranges should be checked when applied in practice!
 
 FOREST_COVERAGE LULT [0..1] False 0 0 1
 FOREST_COV LULT [0..1] False 0 0 1
@@ -23,7 +23,7 @@ HBV_GLACIER_KMIN LULT [-] False 0.05 -9999 -9999
 GLAC_STORAGE_COEFF LULT [1/d] False 0.1 0 1
 HBV_GLACIER_AG LULT [-] False 0.05 -9999 -9999
 ABST_PERCENT LULT [0..1] False 0.1 0 1
-DEP_MAX LULT [mm] False 6.29 0 20
+DEP_MAX LULT [mm] False 50 0 200
 SCS_CN LULT [-] False 50 -9999 -9999
 SCS_IA_FRACTION LULT [0..1] False 0.2 0 1
 PDMROF_B LULT [-] False 4.0 0.05 10
@@ -33,6 +33,11 @@ DEP_MAX_FLOW  LULT [mm/d] False 0.1 0.0 -9999
 DEP_K LULT [-]  False 0.1 0.0 -9999
 DEP_CRESTRATIO LULT [m/m]  False 0.0 10 -9999
 DEP_SEEP_K LULT [-]  False 0.1 0.0 -9999
+PET_VAP_COEFF LULT [mm/d/kPa] False 1.5 1.0 3.0
+PET_LIN_COEFF LULT [mm/d/K] False -9999 0.0 -9999
+WINDVEL_CORR LULT [-] True 1.0 0.0 4.0
+RELHUM_CORR LULT [-] True 1.0 0.5 1.5
+LAKESNOW_BUFFER_HT LULT [-] False 10 0 1000
 
 POROSITY SOIL [0..1] True 0.4 0.0 1.0
 VIC_ALPHA SOIL [-] False -9999 -9999 -9999
@@ -118,8 +123,8 @@ MANNINGS_N SUBBASIN [-] False -9999 -9999 9999
 SLOPE  SUBBASIN [-] False 0.01 0.0 10
 RAIN_CORR SUBBASIN [1] True 1.0 0.5 2.0
 SNOW_CORR SUBBASIN [1] True 1.0 0.5 2.0
-GAMMA_SHAPE SUBBASIN [-] False 1.0 0.1 10
-GAMMA_SCALE SUBBASIN [1/d] False 3.0 0.1 20
+GAMMA_SHAPE SUBBASIN [-] False 3.0 0.1 10
+GAMMA_SCALE SUBBASIN [1/d] False 1.0 0.1 20
 
 #Newly Added
 #soil_struct
@@ -189,6 +194,8 @@ DRIP_PROPORTION VEG [1/d] False 0.2 0 1
 MAX_INTERCEPT_RATE VEG [mm/d] False 10 0 9999
 CHU_MATURITY VEG [-] False 2800 0 9999
 UPTAKE_MODERATOR VEG [-] True 1 0 1
+CAP_LAI_RATIO VEG [-] True 0.15 0.05 2
+SNOCAP_LAI_RATIO VEG [-] True 0.6 0.2 8
 
 #veg_var_struct
 LAI VEG [m2/m2] False 4.0 0.0 7
@@ -273,3 +280,9 @@ ASSIMILATION_FACT GLOBAL [0..1] True 1 0 1
 ASSIM_UPSTREAM_DECAY GLOBAL [1/km] True 0.01 0 1
 ASSIM_TIME_DECAY GLOBAL [1/d] True 0.2 0 1
 RESERVOIR_DEMOND_MULT GLOBAL [0..1] False 0 0 1
+HBVEC_LAPSE_UPPER GLOBAL [mm/d/km] True 0 0 0.1
+HBVEC_LAPSE_RATE  GLOBAL [mm/d/km] True 0.08 0 0.1
+HBVEC_LAPSE_ELEV GLOBAL [masl] True 5000 3000 7000
+TIME_TO_PEAK_MULTIPLIER GLOBAL [-] True 1 0 5
+GAMMA_SHAPE_MULTIPLIER GLOBAL [-] True 1 0 5
+GAMMA_SCALE_MULTIPLIER GLOBAL [-] True 1 0 5

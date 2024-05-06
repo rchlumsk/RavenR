@@ -2,6 +2,7 @@
 % Please edit documentation in R/RavenR-package.R
 \docType{package}
 \name{RavenR-package}
+\alias{RavenR}
 \alias{RavenR-package}
 \title{RavenR}
 \description{
@@ -23,4 +24,18 @@ the development version on \href{https://github.com/rchlumsk/RavenR}{GitHub}.
 See also \href{http://www.civil.uwaterloo.ca/jrcraig/}{James R.
 Craig's research page} for software downloads, including the
 \href{http://raven.uwaterloo.ca/}{Raven webpage}.
+}
+\author{
+\strong{Maintainer}: Robert Chlumsky \email{rchlumsk@uwaterloo.ca} (\href{https://orcid.org/0000-0002-1303-5064}{ORCID})
+
+Authors:
+\itemize{
+  \item James Craig \email{jrcraig@uwaterloo.ca} (\href{https://orcid.org/0000-0003-2715-7166}{ORCID}) [contributor]
+  \item Leland Scantlebury \email{lscantlebury@uwaterloo.ca} [contributor]
+  \item Simon Lin \email{simon.lin@uwaterloo.ca} [contributor]
+  \item Sarah Grass \email{sgrass@nhcweb.com} [contributor]
+  \item Genevieve Brown \email{genevieve.wbrown@gmail.com} [contributor]
+  \item Rezgar Arabzadeh \email{rarabzad@uwaterloo.ca} [contributor]
+}
+
 }

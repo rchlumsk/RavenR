@@ -47,12 +47,6 @@
 #' that this works for iterations of this function. metdata must include the columns
 #' ELEV, LAT, and LON if station data is to be written, else the meta data file will not be created.
 #'
-#' write_redirect will print out the :RedirectToFile commands into the file specified
-#' by filename_stndata, if write_stndata is \code{TRUE}. These commands can be copied into the main model's
-#' .rvt file to redirect to the produced time series files. The function will
-#' append to the file if it already exists, meaning that this works for
-#' iterations of this function.
-#'
 #' The function has several built-in data quality checks. These include:
 #'
 #' * checking that the time interval is consistent for each station;
@@ -75,8 +69,6 @@
 #' @param met_file_prefix (optional) prefixes the file name (default: "met_")
 #' @param prd (optional) data period to use in .rvt file
 #' @param write_stndata (optional) write the gauge data to a separate .rvt file
-#' @param write_redirect (optional) write the :RedirectToFile commands in a
-#' separate .rvt file
 #' @param filename_stndata (optional) name of the station data file created (if \code{write_stndata=TRUE})
 #' @param NA_value (optional) value to use for NA values in rvt file (default -1.2345 for Raven format)
 #' @return \item{TRUE}{return \code{TRUE} if the function is executed properly}
@@ -103,7 +95,7 @@
 #' @importFrom dplyr filter
 #' @importFrom zoo coredata
 rvn_rvt_write_met <-  function(metdata, rvt_met_mapping=NULL, filenames=NULL, met_file_prefix='met_', prd=NULL,
-                           write_stndata = TRUE, write_redirect=TRUE, filename_stndata = "met_stndata.rvt",
+                           write_stndata = TRUE, filename_stndata = "met_stndata.rvt",
                             NA_value=-1.2345) {
 
   # data("rvn_rvt_mappings_data")
@@ -301,16 +293,8 @@ rvn_rvt_write_met <-  function(metdata, rvt_met_mapping=NULL, filenames=NULL, me
           writeLines(sprintf("  :Latitude %.6f", md$LAT[k]),fc)
           writeLines(sprintf("  :Longitude %.6f", md$LON[k]),fc)
           writeLines(sprintf("  :Elevation %.2f", md$ELEV[k]),fc)
+          writeLines(sprintf("  :RedirectToFile %s", md$rvt.name[k]),fc)
           writeLines(":EndGauge\n",fc)
-        }
-
-        ## Write Redirect commands in stndata file
-        if(write_redirect) {
-          # writeLines("\n",fc)
-          # fc.redirect = file(rd_file, open = "a+")
-          for(k in 1:nrow(md)){
-            writeLines(sprintf(":RedirectToFile %s", md$rvt.name[k]),fc)
-          }
         }
 
         close(fc)

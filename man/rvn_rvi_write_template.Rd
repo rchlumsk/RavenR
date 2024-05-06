@@ -23,7 +23,7 @@ rvn_rvi_write_template(
 
 \item{writeheader}{boolean whether to write a header to the rvi file (default \code{TRUE})}
 
-\item{filetype}{File extension, Encoding, Raven version (e.g. "rvp ASCII Raven 2.9.1") (optional)}
+\item{filetype}{File extension, Encoding, Raven version (e.g. "rvp ASCII Raven v3.8") (optional)}
 
 \item{author}{Name of file author (optional)}
 
@@ -41,7 +41,7 @@ novel model configurations are provided which may be helpful to the user. These 
 for ease of getting started with a model using Raven.
 
 The template_name parameter should be one of "UBCWM", "HBV-EC", "HBV-Light", "GR4J",
- "CdnShield", "MOHYSE", "HMETS", "HYPR", or "HYMOD".
+ "CdnShield", "MOHYSE", "HMETS", "HYPR", "HYMOD", "SAC-SMA", "blended", or "blended_v2".
 
 This function uses the same model template files that are provided in the Raven User's manual, Appendix D.
 
