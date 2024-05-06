@@ -11,6 +11,8 @@
 #' mm and dd indicate the end of the water year period (i.e. mm=9 and dd=30 indicates
 #' a new water year on Oct 1).
 #'
+#' Note that if using \code{FUN=mean}, please use \code{FUN=colMeans} instead.
+#'
 #' @param x xts vector to calculate FUN for
 #' @param FUN the function to be applied
 #' @param ... optional arguments to FUN
@@ -22,11 +24,11 @@
 #' # use sample forcing data (or use forcings_read to read in ForcingFunctions.csv)
 #' data(rvn_forcing_data)
 #'
-#' # apply mean as FUN to daily average temperature
-#' rvn_apply_wyearly(rvn_forcing_data$forcings$temp_daily_ave,mean,na.rm=TRUE)
+#' # apply mean (with colMeans) as FUN to daily average temperature
+#' rvn_apply_wyearly(rvn_forcing_data$forcings$temp_daily_ave,colMeans,na.rm=TRUE)
 #'
 #' # apply mean as FUN to all forcings
-#' rvn_apply_wyearly(rvn_forcing_data$forcings,mean,na.rm=TRUE)
+#' rvn_apply_wyearly(rvn_forcing_data$forcings,colMeans,na.rm=TRUE)
 #'
 #' # apply maximum via RavenR::cmax as FUN to all forcings (takes the max in each column)
 #' ## note that the base::max will not work properly here

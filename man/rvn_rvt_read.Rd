@@ -35,6 +35,7 @@ the user to the local time zone as needed, based on the model run.
 \examples{
 # read in rvt file
 system.file('extdata','GlenAllan.rvt',package="RavenR") \%>\%
+
 rvn_rvt_read(.) -> rvt
 plot(rvt$rvt_xts$TEMP_DAILY_MIN)
 

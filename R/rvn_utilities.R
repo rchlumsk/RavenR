@@ -306,11 +306,16 @@ rvn_apply_wyearly_which_max_xts <- function(x, mm=9, dd=30)
     xx <- rep(NA,length(ep)-1)
 
     for (i in 1:(length(ep)-1)) {
-      dx[i] <- lubridate::date(x[ep[i]:ep[i+1]])[which.max(x[ep[i]:ep[i+1]])]
-      xx[i] <- as.numeric(x[ep[i]:ep[i+1]][which.max(x[ep[i]:ep[i+1]])])
+      if (length(which.max(x[ep[i]:ep[i+1]]))>=1) {
+        dx[i] <- lubridate::date(x[ep[i]:ep[i+1]])[which.max(x[ep[i]:ep[i+1]])]
+        xx[i] <- as.numeric(x[ep[i]:ep[i+1]][which.max(x[ep[i]:ep[i+1]])])
+      }
     }
 
-    myxts <- xts(xx, order.by=dx)
+    df <- data.frame(xx,dx)
+    df[which(is.na(df$xx)),]$dx <- lubridate::date(x[ep[which(is.na(df$xx))+1]])
+
+    myxts <- xts(df$xx, order.by=df$dx)
     colnames(myxts) <- colnames(x)
     return(myxts)
 
@@ -465,6 +470,31 @@ rvn_stringpad <- function(string, width, just='r', padstring=' ')
   else if (just == 'l') {
     return(paste0(string, strrep(padstring, padlength)))
   }
+}
+
+#' @title Convert hours, minutes, seconds to decimal hours
+#'
+#' @description
+#' Converts string format HH:MM:SS to decimal hours
+#'
+#' @param x input as character, format HH:MM:SS
+#'
+#' @return {time in decimal hours}
+#'
+#' @examples
+#' # return hour:minutes:seconds to decimal hours
+#' hhmmss2dec("02:35:58")
+#'
+#' @export hhmmss2dec
+hhmmss2dec <- function(x) {
+  # from Stack Overflow:
+  # https://stackoverflow.com/questions/42516233/converting-time-hhmmss-to-decimal-values-in-r
+  xlist <- strsplit(x,split=":")
+  h <- as.numeric(sapply(xlist,"[",1))
+  m <- as.numeric(sapply(xlist,"[",2))
+  s <- as.numeric(sapply(xlist,"[",3))
+  xdec <- h+(m/60)+(s/60/60)
+  return(xdec)
 }
 
 #' @title \%notin\% operator
@@ -687,7 +717,7 @@ get_rvt_mapping <- function() {
 #' @noRd
 get_rvt_data_type_mapping <- function() {
 
-  # update this based on table C.1 in Raven Manual?
+  # update this based on table D.1 in Raven Manual?
   rvt_data_type_mapping <- list(
     "HYDROGRAPH"=list(
       "units"="m3/s"
@@ -709,9 +739,11 @@ get_rvt_data_type_mapping <- function() {
     ),
     "STREAM_CONCENTRATION"=list(
       "units"="mg/L"
+    ),
+    "SNOW"=list(
+      "units"="mm"
     )
   )
-
   return(rvt_data_type_mapping)
 }
 
@@ -854,14 +886,17 @@ rvn_dist_lonlat <- function(p1, p2, method="haversine", r=6378137) {
 
 #' @title Determine layout coordinates of labels
 #'
-#' @description Provides the layout data frame based on the supplied vector of named Raven state variables.
+#' @description Provides the layout data frame based on the supplied vector of
+#' named Raven state variables.
 #'
-#' @details
-#' The position is based on the state variable, i.e. soils generally on the bottom, atmosphere at the top, etc.
-#' Unrecognized labels are generally placed on the left hand side of the layout.
+#' @details The position is based on the state variable, i.e. soils generally on
+#' the bottom, atmosphere at the top, etc. Unrecognized labels are generally
+#' placed on the left hand side of the layout.
 #'
 #' @param verts character vector of state variables to be included in the layout
-#' @return \item{layout}{a data frame of verts labels and xy coordinates intended for plotting labels}
+#'
+#' @return \item{layout}{a data frame of verts labels and xy coordinates
+#' intended for plotting labels}
 #'
 #' @noRd
 #' @keywords internal
@@ -912,7 +947,7 @@ rvn_rvi_process_layout <- function(verts) {
 
 #' @title Estimate text grob length
 #'
-#' Estimate the printed length of `resizingTextGrob` text
+#' @description Estimate the printed length of `resizingTextGrob` text
 #'
 #' @param text The text to be printed (character)
 #' @param rot The rotation in radians
@@ -930,7 +965,8 @@ text_grob_length <- function(text, rot = 0) {
 
 #' @title Bounding box coords for labels
 #'
-#' Given a position, size, rotation, and justification of a label, calculate the bounding box coordinates
+#' @description Given a position, size, rotation, and justification of a label,
+#' calculate the bounding box coordinates
 #'
 #' @param label character text of each label
 #' @param x Horizontal position of center of text grob
@@ -1014,7 +1050,8 @@ label_bounds <- function(label, x, y, height, rotation, just) {
 
 #' @title Reformat bounding box coords for labels
 #'
-#' Reformat the bounding box coordinates object to have columns for label, xmin, xmax, ymin, ymax.
+#' @description Reformat the bounding box coordinates object to have columns for
+#' label, xmin, xmax, ymin, ymax.
 #'
 #' @param bounds object returned by \code{label_bounds}
 #'

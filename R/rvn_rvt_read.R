@@ -27,6 +27,7 @@
 #' @examples
 #' # read in rvt file
 #' system.file('extdata','GlenAllan.rvt',package="RavenR") %>%
+#'
 #' rvn_rvt_read(.) -> rvt
 #' plot(rvt$rvt_xts$TEMP_DAILY_MIN)
 #'
@@ -208,6 +209,12 @@ rvn_rvt_read<-function(filename, tzone="UTC") {
             if (nrow(dd) != meta_df[meta_df$param=="num_points","value"]) {
               stop("rvn_rvt_read: Number of points not consistent with header declaration;\nPlease check for file consistency and runaway comment characters.")
             }
+          }
+
+          # check time interval, convert to numeric if needed
+          if (is.na(as.numeric(meta_df[meta_df$param=="time_interval","value"]))) {
+            meta_df[meta_df$param=="time_interval","value"] <-
+              hhmmss2dec(meta_df[meta_df$param=="time_interval","value"])/24
           }
 
           dd.xts <- xts(dd, order.by=seq.POSIXt(from=as.POSIXct(sprintf("%s %s",
@@ -403,6 +410,12 @@ rvn_rvt_read<-function(filename, tzone="UTC") {
             }
           }
 
+          # check time interval, convert to numeric if needed
+          if (is.na(as.numeric(meta_df[meta_df$param=="time_interval","value"]))) {
+            meta_df[meta_df$param=="time_interval","value"] <-
+              hhmmss2dec(meta_df[meta_df$param=="time_interval","value"])/24
+          }
+
           dd.xts <- xts(dd, order.by=seq.POSIXt(from=as.POSIXct(sprintf("%s %s",
                                                                         meta_df[meta_df$param=="start_date","value"],
                                                                         meta_df[meta_df$param=="start_time","value"]),
@@ -415,6 +428,9 @@ rvn_rvt_read<-function(filename, tzone="UTC") {
       }
     }
   }
+
+  # update time interval to numeric
+
 
   return(list(
     "rvt_xts"=dd.xts,

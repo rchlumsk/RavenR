@@ -9,7 +9,7 @@ rvn_hyd_extract(subs = NA, hyd = NA, prd = NULL, rename_cols = TRUE)
 \arguments{
 \item{subs}{column name for plotting/extracting}
 
-\item{hyd}{full hydrograph data frame (including units) produced by hyd.read}
+\item{hyd}{full hydrograph data frame (including units) produced by rvn_hyd_read}
 
 \item{prd}{time period for plotting, as string. See details}
 
@@ -40,7 +40,7 @@ use of this will be for subbasin outflows, where the names will be of the
 form "subXX", for example "sub24".
 
 The hyd object is the full hydrograph object (hyd and units in one data
-frame) created by the hyd.read function. Both the hyd and units are
+frame) created by the rvn_hyd_read function. Both the hyd and units are
 required, since the units are placed onto the plots if one is created. This
 is useful to at least see the units of the plotted variable, even if the
 plot is later modified.

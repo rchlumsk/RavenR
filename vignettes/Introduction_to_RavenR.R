@@ -1,28 +1,28 @@
-## ----Installing RavenR from CRAN, eval=FALSE--------------------------------------------------------------------------
+## ----Installing RavenR from CRAN, eval=FALSE---------------------------------------------------------
 #  install.packages("RavenR")
 
-## ----Installing RavenR from Github, eval=FALSE, include=TRUE----------------------------------------------------------
+## ----Installing RavenR from Github, eval=FALSE, include=TRUE-----------------------------------------
 #  # install.packages("devtools")
 #  library(devtools)
 #  devtools::install_github("rchlumsk/RavenR")
 
-## ----RavenR function list, echo=TRUE, message=FALSE, warning=FALSE, results='hide'------------------------------------
+## ----RavenR function list, echo=TRUE, message=FALSE, warning=FALSE, results='hide'-------------------
 library(RavenR)
 
 # view first 20 functions in RavenR
 ls("package:RavenR") %>% 
   head(., 20) 
 
-## ----Getting help on functions, eval=FALSE----------------------------------------------------------------------------
+## ----Getting help on functions, eval=FALSE-----------------------------------------------------------
 #  ?rvn_flow_scatterplot
 
-## ----R sample data, message=FALSE, warning=FALSE, results='hide'------------------------------------------------------
+## ----R sample data, message=FALSE, warning=FALSE, results='hide'-------------------------------------
 data("rvn_forcing_data")
 # ?rvn_forcing_data
 plot(rvn_forcing_data$forcings$temp_daily_ave,
      main="Daily Avg. Temperature")
 
-## ----Raw sample data--------------------------------------------------------------------------------------------------
+## ----Raw sample data---------------------------------------------------------------------------------
 # read in hydrograph sample csv data from RavenR package
 ff <- system.file("extdata","run1_Hydrographs.csv", package = "RavenR")
 
@@ -35,27 +35,27 @@ rvi_file <- system.file("extdata", "Nith.rvi", package = "RavenR")
 # show first 6 lines of the file
 readLines(rvi_file) %>% head()
 
-## ----Read forcing data------------------------------------------------------------------------------------------------
+## ----Read forcing data-------------------------------------------------------------------------------
 ff <- system.file("extdata","run1_ForcingFunctions.csv", package = "RavenR")
 # ff <- "C:/TEMP/Nith/output/ForcingFunctions.csv" # replace with your own file
 ff_data <- RavenR::rvn_forcings_read(ff)
 head(ff_data$forcings[,1:6])
 
-## ----Plot forcing data------------------------------------------------------------------------------------------------
+## ----Plot forcing data-------------------------------------------------------------------------------
 myplots <- rvn_forcings_plot(ff_data$forcings)
 # myplots$Temperature
 # myplots$Radiation
 # myplots$AllForcings
 myplots$PET
 
-## ----Plot forcing data with labels------------------------------------------------------------------------------------
+## ----Plot forcing data with labels-------------------------------------------------------------------
 library(ggplot2)
 
 myplots <- rvn_forcings_plot(ff_data$forcings)
 myplots$Radiation +
   theme(legend.position = "bottom")
 
-## ----Extract hydrograph data, fig.height=5, fig.width=6---------------------------------------------------------------
+## ----Extract hydrograph data, fig.height=5, fig.width=6----------------------------------------------
 ff <- system.file("extdata","run1_Hydrographs.csv", package = "RavenR")
 # ff <- "mydirectory/Hydrographs.csv" # replace with your own file
 hy <- rvn_hyd_read(ff)
@@ -63,79 +63,79 @@ head(hy$hyd)
 flow36 <- rvn_hyd_extract("Sub36",hy)
 precip <- hy$hyd$precip
 
-## ----Plot hydrographs with other utilities, fig.height=5, fig.width=6, message=FALSE, warning=FALSE-------------------
+## ----Plot hydrographs with other utilities, fig.height=5, fig.width=6, message=FALSE, warning=FALSE----
 plot(lubridate::date(flow36$sim), flow36$sim,col='red',
      type='l', panel.first=grid())
 lines(lubridate::date(flow36$obs), flow36$obs,col='black')
 
-## ----Create hydrograph, fig.height=5, fig.width=6, message=FALSE, warning=FALSE---------------------------------------
+## ----Create hydrograph, fig.height=5, fig.width=6, message=FALSE, warning=FALSE----------------------
 rvn_hyd_plot(sim=flow36$sim, obs=flow36$obs, precip = precip)
 
-## ----Spaghetti plot, fig.height=5, fig.width=6------------------------------------------------------------------------
+## ----Spaghetti plot, fig.height=5, fig.width=6-------------------------------------------------------
 rvn_flow_spaghetti(flow36$sim)
 
-## ----Annual quantiles, fig.height=5, fig.width=6----------------------------------------------------------------------
+## ----Annual quantiles, fig.height=5, fig.width=6-----------------------------------------------------
 rvn_annual_quantiles(flow36$sim) %>% 
   rvn_annual_quantiles_plot(., ribboncolor = 'magenta')
 
-## ----Annual peak flows, fig.height=5, fig.width=6---------------------------------------------------------------------
+## ----Annual peak flows, fig.height=5, fig.width=6----------------------------------------------------
 rvn_annual_peak(flow36$sim, obs = flow36$obs) 
 rvn_annual_peak_event(flow36$sim, obs = flow36$obs)
 
-## ----Cumulative flow plot and monthly bias, fig.height=5, fig.width=6, message=FALSE, warning=FALSE-------------------
+## ----Cumulative flow plot and monthly bias, fig.height=5, fig.width=6, message=FALSE, warning=FALSE----
 rvn_cum_plot_flow(flow36$sim, obs = flow36$obs) 
 rvn_monthly_vbias(flow36$sim, obs = flow36$obs)
 
-## ----Flow dygraphs, fig.height=5, fig.width=6, eval=FALSE, message=FALSE, warning=FALSE-------------------------------
+## ----Flow dygraphs, fig.height=5, fig.width=6, eval=FALSE, message=FALSE, warning=FALSE--------------
 #  library(htmltools)
 #  
 #  rvn_hyd_dygraph(hy, basins="Sub36") %>%
 #  htmltools::tagList()
 
-## ----rvn_apply_wyearly function example, message=FALSE, warning=FALSE-------------------------------------------------
+## ----rvn_apply_wyearly function example, message=FALSE, warning=FALSE--------------------------------
 myhyd <- system.file("extdata","run1_Hydrographs.csv", package = "RavenR") %>% 
   rvn_hyd_read()
 
 library(xts)
 
 # apply mean to calendar year in hydrograph data
-xts::apply.yearly(myhyd$hyd$Sub36, mean, na.rm = TRUE)
+xts::apply.yearly(myhyd$hyd$Sub36, colMeans, na.rm = TRUE)
 
 # apply mean as FUN to daily average temperature
-RavenR::rvn_apply_wyearly(myhyd$hyd$Sub36, mean, na.rm = TRUE)
+RavenR::rvn_apply_wyearly(myhyd$hyd$Sub36, colMeans, na.rm = TRUE)
 
-## ----RVI connection plot example--------------------------------------------------------------------------------------
+## ----RVI connection plot example---------------------------------------------------------------------
 rvi <- rvn_rvi_read(system.file("extdata","Nith.rvi", package = "RavenR"))
 
 rvn_rvi_connections(rvi) %>% 
   rvn_rvi_process_ggplot()
 
-## ----RVI write template example---------------------------------------------------------------------------------------
+## ----RVI write template example----------------------------------------------------------------------
 tf <- file.path(tempdir(), "mymodel.rvi")
 
 rvn_rvi_write_template(template_name="HMETS",
                        filename=tf,
                        author="Your Name")
 
-## ----Read rvh file----------------------------------------------------------------------------------------------------
+## ----Read rvh file-----------------------------------------------------------------------------------
 # read in rvh file
 rvh <- rvn_rvh_read(system.file("extdata","Nith.rvh", package = "RavenR"))
 
 rvh$SBtable[, c("SBID","Downstream_ID","Area","TotalUpstreamArea")]
 
-## ----Discretization network plot example------------------------------------------------------------------------------
+## ----Discretization network plot example-------------------------------------------------------------
 # plot network from rvh file directly
 plot(rvh$SBnetwork)
 
 # create network plot of watershed structure from rvh file
 rvn_rvh_subbasin_network_plot(rvh$SBtable, labeled = TRUE)
 
-## ----Create RVP template file, eval=FALSE-----------------------------------------------------------------------------
+## ----Create RVP template file, eval=FALSE------------------------------------------------------------
 #  rvn_run(fileprefix = "mymodel",
 #          rvi_options=":CreateRVPTemplate",
 #          showoutput = TRUE)
 
-## ----Fill a basic rvp file, echo=TRUE---------------------------------------------------------------------------------
+## ----Fill a basic rvp file, echo=TRUE----------------------------------------------------------------
 # temporary file path
 tf <- tempfile()
 
@@ -148,13 +148,13 @@ rvn_rvp_fill_template(
                       extra_commands=":RedirectToFile  channel_properties.rvp",
                       rvp_out = tf)
 
-## ----RVP getparams example--------------------------------------------------------------------------------------------
+## ----RVP getparams example---------------------------------------------------------------------------
 system.file("extdata","Nith.rvi", package = "RavenR") %>%
   rvn_rvi_read() %>% 
   rvn_rvi_getparams() %>% 
   head() # preview of parameter data frame
 
-## ----Write rvt file for flow observation data, message=FALSE, warning=FALSE, eval=FALSE-------------------------------
+## ----Write rvt file for flow observation data, message=FALSE, warning=FALSE, eval=FALSE--------------
 #  stations <- c("05CB004","05CA002")
 #  
 #  ## Gather station data/info using tidyhydat functions
@@ -176,7 +176,7 @@ system.file("extdata","Nith.rvi", package = "RavenR") %>%
 #  # preview first 6 lines of rvt file 1
 #  readLines(tf1) %>% head()
 
-## ----write rvt file for meteorological data, message=FALSE, warning=FALSE---------------------------------------------
+## ----write rvt file for meteorological data, message=FALSE, warning=FALSE----------------------------
 ## Obtain data using the weathercan package
 # library(weathercan)
 # kam <- weather_dl(station_ids = 51423,
@@ -200,7 +200,7 @@ result <- kam[,c("station_name","date","lat","lon","elev","max_temp","min_temp",
 readLines(fpath1) %>% head() # data rvt file
 readLines(fpath2) %>% head() # gauge data file
 
-## ----Workflow script, eval=FALSE--------------------------------------------------------------------------------------
+## ----Workflow script, eval=FALSE---------------------------------------------------------------------
 #  modelfolder <- "C:/TEMP/Nith/"  # model folder with Raven.exe and Nith model files
 #  fileprefix <- "Nith"            # prefix for model files (i.e. Nith.rvi should be in the modelfolder)
 #  outdir <- "./output/"
@@ -224,7 +224,7 @@ readLines(fpath2) %>% head() # gauge data file
 #  
 #  system(RavenCMD) # this runs raven from the command prompt
 
-## ----Save plots, eval=FALSE-------------------------------------------------------------------------------------------
+## ----Save plots, eval=FALSE--------------------------------------------------------------------------
 #  # GENERATE OUTPUT PLOTS
 #  # =====================================================
 #  # read in the model output files
@@ -242,7 +242,7 @@ readLines(fpath2) %>% head() # gauge data file
 #       main='Snowpack (mm SWE)', col='blue')
 #  dev.off() #finishes writing plot to .png file
 
-## ----Exercise 2 solution, eval=FALSE, include=FALSE-------------------------------------------------------------------
+## ----Exercise 2 solution, eval=FALSE, include=FALSE--------------------------------------------------
 #  library(RavenR)
 #  library(tidyhydat)
 #  library(weathercan)
@@ -268,7 +268,7 @@ readLines(fpath2) %>% head() # gauge data file
 #  # write Raven rvt file
 #  rvn_rvt_write_met(met_data)
 
-## ----Exercise 3 solution, eval=FALSE, include=FALSE-------------------------------------------------------------------
+## ----Exercise 3 solution, eval=FALSE, include=FALSE--------------------------------------------------
 #  
 #  # view model template options, and keyword needed to use in function
 #  ?rvn_rvi_write_template

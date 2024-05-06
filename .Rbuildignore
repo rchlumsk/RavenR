@@ -13,3 +13,4 @@
 ^.rvt$
 
 R/rvn_rvi_process_visplot
+^\.github$
