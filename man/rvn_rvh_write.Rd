@@ -54,9 +54,9 @@ separate the SubBasins and HRUs in different files.
 }
 \section{Functions}{
 \itemize{
-\item \code{rvn_rvh_overwrite}: Overwrite contents of original .rvh file
-}}
+\item \code{rvn_rvh_overwrite()}: Overwrite contents of original .rvh file
 
+}}
 \examples{
 ## Example: write a blank rvh file
 ## create some blank tables

@@ -293,19 +293,9 @@ rvn_rvt_write_met <-  function(metdata, rvt_met_mapping=NULL, filenames=NULL, me
           writeLines(sprintf("  :Latitude %.6f", md$LAT[k]),fc)
           writeLines(sprintf("  :Longitude %.6f", md$LON[k]),fc)
           writeLines(sprintf("  :Elevation %.2f", md$ELEV[k]),fc)
-          writeLines(sprintf(":RedirectToFile %s", md$rvt.name[k]),fc)
+          writeLines(sprintf("  :RedirectToFile %s", md$rvt.name[k]),fc)
           writeLines(":EndGauge\n",fc)
         }
-
-        ## Write Redirect commands in stndata file
-        # if(write_redirect) {
-        #   # writeLines("\n",fc)
-        #   # fc.redirect = file(rd_file, open = "a+")
-        #   for(k in 1:nrow(md)){
-        #     writeLines(sprintf(":RedirectToFile %s", md$rvt.name[k]),fc)
-        #   }
-        # }
-
         close(fc)
         message(sprintf("rvn_rvt_write_met: Done writing station data to %s", filename_stndata))
       }

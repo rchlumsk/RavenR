@@ -546,7 +546,6 @@ rvn_fortify_xts <- function(x)
   return(y)
 }
 
-
 #' @title Provide known options for Raven rvi options
 #'
 #' @description
@@ -732,11 +731,19 @@ get_rvt_data_type_mapping <- function() {
     "RESERVOIR_NETINFLOW"=list(
       "units"="m3/s"
     ),
+    "WATER_LEVEL"=list(
+      "units"="m"
+    ),
+    "STREAM_TEMPERATURE"=list(
+      "units"="dC"
+    ),
+    "STREAM_CONCENTRATION"=list(
+      "units"="mg/L"
+    ),
     "SNOW"=list(
       "units"="mm"
     )
   )
-
   return(rvt_data_type_mapping)
 }
 
@@ -798,6 +805,7 @@ get_rvt_met_mapping_weathercan <- function() {
     "TOTAL_SNOW"=list("SNOWFALL"),
     "MAX_TEMP"=list("TEMP_MAX"),
     "MIN_TEMP"=list("TEMP_MIN"),
+    "MEAN_TEMP"=list("TEMP_AVE"),
     "WIND_SPD"=list("WIND_VEL"), # warning on unit conversion
     "REL_HUM"=list("REL_HUMIDITY"),
     "PRECIP_AMT"=list("PRECIP"), # add warning on unit conversion

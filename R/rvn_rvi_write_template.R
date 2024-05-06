@@ -7,7 +7,7 @@
 #' @param filename Name of the rvi file, with extension (optional)
 #' @param overwrite boolean whether to overwrite file if it already exists (default \code{FALSE})
 #' @param writeheader boolean whether to write a header to the rvi file (default \code{TRUE})
-#' @param filetype File extension, Encoding, Raven version (e.g. "rvp ASCII Raven 2.9.1") (optional)
+#' @param filetype File extension, Encoding, Raven version (e.g. "rvp ASCII Raven v3.8") (optional)
 #' @param author Name of file author (optional)
 #' @param description File Description for header (e.g., Basin or project information, R script name) (optional)
 #'
@@ -19,7 +19,7 @@
 #' for ease of getting started with a model using Raven.
 #'
 #' The template_name parameter should be one of "UBCWM", "HBV-EC", "HBV-Light", "GR4J",
-#'  "CdnShield", "MOHYSE", "HMETS", "HYPR", "HYMOD", or "blended_v1".
+#'  "CdnShield", "MOHYSE", "HMETS", "HYPR", "HYMOD", "SAC-SMA", "blended", or "blended_v2".
 #'
 #' This function uses the same model template files that are provided in the Raven User's manual, Appendix D.
 #'
@@ -44,8 +44,8 @@ rvn_rvi_write_template <- function(template_name="UBCWM", filename=NULL,
                                    filetype="rvi ASCII Raven", author="RavenR",
                                    description=NULL) {
 
-  known_templates  <- c("UBCWM", "HBV-EC", "HBV-Light", "GR4J", "CdnShield", "MOHYSE",
-                        "HMETS", "HYPR", "HYMOD", "blended_v1")
+  known_templates  <- c("UBCWM", "HBV-EC", "HBV-Light", "GR4J", "CdnShield", "MOHYSE", "HMETS", "HYPR",
+                        "HYMOD", "SAC-SMA", "blended","blended_v2")
 
   if (is.null(template_name) | template_name %notin% known_templates) {
     stop("template_name must be one of the available model templates, see function details")
@@ -480,21 +480,52 @@ rvn_rvi_write_template <- function(template_name="UBCWM", filename=NULL,
 
 ",
 
-"blended_v1"="
+"SAC-SMA"="
 :StartDate    2000-01-01 00:00:00
 :Duration     365
 :TimeStep     1.0
 
-:PotentialMeltMethod     POTMELT_HMETS
-
-:RainSnowFraction        RAINSNOW_HBV        # RAINSNOW_DATA
-#:SWRadiationMethod      SW_RAD_NONE         # no radiation is faster
-
-:Evaporation           PET_OUDIN
-
+# Model options for SAC-SMA emulation
+#------------------------------------------------------------------------
+:PotentialMeltMethod     POTMELT_DEGREE_DAY
+:RainSnowFraction        RAINSNOW_DATA
+:Evaporation             PET_DATA
 :CatchmentRoute          ROUTE_DUMP
 :Routing                 ROUTE_NONE
-:SoilModel               SOIL_MULTILAYER 3
+
+:SoilModel               SOIL_MULTILAYER 7
+
+:Alias UZ_T  SOIL[0]
+:Alias UZ_F  SOIL[1]
+:Alias LZ_T  SOIL[2]
+:Alias LZ_PF SOIL[3]
+:Alias LZ_PS SOIL[4]
+
+:HydrologicProcesses
+  :SnowBalance           SNOBAL_SIMPLE_MELT   SNOW          PONDED_WATER
+  :Precipitation         RAVEN_DEFAULT        ATMOS_PRECIP  MULTIPLE
+  :SoilEvaporation       SOILEVAP_SACSMA      MULTIPLE      ATMOSPHERE
+  :SoilBalance           SOILBAL_SACSMA       MULTIPLE      MULTIPLE
+  :OpenWaterEvaporation  OPEN_WATER_RIPARIAN  SURFACE_WATER ATMOSPHERE
+:EndHydrologicProcesses
+
+#
+
+",
+    "blended"="
+:StartDate    2000-01-01 00:00:00
+:Duration     365
+:TimeStep     1.0
+:Method              ORDERED_SERIES
+:Interpolation       INTERP_NEAREST_NEIGHBOR
+
+:PotentialMeltMethod     POTMELT_HMETS
+:RainSnowFraction        RAINSNOW_HBV
+:SWRadiationMethod       SW_RAD_NONE         # no radiation is faster
+:Evaporation             PET_DATA
+:CatchmentRoute          ROUTE_DUMP
+:Routing                 ROUTE_NONE
+:SoilModel               SOIL_MULTILAYER 2
 
 :Alias DELAYED_RUNOFF CONVOLUTION[1]
 
@@ -504,13 +535,13 @@ rvn_rvi_write_template <- function(template_name="UBCWM", filename=NULL,
                 :Infiltration    INF_HMETS               PONDED_WATER   MULTIPLE
                 :Infiltration    INF_VIC_ARNO            PONDED_WATER   MULTIPLE
                 :Infiltration    INF_HBV                 PONDED_WATER   MULTIPLE
-  :EndProcessGroup CALCULATE_WTS 0.55556 0.5
+  :EndProcessGroup CALCULATE_WTS 0.556 0.5
                   :Overflow      OVERFLOW_RAVEN          SOIL[0]        DELAYED_RUNOFF
   :ProcessGroup #quickflow group
                 :Baseflow        BASE_LINEAR_ANALYTIC    SOIL[0]        SURFACE_WATER   # interflow, really
                 :Baseflow        BASE_VIC                SOIL[0]        SURFACE_WATER
                 :Baseflow        BASE_TOPMODEL           SOIL[0]        SURFACE_WATER
-  :EndProcessGroup CALCULATE_WTS 0.55556 0.5
+  :EndProcessGroup CALCULATE_WTS 0.556 0.5
   :Percolation                   PERC_LINEAR             SOIL[0]        SOIL[1]         # recharge
     :Overflow                    OVERFLOW_RAVEN          SOIL[1]        DELAYED_RUNOFF
   :Percolation                   PERC_LINEAR             SOIL[1]        SOIL[2]         # loss to deep gw
@@ -528,8 +559,66 @@ rvn_rvi_write_template <- function(template_name="UBCWM", filename=NULL,
                 :SnowBalance     SNOBAL_HMETS            MULTIPLE       MULTIPLE
                 :SnowBalance     SNOBAL_SIMPLE_MELT      SNOW           PONDED_WATER
                 :SnowBalance     SNOBAL_HBV              MULTIPLE       MULTIPLE
-  :EndProcessGroup CALCULATE_WTS 0.55556 0.5
+  :EndProcessGroup CALCULATE_WTS 0.556 0.5
 :EndHydrologicProcesses
+
+#
+
+",
+    "blended_v2"="
+:StartDate    2000-01-01 00:00:00
+:Duration     365
+:TimeStep     1.0
+:Method              ORDERED_SERIES
+
+:SoilModel               SOIL_MULTILAYER 3
+
+:Evaporation           PET_BLENDED
+:BlendedPETWeights PET_GRANGERGRAY 0.556 PET_HAMON 0.5 PET_PENMAN_MONTEITH
+
+:PotentialMeltMethod           POTMELT_BLENDED
+:BlendedPotMeltWeights POTMELT_HMETS 0.5 POTMELT_RESTRICTED
+
+:RainSnowFraction        RAINSNOW_HBV        # RAINSNOW_DATA
+:PrecipIceptFract   PRECIP_ICEPT_USER
+:CatchmentRoute          ROUTE_DUMP
+:Routing                 ROUTE_NONE
+
+:Alias DELAYED_RUNOFF CONVOLUTION[1]
+
+:HydrologicProcesses
+  :Precipitation                 RAVEN_DEFAULT           ATMOS_PRECIP   MULTIPLE
+  :CanopyDrip                    CANDRIP_RUTTER          CANOPY         PONDED_WATER
+  :Abstraction                   ABST_PERCENTAGE         PONDED_WATER   DEPRESSION
+  :OpenWaterEvaporation          OPEN_WATER_EVAP         DEPRESSION     ATMOSPHERE
+  :CanopyEvaporation             CANEVP_MAXIMUM          CANOPY         ATMOSPHERE
+  :CanopySnowEvap                CANEVP_MAXIMUM          CANOPY_SNOW    ATMOSPHERE
+  :Seepage                       SEEP_LINEAR             DEPRESSION     SOIL[1]
+  :Infiltration    INF_HMETS               PONDED_WATER   MULTIPLE
+         :Overflow      OVERFLOW_RAVEN          SOIL[0]        DELAYED_RUNOFF
+   :ProcessGroup #quickflow/interflow group
+                :Baseflow        BASE_POWER_LAW          SOIL[0]        SURFACE_WATER
+                :Baseflow        BASE_THRESH_POWER       SOIL[0]        SURFACE_WATER
+  :EndProcessGroup CALCULATE_WTS 0.5
+  :Percolation                   PERC_LINEAR             SOIL[0]        SOIL[1]         # recharge
+  :CapillaryRise                 CRISE_HBV               SOIL[1]        SOIL[0]
+  :Overflow                      OVERFLOW_RAVEN          SOIL[1]        DELAYED_RUNOFF
+  :Percolation                   PERC_LINEAR             SOIL[1]        SOIL[2]         # loss to deep gw
+  :CapillaryRise                 CRISE_HBV               SOIL[2]        SOIL[1]
+  :ProcessGroup #evaporation group
+                :SoilEvaporation SOILEVAP_ALL            SOIL[0]        ATMOSPHERE      # AET
+                :SoilEvaporation SOILEVAP_ROOT           SOIL[0]        ATMOSPHERE      # AET
+				:SoilEvaporation SOILEVAP_SEQUEN         SOIL[0]        ATMOSPHERE      # AET
+  :EndProcessGroup CALCULATE_WTS  0.556 0.5
+  :Convolve                      CONVOL_GAMMA            CONVOLUTION[0] SURFACE_WATER   # 'surface runoff'
+  :Convolve                      CONVOL_GAMMA_2          DELAYED_RUNOFF SURFACE_WATER   # 'delayed runoff'
+  :ProcessGroup #baseflow group
+        :Baseflow        BASE_POWER_LAW          SOIL[1]        SURFACE_WATER
+				:Baseflow        BASE_THRESH_POWER       SOIL[1]        SURFACE_WATER
+  :EndProcessGroup CALCULATE_WTS  0.5
+  :SnowBalance     SNOBAL_HBV              MULTIPLE       MULTIPLE
+:EndHydrologicProcesses
+
 #
 
 "
