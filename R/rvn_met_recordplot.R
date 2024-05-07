@@ -64,6 +64,7 @@
 #'
 #' @importFrom ggplot2 geom_point geom_rect geom_col xlab ylab ggtitle scale_x_continuous scale_color_continuous theme_bw theme
 #' @importFrom cowplot plot_grid
+#' @importFrom stats na.omit
 #' @export rvn_met_recordplot
 #'
 rvn_met_recordplot <- function(metadata=NULL,stndata=NULL,variables=NULL,colorby=NULL)

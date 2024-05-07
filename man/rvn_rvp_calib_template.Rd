@@ -66,7 +66,8 @@ If you find parameters not found by this function, please open an ticket on Gith
 rvp_tempfile <- tempfile(fileext=".rvp")
 rvn_rvp_fill_template(rvi_file=system.file("extdata","Nith.rvi", package="RavenR"),
                       rvh_file=system.file("extdata","Nith.rvh", package="RavenR"),
-                      rvp_template_file =system.file("extdata","nithmodel.rvp_temp.rvp", package="RavenR"),
+                      rvp_template_file =system.file("extdata","nithmodel.rvp_temp.rvp",
+                      package="RavenR"),
                       rvp_out=rvp_tempfile)
 
 # setup calibration rvp template and ostin file
