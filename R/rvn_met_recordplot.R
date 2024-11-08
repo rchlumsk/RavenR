@@ -89,26 +89,35 @@ rvn_met_recordplot <- function(metadata=NULL,stndata=NULL,variables=NULL,colorby
   }
 
   if(!is.null(stndata) & !is.null(variables)){
-    stndata = stndata[,c('station_name','station_id','year','elev',variables)] # subset only the variable of interest
+    stndata = stndata[,c('station_name','station_id','climate_id','year','elev',variables)] # subset only the variable of interest
 
     # extract start/end years for specified variables where data actually exists
     metadata = do.call('rbind',lapply(unique(stndata$station_id),function(sid){
       onestation = stndata[stndata$station_id==sid,]
       metadata = data.frame(station_name=unique(onestation$station_name),
+                            climate_id = unique(onestation$climate_id),
                              start=as.numeric(min(onestation$year[!is.na(onestation[,variables])])),
                              end = as.numeric(max(onestation$year[!is.na(onestation[,variables])])),
                              elev= unique(onestation$elev[onestation$station_id==sid]))
+      # add plotting label
+      metadata$station_label = paste0(metadata$station_name," (Climate ID: ",metadata$climate_id,")")
       return(metadata)
     }))
   }
 
   if(!is.null(metadata)){
     # reorder chronologically by start of record
-    metadata$station_name=factor(metadata$station_name,levels=metadata$station_name[order(-metadata$start)])
+    #metadata$station_name=factor(metadata$station_name,levels=metadata$station_name[order(-metadata$start)])
+    metadata$station_label = paste0(metadata$station_name," (Climate ID: ",metadata$climate_id,")")
+    metadata$station_label = factor(metadata$station_label,levels=metadata$station_label[order(-metadata$start)])
 
     # plot records to show overlap
     xmax = max(na.omit(metadata$end))
     xmin = min(na.omit(metadata$start))
+
+    # dynamic spacing (x-label) and text size (y-label)
+    xbreaks = ifelse( (xmax - xmin) > 30, 10, 2) # control year label spacing on plot
+    ylab_size = ifelse(nrow(metadata)>=30,3,ifelse(nrow(metadata)>=20,6,8))
 
     if(is.null(variables)){variables = 'overall station records'} # plot title
 
@@ -130,15 +139,16 @@ rvn_met_recordplot <- function(metadata=NULL,stndata=NULL,variables=NULL,colorby
     }
 
     overlapPlot <- ggplot(data=metadata)+
-      geom_point(aes(x=start,y=station_name))+
-      geom_point(aes(x=end,y=station_name))+
-      geom_rect(aes(xmin=start,xmax=end,ymin=station_name,ymax=station_name,color=get(colorby)))+
+      geom_point(aes(x=start,y=station_label))+
+      geom_point(aes(x=end,y=station_label))+
+      geom_rect(aes(xmin=start,xmax=end,ymin=station_label,ymax=station_label,color=get(colorby)))+
       ggtitle('climate station record periods',subtitle = variables)+
       scale_color_continuous(name=colorname, high = "#56B4E9", low = "#D55E00")+
-      scale_x_continuous(limits=c(xmin,xmax),breaks=seq(xmin,xmax,1))+
+      scale_x_continuous(limits=c(xmin,xmax),breaks=seq(xmin,xmax,xbreaks))+
       theme_bw()+
       theme(plot.title=element_text(hjust=0.5),plot.subtitle=element_text(hjust = 0.5),
-            legend.position = 'bottom',axis.title.y=element_blank(),axis.text.x=element_text(angle=90))
+            legend.position = 'bottom',axis.title.y=element_blank(),axis.text.x=element_text(angle=90),
+            axis.text.y=element_text(size=ylab_size))
   }
 
   # Count number of station records available for each year
@@ -154,7 +164,7 @@ rvn_met_recordplot <- function(metadata=NULL,stndata=NULL,variables=NULL,colorby
     ggtitle('Data availablity by year')+
     xlab('year')+
     ylab('stations')+
-    scale_x_continuous(breaks=seq(xmin,xmax,1))+
+    scale_x_continuous(breaks=seq(xmin,xmax,xbreaks))+
     theme_bw()+
     theme(plot.title=element_text(hjust = 0.5),axis.text.x=element_text(angle=90))
 
