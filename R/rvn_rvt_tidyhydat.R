@@ -48,6 +48,9 @@
 #' alphabetized order is not dependent on the station name, and the observed
 #' files will be in one set.
 #'
+#' remove_number will tell RavenR to just use the station name as the rvt file name,
+#' for example 01AA001 becomes 01AA001.rvt.
+#'
 #' The function will write to name generated from the station name(s), otherwise
 #' the .rvt filename may be specified with the filename argument (full path to
 #' the filename, including .rvt extension). If multiple stations are provided,
@@ -74,6 +77,7 @@
 #' @param write_redirect (optional) write the :RedirectToFile commands in a separate .rvt file
 #' @param rd_file (optional) name of the redirect file created (if \code{write_redirect=TRUE})
 #' @param flip_number (optional) put the subID first in the .rvt filename
+#' @param remove_number (optional) remove the subID from the .rvt filename entirely
 #' @param filename specified name of file(s) to write to (optional)
 #' @return \item{TRUE}{return TRUE if the function is executed properly}
 #'
@@ -104,6 +108,7 @@
 rvn_rvt_tidyhydat <- function(indata, rvt_type="ObservationData", data_type="HYDROGRAPH",
                               subIDs, prd=NULL, stnNames=NULL,
                               write_redirect=FALSE, flip_number=FALSE,
+                              remove_number=FALSE,
                               rd_file = 'flow_stn_redirect_text.rvt',
                               filename=NULL)
 {
@@ -116,6 +121,11 @@ rvn_rvt_tidyhydat <- function(indata, rvt_type="ObservationData", data_type="HYD
   }
 
   stns <- sort(unique(indata$STATION_NUMBER))
+
+  # check that filenames is a single value and not a vector
+  if (length(stns)>1 & !is.null(filename)) {
+    stop("filename argument should not be used with multiple stations")
+  }
 
   # begin writing the support file
   if (write_redirect) {
@@ -145,7 +155,9 @@ rvn_rvt_tidyhydat <- function(indata, rvt_type="ObservationData", data_type="HYD
     if (!is.null(filename)) {
       rvt.name <- filename[i]
     } else {
-      if (flip_number) {
+      if (remove_number) {
+        rvt.name <- sprintf('%s.rvt',stns[i])
+      } else if (flip_number) {
         if (!(is.null(stnNames))) {
           rvt.name <- sprintf('%i_%s.rvt',subIDs[i],stnNames[i])
         } else {
