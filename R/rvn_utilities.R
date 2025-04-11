@@ -511,7 +511,6 @@ hhmmss2dec <- function(x) {
 #' @export
 "%notin%" <- function(x, table) match(x, table, nomatch = 0) == 0
 
-
 #' @title Fortify xts object to specific format
 #'
 #' @description
@@ -544,6 +543,26 @@ rvn_fortify_xts <- function(x)
   colnames(y) <- c("Date",colnames(y)[-1])
   y$Date <- as.Date(y$Date)
   return(y)
+}
+
+#' @title Generate colours consistent with ggplot defaults
+#'
+#' @description
+#' Returns \code{n} colours consistent with default colours from \code{ggplot2}
+#'
+#' @param n number of coours to generate
+#'
+#' @return vector of colours in hexadecimal format
+#'
+#' @examples
+#' ggplotColours(4)
+#' # returns c("#F8766D","#7CAE00","#00BFC4","#C77CFF")
+#'
+#' @export ggplotColours
+ggplotColours <- function(n = 6){
+  h = c(0, 360) + 15
+  if ((diff(h) %% 360) < 1) h[2] <- h[2] - 360/n
+  hcl(h = (seq(h[1], h[2], length = n)), c = 100, l = 65)
 }
 
 #' @title Provide known options for Raven rvi options
