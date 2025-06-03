@@ -13,6 +13,7 @@ rvn_rvt_tidyhydat(
   stnNames = NULL,
   write_redirect = FALSE,
   flip_number = FALSE,
+  remove_number = FALSE,
   rd_file = "flow_stn_redirect_text.rvt",
   filename = NULL
 )
@@ -33,6 +34,8 @@ rvn_rvt_tidyhydat(
 \item{write_redirect}{(optional) write the :RedirectToFile commands in a separate .rvt file}
 
 \item{flip_number}{(optional) put the subID first in the .rvt filename}
+
+\item{remove_number}{(optional) remove the subID from the .rvt filename entirely}
 
 \item{rd_file}{(optional) name of the redirect file created (if \code{write_redirect=TRUE})}
 
@@ -88,6 +91,9 @@ flip_number is a useful option to place the subID first in the filename.
 This is often cleaner for organizing files in a folder, since the
 alphabetized order is not dependent on the station name, and the observed
 files will be in one set.
+
+remove_number will tell RavenR to just use the station name as the rvt file name,
+for example 01AA001 becomes 01AA001.rvt.
 
 The function will write to name generated from the station name(s), otherwise
 the .rvt filename may be specified with the filename argument (full path to
