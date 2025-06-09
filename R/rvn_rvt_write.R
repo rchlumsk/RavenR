@@ -111,7 +111,8 @@ rvn_rvt_write <- function(x, filename=NULL, rvt_type="ObservationData",
   # check data type (if in the rvt_mapping list)
   if ("data_type" %in% unlist(rvt_writelist)) {
     if (data_type %notin% names(rvt_data_type_mapping)) {
-      warning("Unknown data_type %s, please ensure the data_type is a recognized type from Table D.1 in the Raven Manual.")
+      warning(sprintf("Unknown data_type %s, please ensure the data_type is a recognized type from the list below.\n%s",
+                      data_type, paste(names(rvt_data_type_mapping), collapse="\n")))
     }
   }
 
