@@ -25,14 +25,15 @@ for example as June 30 for a July 1 water year (i.e. the Australian water year).
 This function is useful in supplying endpoints for water year evaluations.
 }
 \details{
-Emulates the \code{\link{endpoints}} function
+Emulates the \code{\link[xts]{endpoints}} function
 for a water year period. The first and last points are included in all supplied endpoints,
 which may introduce partial periods to the analysis.
 }
 \examples{
 
 # read in sample forcings data
-data(rvn_forcing_data)
+ff <- system.file("extdata","run1_ForcingFunctions.csv", package = "RavenR")
+rvn_forcing_data <- RavenR::rvn_forcings_read(ff)
 
 # get the indices of the water year for October 1 (the default)
 rvn_wyear_indices(rvn_forcing_data$forcings)
@@ -47,5 +48,5 @@ rvn_forcing_data$forcings[., 1:2]
 }
 \seealso{
 \code{\link{rvn_apply_wyearly}} to apply functions over the water year
-\code{\link{endpoints}} workhorse function for generating endpoints in xts for other periods
+\code{\link[xts]{endpoints}} workhorse function for generating endpoints in xts for other periods
 }

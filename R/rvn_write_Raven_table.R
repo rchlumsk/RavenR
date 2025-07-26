@@ -6,9 +6,9 @@
 #' @param filename Name of the file, with extension, to append the table to
 #' @param id_col \code{TRUE/FALSE} of whether an numeric id column is the first column in the table
 #' and, in common Raven fashion, does not have a corresponding attribute (default \code{TRUE})
-#' @param justify alignment of character columns (default 'right'). See \code{\link{format}}
+#' @param justify alignment of character columns (default 'right'). See \code{\link[base]{format}}
 #' @param sep character(s) used to seperate columns (default ', ')
-#' @param ... Extra arguments for \code{\link{write.fwf}}
+#' @param ... Extra arguments for \code{\link[gdata]{write.fwf}}
 #'
 #' @return \item{TRUE}{returns \code{TRUE} if executed successfully}
 #'

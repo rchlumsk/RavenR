@@ -99,7 +99,7 @@
 #' tf1 <- file.path(tempdir(), "station1.rvt")
 #' tf2 <- file.path(tempdir(), "station2.rvt")
 #'
-#' # Create RVT files
+#' # Create RVT file
 #' rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
 #'   filename=c(tf1,tf2))
 #'
@@ -121,11 +121,6 @@ rvn_rvt_tidyhydat <- function(indata, rvt_type="ObservationData", data_type="HYD
   }
 
   stns <- sort(unique(indata$STATION_NUMBER))
-
-  # check that filenames is a single value and not a vector
-  if (length(stns)>1 & !is.null(filename)) {
-    stop("filename argument should not be used with multiple stations")
-  }
 
   # begin writing the support file
   if (write_redirect) {

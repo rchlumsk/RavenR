@@ -19,7 +19,6 @@ Calculates the number of days in the month
 This method includes leap years if they exist in the specified month.
 }
 \examples{
-
 rvn_num_days_month(as.Date("2016-02-05"))
 # 29
 
@@ -30,8 +29,4 @@ rvn_num_days_month(as.Date("2017-01-17"))
 \seealso{
 \code{\link{rvn_num_days}} for calculating the number of days between
 two dates
-
-See original code on post in Stack Overflow
-\href{https://stackoverflow.com/questions/6243088/find-out-the-number-of-days-of-a-month-in-rfind}{
-the number of days in a month}
 }

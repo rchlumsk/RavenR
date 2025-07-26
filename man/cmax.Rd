@@ -34,6 +34,6 @@ rvn_apply_wyearly(rvn_hydrograph_data$hyd, cmax, na.rm=TRUE)
 
 }
 \seealso{
-\code{\link{rvn_apply_wyearly}} where this function can be applied for the water year,
-and the xts functions such as \code{\link{apply.yearly}} and \code{\link{apply.monthly}}
+\code{\link[RavenR]{rvn_apply_wyearly}} where this function can be applied for the water year,
+and the xts functions such as \code{\link[xts]{apply.yearly}} and \code{\link[xts]{apply.monthly}}
 }

@@ -22,7 +22,8 @@
 #'
 #' @examples
 #' # use sample forcing data (or use forcings_read to read in ForcingFunctions.csv)
-#' data(rvn_forcing_data)
+#' ff <- system.file("extdata","run1_ForcingFunctions.csv", package = "RavenR")
+#' rvn_forcing_data <- RavenR::rvn_forcings_read(ff)
 #'
 #' # apply mean (with colMeans) as FUN to daily average temperature
 #' rvn_apply_wyearly(rvn_forcing_data$forcings$temp_daily_ave,colMeans,na.rm=TRUE)

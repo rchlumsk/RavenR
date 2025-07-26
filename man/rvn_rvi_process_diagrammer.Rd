@@ -45,7 +45,7 @@ and returns the connections information as a DiagrammeR object.
 Uses the output from the \code{\link{rvn_rvi_connections}} function to generate the plot
 with the \code{DiagrammeR} library.
 
-Note that the output can be plotted using the \code{\link{render_graph}} function
+Note that the output can be plotted using the \code{\link[DiagrammeR]{render_graph}} function
 in the DiagrammeR library. The outputted DiagrammeR object may also have aesthetics modified
 with various commands from the
 same library, if desired, as shown in the examples. The \code{rsvg} and \code{DiagrammeRsvg} packages

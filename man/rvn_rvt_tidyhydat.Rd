@@ -130,7 +130,7 @@ hd <- rvn_tidyhydat_sample
 tf1 <- file.path(tempdir(), "station1.rvt")
 tf2 <- file.path(tempdir(), "station2.rvt")
 
-# Create RVT files
+# Create RVT file
 rvn_rvt_tidyhydat(hd, subIDs=c(3,11),
   filename=c(tf1,tf2))
 

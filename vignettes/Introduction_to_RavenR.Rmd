@@ -59,10 +59,10 @@ The name of each external function in the RavenR package begins with the "rvn_" 
 The RavenR package contains a number of sample data files, which are useful for training purposes and testing of functions. The package contains sample data both in R format (under RavenR/data) and as raw data files in their native formats (RavenR/inst/extdata). The sample data set from the RavenR package (in R format) can be loaded in using the data function (with either quotes or just the name of the data), e.g.,
 
 ```{r R sample data, message=FALSE, warning=FALSE, results='hide'}
-data("rvn_forcing_data")
+data("rvn_hydrograph_data")
 # ?rvn_forcing_data
-plot(rvn_forcing_data$forcings$temp_daily_ave,
-     main="Daily Avg. Temperature")
+plot(rvn_hydrograph_data$hyd$Sub36,
+     main="Subbasin 36 Flows")
 ```
 
 Notice as well that the sample data set in R format also has a built in help file to describe the data.
@@ -118,7 +118,7 @@ The legend for the forcing plot functions is turned off by default, but can be a
 ```{r Plot forcing data with labels}
 library(ggplot2)
 
-myplots <- rvn_forcings_plot(ff_data$forcings)
+myplots <- rvn_forcings_plot(ff_data)
 myplots$Radiation +
   theme(legend.position = "bottom")
 ```
@@ -511,6 +511,6 @@ rvn_rvp_fill_template(fileprefix = "ravenriver",
 
 # Conclusion
 
-This tutorial is meant to serve as a brief introduction to the RavenR package. If you have any comments, suggestions or bug reports, please leave a note on the issues page of the Github project ([RavenR Github page](https://github.com/rchlumsk/RavenR)), email the authors of the package, or feel free to let us know on the [Raven forum](https://www.civil.uwaterloo.ca/raven_forum/). 
+This tutorial is meant to serve as a brief introduction to the RavenR package. If you have any comments, suggestions or bug reports, please leave a note on the issues page of the Github project ([RavenR Github page](https://github.com/rchlumsk/RavenR)), email the authors of the package, or feel free to let us know on the [Raven forum](https://raven.uwaterloo.ca/). 
 
 Additional Raven materials can be found on the [Raven downloads page](https://raven.uwaterloo.ca/Downloads.html), and additional RavenR vignettes can be found on Github in the [vignettes folder](https://github.com/rchlumsk/RavenR/tree/master/vignettes).

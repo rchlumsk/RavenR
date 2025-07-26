@@ -171,11 +171,7 @@ rvn_num_days <- function(date1, date2)
 #' @seealso \code{\link{rvn_num_days}} for calculating the number of days between
 #' two dates
 #'
-#' See original code on post in Stack Overflow
-#' \href{https://stackoverflow.com/questions/6243088/find-out-the-number-of-days-of-a-month-in-rfind}{
-#' the number of days in a month}
 #' @examples
-#'
 #' rvn_num_days_month(as.Date("2016-02-05"))
 #' # 29
 #'
@@ -211,8 +207,8 @@ rvn_num_days_month <- function(date)
 #'
 #' @return x with the max value in each column determined
 #'
-#' @seealso \code{\link{rvn_apply_wyearly}} where this function can be applied for the water year,
-#' and the xts functions such as \code{\link{apply.yearly}} and \code{\link{apply.monthly}}
+#' @seealso \code{\link[RavenR]{rvn_apply_wyearly}} where this function can be applied for the water year,
+#' and the xts functions such as \code{\link[xts]{apply.yearly}} and \code{\link[xts]{apply.monthly}}
 #'
 #' @examples
 #' data(rvn_hydrograph_data)
@@ -559,6 +555,7 @@ rvn_fortify_xts <- function(x)
 #' # returns c("#F8766D","#7CAE00","#00BFC4","#C77CFF")
 #'
 #' @export ggplotColours
+#' @importFrom grDevices hcl
 ggplotColours <- function(n = 6){
   h = c(0, 360) + 15
   if ((diff(h) %% 360) < 1) h[2] <- h[2] - 360/n

@@ -17,8 +17,8 @@
 #' @examples
 #'
 #' # read in sample forcings data
-#' data("rvn_forcing_data")
-#' fdata <- rvn_forcing_data$forcings
+#' ff <- system.file("extdata","run1_ForcingFunctions.csv", package = "RavenR")
+#' fdata <- RavenR::rvn_forcings_read(ff)
 #'
 #' # plot forcings data
 #' p1 <- rvn_forcings_plot(fdata)
@@ -42,10 +42,10 @@
 rvn_forcings_plot <-function(forcings, prd=NULL)
 {
 
-  Index <- value <- variable <- color <- PET <- potential.melt <- NULL
+  Index <- value <- variable <- color <- PET <- potential_melt <- NULL
 
-  if (class(forcings) %in% c("list")) {
-    warning("passed forcings as list, disaggregating forcings")
+  if ("list" %in% class(forcings)) {
+    message("passed forcings as list, disaggregating forcings")
     forcings <- forcings$forcings
   }
 

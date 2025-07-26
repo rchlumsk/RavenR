@@ -25,8 +25,8 @@ structure generating using RavenR's forcings.read function
 \examples{
 
 # read in sample forcings data
-data("rvn_forcing_data")
-fdata <- rvn_forcing_data$forcings
+ff <- system.file("extdata","run1_ForcingFunctions.csv", package = "RavenR")
+fdata <- RavenR::rvn_forcings_read(ff)
 
 # plot forcings data
 p1 <- rvn_forcings_plot(fdata)

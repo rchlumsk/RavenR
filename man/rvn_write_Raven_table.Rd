@@ -27,11 +27,11 @@ rvn_write_Raven_table(
 \item{id_col}{\code{TRUE/FALSE} of whether an numeric id column is the first column in the table
 and, in common Raven fashion, does not have a corresponding attribute (default \code{TRUE})}
 
-\item{justify}{alignment of character columns (default 'right'). See \code{\link{format}}}
+\item{justify}{alignment of character columns (default 'right'). See \code{\link[base]{format}}}
 
 \item{sep}{character(s) used to seperate columns (default ', ')}
 
-\item{...}{Extra arguments for \code{\link{write.fwf}}}
+\item{...}{Extra arguments for \code{\link[gdata]{write.fwf}}}
 }
 \value{
 \item{TRUE}{returns \code{TRUE} if executed successfully}

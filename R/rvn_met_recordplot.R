@@ -70,7 +70,7 @@
 rvn_met_recordplot <- function(metadata=NULL,stndata=NULL,variables=NULL,colorby=NULL)
 {
 
-  start <- station_name <- nstations <- NA
+  start <- station_name <- nstations <- station_label <- NA
 
   # ensure there is a list of stations to read
   if(!is.null(metadata) & !is.null(stndata)){
