@@ -194,8 +194,9 @@ rvn_rvi_write_template <- function(template_name="UBCWM", filename=NULL,
   :Baseflow          BASE_LINEAR        SLOW_RESERVOIR  SURFACE_WATER
 :EndHydrologicProcesses
 #
-:AggregatedVariable FAST_RESERVOIR AllHRUs
-:AggregatedVariable SLOW_RESERVOIR AllHRUs
+:DefineHRUGroups AllHRUs
+:LateralEquilibrate RAVEN_DEFAULT AllHRUs FAST_RESERVOIR 1.0
+:LateralEquilibrate RAVEN_DEFAULT AllHRUs SLOW_RESERVOIR 1.0
 
 #
 
