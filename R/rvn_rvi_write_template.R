@@ -19,7 +19,7 @@
 #' for ease of getting started with a model using Raven.
 #'
 #' The template_name parameter should be one of "UBCWM", "HBV-EC", "HBV-Light", "GR4J",
-#'  "CdnShield", "MOHYSE", "HMETS", "HYPR", "HYMOD", "SAC-SMA", "blended", or "blended_v2".
+#'  "CdnShield", "MOHYSE", "HMETS", "HYPR", "HYMOD", "SAC-SMA", "SCS", "routingonly", blended", or "blended_v2".
 #'
 #' This function uses the same model template files that are provided in the Raven User's manual, Appendix D.
 #'
@@ -45,7 +45,7 @@ rvn_rvi_write_template <- function(template_name="UBCWM", filename=NULL,
                                    description=NULL) {
 
   known_templates  <- c("UBCWM", "HBV-EC", "HBV-Light", "GR4J", "CdnShield", "MOHYSE", "HMETS", "HYPR",
-                        "HYMOD", "SAC-SMA", "blended","blended_v2")
+                        "HYMOD", "SAC-SMA", "SCS", "routingonly", "blended","blended_v2")
 
   if (is.null(template_name) | template_name %notin% known_templates) {
     stop("template_name must be one of the available model templates, see function details")
@@ -510,6 +510,69 @@ rvn_rvi_write_template <- function(template_name="UBCWM", filename=NULL,
   :OpenWaterEvaporation  OPEN_WATER_RIPARIAN  SURFACE_WATER ATMOSPHERE
 :EndHydrologicProcesses
 
+#
+
+",
+
+"SCS"="
+:StartDate    2000-01-01 00:00:00
+:Duration     365
+:TimeStep     1.0
+:Method       ORDERED_SERIES
+
+# Model options for SCS emulation
+#------------------------------------------------------------------------
+:Routing             ROUTE_NONE
+:CatchmentRoute      ROUTE_GAMMA_CONVOLUTION
+
+:Evaporation         PET_OUDIN
+:OW_Evaporation      PET_OUDIN
+
+:SWRadiationMethod   SW_RAD_DEFAULT
+:LWRadiationMethod   LW_RAD_NONE
+:CloudCoverMethod    CLOUDCOV_NONE
+:OroTempCorrect      OROCORR_SIMPLELAPSE
+
+:RainSnowFraction    RAINSNOW_THRESHOLD
+:PotentialMeltMethod POTMELT_DEGREE_DAY
+
+:PrecipIceptFract    PRECIP_ICEPT_NONE
+
+:SoilModel           SOIL_MULTILAYER 1
+
+:HydrologicProcesses
+  :Precipitation     PRECIP_RAVEN       ATMOS_PRECIP    MULTIPLE
+  :SnowBalance       SNOBAL_SIMPLE_MELT SNOW            PONDED_WATER
+  :Infiltration      INF_SCS            PONDED_WATER    MULTIPLE
+  :SoilEvaporation   SOILEVAP_LINEAR    SOIL[0]         ATMOSPHERE
+  :Baseflow          BASE_LINEAR        SOIL[0]         SURFACE_WATER
+:EndHydrologicProcesses
+
+#
+
+",
+
+"routingonly"="
+:StartDate    2000-01-01 00:00:00
+:Duration     365
+:TimeStep     1.0
+
+# Model options for Routing-only implementation
+#------------------------------------------------------------------------
+:CatchmentRoute        ROUTE_GAMMA_CONVOLUTION
+:Routing               ROUTE_DIFFUSIVE_WAVE
+
+:PrecipIceptFract      PRECIP_ICEPT_NONE
+:PotentialMeltMethod   POTMELT_NONE
+:SWRadiationMethod     SW_RAD_NONE
+:OW_Evaporation        PET_NONE
+
+:SoilModel             SOIL_ONE_LAYER
+
+:HydrologicProcesses
+  :Precipitation PRECIP_RAVEN   ATMOS_PRECIP  PONDED_WATER
+  :Flush         RAVEN_DEFAULT  PONDED_WATER  SURFACE_WATER
+:EndHydrologicProcesses
 #
 
 ",
