@@ -16,7 +16,7 @@
 #' @references Budyko, M.I. (1974), Climate and Life, Academic Press, New York.
 #'
 #' @param x extensible time series object of PET, AET, and PRECIP (optional)
-#' @param x_indices extensible time series object of annual ARIDITY and EVAPORATION indices (optional)
+#' @param x_indices extensible time series object of annual ARIDITY and EVAPORATIVE indices (optional)
 #' @param limiting_labels boolean whether to vertical line at x=1 and labels for 'Energy Limited' and 'Water Limited' to plot
 #' @param budyko_curve boolean whether to add curve to plot
 #' @param mm month of water year ending (default 9)
@@ -76,7 +76,7 @@ rvn_budyko_plot <- function(x=NULL, x_indices=NULL, limiting_labels=FALSE, budyk
       stop("rvn_budyko_plot: x_indices should be of class xts")
     }
     names(x_indices) <- toupper(names(x_indices))
-    if (c("PET","AET","PRECIP") %notin% names(x_indices)) {
+    if (!any(c("PET","AET","PRECIP") %notin% names(x_indices))) {
       stop(sprintf("rvn_budyko_plot: x_indices should contain columns for ARIDITY and EVAPORATIVE;\nNissing columns for %s",
                    c("ARIDITY","EVAPORATIVE")[which(c("ARIDITY","EVAPORATIVE") %notin% names(x_indices))] ))
     }

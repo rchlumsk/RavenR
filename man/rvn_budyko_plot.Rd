@@ -16,7 +16,7 @@ rvn_budyko_plot(
 \arguments{
 \item{x}{extensible time series object of PET, AET, and PRECIP (optional)}
 
-\item{x_indices}{extensible time series object of annual ARIDITY and EVAPORATION indices (optional)}
+\item{x_indices}{extensible time series object of annual ARIDITY and EVAPORATIVE indices (optional)}
 
 \item{limiting_labels}{boolean whether to vertical line at x=1 and labels for 'Energy Limited' and 'Water Limited' to plot}
 
